@@ -36,7 +36,7 @@
   h1,h2,h3,.display{font-family:"Bricolage Grotesque","Instrument Sans",sans-serif;line-height:1.05;letter-spacing:-.02em;font-weight:700}
   a{color:inherit}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
-  section{padding:88px 0}
+  section{padding:64px 0}
 
   .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:inline-flex;align-items:center;gap:9px;margin-bottom:20px}
   .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--gold)}
@@ -178,11 +178,11 @@
   @media(max-width:860px){.step::after{display:none}}
 
   /* ---- contact ---- */
-  .contact{background:var(--bg);text-align:center}
-  .contact .inner{background:linear-gradient(150deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:22px;padding:64px 32px;position:relative;overflow:hidden}
+  .contact{background:var(--bg);text-align:center;padding:56px 0}
+  .contact .inner{background:linear-gradient(150deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:22px;padding:36px 30px;position:relative;overflow:hidden}
   .contact .inner::before{content:"";position:absolute;bottom:-140px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(232,180,74,.18),transparent 65%);pointer-events:none}
-  .contact h2{font-size:clamp(2.1rem,5vw,3.2rem);max-width:18ch;margin:0 auto;position:relative}
-  .contact p{color:var(--muted);max-width:48ch;margin:20px auto 36px;font-size:1.1rem;position:relative}
+  .contact h2{font-size:clamp(1.6rem,3.6vw,2.3rem);max-width:22ch;margin:0 auto;position:relative}
+  .contact p{color:var(--muted);max-width:52ch;margin:14px auto 26px;font-size:1.02rem;position:relative}
   .contact .hero-cta{justify-content:center;position:relative}
   .contact-alt{margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:14px;color:var(--gold-soft);position:relative}
   .contact-alt a{color:var(--gold-soft);text-decoration:none}
@@ -265,13 +265,18 @@
     </div>
   </section>
 
-  <!-- VALUE STRIP -->
-  <section class="value">
+  <!-- PROCESS -->
+  <section id="process" class="process">
     <div class="wrap">
-      <div class="grid">
-        <div class="cell"><span class="num">01 / BUILT</span><h3>Made to be found</h3><p>Mobile-first, fast, and set up on Google so people searching in your area actually land on you.</p></div>
-        <div class="cell"><span class="num">02 / KEPT</span><h3>Looked after monthly</h3><p>Hosting, security and edits handled on an affordable care plan, so your site never goes stale or offline.</p></div>
-        <div class="cell"><span class="num">03 / LOCAL</span><h3>A person, not a portal</h3><p>You deal with me directly on WhatsApp or the phone — no ticket queue, no call centre, no jargon.</p></div>
+      <div class="shead">
+        <span class="eyebrow">How it works</span>
+        <h2>From first message to live in weeks.</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><h3>Chat</h3><p>Message me on WhatsApp. We talk through what your business needs and I give you a fixed quote — no obligation.</p></div>
+        <div class="step"><h3>Book</h3><p>Happy to go ahead? A 50% deposit books your slot and I start gathering your content and photos.</p></div>
+        <div class="step"><h3>Build</h3><p>I design and build your site, share a live preview, and refine it with you until it's right.</p></div>
+        <div class="step"><h3>Launch &amp; care</h3><p>Final balance, we go live, and your care plan keeps it fast, secure and up to date.</p></div>
       </div>
     </div>
   </section>
@@ -417,22 +422,6 @@
       <div class="deposit-note">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7v6c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5Zm-1 14-4-4 1.41-1.41L11 13.17l5.59-5.58L18 9l-7 7Z"/></svg>
         <div><b>How payment works:</b> builds are split 50% deposit to book your slot and 50% on launch. Care plans start when your site goes live and are collected by monthly Direct Debit — cancel any time with 30 days' notice.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROCESS -->
-  <section id="process" class="process">
-    <div class="wrap">
-      <div class="shead">
-        <span class="eyebrow">How it works</span>
-        <h2>From first message to live in weeks.</h2>
-      </div>
-      <div class="steps">
-        <div class="step"><h3>Chat</h3><p>Message me on WhatsApp. We talk through what your business needs and I give you a fixed quote — no obligation.</p></div>
-        <div class="step"><h3>Book</h3><p>Happy to go ahead? A 50% deposit books your slot and I start gathering your content and photos.</p></div>
-        <div class="step"><h3>Build</h3><p>I design and build your site, share a live preview, and refine it with you until it's right.</p></div>
-        <div class="step"><h3>Launch &amp; care</h3><p>Final balance, we go live, and your care plan keeps it fast, secure and up to date.</p></div>
       </div>
     </div>
   </section>
