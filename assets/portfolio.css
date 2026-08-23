@@ -19,7 +19,9 @@
   --body:"Instrument Sans",system-ui,-apple-system,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
 
-  --ease:cubic-bezier(.4,0,.2,1);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --swap-out:100ms;              /* screenshot fades to a blank screen */
+  --swap-in:100ms;               /* then the next one fades up */
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -44,14 +46,17 @@ img{display:block;max-width:100%}
   min-height:100svh;
   display:grid;
   grid-template-columns:40vw 60vw;
-  align-items:center;
+  align-items:stretch;
 }
 
 /* --- left rail: identity + project list --------------------------------- */
 
+/* The identity block does not move between State A and A2, so the rail is
+   anchored from the top rather than centred — everything to the right of it
+   is what changes. */
 .rail{
-  padding:6vh 4vw 6vh 10vw;
-  display:flex;flex-direction:column;justify-content:center;gap:7vh;
+  padding:24vh 4vw 6vh 10vw;
+  display:flex;flex-direction:column;align-items:flex-start;gap:7vh;
   min-width:0;
 }
 
@@ -69,25 +74,56 @@ img{display:block;max-width:100%}
   color:var(--muted);
   max-width:38ch;margin-top:14px;
 }
-.more{margin-top:18px}
-.more>summary{
+/* The bio keeps the rail's own type voice — the spec's fixed point is that
+   type size and position do not change between A and A2, so this stays in
+   the display face rather than switching to Instrument Sans. */
+.bio{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(1rem,1.35vw,1.14rem);
+  line-height:1.5;letter-spacing:-.01em;
+  color:var(--muted);
+  max-width:28ch;                  /* the narrow measure, ~28 chars a line */
+  margin-top:14px;display:none;
+}
+.bio strong{color:var(--text);font-weight:600}
+
+.disclose{
+  margin-top:18px;
   font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--muted);cursor:pointer;list-style:none;
-  display:inline-flex;align-items:center;gap:8px;
+  color:var(--muted);background:none;border:0;padding:0;cursor:pointer;
+  display:inline-flex;align-items:center;gap:9px;
   transition:color .15s ease;
 }
-.more>summary::-webkit-details-marker{display:none}
-.more>summary::after{content:"+";font-size:14px;letter-spacing:0}
-.more[open]>summary::after{content:"–"}
-.more>summary:hover{color:var(--text)}
-.more-body{
-  font-family:var(--display);font-weight:500;
-  font-size:clamp(.95rem,1.2vw,1.05rem);line-height:1.4;letter-spacing:-.01em;
-  color:var(--muted);max-width:30ch;margin-top:14px;
-  display:flex;flex-direction:column;gap:10px;
+.disclose svg{width:13px;height:13px;transition:transform .15s ease}
+.disclose:hover{color:var(--text)}
+.wa-btn.rail-wa{margin-top:22px;display:none}
+
+/* --- State A2 ---------------------------------------------------------- */
+.about{
+  grid-column:2;grid-row:1;position:relative;
+  height:100svh;overflow:hidden;display:none;
 }
-.more-body a{color:var(--text);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
-.more-body a:hover{text-decoration-color:var(--text)}
+.portrait{
+  position:absolute;top:0;left:0;right:-9%;          /* bleeds off the edge */
+  height:100%;width:109%;
+  object-fit:cover;object-position:52% 32%;
+}
+/* soft handover from the photograph into the canvas */
+.about::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,var(--bg) 0%,rgba(9,53,38,.55) 16%,rgba(9,53,38,0) 42%);
+}
+
+.is-about .stage,
+.is-about .plist,
+.is-about .positioning{display:none}
+.is-about .about{display:block}
+.is-about .bio{display:block}
+.is-about .wa-btn.rail-wa{display:inline-flex}
+/* --wa stays on exactly one element at a time: in A2 the rail carries it */
+.is-about .index-foot .wa-btn{display:none}
+.is-about .index-foot{justify-content:flex-end}
+.is-about .disclose svg{transform:rotate(180deg)}
 
 /* project list — a menu, not a table. Pitch ≈ 1.9× the line box. */
 .projects{list-style:none;display:flex;flex-direction:column;gap:10px}
@@ -134,28 +170,52 @@ img{display:block;max-width:100%}
   height:100svh;
   display:grid;place-items:center;
   padding:0 6vw 0 2vw;
-  overflow:hidden;
 }
 .desk{
   position:relative;
   width:100%;max-width:760px;
   aspect-ratio:4/3;
 }
-.desk-svg{position:absolute;inset:0;width:100%;height:100%}
+.desk-svg{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+
+/* Content-keyed ambient light. The scene's brightness tracks the screen,
+   which is what makes the render read as an object rather than a mockup.
+   Clamped toward the brand's warm axis so a bright screenshot does not
+   wash the forest canvas grey-green (CLAUDE.md §3.1b). */
+.bloom-layer{position:absolute;pointer-events:none}
+.bloom{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;filter:blur(60px) saturate(.6);
+  transition:opacity var(--swap-out) var(--ease);
+}
+.bloom.is-active{transition:opacity var(--swap-in) var(--ease)}
+
+/* behind the monitor — the wall */
+.bloom-back{left:10%;top:2%;width:80%;height:64%;z-index:0;transform:scale(1.25)}
+.bloom-back .bloom.is-active{opacity:.30}
+/* in front of the chassis — spill across the plinth and keyboard */
+.bloom-front{left:2%;top:60%;width:96%;height:36%;z-index:2;mix-blend-mode:screen}
+.bloom-front .bloom.is-active{opacity:.16}
+/* the warm clamp: gold at very low opacity over the whole spill */
+.bloom-layer::after{
+  content:"";position:absolute;inset:-15%;
+  background:radial-gradient(58% 56% at 50% 50%,rgba(232,180,74,.09),rgba(232,180,74,0) 72%);
+  mix-blend-mode:screen;
+}
 
 /* Screen slot. Rect matches the SVG screen at viewBox 1200×900:
    x 221 → 18.4167%, y 94 → 10.4444%, w 758 → 63.1667%, h 474 → 52.6667% */
 .screen-slot{
-  position:absolute;
+  position:absolute;z-index:3;
   left:18.4167%;top:10.4444%;width:63.1667%;height:52.6667%;
   border-radius:6px;overflow:hidden;
   background:var(--scrim);
 }
 .shot{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  opacity:0;transition:opacity .28s var(--ease);
+  opacity:0;transition:opacity var(--swap-out) var(--ease);
 }
-.shot.is-active{opacity:1}
+.shot.is-active{opacity:1;transition:opacity var(--swap-in) var(--ease)}
 /* glass: one soft diagonal sheen, nothing that reads as a filter */
 .screen-slot::after{
   content:"";position:absolute;inset:0;pointer-events:none;
@@ -193,7 +253,7 @@ img{display:block;max-width:100%}
 @media(max-width:900px){
   .index{
     grid-template-columns:1fr;
-    grid-template-areas:"identity" "stage" "list";
+    grid-template-areas:"identity" "stage" "about" "list";
     align-items:start;
     min-height:0;
   }
@@ -206,7 +266,7 @@ img{display:block;max-width:100%}
     grid-area:stage;
     position:sticky;top:0;z-index:5;
     height:40svh;min-height:250px;
-    padding:0;
+    padding:0;overflow:hidden;
     background:linear-gradient(180deg,var(--panel) 0%,var(--panel-2) 74%,var(--bg-deep) 100%);
     border-radius:0 0 34px 34px;
   }
@@ -217,6 +277,18 @@ img{display:block;max-width:100%}
     pointer-events:none;
   }
   .desk{height:100%;width:auto;max-width:none;min-width:100%;aspect-ratio:4/3}
+
+  .about{
+    grid-area:about;grid-column:1;grid-row:auto;
+    height:46svh;min-height:280px;
+    border-radius:0 0 34px 34px;
+  }
+  .portrait{right:0;width:100%;object-position:52% 26%}
+  .about::after{
+    background:linear-gradient(180deg,rgba(9,53,38,0) 58%,rgba(9,53,38,.9) 100%);
+    border-radius:0 0 34px 34px;
+  }
+  .rail-wa{margin-top:20px}
 
   .plist{
     grid-area:list;position:relative;z-index:1;
@@ -270,12 +342,12 @@ img{display:block;max-width:100%}
 .back{
   width:44px;height:44px;flex:none;
   display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid var(--line);border-radius:50%;
+  background:var(--panel);border:1px solid var(--line);border-radius:50%;
   color:var(--muted);
   transition:transform .15s ease,background .15s ease,color .15s ease;
 }
 .back svg{width:18px;height:18px}
-.back:hover{background:var(--pill);color:var(--text);transform:translateY(-2px)}
+.back:hover{background:var(--panel-2);color:var(--text);transform:translateY(-2px)}
 
 .case-rail h1{
   font-family:var(--display);font-weight:800;

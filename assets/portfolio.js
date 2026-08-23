@@ -6,19 +6,55 @@
   var shots = Array.prototype.slice.call(document.querySelectorAll('[data-shot]'));
   if (!items.length || !shots.length) return;
 
+  /* State A2. `More` replaces the canvas rather than expanding inline; the
+     identity block is the fixed anchor and does not move. */
+  var disclose = document.querySelector('.disclose');
+  if (disclose) {
+    var label = disclose.querySelector('.disclose-label');
+    disclose.addEventListener('click', function () {
+      var open = document.body.classList.toggle('is-about');
+      disclose.setAttribute('aria-expanded', open ? 'true' : 'false');
+      label.textContent = open ? 'Close' : 'More';
+      if (open) window.scrollTo({ top: 0, behavior: 'auto' });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && document.body.classList.contains('is-about')) disclose.click();
+    });
+  }
+
   var active = -1;
+  var swapTimer = null;
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   function setActive(i) {
     if (i === active || i < 0 || i >= items.length) return;
     active = i;
     var key = items[i].getAttribute('data-project');
+
+    /* The label changes immediately. The screen lags behind through the
+       crossfade — that desync is deliberate, so don't synchronise them. */
     items.forEach(function (el, n) {
       el.classList.toggle('is-active', n === i);
       el.setAttribute('aria-current', n === i ? 'true' : 'false');
     });
-    shots.forEach(function (img) {
-      img.classList.toggle('is-active', img.getAttribute('data-shot') === key);
-    });
+
+    /* Crossfade through blank: everything fades out, then the incoming one
+       fades up after the gap, leaving an empty screen at the midpoint. */
+    clearTimeout(swapTimer);
+    shots.forEach(function (img) { img.classList.remove('is-active'); });
+    var gap = still.matches ? 0 : swapOut();
+    swapTimer = setTimeout(function () {
+      shots.forEach(function (img) {
+        if (img.getAttribute('data-shot') === key) img.classList.add('is-active');
+      });
+    }, gap);
+  }
+
+  function swapOut() {
+    var v = getComputedStyle(document.documentElement).getPropertyValue('--swap-out');
+    var ms = parseFloat(v);
+    if (!ms) return 100;
+    return /\ds\s*$/.test(v.trim()) && !/ms/.test(v) ? ms * 1000 : ms;
   }
 
   setActive(0);

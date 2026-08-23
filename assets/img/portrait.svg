@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Portrait placeholder">
+  <defs>
+    <radialGradient id="key" cx="44%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#10382A"/>
+      <stop offset="46%" stop-color="#0A2A1E"/>
+      <stop offset="100%" stop-color="#041A13"/>
+    </radialGradient>
+    <linearGradient id="fall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(4,26,19,0)"/>
+      <stop offset="100%" stop-color="rgba(4,26,19,.85)"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="url(#key)"/>
+  <rect width="900" height="1200" fill="url(#fall)"/>
+  <text x="450" y="612" text-anchor="middle" fill="rgba(245,234,227,.30)"
+        font-family="'JetBrains Mono', ui-monospace, monospace" font-size="27" letter-spacing="4.4">PORTRAIT PENDING</text>
+  <text x="450" y="656" text-anchor="middle" fill="rgba(245,234,227,.18)"
+        font-family="'JetBrains Mono', ui-monospace, monospace" font-size="19" letter-spacing="3">SHOOT DARK, CROP TIGHT</text>
+</svg>
