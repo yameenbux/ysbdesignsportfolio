@@ -107,7 +107,8 @@ Custom domain **ysbdesigns.uk**: four A records to GitHub Pages IPs `185.199.108
 ## 📫 Contact
 
 - 🌐 [ysbdesigns.uk](https://ysbdesigns.uk)
-- 💬 WhatsApp / phone: **+44 7729 247248**
-- 💼 [LinkedIn — Yameen Bux](https://www.linkedin.com/in/yameenbux/)
+- 💬 WhatsApp: **+44 7404 901859**
+- ☎️ Phone: **+44 7729 247248**
+- 💼 [LinkedIn — Yameen](https://www.linkedin.com/in/yameenbux/)
 
 <sub>YSB Designs is a trading name of YSB Ventures Ltd — registered in England &amp; Wales, company no. 16022339.</sub>
