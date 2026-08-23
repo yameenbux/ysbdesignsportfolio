@@ -52,6 +52,12 @@ A shop-style storefront for a Bolton fragrance brand — product carousel, inter
 *Stack:* static, zero-dependency HTML/CSS/JS · CSS design tokens · IntersectionObserver motion · Formspree · Etsy commerce.
 *Live:* [luxescentuk](https://yameenbux.github.io/Luxescentuk/)
 
+### The Venetian Company — Venetian plaster &amp; microcement *(concept)*
+→ **[/venetian.html](https://ysbdesigns.uk/venetian.html)**
+A speculative pitch site for a nationwide plastering firm whose work lived entirely on Instagram — built before any approach, to show what it could look like online. Not a commission.
+*Stack:* Astro · Tailwind · art-directed around the client's own photography · single call-to-action throughout.
+*Live:* [concept site](https://yameenbux.github.io/Venetiancompany/)
+
 > *"Exceeded our expectations. We told YSB he could have free rein to do what he liked — and he over-delivered. Would recommend."*
 > — **Zahid, LuxeScent UK** (client)
 
@@ -64,6 +70,7 @@ index.html          Portfolio index — split layout, desk render slot, about st
 taiyabah.html       Case study
 buxtravel.html      Case study
 luxescent.html      Case study (client)
+venetian.html       Case study (speculative concept, not a commission)
 services.html       Plans, pricing and how it works — kept off the index
 assets/
   portfolio.css     Index + case-study layout (self-contained, carries the tokens)
