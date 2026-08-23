@@ -365,10 +365,6 @@ text-heavy, it belongs in the State B stack, not in the display slot.
 - **Scroll-snap on mobile.** Whether the list snaps to each item or scrolls
   freely with the active state changing at a threshold. The recording is
   desktop only, so this is unresolved.
-- **State B on mobile.** Only the index has been observed at phone width.
-  Whether the sticky rail survives or the title collapses to a header is
-  unknown — and it matters more for YSB, since the rail must carry outcome
-  copy that Petersen's does not have.
 - **State A ↔ A2 transition.** The `More` open/close is captured only at
   1s intervals, so the timing and whether the portrait scales or fades is
   not measured. Re-record just that interaction.
@@ -379,3 +375,19 @@ an inline expansion), swap timing (~200ms crossfade through blank), the
 label/screen desync, content-keyed ambient light, hover-not-click on
 desktop, and that case-study cards inherit project colour rather than
 being white.
+
+**State B on mobile — resolved by recording.** The sticky rail does not
+survive. The title centres at the top of the scroll with "See it live ↗"
+centred beneath it, the cards run full width below, and the back control
+becomes a floating circle at the bottom centre, in thumb reach, which stays
+put while the stack scrolls past. YSB keeps its outcome copy (§3.6) between
+the centred header and the links, left-aligned — three centred paragraphs
+do not read — and puts the back circle in the centre of the fixed contact
+bar rather than floating it over the cards, where it would land on top of a
+"See it live" link.
+
+**Mobile index, measured.** The render block is ~51% of the viewport and the
+monitor ~80% of screen width. The list does not cut off against the render's
+edge: the block's own bottom fades out, so an item passing beneath dissolves
+into it. The footer is at the end of the document, not fixed — YSB keeps its
+fixed contact bar per §3.5.
