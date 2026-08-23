@@ -40,6 +40,17 @@
   --lh-sub:1.4;                 /* display face at text size */
   --lh-body:1.6;                /* Instrument Sans */
 
+  /* Vertical rhythm — 8px base. The point is the hierarchy: space inside a
+     block is smaller than space between blocks, which is smaller than space
+     between sections. Before this every gap sat in a 14-23px band, so a
+     section boundary read the same as a line break. */
+  --s-1:8px;    /* hairline */
+  --s-2:16px;   /* inside a block */
+  --s-3:24px;   /* between blocks */
+  --s-4:32px;   /* between a block and its section */
+  --s-5:48px;   /* between sections */
+  --s-6:64px;
+
   /* Tracking opens up as the mono gets smaller, not the reverse. */
   --ls-display:-.02em;
   --ls-sub:-.01em;
@@ -97,7 +108,7 @@ img{display:block;max-width:100%}
   font-size:clamp(var(--t-sm),1.35vw,var(--t-md));
   line-height:var(--lh-sub);letter-spacing:var(--ls-sub);
   color:var(--muted);
-  max-width:38ch;margin-top:14px;
+  max-width:38ch;margin-top:var(--s-2);
 }
 /* The bio keeps the rail's own type voice — the spec's fixed point is that
    type size and position do not change between A and A2, so this stays in
@@ -108,12 +119,12 @@ img{display:block;max-width:100%}
   line-height:var(--lh-sub);letter-spacing:var(--ls-sub);
   color:var(--muted);
   max-width:28ch;                  /* the narrow measure, ~28 chars a line */
-  margin-top:14px;display:none;
+  margin-top:var(--s-2);display:none;
 }
 .bio strong{color:var(--text);font-weight:600}
 
 .disclose{
-  margin-top:18px;
+  margin-top:var(--s-3);
   font-family:var(--mono);font-size:var(--t-mono);line-height:var(--lh-label);letter-spacing:var(--ls-mono);text-transform:uppercase;
   color:var(--muted);background:none;border:0;padding:0;cursor:pointer;
   display:inline-flex;align-items:center;gap:9px;
@@ -123,7 +134,7 @@ img{display:block;max-width:100%}
 .disclose:hover{color:var(--text)}
 .caps{
   list-style:none;display:none;flex-wrap:wrap;gap:7px 18px;
-  max-width:34ch;margin-top:16px;
+  max-width:34ch;margin-top:var(--s-3);
 }
 .caps li{
   font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
@@ -131,7 +142,7 @@ img{display:block;max-width:100%}
 }
 .is-about .caps{display:flex}
 
-.wa-btn.rail-wa{margin-top:22px;display:none}
+.wa-btn.rail-wa{margin-top:var(--s-3);display:none}
 
 /* --- State A2 ---------------------------------------------------------- */
 .about{
@@ -294,10 +305,14 @@ img{display:block;max-width:100%}
     display:flex;flex-direction:column;
     min-height:100svh;
   }
-  /* State A2 has no list, so it still holds to a single screen */
-  .is-about .index{height:100svh}
+  /* State A2 has no list, so it still holds to a single screen. The footer
+     is a sibling of .index, so pinning .index alone to 100svh left the page
+     one footer taller than the viewport — the column has to include it. */
+  body.is-about{display:flex;flex-direction:column;height:100svh;overflow:hidden}
+  .is-about .index{flex:1 1 auto;min-height:0;height:auto}
+  .is-about .index-foot{flex:none}
   .rail{display:contents;padding:0}
-  .identity{order:1;flex:none;padding:4vh 6vw 2.4vh;}
+  .identity{order:1;flex:none;padding:4vh 6vw var(--s-4);}
   .identity h1{font-size:clamp(var(--t-2xl),7.8vw,var(--t-3xl))}
   .positioning{font-size:clamp(var(--t-sm),3.9vw,var(--t-lg));max-width:none}  /* scales so the two authored lines never wrap */
 
@@ -332,7 +347,7 @@ img{display:block;max-width:100%}
     border-radius:0 0 34px 34px;
   }
   .bio{font-size:clamp(var(--t-sm),3.8vw,var(--t-md));max-width:none}
-  .caps{max-width:none;margin-top:12px;gap:6px 14px}
+  .caps{max-width:none;margin-top:var(--s-3);gap:var(--s-1) 14px}
   .portrait{right:0;width:100%;object-position:52% 26%}
   .about::after{
     background:linear-gradient(180deg,rgba(9,53,38,0) 58%,rgba(9,53,38,.9) 100%);
@@ -343,22 +358,22 @@ img{display:block;max-width:100%}
   /* very short viewports (SE-class): reclaim height from the chrome so the
      list still clears the contact bar */
   @media(max-height:620px){
-    .identity{padding:3vh 6vw 1.6vh}
+    .identity{padding:3vh 6vw var(--s-3)}
     .identity h1{font-size:clamp(var(--t-xl),7vw,var(--t-2xl))}
     .positioning{font-size:clamp(var(--t-xs),3.6vw,var(--t-sm))}
     .stage{min-height:120px}
     /* too little height left here to fill the width without cutting the
        keyboard, so fit the scene to the block instead */
     .desk{height:100%;width:auto}
-    .plist{padding-top:1.6vh}
+    .plist{padding-top:var(--s-4)}
   }
 
   .plist{
     order:3;
     flex:none;position:relative;z-index:1;
-    padding:3.5vh 6vw 52svh;
+    padding:var(--s-5) 6vw 52svh;
   }
-  .projects{gap:20px}
+  .projects{gap:var(--s-3)}
   .project{
     width:100%;                       /* full content width on mobile */
     justify-content:flex-start;
@@ -424,7 +439,7 @@ img{display:block;max-width:100%}
 }
 /* Petersen ships no body copy here. YSB must — nobody recognises the
    products in these screenshots (CLAUDE.md §3.6). */
-.case-copy{display:flex;flex-direction:column;gap:14px;max-width:42ch}
+.case-copy{display:flex;flex-direction:column;gap:var(--s-3);max-width:42ch}
 .case-copy p{font-family:var(--body);font-size:var(--t-md);line-height:var(--lh-body);color:var(--muted)}
 .case-copy strong{color:var(--text);font-weight:600}
 
@@ -477,11 +492,11 @@ a.live-link:hover{color:var(--text);transform:translateY(-2px)}
      is three paragraphs, and centred body copy does not read. */
   .case-rail{
     position:static;height:auto;
-    padding:6vh 7vw 4vh;justify-content:flex-start;gap:14px;
+    padding:6vh 7vw var(--s-5);justify-content:flex-start;gap:var(--s-2);
     align-items:center;text-align:center;
   }
   .case-rail h1{font-size:clamp(var(--t-xl),7.4vw,var(--t-2xl));max-width:none}
-  .case-copy{text-align:left;max-width:42ch;margin-top:10px;gap:11px}
+  .case-copy{text-align:left;max-width:42ch;margin-top:var(--s-4);gap:var(--s-3)}
   /* "See it live" sits under the title as it does in the reference, with
      the outcome copy below. That also keeps the only tappable links in the
      header clear of the band the floating back circle occupies. */
@@ -506,7 +521,7 @@ a.live-link:hover{color:var(--text);transform:translateY(-2px)}
     opacity:0;pointer-events:none;
     transform:translateX(-50%) translateY(10px);
   }
-  .case-stack{padding:0 5vw 26vh;gap:26px;max-width:none}
+  .case-stack{padding:0 5vw 26vh;gap:var(--s-5);max-width:none}
   .shot-card.is-portrait{align-self:stretch}
   .shot-card.is-portrait img{max-width:100%}
 }
