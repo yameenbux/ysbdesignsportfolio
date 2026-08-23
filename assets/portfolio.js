@@ -59,27 +59,77 @@
 
   setActive(0);
 
-  /* Two input sources, one piece of state. On the split layout the cursor
-     drives selection continuously. On the one-screen layout there is no
-     scroll position left to read, so the first tap selects and previews and
-     a second tap on the already-active item opens it.
+  /* Two input sources, one piece of state — never two selection systems.
+     On the split layout the cursor drives it. On the pinned layout the list
+     scrolls under the render and position drives it, with a tap able to
+     take over: the first tap selects and previews, a second tap on the
+     already-active item opens it.
 
-     The hover binding is switched off there rather than gated on pointer
-     type: a tap emits compatibility mouse events, so mouseenter would
-     otherwise make the item active before its own click could see it. */
-  var onePane = window.matchMedia('(max-width: 900px)');
+     The hover binding is switched off on the pinned layout rather than
+     gated on pointer type, and the focus preview is limited to
+     :focus-visible — a tap emits compatibility mouseenter and focus events
+     that would otherwise make the item active before its own click. */
+  var pinned = window.matchMedia('(max-width: 900px)');
 
   items.forEach(function (el, i) {
-    el.addEventListener('mouseenter', function () { if (!onePane.matches) setActive(i); });
+    el.addEventListener('mouseenter', function () { if (!pinned.matches) setActive(i); });
     el.addEventListener('focus', function () {
-      /* keyboard focus previews; the focus a tap incidentally gives the link
-         must not, or the tap's own click would find it already active */
       try { if (!el.matches(':focus-visible')) return; } catch (err) {}
       setActive(i);
     });
     el.addEventListener('click', function (e) {
-      if (onePane.matches && i !== active) { e.preventDefault(); setActive(i); }
+      if (pinned.matches && i !== active) { e.preventDefault(); setActive(i); }
     });
   });
+
+  /* Position-driven selection under the pinned render. The line sits just
+     below the render; the item nearest it wins, and hitting the bottom of
+     the page always resolves to the last item so a short list still gives
+     every project its turn. */
+  var io = null;
+  var inBand = [];
+
+  function resolve() {
+    if (document.body.classList.contains('is-about')) return;
+    var atEnd = window.innerHeight + window.scrollY >=
+                document.documentElement.scrollHeight - 4;
+    if (atEnd) { setActive(items.length - 1); return; }
+    if (!inBand.length) return;
+    var stage = document.querySelector('.stage');
+    var line = (stage ? stage.getBoundingClientRect().bottom : 0) +
+               window.innerHeight * 0.06;
+    var best = null, bestD = Infinity;
+    inBand.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      var d = Math.abs(r.top + r.height / 2 - line);
+      if (d < bestD) { bestD = d; best = el; }
+    });
+    if (best) setActive(items.indexOf(best));
+  }
+
+  function observe() {
+    if (io || !('IntersectionObserver' in window)) return;
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var at = inBand.indexOf(entry.target);
+        if (entry.isIntersecting && at === -1) inBand.push(entry.target);
+        if (!entry.isIntersecting && at !== -1) inBand.splice(at, 1);
+      });
+      resolve();
+    }, { rootMargin: '-40% 0px -12% 0px', threshold: 0 });
+    items.forEach(function (el) { io.observe(el); });
+    window.addEventListener('scroll', resolve, { passive: true });
+  }
+
+  function unobserve() {
+    if (!io) return;
+    io.disconnect(); io = null; inBand = [];
+    window.removeEventListener('scroll', resolve);
+  }
+
+  function sync() { pinned.matches ? observe() : unobserve(); }
+  sync();
+  pinned.addEventListener ? pinned.addEventListener('change', sync)
+                          : pinned.addListener(sync);
 
 })();

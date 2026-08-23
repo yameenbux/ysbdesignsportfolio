@@ -261,25 +261,27 @@ img{display:block;max-width:100%}
    =========================================================================== */
 
 @media(max-width:900px){
-  /* Everything fits the first screen — the render is sized from what the
-     identity block and the list leave over, so there is nothing to scroll
-     to at any phone height. */
+  /* The reference's mobile behaviour: the identity block scrolls away, the
+     render pins to the top of the viewport at roughly half its height, and
+     the project list scrolls underneath it. The contact bar is fixed, so
+     WhatsApp stays on screen throughout. */
   .index{
     display:flex;flex-direction:column;
-    height:100svh;min-height:0;
-    padding-bottom:calc(72px + env(safe-area-inset-bottom));
+    min-height:100svh;
   }
+  /* State A2 has no list, so it still holds to a single screen */
+  .is-about .index{height:100svh}
   .rail{display:contents;padding:0}
-  .identity{order:1;flex:none;padding:2.6vh 6vw 1.4vh;}
-  .identity h1{font-size:clamp(1.75rem,7.2vw,2.3rem)}
+  .identity{order:1;flex:none;padding:4vh 6vw 2.4vh;}
+  .identity h1{font-size:clamp(1.95rem,7.8vw,2.5rem)}
   .positioning{font-size:clamp(.88rem,3.9vw,1.2rem);max-width:none}  /* scales so the two authored lines never wrap */
 
   .stage{
     order:2;
     place-items:start center;
-    position:relative;z-index:5;
-    flex:1 1 auto;height:auto;min-height:150px;
-    max-height:85vw;                /* the reference gives the render ~half the viewport */
+    position:sticky;top:0;z-index:5;
+    flex:none;height:min(51svh,85vw);   /* the reference's proportion */
+    min-height:150px;
     padding:0;overflow:hidden;
     background:linear-gradient(180deg,var(--panel) 0%,var(--panel-2) 74%,var(--bg-deep) 100%);
     border-radius:0 0 34px 34px;
@@ -331,13 +333,13 @@ img{display:block;max-width:100%}
   .plist{
     order:3;
     flex:none;position:relative;z-index:1;
-    padding:1.5vh 6vw 0;
+    padding:3.5vh 6vw calc(38svh + 72px + env(safe-area-inset-bottom));
   }
-  .projects{gap:clamp(5px,.8vh,11px)}
+  .projects{gap:20px}
   .project{
     width:100%;                       /* full content width on mobile */
     justify-content:flex-start;
-    padding:clamp(7px,1.15vh,14px) 20px;
+    padding:16px 20px;
     border-radius:100px;
   }
   .project.is-active{padding-right:20px}
