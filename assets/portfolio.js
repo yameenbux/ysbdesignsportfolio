@@ -59,58 +59,27 @@
 
   setActive(0);
 
-  /* pointer: the desktop equivalent of the same coupling */
+  /* Two input sources, one piece of state. On the split layout the cursor
+     drives selection continuously. On the one-screen layout there is no
+     scroll position left to read, so the first tap selects and previews and
+     a second tap on the already-active item opens it.
+
+     The hover binding is switched off there rather than gated on pointer
+     type: a tap emits compatibility mouse events, so mouseenter would
+     otherwise make the item active before its own click could see it. */
+  var onePane = window.matchMedia('(max-width: 900px)');
+
   items.forEach(function (el, i) {
-    el.addEventListener('mouseenter', function () { setActive(i); });
-    el.addEventListener('focus', function () { setActive(i); });
+    el.addEventListener('mouseenter', function () { if (!onePane.matches) setActive(i); });
+    el.addEventListener('focus', function () {
+      /* keyboard focus previews; the focus a tap incidentally gives the link
+         must not, or the tap's own click would find it already active */
+      try { if (!el.matches(':focus-visible')) return; } catch (err) {}
+      setActive(i);
+    });
+    el.addEventListener('click', function (e) {
+      if (onePane.matches && i !== active) { e.preventDefault(); setActive(i); }
+    });
   });
 
-  /* position: as the list moves under the pinned render, the active pill
-     advances and the screen swaps to match */
-  var positionDriven = window.matchMedia('(max-width: 900px)');
-  var io = null;
-  var inBand = [];
-
-  /* the item nearest the selection line wins — a short list means several
-     can sit in the band at once */
-  function resolve() {
-    if (!inBand.length) return;
-    var line = window.innerHeight * 0.46;
-    var best = null, bestD = Infinity;
-    inBand.forEach(function (el) {
-      var r = el.getBoundingClientRect();
-      var d = Math.abs(r.top + r.height / 2 - line);
-      if (d < bestD) { bestD = d; best = el; }
-    });
-    if (best) setActive(items.indexOf(best));
-  }
-
-  function observe() {
-    if (io) return;
-    if (!('IntersectionObserver' in window)) return;
-    io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        var at = inBand.indexOf(entry.target);
-        if (entry.isIntersecting && at === -1) inBand.push(entry.target);
-        if (!entry.isIntersecting && at !== -1) inBand.splice(at, 1);
-      });
-      resolve();
-    }, { rootMargin: '-40% 0px -20% 0px', threshold: 0 });
-    items.forEach(function (el) { io.observe(el); });
-    window.addEventListener('scroll', resolve, { passive: true });
-  }
-
-  function unobserve() {
-    if (!io) return;
-    io.disconnect();
-    io = null;
-    inBand = [];
-    window.removeEventListener('scroll', resolve);
-  }
-
-  function sync() { positionDriven.matches ? observe() : unobserve(); }
-  sync();
-  positionDriven.addEventListener
-    ? positionDriven.addEventListener('change', sync)
-    : positionDriven.addListener(sync);
 })();
