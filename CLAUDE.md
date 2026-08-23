@@ -18,7 +18,7 @@ before building anything.
 
 ## Part 1 — The structural pattern
 
-This is NOT a scrolling grid of project cards. It is two states.
+This is NOT a scrolling grid of project cards. It is **three** states.
 
 ### State A — Index
 
@@ -31,12 +31,39 @@ This is NOT a scrolling grid of project cards. It is two states.
   `--text` colour, trailing expand icon. All others sit at `--muted`.
 - The scene never moves. Only the screen content changes.
 
+### State A2 — About (opened by `More`)
+
+Observed in the recording; missed by every earlier pass.
+
+`More` does not expand a paragraph inline. It replaces the entire canvas:
+- The desk render and the project list both disappear.
+- A large, dark, tightly-cropped **portrait photograph** takes the right
+  side and bleeds off the right edge of the viewport.
+- The left rail keeps its position and its width, but the two-line
+  positioning statement expands into a full bio paragraph (~45 words,
+  set to roughly 28 characters per line — a narrow measure).
+- The disclosure label flips from `More ⌄` to `Close ⌃` and sits below
+  the paragraph.
+
+The rail's left edge, type size, and vertical position do not move between
+State A and A2. The identity block is the fixed anchor of the whole design;
+everything to the right of it is what changes.
+
 ### State B — Case study
 
-- Left rail becomes: circular back button, project title, "See it live"
-  beneath in muted. Rail is sticky.
-- Right side: a vertical stack of large rounded cards, each a full-width
-  screenshot of the project. Generous vertical gap between them.
+- Left rail becomes: circular back button (~44px, `--panel` fill, muted
+  chevron), project title in `--text`, "See it live ↗" beneath in `--muted`
+  with a small arrow glyph. Rail is genuinely sticky — confirmed fixed
+  while cards scroll past it.
+- Right side: a vertical stack of large rounded cards, uniform width,
+  left-aligned to a gutter at roughly 40% of viewport width and running to
+  ~88%. Generous vertical gap.
+- **Cards are not white.** Each card carries the project's own background
+  colour — a dark project produces a dark card. Every card has a hairline
+  ~1px border at low opacity and a large corner radius (~20–24px), which is
+  what separates a dark card from the dark canvas.
+- Cards are full-page captures, so scrolling the stack reads like browsing
+  the project itself.
 - Petersen ships no body copy here. **YSB must.** See "Reconciling".
 
 If you build a normal card grid, you have missed the point of the design.
@@ -75,16 +102,58 @@ Behaviour:
   (monitor / sun / moon) bottom-left in its own rounded container, contact
   links bottom-right. On desktop both sit together bottom-right.
 
-### Interaction model (resolved)
+### Interaction model (measured)
 
-Selection is **position-driven, not click-driven**. On mobile, the active
-item is determined by scroll position — as the list moves under the pinned
-render, the active pill advances and the composited screen swaps to match.
-Desktop hover is the pointer-equivalent of the same coupling.
+Selection is **position-driven, not click-driven**.
 
-Implementation: an IntersectionObserver on the list items driving a single
-piece of state that both the pill and the screen slot read from. Do not
-implement mobile and desktop as separate selection systems.
+- Desktop: pure hover. Moving the cursor down the list changes the active
+  item continuously — no click required for the preview. Click opens State B.
+- Mobile: scroll position drives the same state as the list moves under the
+  pinned render.
+- The hovered item's label goes from `--muted` to full `--text` and reveals
+  its trailing expand icon. The pill fill appears on the active item only.
+
+Implementation: one piece of state that both the pill and the screen slot
+read from, driven by pointer position on desktop and an IntersectionObserver
+on mobile. Do not build two separate selection systems.
+
+### Motion (measured from 20fps frame extraction)
+
+**Screen swap is a crossfade through blank — not a cut, not a slide.**
+
+Sampled at 50ms intervals, the outgoing screenshot fades to an empty
+screen over ~100ms, and the incoming one fades up over ~100ms.
+Total ≈ 200ms, with a brief blank frame at the midpoint.
+
+```css
+--swap-out: 100ms;
+--swap-in:  100ms;
+--ease: cubic-bezier(.2,.8,.2,1);  /* already in YSB styles.css */
+```
+
+The label state (colour, pill, icon) changes **immediately** on hover while
+the screen lags behind through the crossfade. That desync is deliberate and
+is a large part of why the interaction feels physical rather than instant.
+Do not synchronise them.
+
+### The signature detail: content-keyed ambient light
+
+The desk render is not a static image with a screenshot pasted in. **The
+light spilling onto the surrounding scene changes with the screen content.**
+
+A bright white screenshot throws a blue-white bloom across the plinth, the
+keyboard and the wall behind. A dark screenshot lets the whole scene fall
+back to near-black. Across the recording the entire render's brightness
+visibly tracks the project being previewed.
+
+This is the one thing that makes the render read as a real object rather
+than a mockup. If you build the slot without it, you have built a picture
+frame and the whole approach loses its point.
+
+Cheapest credible implementation: a blurred, heavily-scaled copy of the
+current screenshot rendered behind and below the monitor at low opacity
+with `filter: blur(60px) saturate(1.4)`, crossfading on the same timing as
+the slot. Do not attempt real lighting.
 
 Case study:
 - Cards occupy roughly the right half of the viewport, left-aligned to a
@@ -159,12 +228,25 @@ YSB's palette is the opposite: saturated green, warm cream, a gold accent
 and a second bright green for CTAs. Dropped into the Petersen architecture
 unmodified, it fights the design. Specific conflicts and their resolutions:
 
-**1. White cards on green will clash.**
-Petersen's pure-white case-study cards read clean against neutral near-black.
-Against saturated `#093526` they read cold and cut out.
-→ Inset each screenshot in a `--panel` card with `1px solid var(--line)`,
-   so the white of the screenshot is framed rather than bleeding to the edge.
-   Never place a raw white rectangle directly on `--bg`.
+**1. Cards must be framed, not pasted.**
+Correction to the previous version: case-study cards are **not** white. Each
+inherits its project's own background colour, separated from the canvas only
+by a hairline border. On neutral near-black that works for light and dark
+projects alike. On saturated `#093526` a light project's card will read cold
+and cut out, while a dark one will disappear.
+→ Card = `--panel` frame, `1px solid var(--line)`, `--radius-lg`, screenshot
+   inset inside it. The frame does the separating, not the contrast. Never
+   place a raw screenshot directly on `--bg` in either direction.
+
+**1b. The ambient glow will muddy the green.**
+A blue-white bloom keyed to screenshot content, thrown across a forest-green
+canvas, produces a desaturated grey-green wash. The effect that carries the
+whole design on a neutral canvas actively degrades a coloured one.
+→ Constrain the bloom: sample the screenshot but clamp it toward the brand's
+   warm axis — `saturate(.6)` plus a `--gold` overlay at very low opacity —
+   and cap total spill opacity below the reference. Test with LuxeScent
+   (light, warm) and Taiyabah (likely dark) side by side; those two are the
+   extremes that will break it.
 
 **2. Gold competes with the work.**
 `--gold` at 7:1 is loud. If it appears on the eyebrow, the active pill, the
@@ -207,6 +289,17 @@ WorkOS. Nobody browsing YSB Designs recognises LuxeScent UK.
    what was built, what changed. Two or three short paragraphs in Instrument
    Sans at `--muted`, above "See it live". Wordless case studies are a
    positioning choice that only works from a position of existing fame.
+
+**7. The About portrait is worth more to you than to him.**
+Petersen's `More` state is a flex — his audience already trusts the work, so
+the photo is personality. Your audience is deciding whether to hand cash to
+a stranger found on Google. A face, a name and a Bolton address is
+trust-building, not decoration.
+→ Build State A2 exactly as observed, but treat it as a conversion surface
+   rather than a vanity page: the bio names the location and the company,
+   and a `--wa` contact button sits in the rail beneath `Close`.
+   Shoot the portrait dark and tightly cropped to match the canvas — a
+   bright studio headshot dropped on `--bg` will look pasted on.
 
 ---
 
@@ -269,19 +362,20 @@ text-heavy, it belongs in the State B stack, not in the display slot.
 
 ## UNVERIFIED — confirm before treating as spec
 
-- **Motion.** Transition timing and easing on the screen swap and the A→B
-  state change. Now the **only** high-value unknown; the polish of the
-  reference site almost certainly lives in that transition. Screen-record it
-  and step through frame by frame.
-- **Scroll-snap.** Whether the mobile list snaps to each item or scrolls
-  freely with the active state changing at a threshold. Free-scrolling would
-  make the screen swap fire mid-gesture, which is either the best or the
-  worst detail in the whole design. Check this.
+- **Scroll-snap on mobile.** Whether the list snaps to each item or scrolls
+  freely with the active state changing at a threshold. The recording is
+  desktop only, so this is unresolved.
 - **State B on mobile.** Only the index has been observed at phone width.
-  Whether the sticky rail survives, or the title collapses to a header, is
+  Whether the sticky rail survives or the title collapses to a header is
   unknown — and it matters more for YSB, since the rail must carry outcome
   copy that Petersen's does not have.
+- **State A ↔ A2 transition.** The `More` open/close is captured only at
+  1s intervals, so the timing and whether the portrait scales or fades is
+  not measured. Re-record just that interaction.
 - Light-mode palette. Does not currently exist.
 
-**Resolved since the previous version:** mobile layout (render is kept and
-pinned, not hidden) and the interaction model (position-driven).
+**Resolved since the previous version:** the About state (a third state, not
+an inline expansion), swap timing (~200ms crossfade through blank), the
+label/screen desync, content-keyed ambient light, hover-not-click on
+desktop, and that case-study cards inherit project colour rather than
+being white.
