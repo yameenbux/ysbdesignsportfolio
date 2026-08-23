@@ -133,3 +133,15 @@
                           : pinned.addListener(sync);
 
 })();
+
+/* Case study: the floating back circle steps aside once the footer scrolls
+   into view, so it never lands on the contact button. The footer carries
+   its own link back. */
+(function () {
+  var back = document.querySelector('.case-rail .back');
+  var foot = document.querySelector('.case-foot');
+  if (!back || !foot || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    back.classList.toggle('is-tucked', entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(foot);
+})();

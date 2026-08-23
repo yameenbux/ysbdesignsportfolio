@@ -98,7 +98,8 @@ Behaviour:
 - The list scrolls underneath the pinned render.
 - The active pill spans the **full content width** on mobile — it does not
   hug the label as it does on desktop. Same fill, same trailing expand icon.
-- Footer is fixed and splits across the bottom: theme control group
+- Footer is at the end of the document, not fixed — it arrives when the
+  list has scrolled away. It splits across the bottom: theme control group
   (monitor / sun / moon) bottom-left in its own rounded container, contact
   links bottom-right. On desktop both sit together bottom-right.
 
@@ -275,11 +276,16 @@ much brighter green.
 Petersen can afford that — his visitor is browsing out of curiosity and the
 render *is* the pitch. A YSB visitor arrived from a Google search for a
 tradesperson's website and wants a price and a phone number.
-→ Keep the pinned render, but the fixed mobile footer must carry the primary
-   contact action, not just social links. Replace the theme control slot
-   (bottom-left) with a `--wa` WhatsApp button. It is always on screen, it
-   costs no additional scroll, and it is the one place the brand's brightest
-   colour earns its keep.
+→ Keep the pinned render, and give the theme control slot (bottom-left) to
+   a `--wa` WhatsApp button — the mobile footer must carry the primary
+   contact action, not just social links. It is the one place the brand's
+   brightest colour earns its keep.
+   **Amended:** the footer follows the reference and sits at the end of the
+   document rather than being fixed, so the contact button is no longer
+   always on screen. That was the argument for fixing it; the trade was made
+   deliberately for the reference's proportions and quiet. The case-study
+   back circle floats bottom-centre instead, and tucks away when the footer
+   scrolls in.
 
 **6. The screenshots are not recognisable products.**
 Petersen can ship wordless case studies because his audience already knows

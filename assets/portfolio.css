@@ -332,7 +332,7 @@ img{display:block;max-width:100%}
   .plist{
     order:3;
     flex:none;position:relative;z-index:1;
-    padding:3.5vh 6vw calc(38svh + 72px + env(safe-area-inset-bottom));
+    padding:3.5vh 6vw 52svh;
   }
   .projects{gap:20px}
   .project{
@@ -346,13 +346,14 @@ img{display:block;max-width:100%}
   .p-expand{margin-left:auto}
   .p-tag{display:none}
 
-  /* fixed footer: contact action bottom-left, links bottom-right.
-     The theme control slot is given to WhatsApp (CLAUDE.md §3.5). */
+  /* At the end of the document rather than fixed, as the reference has it:
+     contact action bottom-left in the slot its theme control occupies,
+     links bottom-right. */
   .index-foot{
-    left:0;right:0;bottom:0;
-    padding:12px max(14px,3vw) calc(12px + env(safe-area-inset-bottom));
+    position:static;
+    padding:2vh 6vw calc(30px + env(safe-area-inset-bottom));
     justify-content:space-between;
-    background:linear-gradient(180deg,rgba(9,53,38,0) 0%,rgba(6,34,25,.92) 46%);
+    background:none;
   }
   .foot-links{gap:16px}
   .foot-links a{font-size:11px;letter-spacing:.12em}
@@ -457,41 +458,48 @@ a.live-link:hover{color:var(--text);transform:translateY(-2px)}
     align-items:center;text-align:center;
   }
   .case-rail h1{font-size:clamp(1.9rem,7.4vw,2.4rem);max-width:none}
-  .case-copy{text-align:left;max-width:42ch;margin-top:4px;gap:11px}
+  .case-copy{text-align:left;max-width:42ch;margin-top:10px;gap:11px}
   .case-copy p{font-size:15px;line-height:1.55}
   .case-role{font-size:10.5px;letter-spacing:.13em}
-  .live-link{align-self:center}
+  /* "See it live" sits under the title as it does in the reference, with
+     the outcome copy below. That also keeps the only tappable links in the
+     header clear of the band the floating back circle occupies. */
+  .live-link{align-self:center;order:1}
+  .case-copy{order:2}
 
-  /* Back moves to the bottom, in thumb reach, as the reference does — but
-     into the centre of the contact bar rather than floating over the cards,
-     where it would sit on top of a "See it live" link. */
+  /* Back floats at the bottom centre, in thumb reach, and stays put while
+     the stack scrolls past — the reference's treatment, now that the
+     contact bar no longer occupies that band. */
   .back{
     position:fixed;z-index:30;
-    left:50%;bottom:calc(11px + env(safe-area-inset-bottom));
+    left:50%;bottom:calc(20px + env(safe-area-inset-bottom));
     transform:translateX(-50%);
-    width:44px;height:44px;
-    background:rgba(6,34,25,.82);backdrop-filter:blur(14px);
+    width:50px;height:50px;
+    background:rgba(6,34,25,.84);backdrop-filter:blur(14px);
     border-color:rgba(245,234,227,.2);color:var(--text);
+    box-shadow:0 8px 26px rgba(4,26,19,.5);
   }
   .back:hover,.back:focus-visible{transform:translateX(-50%) translateY(-2px)}
-  /* the circle does this job now */
-  .foot-work{display:none}
+  /* tucks away once the footer scrolls in, which carries its own way back */
+  .back.is-tucked{
+    opacity:0;pointer-events:none;
+    transform:translateX(-50%) translateY(10px);
+  }
   .case-stack{padding:0 5vw 26vh;gap:26px;max-width:none}
   .shot-card.is-portrait{align-self:stretch}
   .shot-card.is-portrait img{max-width:100%}
-  .case-foot{padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 }
 
-/* case-study footer reuses the fixed contact bar */
+/* At the end of the document on mobile, like the index footer; desktop
+   opts into the floating pill below. */
 .case-foot{
-  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  position:static;z-index:20;
   display:flex;align-items:center;justify-content:space-between;
-  padding:12px max(14px,3vw) calc(12px + env(safe-area-inset-bottom));
-  background:linear-gradient(180deg,rgba(9,53,38,0) 0%,rgba(6,34,25,.92) 46%);
+  padding:2vh 6vw calc(30px + env(safe-area-inset-bottom));
 }
 @media(min-width:901px){
   .case-foot{
-    left:auto;bottom:2.4vh;right:3vw;
+    position:fixed;left:auto;bottom:2.4vh;right:3vw;
     gap:20px;padding:7px 7px 7px 22px;
     border:1px solid var(--line);border-radius:100px;
     background:rgba(6,34,25,.74);backdrop-filter:blur(12px);
