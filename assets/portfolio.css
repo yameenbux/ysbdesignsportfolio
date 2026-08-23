@@ -20,6 +20,31 @@
   --mono:"JetBrains Mono",ui-monospace,monospace;
 
   --ease:cubic-bezier(.2,.8,.2,1);
+
+  /* Type scale — 1.25 (major third), anchored on the 17px body size the
+     brand already specifies. Every size on the site is one of these steps,
+     or a clamp interpolating between two adjacent ones. Nothing else. */
+  --t-3xl:41.5px;
+  --t-2xl:33px;
+  --t-xl:26.5px;
+  --t-lg:21px;
+  --t-md:17px;                  /* base */
+  --t-sm:13.5px;
+  --t-xs:11px;
+  --t-mono:12.5px;              /* the utility face keeps its brand size */
+  --t-mono-sm:var(--t-xs);
+
+  /* Line-height: one value per role, not one per element. */
+  --lh-display:1.05;            /* headlines and the project list */
+  --lh-label:1.25;              /* uppercase mono labels */
+  --lh-sub:1.4;                 /* display face at text size */
+  --lh-body:1.6;                /* Instrument Sans */
+
+  /* Tracking opens up as the mono gets smaller, not the reverse. */
+  --ls-display:-.02em;
+  --ls-sub:-.01em;
+  --ls-mono:.16em;
+  --ls-mono-sm:.18em;
   --swap-out:100ms;              /* screenshot fades to a blank screen */
   --swap-in:100ms;               /* then the next one fades up */
 }
@@ -28,14 +53,14 @@
 html{-webkit-text-size-adjust:100%}
 body{
   background:var(--bg);color:var(--text);
-  font-family:var(--body);font-size:17px;line-height:1.6;
+  font-family:var(--body);font-size:var(--t-md);line-height:var(--lh-body);
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
 
-.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase}
+.mono{font-family:var(--mono);font-size:var(--t-mono);line-height:var(--lh-label);letter-spacing:var(--ls-mono);text-transform:uppercase}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ===========================================================================
@@ -62,15 +87,15 @@ img{display:block;max-width:100%}
 
 .identity h1{
   font-family:var(--display);font-weight:800;
-  font-size:clamp(1.7rem,2.4vw,2.05rem);
-  line-height:1.05;letter-spacing:-.02em;
+  font-size:clamp(var(--t-xl),2.4vw,var(--t-2xl));
+  line-height:var(--lh-display);letter-spacing:var(--ls-display);
 }
 /* No Instrument Sans on the index — the positioning statement stays in the
    display face, recessed by colour rather than by scale (CLAUDE.md §3.3). */
 .positioning{
   font-family:var(--display);font-weight:500;
-  font-size:clamp(1rem,1.35vw,1.14rem);
-  line-height:1.35;letter-spacing:-.01em;
+  font-size:clamp(var(--t-sm),1.35vw,var(--t-md));
+  line-height:var(--lh-sub);letter-spacing:var(--ls-sub);
   color:var(--muted);
   max-width:38ch;margin-top:14px;
 }
@@ -79,8 +104,8 @@ img{display:block;max-width:100%}
    the display face rather than switching to Instrument Sans. */
 .bio{
   font-family:var(--display);font-weight:500;
-  font-size:clamp(1rem,1.35vw,1.14rem);
-  line-height:1.5;letter-spacing:-.01em;
+  font-size:clamp(var(--t-sm),1.35vw,var(--t-md));
+  line-height:var(--lh-sub);letter-spacing:var(--ls-sub);
   color:var(--muted);
   max-width:28ch;                  /* the narrow measure, ~28 chars a line */
   margin-top:14px;display:none;
@@ -89,7 +114,7 @@ img{display:block;max-width:100%}
 
 .disclose{
   margin-top:18px;
-  font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono);line-height:var(--lh-label);letter-spacing:var(--ls-mono);text-transform:uppercase;
   color:var(--muted);background:none;border:0;padding:0;cursor:pointer;
   display:inline-flex;align-items:center;gap:9px;
   transition:color .15s ease;
@@ -101,7 +126,7 @@ img{display:block;max-width:100%}
   max-width:34ch;margin-top:16px;
 }
 .caps li{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
   color:var(--muted);white-space:nowrap;
 }
 .is-about .caps{display:flex}
@@ -149,12 +174,12 @@ img{display:block;max-width:100%}
 }
 .p-name{
   font-family:var(--display);font-weight:700;
-  font-size:clamp(1.45rem,2.1vw,1.8rem);
-  line-height:1.05;letter-spacing:-.02em;
+  font-size:clamp(var(--t-lg),2.1vw,var(--t-xl));
+  line-height:var(--lh-display);letter-spacing:var(--ls-display);
   white-space:nowrap;
 }
 .p-tag{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
   color:var(--muted);white-space:nowrap;
   opacity:0;transition:opacity .15s ease;
 }
@@ -241,14 +266,14 @@ img{display:block;max-width:100%}
 }
 .foot-links{display:flex;align-items:center;gap:20px}
 .foot-links a{
-  font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
   color:var(--muted);transition:color .15s ease;
 }
 .foot-links a:hover{color:var(--text)}
 .wa-btn{
   display:inline-flex;align-items:center;gap:9px;
   background:var(--wa);color:#04231a;                 /* --wa's only job */
-  font-family:var(--body);font-weight:600;font-size:14.5px;
+  font-family:var(--body);font-weight:600;font-size:var(--t-sm);line-height:var(--lh-label);
   padding:11px 18px;border-radius:100px;
   transition:transform .15s ease,background .15s ease,box-shadow .15s ease;
 }
@@ -273,8 +298,8 @@ img{display:block;max-width:100%}
   .is-about .index{height:100svh}
   .rail{display:contents;padding:0}
   .identity{order:1;flex:none;padding:4vh 6vw 2.4vh;}
-  .identity h1{font-size:clamp(1.95rem,7.8vw,2.5rem)}
-  .positioning{font-size:clamp(.88rem,3.9vw,1.2rem);max-width:none}  /* scales so the two authored lines never wrap */
+  .identity h1{font-size:clamp(var(--t-2xl),7.8vw,var(--t-3xl))}
+  .positioning{font-size:clamp(var(--t-sm),3.9vw,var(--t-lg));max-width:none}  /* scales so the two authored lines never wrap */
 
   .stage{
     order:2;
@@ -306,9 +331,8 @@ img{display:block;max-width:100%}
     flex:1 1 auto;height:auto;min-height:130px;
     border-radius:0 0 34px 34px;
   }
-  .bio{font-size:clamp(.94rem,3.8vw,1.08rem);line-height:1.45;max-width:none}
+  .bio{font-size:clamp(var(--t-sm),3.8vw,var(--t-md));max-width:none}
   .caps{max-width:none;margin-top:12px;gap:6px 14px}
-  .caps li{font-size:10px;letter-spacing:.1em}
   .portrait{right:0;width:100%;object-position:52% 26%}
   .about::after{
     background:linear-gradient(180deg,rgba(9,53,38,0) 58%,rgba(9,53,38,.9) 100%);
@@ -320,8 +344,8 @@ img{display:block;max-width:100%}
      list still clears the contact bar */
   @media(max-height:620px){
     .identity{padding:3vh 6vw 1.6vh}
-    .identity h1{font-size:clamp(1.7rem,7vw,2.1rem)}
-    .positioning{font-size:clamp(.78rem,3.6vw,1rem)}
+    .identity h1{font-size:clamp(var(--t-xl),7vw,var(--t-2xl))}
+    .positioning{font-size:clamp(var(--t-xs),3.6vw,var(--t-sm))}
     .stage{min-height:120px}
     /* too little height left here to fill the width without cutting the
        keyboard, so fit the scene to the block instead */
@@ -356,7 +380,6 @@ img{display:block;max-width:100%}
     background:none;
   }
   .foot-links{gap:16px}
-  .foot-links a{font-size:11px;letter-spacing:.12em}
 }
 
 @media(min-width:901px){
@@ -392,21 +415,21 @@ img{display:block;max-width:100%}
 
 .case-rail h1{
   font-family:var(--display);font-weight:800;
-  font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.05;letter-spacing:-.02em;
+  font-size:clamp(var(--t-2xl),3vw,var(--t-3xl));line-height:var(--lh-display);letter-spacing:var(--ls-display);
   max-width:14ch;
 }
 .case-role{
-  font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
   color:var(--muted);
 }
 /* Petersen ships no body copy here. YSB must — nobody recognises the
    products in these screenshots (CLAUDE.md §3.6). */
 .case-copy{display:flex;flex-direction:column;gap:14px;max-width:42ch}
-.case-copy p{font-family:var(--body);font-size:16px;line-height:1.6;color:var(--muted)}
+.case-copy p{font-family:var(--body);font-size:var(--t-md);line-height:var(--lh-body);color:var(--muted)}
 .case-copy strong{color:var(--text);font-weight:600}
 
 .live-link{
-  font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono);line-height:var(--lh-label);letter-spacing:var(--ls-mono);text-transform:uppercase;
   color:var(--muted);
   display:inline-flex;align-items:center;gap:9px;width:max-content;
   transition:color .15s ease,transform .15s ease;
@@ -437,7 +460,7 @@ a.live-link:hover{color:var(--text);transform:translateY(-2px)}
   border-radius:calc(var(--radius-lg) - 14px);
 }
 .shot-card figcaption{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
   color:var(--muted);padding:14px 6px 4px;
 }
 .shot-card.is-portrait{align-self:flex-start}   /* card hugs the phone, stays on the gutter */
@@ -457,10 +480,8 @@ a.live-link:hover{color:var(--text);transform:translateY(-2px)}
     padding:6vh 7vw 4vh;justify-content:flex-start;gap:14px;
     align-items:center;text-align:center;
   }
-  .case-rail h1{font-size:clamp(1.9rem,7.4vw,2.4rem);max-width:none}
+  .case-rail h1{font-size:clamp(var(--t-xl),7.4vw,var(--t-2xl));max-width:none}
   .case-copy{text-align:left;max-width:42ch;margin-top:10px;gap:11px}
-  .case-copy p{font-size:15px;line-height:1.55}
-  .case-role{font-size:10.5px;letter-spacing:.13em}
   /* "See it live" sits under the title as it does in the reference, with
      the outcome copy below. That also keeps the only tappable links in the
      header clear of the band the floating back circle occupies. */
