@@ -2,7 +2,7 @@
 
 **Live site → https://ysbdesigns.uk**
 
-The portfolio site for **YSB Designs** *(a trading name of YSB Ventures Ltd)* — fast, mobile-first websites for small businesses in and around Bolton, backed by affordable monthly care plans.
+The portfolio site for **YSB Designs** — fast, mobile-first websites for small businesses, backed by affordable monthly care plans. Based in Bolton, working with clients anywhere in the UK.
 
 A dependency-free static site built around a fixed desk render whose monitor is a live slot: move down the project list and the screenshot in the screen swaps to match. Plans and pricing live on their own route, off the index.
 

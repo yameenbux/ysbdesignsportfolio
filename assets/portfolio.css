@@ -262,7 +262,7 @@ img{display:block;max-width:100%}
   .rail{display:contents;padding:0}
   .identity{order:1;flex:none;padding:4.5vh 6vw 2.4vh;}
   .identity h1{font-size:clamp(2rem,8vw,2.6rem)}
-  .positioning{font-size:clamp(1.05rem,4.4vw,1.25rem);max-width:32ch}
+  .positioning{font-size:clamp(.88rem,3.9vw,1.2rem);max-width:none}  /* scales so the two authored lines never wrap */
 
   .stage{
     order:2;
@@ -298,7 +298,7 @@ img{display:block;max-width:100%}
   @media(max-height:620px){
     .identity{padding:3vh 6vw 1.6vh}
     .identity h1{font-size:clamp(1.7rem,7vw,2.1rem)}
-    .positioning{font-size:1rem}
+    .positioning{font-size:clamp(.78rem,3.6vw,1rem)}
     .stage{min-height:120px}
     .plist{padding-top:1.6vh}
   }
