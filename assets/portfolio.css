@@ -176,7 +176,11 @@ img{display:block;max-width:100%}
 
 .project{
   display:inline-flex;align-items:center;gap:14px;
-  width:max-content;max-width:100%;
+  width:max-content;
+  max-width:26vw;               /* the rail's own content width: 40vw - 14vw
+                                   of padding. Without this the pill sized to
+                                   max-content and a long enough label ran out
+                                   over the render. */
   padding:10px 15px;                 /* h-padding = 1.5 × v-padding */
   border-radius:100px;               /* radius = half height */
   background:transparent;
@@ -188,11 +192,7 @@ img{display:block;max-width:100%}
   font-size:clamp(var(--t-lg),2.1vw,var(--t-xl));
   line-height:var(--lh-display);letter-spacing:var(--ls-display);
   white-space:nowrap;
-}
-.p-tag{
-  font-family:var(--mono);font-size:var(--t-mono-sm);line-height:var(--lh-label);letter-spacing:var(--ls-mono-sm);text-transform:uppercase;
-  color:var(--muted);white-space:nowrap;
-  opacity:0;transition:opacity .15s ease;
+  flex:0 0 auto;
 }
 .p-expand{
   width:17px;height:17px;flex:none;
@@ -205,7 +205,6 @@ img{display:block;max-width:100%}
   color:var(--text);
   padding-right:38px;                /* pill runs wider than the label */
 }
-.project.is-active .p-tag{opacity:1}
 .project.is-active .p-expand{opacity:1;transform:translateX(0)}
 .project:hover{transform:translateY(-2px)}
 
@@ -383,7 +382,6 @@ img{display:block;max-width:100%}
   .project.is-active{padding-right:20px}
   .project:hover{transform:none}
   .p-expand{margin-left:auto}
-  .p-tag{display:none}
 
   /* At the end of the document rather than fixed, as the reference has it:
      contact action bottom-left in the slot its theme control occupies,
