@@ -88,10 +88,18 @@
             <stop offset="100%" stop-color="var(--panel-2)"/>
           </linearGradient>
           <radialGradient id="ground" cx="50%" cy="34%" r="70%">
-            <stop offset="0%" stop-color="rgba(14,68,51,.5)"/>
-            <stop offset="62%" stop-color="rgba(14,68,51,.2)"/>
+            <stop offset="0%" stop-color="rgba(14,68,51,.34)"/>
+            <stop offset="62%" stop-color="rgba(14,68,51,.14)"/>
             <stop offset="100%" stop-color="rgba(14,68,51,0)"/>
           </radialGradient>
+          <linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--panel-2)"/>
+            <stop offset="100%" stop-color="var(--bg-deep)"/>
+          </linearGradient>
+          <linearGradient id="riser" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--bg-deep)"/>
+            <stop offset="100%" stop-color="var(--scrim)"/>
+          </linearGradient>
           <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="var(--panel)"/>
             <stop offset="60%" stop-color="var(--panel-2)"/>
@@ -120,9 +128,16 @@
 
         <ellipse cx="600" cy="352" rx="580" ry="410" fill="url(#glow)"/>
 
-        <!-- the surface: a soft pool with contact shadows, not a slab. An
-             ellipse, because a rect showed its own edges against the canvas. -->
-        <ellipse cx="600" cy="742" rx="640" ry="215" fill="url(#ground)"/>
+        <!-- The plinth the devices stand on. The reference has one — a slab
+             seen slightly from above, its top face in perspective and a front
+             face below it. The product photos were shot on white with nothing
+             under them, which said nothing either way; removing it was my
+             inference and it was wrong. -->
+        <polygon points="200,622 1000,622 1094,800 106,800" fill="url(#deck)"/>
+        <line x1="200" y1="622.5" x2="1000" y2="622.5" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <path d="M106 800 H1094 V838 a16 16 0 0 1 -16 16 H122 a16 16 0 0 1 -16 -16 Z" fill="url(#riser)"/>
+        <line x1="106" y1="800.5" x2="1094" y2="800.5" stroke="rgba(4,26,19,.7)" stroke-width="1"/>
+        <ellipse cx="600" cy="716" rx="470" ry="118" fill="url(#ground)"/>
         <ellipse cx="600" cy="648" rx="250" ry="20" fill="#03130E" opacity=".6" filter="url(#soft)"/>
 
         <!-- flat slab foot: the display sits on it, no neck -->
