@@ -83,53 +83,70 @@
             <stop offset="0%" stop-color="rgba(245,234,227,.075)"/>
             <stop offset="100%" stop-color="rgba(245,234,227,0)"/>
           </radialGradient>
-          <linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--panel)"/>
-            <stop offset="100%" stop-color="var(--panel-2)"/>
-          </linearGradient>
-          <linearGradient id="riser" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--bg-deep)"/>
-            <stop offset="100%" stop-color="var(--scrim)"/>
-          </linearGradient>
           <linearGradient id="chassis" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="var(--panel)"/>
             <stop offset="100%" stop-color="var(--panel-2)"/>
           </linearGradient>
-          <pattern id="keys" x="0" y="0" width="27" height="11" patternUnits="userSpaceOnUse">
-            <rect x="1.5" y="2" width="20" height="6" rx="2" fill="rgba(245,234,227,.075)"/>
+          <radialGradient id="ground" cx="50%" cy="34%" r="70%">
+            <stop offset="0%" stop-color="rgba(14,68,51,.5)"/>
+            <stop offset="62%" stop-color="rgba(14,68,51,.2)"/>
+            <stop offset="100%" stop-color="rgba(14,68,51,0)"/>
+          </radialGradient>
+          <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--panel)"/>
+            <stop offset="60%" stop-color="var(--panel-2)"/>
+            <stop offset="100%" stop-color="var(--bg-deep)"/>
+          </linearGradient>
+          <linearGradient id="deckplate" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(245,234,227,.12)"/>
+            <stop offset="18%" stop-color="var(--panel)"/>
+            <stop offset="100%" stop-color="var(--panel-2)"/>
+          </linearGradient>
+          <linearGradient id="mouseshell" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(245,234,227,.16)"/>
+            <stop offset="22%" stop-color="var(--panel)"/>
+            <stop offset="100%" stop-color="var(--bg-deep)"/>
+          </linearGradient>
+          <pattern id="keys" x="0" y="0" width="17.6" height="10.4" patternUnits="userSpaceOnUse">
+            <rect x="1.4" y="1.4" width="14.8" height="7.6" rx="2" fill="rgba(245,234,227,.085)"/>
           </pattern>
-          <filter id="soft" x="-40%" y="-60%" width="180%" height="260%">
+          <filter id="soft" x="-40%" y="-90%" width="180%" height="320%">
             <feGaussianBlur stdDeviation="13"/>
+          </filter>
+          <filter id="contact" x="-60%" y="-200%" width="220%" height="520%">
+            <feGaussianBlur stdDeviation="7"/>
           </filter>
         </defs>
 
         <ellipse cx="600" cy="352" rx="580" ry="410" fill="url(#glow)"/>
 
-        <!-- plinth -->
-        <ellipse cx="600" cy="716" rx="300" ry="26" fill="#03130E" opacity=".55" filter="url(#soft)"/>
-        <polygon points="140,688 1060,688 1140,782 60,782" fill="url(#deck)"/>
-        <line x1="140" y1="688.5" x2="1060" y2="688.5" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
-        <path d="M60 782 H1140 V814 a16 16 0 0 1 -16 16 H76 a16 16 0 0 1 -16 -16 Z" fill="url(#riser)"/>
-        <line x1="60" y1="782.5" x2="1140" y2="782.5" stroke="rgba(4,26,19,.6)" stroke-width="1"/>
+        <!-- the surface: a soft pool with contact shadows, not a slab. An
+             ellipse, because a rect showed its own edges against the canvas. -->
+        <ellipse cx="600" cy="742" rx="640" ry="215" fill="url(#ground)"/>
+        <ellipse cx="600" cy="648" rx="250" ry="20" fill="#03130E" opacity=".6" filter="url(#soft)"/>
 
-        <!-- monitor stand -->
-        <polygon points="480,682 720,682 748,712 452,712" fill="var(--panel-2)" stroke="rgba(245,234,227,.10)" stroke-width="1"/>
-        <line x1="480" y1="682.5" x2="720" y2="682.5" stroke="rgba(245,234,227,.12)" stroke-width="1"/>
-        <polygon points="572,588 628,588 638,690 562,690" fill="url(#chassis)" stroke="rgba(245,234,227,.10)" stroke-width="1"/>
+        <!-- flat slab foot: the display sits on it, no neck -->
+        <ellipse cx="600" cy="641" rx="176" ry="9" fill="#03130E" opacity=".65" filter="url(#contact)"/>
+        <path d="M462 590 H738 L770 630 a9 9 0 0 1 -9 9 H439 a9 9 0 0 1 -9 -9 Z" fill="url(#foot)"/>
+        <path d="M462 590.5 H738" stroke="rgba(245,234,227,.16)" stroke-width="1.4"/>
 
-        <!-- monitor -->
+        <!-- monitor: body and screen rect are unchanged, the slot maps to them -->
         <rect x="205" y="78" width="790" height="512" rx="22" fill="url(#chassis)" stroke="rgba(245,234,227,.14)" stroke-width="1"/>
         <path d="M227 78 H973 a22 22 0 0 1 22 22" fill="none" stroke="rgba(245,234,227,.22)" stroke-width="1.5" stroke-linecap="round"/>
         <rect x="221" y="94" width="758" height="474" rx="8" fill="var(--scrim)"/>
 
-        <!-- keyboard -->
-        <ellipse cx="600" cy="770" rx="215" ry="12" fill="#03130E" opacity=".45" filter="url(#soft)"/>
-        <rect x="398" y="724" width="404" height="42" rx="11" fill="url(#chassis)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
-        <rect x="409" y="731" width="382" height="28" fill="url(#keys)"/>
+        <!-- low-profile keyboard -->
+        <ellipse cx="600" cy="774" rx="228" ry="10" fill="#03130E" opacity=".55" filter="url(#contact)"/>
+        <rect x="378" y="714" width="444" height="60" rx="12" fill="url(#deckplate)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <rect x="390" y="722" width="420" height="31" fill="url(#keys)"/>
+        <rect x="481" y="755" width="238" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
+        <rect x="390" y="755" width="83" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
+        <rect x="727" y="755" width="83" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
 
-        <!-- mouse -->
-        <rect x="840" y="726" width="52" height="42" rx="21" fill="url(#chassis)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
-        <line x1="866" y1="728" x2="866" y2="743" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <!-- puck mouse -->
+        <ellipse cx="884" cy="772" rx="34" ry="9" fill="#03130E" opacity=".5" filter="url(#contact)"/>
+        <rect x="854" y="722" width="60" height="50" rx="25" fill="url(#mouseshell)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <path d="M884 724 V742" stroke="rgba(245,234,227,.11)" stroke-width="1.2"/>
       </svg>
 
       <div class="bloom-layer bloom-front">
