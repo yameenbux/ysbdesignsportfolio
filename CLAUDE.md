@@ -299,7 +299,7 @@ WorkOS. Nobody browsing YSB Designs recognises LuxeScent UK.
 **7. The About portrait is worth more to you than to him.**
 Petersen's `More` state is a flex — his audience already trusts the work, so
 the photo is personality. Your audience is deciding whether to hand cash to
-a stranger found on Google. A face, a name and a Bolton address is
+a stranger found on Google. A face, a name and a Greater Manchester address is
 trust-building, not decoration.
 → Build State A2 exactly as observed, but treat it as a conversion surface
    rather than a vanity page: the bio names the location and the company,

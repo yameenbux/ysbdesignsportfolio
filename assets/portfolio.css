@@ -361,6 +361,7 @@ img{display:block;max-width:100%}
     .identity h1{font-size:clamp(var(--t-xl),7vw,var(--t-2xl))}
     .positioning{font-size:clamp(var(--t-xs),3.6vw,var(--t-sm))}
     .stage{min-height:120px}
+    .caps{margin-top:var(--s-2)}   /* "Greater Manchester" costs a line here */
     /* too little height left here to fill the width without cutting the
        keyboard, so fit the scene to the block instead */
     .desk{height:100%;width:auto}
