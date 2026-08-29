@@ -36,7 +36,7 @@ Each project has its own case-study page with outcome copy and a full-page scree
 
 ### Taiyabah Masjid — digital ecosystem
 → **[/taiyabah.html](https://ysbdesigns.uk/taiyabah.html)**
-One project, four connected products built and deployed end to end: a daily-use progressive web app, a public website and two in-building digital signage screens.
+One project, five connected products built and deployed end to end: a daily-use progressive web app, a public website, two in-building digital signage screens and a home display for tablets and TVs.
 *Stack:* Cloudflare Workers (serverless edge) · CI/CD with GitHub Actions · OneSignal push · installable, offline-ready PWA · Python timetable pipeline.
 *Live:* [app](https://yameenbux.github.io/Taiyabah-Mosque-App/) · [website](https://yameenbux.github.io/Taiyabah-Mosque-Website-Rebrand/)
 
@@ -51,6 +51,12 @@ A complete, multi-section website for a Bolton minibus and private-hire operator
 A shop-style storefront for a Bolton fragrance brand — product carousel, interactive scent finder, and every CTA deep-linking to the brand's Etsy listings.
 *Stack:* static, zero-dependency HTML/CSS/JS · CSS design tokens · IntersectionObserver motion · Formspree · Etsy commerce.
 *Live:* [luxescentuk](https://yameenbux.github.io/Luxescentuk/)
+
+### Hair by Chrissy — booking platform *(client)*
+→ **[/hairbychrissy.html](https://ysbdesigns.uk/hairbychrissy.html)**
+A hair extension specialist in London taking bookings through Instagram DMs. The site is the booking system: live availability, deposits, an admin calendar and automatic confirmations.
+*Stack:* Node with **zero dependencies** · JSON store · hand-written front end · Resend email · deposit handling.
+*Live:* private client system, not publicly deployed.
 
 ### The Venetian Company — Venetian plaster &amp; microcement
 → **[/venetian.html](https://ysbdesigns.uk/venetian.html)**
@@ -70,6 +76,7 @@ index.html          Portfolio index — split layout, desk render slot, about st
 taiyabah.html       Case study
 buxtravel.html      Case study
 luxescent.html      Case study (client)
+hairbychrissy.html  Case study (client)
 venetian.html       Case study
 services.html       Plans, pricing and how it works — kept off the index
 assets/
