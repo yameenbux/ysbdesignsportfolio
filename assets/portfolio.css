@@ -215,6 +215,10 @@ img{display:block;max-width:100%}
   height:100svh;
   display:grid;place-items:center;
   padding:0 6vw 0 2vw;
+  /* The ambient bloom is built to spill past the desk. Clip that spill at
+     the viewport edge so a decorative glow cannot put the page into
+     horizontal scroll — clip, not hidden, so sticky still works. */
+  overflow-x:clip;
 }
 .desk{
   position:relative;
