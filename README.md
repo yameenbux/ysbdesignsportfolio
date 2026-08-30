@@ -38,13 +38,13 @@ Each project has its own case-study page with outcome copy and a full-page scree
 → **[/taiyabah.html](https://ysbdesigns.uk/taiyabah.html)**
 One project, five connected products built and deployed end to end: a daily-use progressive web app, a public website, two in-building digital signage screens and a home display for tablets and TVs.
 *Stack:* Cloudflare Workers (serverless edge) · CI/CD with GitHub Actions · OneSignal push · installable, offline-ready PWA · Python timetable pipeline.
-*Live:* [app](https://yameenbux.github.io/Taiyabah-Mosque-App/) · [website](https://yameenbux.github.io/Taiyabah-Mosque-Website-Rebrand/)
+*Live:* [app](https://taiyabahapp.ysbdesigns.uk/) · [website](https://taiyabahwebsite.ysbdesigns.uk/) · [home display](https://yameenbux.github.io/Taiyabah-Masjid-HomeSmartScreen/)
 
 ### Bux Travel — minibus & private hire
 → **[/buxtravel.html](https://ysbdesigns.uk/buxtravel.html)**
 A complete, multi-section website for a Bolton minibus and private-hire operator — services, fleet showcase, coverage area, Google reviews, an online booking form and a full FAQ.
 *Stack:* static, responsive HTML/CSS/JS · WhatsApp click-to-chat · booking enquiry form · sitemap/robots/privacy, SEO-ready.
-*Live:* [buxtravel](https://yameenbux.github.io/BuxTravel/)
+*Live:* [buxtravel.co.uk](https://buxtravel.co.uk/)
 
 ### LuxeScent UK — luxury car diffusers *(client project)*
 → **[/luxescent.html](https://ysbdesigns.uk/luxescent.html)**
@@ -52,11 +52,17 @@ A shop-style storefront for a Bolton fragrance brand — product carousel, inter
 *Stack:* static, zero-dependency HTML/CSS/JS · CSS design tokens · IntersectionObserver motion · Formspree · Etsy commerce.
 *Live:* [luxescentuk](https://yameenbux.github.io/Luxescentuk/)
 
+### èllash — booking page *(client)*
+→ **[/ellash.html](https://ysbdesigns.uk/ellash.html)**
+A booking page for a mobile lash technician working across Birmingham, Nuneaton and Coventry. Availability is built around travel days rather than a salon diary, with deposits and aftercare built in — the simple version of what the big platforms sell, without the commission or the monthly fee.
+*Stack:* one page, no build step, no dependencies · deposit handling · area-aware availability.
+*Live:* [ellashtech.ysbdesigns.uk](https://ellashtech.ysbdesigns.uk/)
+
 ### Hair by Chrissy — booking platform *(client)*
 → **[/hairbychrissy.html](https://ysbdesigns.uk/hairbychrissy.html)**
 A hair extension specialist in London taking bookings through Instagram DMs. The site is the booking system: live availability, deposits, an admin calendar and automatic confirmations.
 *Stack:* Node with **zero dependencies** · JSON store · hand-written front end · Resend email · deposit handling.
-*Live:* private client system, not publicly deployed.
+*Live:* [hairbychrissy.ysbdesigns.uk](https://hairbychrissy.ysbdesigns.uk/)
 
 ### The Venetian Company — Venetian plaster &amp; microcement
 → **[/venetian.html](https://ysbdesigns.uk/venetian.html)**
@@ -76,6 +82,7 @@ index.html          Portfolio index — split layout, desk render slot, about st
 taiyabah.html       Case study
 buxtravel.html      Case study
 luxescent.html      Case study (client)
+ellash.html         Case study (client)
 hairbychrissy.html  Case study (client)
 venetian.html       Case study
 services.html       Plans, pricing and how it works — kept off the index
