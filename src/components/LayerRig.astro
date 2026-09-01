@@ -58,7 +58,7 @@ const { shot, shotAlt } = Astro.props;
     <span class="sheet px-[7px] py-[2px] font-mono text-[10.5px]">drag</span>
     <span>or</span>
     <span class="sheet px-[7px] py-[2px] font-mono text-[10.5px]">↑ ↓</span>
-    <span>to pull the stack apart</span>
+    <span class="max-[700px]:hidden">to pull the stack apart</span><span class="hidden max-[700px]:inline">scroll to pull the stack apart</span>
     <button id="rigReset" type="button" class="ml-1 cursor-pointer underline underline-offset-2 hover:text-blue">reset</button>
   </p>
 </div>
@@ -81,7 +81,9 @@ const { shot, shotAlt } = Astro.props;
      have nowhere to go at this width, so each label moves inside its own
      card's visible strip — which is what collided when they floated outside. */
   @media (max-width: 700px) {
-    #rig { height: 470px; perspective: 900px; }
+    /* touch-action must not be none here: the rig is 470px tall and blocking
+       it means a swipe over the hero does not scroll the page at all. */
+    #rig { height: 470px; perspective: 900px; touch-action: auto; }
     /* The screenshot is cropped short on a phone so all three sheets fit the
        deck in reading order with each label clear of the sheet above it. */
     .rig-layer[data-depth="3"] .sheet { height: 132px; }
@@ -137,6 +139,8 @@ const { shot, shotAlt } = Astro.props;
       };
 
       function tick() {
+        // Entrance: each sheet slides up into the stack, lowest first.
+        const intro = Math.min(1, (performance.now() - introFrom) / 1100);
         px += (tx - px) * 0.09;
         py += (ty - py) * 0.09;
         spread += (target - spread) * 0.1;
@@ -149,25 +153,51 @@ const { shot, shotAlt } = Astro.props;
             // above, so every label stays uncovered.
             const step = 150 + spread * 58;
             l.style.zIndex = String(d);
+            const e = Math.max(0, Math.min(1, (intro - (3 - d) * 0.13) / 0.62));
+            const ease = 1 - Math.pow(1 - e, 3);
+            l.style.opacity = String(ease);
             // No percentage translate here — the layer is anchored by
             // left/right, so any -50% would reintroduce the overhang.
             l.style.transform =
-              `rotateX(${4 + py * 3}deg) translate3d(${px * 4}px, ${(3 - d) * step}px, 0)`;
+              `rotateX(${4 + py * 3}deg)` +
+              ` translate3d(${px * 4}px, ${(3 - d) * step + (1 - ease) * 54}px, 0)`;
           } else {
             const z = (d - 2) * (60 + spread * 150);
             const lift = (d - 2) * (spread * 46);
+            const e = Math.max(0, Math.min(1, (intro - (3 - d) * 0.13) / 0.62));
+            const ease = 1 - Math.pow(1 - e, 3);
+            l.style.opacity = String(ease);
             l.style.zIndex = '';
             l.style.transform =
               `translate(-50%,-50%) rotateX(${10 + py * 7}deg) rotateY(${px * 12}deg)` +
-              ` translate3d(${px * d * 7}px, ${-lift + py * d * 5}px, ${z}px)`;
+              ` translate3d(${px * d * 7}px, ${-lift + py * d * 5 + (1 - ease) * 42}px, ${z}px)`;
           }
         }
         // Settle: once the rig has stopped moving and nothing is driving it,
         // stop burning frames until something changes.
-        const still = Math.abs(target - spread) < 0.0005 && Math.abs(tx - px) < 0.002 && Math.abs(ty - py) < 0.002;
+        const still = intro >= 1
+          && Math.abs(target - spread) < 0.0005
+          && Math.abs(tx - px) < 0.002 && Math.abs(ty - py) < 0.002;
         raf = (still || !visible) ? null : requestAnimationFrame(tick);
       }
-      const kick = () => { if (raf === null && visible) raf = requestAnimationFrame(tick); };
+      // Deliberately not gated on `visible`: that flag is only correct once
+      // the observer has fired, and a kick arriving before then was dropped,
+      // which left the deck frozen while scroll was updating its target.
+      // tick() stops itself on the next frame if the rig really is off screen.
+      const kick = () => { if (raf === null) raf = requestAnimationFrame(tick); };
+
+      // On a phone there is no cursor and dragging would fight the page
+      // scroll, so the scroll itself opens the stack: the sheets fan apart
+      // over the first stretch of the page. This is the motion that a touch
+      // visitor actually gets, so it has to carry the idea on its own.
+      let introFrom = 0;
+      const fromScroll = () => {
+        if (!deck()) return;
+        target = Math.max(0, Math.min(1, scrollY / 420));
+        announce();
+        kick();
+      };
+      addEventListener('scroll', fromScroll, { passive: true });
 
       // Pause entirely when the hero is scrolled away.
       new IntersectionObserver((es) => {
@@ -190,10 +220,12 @@ const { shot, shotAlt } = Astro.props;
 
       let dragging = false, startY = 0, startSpread = 0;
       const down = (e) => {
+        if (e.touches && deck()) return;   // scroll owns vertical gestures here
         dragging = true; rig.classList.add('cursor-grabbing');
         startY = (e.touches ? e.touches[0] : e).clientY; startSpread = target;
       };
       const move = (e) => {
+        if (e.touches && deck()) return;
         readPointer(e);
         if (!dragging) return;
         const y = (e.touches ? e.touches[0] : e).clientY;
@@ -224,12 +256,17 @@ const { shot, shotAlt } = Astro.props;
 
       matchMedia('(max-width: 700px)').addEventListener('change', kick);
 
-      // Open once on load so the affordance is obvious, then settle apart
-      // enough that it reads as three sheets rather than one.
+      introFrom = performance.now();
       kick();
-      setTimeout(() => { target = 0.55; announce(); kick();
-        setTimeout(() => { target = 0.34; announce(); kick(); }, 1100);
-      }, 700);
+      if (deck()) {
+        fromScroll();
+      } else {
+        // Open once on load so the affordance is obvious, then settle apart
+        // enough that it reads as three sheets rather than one.
+        setTimeout(() => { target = 0.55; announce(); kick();
+          setTimeout(() => { target = 0.34; announce(); kick(); }, 1100);
+        }, 700);
+      }
     }
   }
 </script>

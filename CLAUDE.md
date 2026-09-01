@@ -243,9 +243,14 @@ still structural:
 - The hero rig separates on pointer movement and can be dragged or keyed
   apart. It settles to a resting spread so it reads as three sheets.
 - Below 700px it becomes a deck rather than a 3D fan — sheets stepped in
-  reading order, each label inside its own card's clear strip, still
-  draggable. It must animate on a phone: making it static there was a
-  regression against the approved treatment.
+  reading order, each label inside its own card's clear strip. There is no
+  cursor on a phone and drag would fight the page scroll, so **scroll drives
+  the spread**: the sheets fan apart over the first ~420px of the page. Plus
+  a staggered entrance on load, which is the motion a touch visitor sees
+  first. It must animate on a phone — a rig that only responds to a cursor is
+  a rig that does nothing on the device most visitors arrive on.
+- `touch-action` must never be `none` on the rig at phone width: it is 470px
+  tall and blocking it means a swipe over the hero does not scroll the page.
 - Scroll reveals: 14px rise and a fade, 700ms.
 - Hover: 2px lift on buttons, a slow scale on project shots.
 
