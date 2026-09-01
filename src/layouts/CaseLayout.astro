@@ -1,0 +1,124 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+/**
+ * One template behind all six case studies — the three that lead, and the
+ * three kept unlisted. Content comes from src/data/cases.js; nothing here
+ * is per-project.
+ *
+ * Structure follows the copy rule in CLAUDE.md: problem → approach →
+ * outcome, then the screens. Screenshots are the hero content, so they sit
+ * full width in the content column with the copy above explaining what the
+ * visitor is looking at.
+ */
+
+const { data } = Astro.props;
+const { title, kind, role, problem, approach, outcome, links, shots, description } = data;
+
+const sections = [
+  ['Problem', problem],
+  ['Approach', approach],
+  ['Outcome', outcome],
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <p>
+    <a
+      href="/work.html"
+      class="label transition-colors duration-150 ease-out hover:text-accent"
+    >← All work</a>
+  </p>
+
+  <section class="mt-10">
+    <p class="label">{kind}</p>
+    <h1 class="mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.15] tracking-[-0.015em]">
+      {title}
+    </h1>
+  </section>
+
+  <div class="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-12">
+    {/* narrow metadata column: what it is made of, and where it lives */}
+    <aside class="md:col-span-3">
+      <p class="label m-0 normal-case tracking-normal">{role}</p>
+
+      {links.length > 0 && (
+        <ul class="mt-6 list-none space-y-2 p-0">
+          {links.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener"
+                class="label text-ink underline decoration-rule underline-offset-4 transition-colors duration-150 ease-out hover:text-accent hover:decoration-accent"
+              >{l.text} ↗</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </aside>
+
+    <div class="md:col-span-9">
+      <dl class="m-0 space-y-8">
+        {sections.map(([label, copy]) => (
+          <div>
+            <dt class="label m-0">{label}</dt>
+            <dd
+              class="measure m-0 mt-2 text-[17px] leading-[1.6] text-muted [&_strong]:font-medium [&_strong]:text-ink"
+              set:html={copy}
+            />
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">The screens</h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="space-y-14 md:col-span-9 md:col-start-4">
+        {shots.map((s) => (
+          <figure class="m-0">
+            <img
+              src={s.src}
+              alt={s.alt}
+              width={s.w}
+              height={s.h}
+              loading="lazy"
+              decoding="async"
+              class:list={[
+                'block border border-rule',
+                // portrait captures are phone screens — full width would
+                // blow them up past their own resolution
+                s.portrait ? 'w-full max-w-[300px]' : 'w-full',
+              ]}
+            />
+            <figcaption class="label mt-3">{s.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Start something</h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="md:col-span-9 md:col-start-4">
+        <p class="measure m-0 text-[17px] leading-[1.6]">
+          If this looks like the problem you have, tell me about it.
+        </p>
+        <p class="mt-8">
+          <a
+            href="/contact.html"
+            class="border border-accent px-5 py-3 text-[15px] font-medium text-accent no-underline transition-colors duration-150 ease-out hover:bg-accent hover:text-bg"
+            style="border-radius: var(--radius-sm)"
+          >
+            Get in touch
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
