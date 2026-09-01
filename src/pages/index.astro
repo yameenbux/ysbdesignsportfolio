@@ -1,221 +1,215 @@
-<!DOCTYPE html>
-<html lang="en-GB">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YSB Designs — Websites, apps and the systems behind them</title>
-<meta name="description" content="YSB Designs designs, builds and deploys complete systems — websites, installable apps, serverless backends, databases, cloud infrastructure and in-building digital signage. One person, end to end. Based in Greater Manchester, working with clients anywhere in the UK.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/portfolio.css">
-</head>
-<body>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-<main class="index">
+/**
+ * Homepage. Section order is fixed by CLAUDE.md, "## Structure":
+ * positioning, selected work, what I do, about, contact.
+ *
+ * Evidence sits above biography deliberately — the work is what convinces,
+ * so it comes before anything about Yameen.
+ */
 
-  <div class="rail">
-    <header class="identity">
-      <h1>YSB Designs</h1>
-      <p class="positioning">Websites, apps, backends, cloud.<br>Designed, built and deployed end to end.</p>
-      <p class="bio" id="about-bio">I'm <strong>Yameen</strong>. I build the whole thing, not just the
-        page you see — the front end, the backend and database behind it,
-        the cloud that runs it, and the apps and screens it feeds. One
-        person, <strong>end to end</strong>. Based in Greater Manchester, working with
-        businesses <strong>anywhere</strong>. Tell me what you need and I'll
-        quote the same day.</p>
-      <ul class="caps" aria-label="What I build">
-        <li>Websites</li><li>Web apps</li><li>Installable PWAs</li>
-        <li>Serverless backends</li><li>APIs &amp; databases</li>
-        <li>Cloud &amp; CI/CD</li><li>Digital signage</li>
-      </ul>
-      <button class="disclose" type="button" aria-expanded="false" aria-controls="about-panel">
-        <span class="disclose-label">More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <a class="wa-btn rail-wa" href="https://wa.me/447404901859?text=Hi%20YSB%20Designs%2C%20I%27d%20like%20a%20website%20quote" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.24-.85.83-.85 2.03s.87 2.35.99 2.51c.12.16 1.71 2.61 4.15 3.66.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
-        Message me
-      </a>
-    </header>
+// The three that lead. Outcome lines are drawn from each case study's own
+// copy; nothing here is a metric, a rating or a client count.
+const work = [
+  {
+    href: '/taiyabah.html',
+    name: 'Taiyabah Masjid',
+    kind: 'Community project',
+    stack: 'PWA · Website · Signage · Serverless backend',
+    outcome:
+      'Prayer times in front of a Bolton community every day. One system feeds a phone app, a public website, two always-on screens in the building and a home display for a spare tablet or TV.',
+    img: '/assets/img/taiyabah-web.jpg',
+    alt: 'The Taiyabah Masjid website',
+  },
+  {
+    href: '/venetian.html',
+    name: 'The Venetian Company',
+    kind: 'Client',
+    stack: 'Website · Identity · Design → build → deploy',
+    outcome:
+      'Venetian plaster and microcement work that lived entirely on Instagram — nothing to send anyone, nothing that turned up in a search. Now a site on their own domain, art-directed around their own photography.',
+    img: '/assets/img/venetian-web.jpg',
+    alt: 'The Venetian Company website',
+  },
+  {
+    href: '/hairbychrissy.html',
+    name: 'Hair by Chrissy',
+    kind: 'Client',
+    stack: 'Booking platform · Front end · Backend · Payments',
+    outcome:
+      'Bookings arrived as Instagram DMs, with no calendar and no way to stop two people asking for the same Saturday. The site is the booking system: live availability, deposits, and a real calendar behind it.',
+    img: '/assets/img/hbc-web.jpg',
+    alt: 'The Hair by Chrissy booking site',
+  },
+];
 
-    <div class="plist">
-      <ul class="projects">
-        <li>
-          <a class="project" href="ellash.html" data-project="ellash">
-            <span class="p-name">èllash</span>
-            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="project" href="hairbychrissy.html" data-project="hbc">
-            <span class="p-name">Hair by Chrissy</span>
-            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="project" href="venetian.html" data-project="venetian">
-            <span class="p-name">The Venetian Company</span>
-            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="project" href="taiyabah.html" data-project="taiyabah">
-            <span class="p-name">Taiyabah Masjid</span>
-            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="project" href="buxtravel.html" data-project="bux">
-            <span class="p-name">Bux Travel</span>
-            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="project" href="luxescent.html" data-project="luxe">
-            <span class="p-name">LuxeScent UK</span>
-            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
+const capabilities = [
+  ['Sites', 'Marketing sites, one-pagers and shops that load fast and turn up in a search.'],
+  ['Apps', 'Booking systems, installable web apps, admin tools — the software a business actually runs on.'],
+  ['Behind it', 'Backends, APIs, databases, payments and email.'],
+  ['Keeping it up', 'Hosting, domains, deploys and the pipeline that ships changes.'],
+];
 
-  <!-- The scene never moves. Only the screen content changes.
-       Decorative: the list beside it carries the semantics. -->
-  <div class="stage" aria-hidden="true">
-    <div class="desk">
-      <div class="bloom-layer bloom-back">
-        <img class="bloom is-active" data-shot="ellash" src="assets/img/ellash-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="hbc" src="assets/img/hbc-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="taiyabah" src="assets/img/taiyabah-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="bux" src="assets/img/bux-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="luxe" src="assets/img/luxe-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="venetian" src="assets/img/venetian-web.jpg" alt="" aria-hidden="true" decoding="async">
-      </div>
+const WHATSAPP = 'https://wa.me/447404901859';
+const TEL = '+447404901859';
+const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
 
-      <svg class="desk-svg" viewBox="106 54 988 840" preserveAspectRatio="xMidYMid meet" focusable="false">
-        <defs>
-          <radialGradient id="glow" cx="50%" cy="42%" r="58%">
-            <stop offset="0%" stop-color="rgba(245,234,227,.075)"/>
-            <stop offset="100%" stop-color="rgba(245,234,227,0)"/>
-          </radialGradient>
-          <linearGradient id="chassis" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--panel)"/>
-            <stop offset="100%" stop-color="var(--panel-2)"/>
-          </linearGradient>
-          <radialGradient id="ground" cx="50%" cy="34%" r="70%">
-            <stop offset="0%" stop-color="rgba(14,68,51,.34)"/>
-            <stop offset="62%" stop-color="rgba(14,68,51,.14)"/>
-            <stop offset="100%" stop-color="rgba(14,68,51,0)"/>
-          </radialGradient>
-          <linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--panel-2)"/>
-            <stop offset="100%" stop-color="var(--bg-deep)"/>
-          </linearGradient>
-          <linearGradient id="riser" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--bg-deep)"/>
-            <stop offset="100%" stop-color="var(--scrim)"/>
-          </linearGradient>
-          <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="var(--panel)"/>
-            <stop offset="60%" stop-color="var(--panel-2)"/>
-            <stop offset="100%" stop-color="var(--bg-deep)"/>
-          </linearGradient>
-          <linearGradient id="deckplate" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgba(245,234,227,.12)"/>
-            <stop offset="18%" stop-color="var(--panel)"/>
-            <stop offset="100%" stop-color="var(--panel-2)"/>
-          </linearGradient>
-          <linearGradient id="mouseshell" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgba(245,234,227,.16)"/>
-            <stop offset="22%" stop-color="var(--panel)"/>
-            <stop offset="100%" stop-color="var(--bg-deep)"/>
-          </linearGradient>
-          <pattern id="keys" x="0" y="0" width="17.6" height="10.4" patternUnits="userSpaceOnUse">
-            <rect x="1.4" y="1.4" width="14.8" height="7.6" rx="2" fill="rgba(245,234,227,.085)"/>
-          </pattern>
-          <filter id="soft" x="-40%" y="-90%" width="180%" height="320%">
-            <feGaussianBlur stdDeviation="13"/>
-          </filter>
-          <filter id="contact" x="-60%" y="-200%" width="220%" height="520%">
-            <feGaussianBlur stdDeviation="7"/>
-          </filter>
-        </defs>
+const description =
+  "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.";
+---
 
-        <ellipse cx="600" cy="352" rx="580" ry="410" fill="url(#glow)"/>
-
-        <!-- The plinth the devices stand on. The reference has one — a slab
-             seen slightly from above, its top face in perspective and a front
-             face below it. The product photos were shot on white with nothing
-             under them, which said nothing either way; removing it was my
-             inference and it was wrong. -->
-        <polygon points="200,622 1000,622 1094,800 106,800" fill="url(#deck)"/>
-        <line x1="200" y1="622.5" x2="1000" y2="622.5" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
-        <path d="M106 800 H1094 V838 a16 16 0 0 1 -16 16 H122 a16 16 0 0 1 -16 -16 Z" fill="url(#riser)"/>
-        <line x1="106" y1="800.5" x2="1094" y2="800.5" stroke="rgba(4,26,19,.7)" stroke-width="1"/>
-        <ellipse cx="600" cy="716" rx="470" ry="118" fill="url(#ground)"/>
-        <ellipse cx="600" cy="648" rx="250" ry="20" fill="#03130E" opacity=".6" filter="url(#soft)"/>
-
-        <!-- flat slab foot: the display sits on it, no neck -->
-        <ellipse cx="600" cy="641" rx="176" ry="9" fill="#03130E" opacity=".65" filter="url(#contact)"/>
-        <path d="M462 590 H738 L770 630 a9 9 0 0 1 -9 9 H439 a9 9 0 0 1 -9 -9 Z" fill="url(#foot)"/>
-        <path d="M462 590.5 H738" stroke="rgba(245,234,227,.16)" stroke-width="1.4"/>
-
-        <!-- monitor: body and screen rect are unchanged, the slot maps to them -->
-        <rect x="205" y="78" width="790" height="512" rx="22" fill="url(#chassis)" stroke="rgba(245,234,227,.14)" stroke-width="1"/>
-        <path d="M227 78 H973 a22 22 0 0 1 22 22" fill="none" stroke="rgba(245,234,227,.22)" stroke-width="1.5" stroke-linecap="round"/>
-        <rect x="221" y="94" width="758" height="474" rx="8" fill="var(--scrim)"/>
-
-        <!-- low-profile keyboard -->
-        <ellipse cx="600" cy="774" rx="228" ry="10" fill="#03130E" opacity=".55" filter="url(#contact)"/>
-        <rect x="378" y="714" width="444" height="60" rx="12" fill="url(#deckplate)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
-        <rect x="390" y="722" width="420" height="31" fill="url(#keys)"/>
-        <rect x="481" y="755" width="238" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
-        <rect x="390" y="755" width="83" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
-        <rect x="727" y="755" width="83" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
-
-        <!-- puck mouse -->
-        <ellipse cx="884" cy="772" rx="34" ry="9" fill="#03130E" opacity=".5" filter="url(#contact)"/>
-        <rect x="854" y="722" width="60" height="50" rx="25" fill="url(#mouseshell)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
-        <path d="M884 724 V742" stroke="rgba(245,234,227,.11)" stroke-width="1.2"/>
-      </svg>
-
-      <div class="bloom-layer bloom-front">
-        <img class="bloom is-active" data-shot="ellash" src="assets/img/ellash-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="hbc" src="assets/img/hbc-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="taiyabah" src="assets/img/taiyabah-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="bux" src="assets/img/bux-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="luxe" src="assets/img/luxe-web.jpg" alt="" aria-hidden="true" decoding="async">
-        <img class="bloom" data-shot="venetian" src="assets/img/venetian-web.jpg" alt="" aria-hidden="true" decoding="async">
-      </div>
-
-      <!-- the slot -->
-      <div class="screen-slot">
-        <img class="shot is-active" data-shot="ellash" src="assets/img/ellash-web.jpg" srcset="assets/img/ellash-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async" fetchpriority="high">
-        <img class="shot" data-shot="hbc" src="assets/img/hbc-web.jpg" srcset="assets/img/hbc-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
-        <img class="shot" data-shot="taiyabah" src="assets/img/taiyabah-web.jpg" srcset="assets/img/taiyabah-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
-        <img class="shot" data-shot="bux" src="assets/img/bux-web.jpg" srcset="assets/img/bux-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
-        <img class="shot" data-shot="luxe" src="assets/img/luxe-web.jpg" srcset="assets/img/luxe-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
-        <img class="shot" data-shot="venetian" src="assets/img/venetian-web.jpg" srcset="assets/img/venetian-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
-      </div>
-    </div>
-  </div>
-
-  <section class="about" id="about-panel">
-    <img class="portrait" src="assets/img/portrait.svg" width="900" height="1200"
-         alt="Yameen, founder of YSB Designs" decoding="async">
+<BaseLayout title="Websites, apps and the software behind them" description={description}>
+  {/* 1 — Positioning. The claim is the first thing on the page. */}
+  <section>
+    <p class="label">Greater Manchester · working anywhere</p>
+    <h1
+      class="measure mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.15] tracking-[-0.015em]"
+    >
+      I help new and growing businesses look established online.
+    </h1>
+    <p class="measure mt-6 text-[17px] leading-[1.6] text-muted">
+      The website, the software behind it and the hosting it runs on, built and
+      deployed end to end — so you can point people at something you're proud of.
+    </p>
   </section>
 
-</main>
+  {/* 2 — Selected work. Rules separate the entries; no cards, no shadows. */}
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Selected work</h2>
 
-<footer class="index-foot">
-  <a class="wa-btn" href="https://wa.me/447404901859?text=Hi%20YSB%20Designs%2C%20I%27d%20like%20a%20website%20quote" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.24-.85.83-.85 2.03s.87 2.35.99 2.51c.12.16 1.71 2.61 4.15 3.66.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
-    WhatsApp
-  </a>
-  <nav class="foot-links">
-    <a href="tel:+447404901859">Call</a>
-    <a href="https://www.linkedin.com/in/yameenbux" target="_blank" rel="noopener">LinkedIn</a>
-  </nav>
-</footer>
+    <ul class="mt-10 list-none space-y-16 p-0">
+      {work.map((w) => (
+        <li class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
+          {/* the narrow metadata column — documentation layout, not marketing */}
+          <div class="md:col-span-3">
+            <p class="label m-0">{w.kind}</p>
+            <p class="label m-0 mt-2 normal-case tracking-normal">{w.stack}</p>
+          </div>
 
-<script is:inline src="assets/portfolio.js" defer></script>
-</body></html>
+          <div class="md:col-span-9">
+            <h3 class="m-0 text-[21px] font-semibold tracking-[-0.01em]">
+              <a
+                href={w.href}
+                class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 ease-out hover:text-accent"
+              >
+                {w.name}
+                <span
+                  aria-hidden="true"
+                  class="text-muted transition-transform duration-150 ease-out group-hover:translate-x-[3px] group-hover:text-accent"
+                >→</span>
+              </a>
+            </h3>
+
+            <p class="measure mt-3 text-[17px] leading-[1.6] text-muted">{w.outcome}</p>
+
+            <a href={w.href} class="mt-6 block" tabindex="-1" aria-hidden="true">
+              <img
+                src={w.img}
+                alt={w.alt}
+                width="760"
+                height="475"
+                loading="lazy"
+                decoding="async"
+                class="w-full border border-rule"
+              />
+            </a>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="mt-12">
+      <a
+        href="/work.html"
+        class="label text-ink underline decoration-rule underline-offset-4 transition-colors duration-150 ease-out hover:text-accent hover:decoration-accent"
+      >
+        All work →
+      </a>
+    </p>
+  </section>
+
+  {/* 3 — What I do. A list, not a services grid. No icons. */}
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">What I do</h2>
+
+    <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+      {capabilities.map(([term, detail]) => (
+        <div class="contents">
+          <dt class="label m-0 md:col-span-3">{term}</dt>
+          <dd class="measure m-0 text-[17px] leading-[1.6] text-muted md:col-span-9">{detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  {/* 4 — About, compressed. Content sits in the same 9 columns as the work
+      and capability sections, so the page keeps one content edge throughout. */}
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Who you'd be working with</h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="md:col-span-9 md:col-start-4">
+        <p class="measure m-0 text-[17px] leading-[1.6]">
+          I'm Yameen. I do the whole thing myself — the design, the code, the
+          database behind it and the cloud it runs on — so there's no agency
+          layer between you and the person building your site.
+        </p>
+        <p class="measure mt-4 text-[17px] leading-[1.6] text-muted">
+          That means one person to ask, and one person who knows why every
+          decision was made.
+        </p>
+        <p class="mt-6">
+          <a
+            href="/about.html"
+            class="label text-ink underline decoration-rule underline-offset-4 transition-colors duration-150 ease-out hover:text-accent hover:decoration-accent"
+          >
+            More about how I work →
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* 5 — Contact. WhatsApp is the primary action. */}
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Start something</h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="md:col-span-9 md:col-start-4">
+        <p class="measure m-0 text-[17px] leading-[1.6]">
+          Tell me what you need and I'll tell you what it takes. No obligation,
+          and I'll say so if I'm not the right fit.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <a
+            href={WHATSAPP}
+            target="_blank"
+            rel="noopener"
+            class="border border-accent px-5 py-3 text-[15px] font-medium text-accent no-underline transition-colors duration-150 ease-out hover:bg-accent hover:text-bg"
+            style="border-radius: var(--radius-sm)"
+          >
+            Message me on WhatsApp
+          </a>
+
+          <a
+            class="label transition-colors duration-150 ease-out hover:text-accent"
+            href={`tel:${TEL}`}
+          >
+            Call 07404 901859
+          </a>
+
+          <a
+            class="label transition-colors duration-150 ease-out hover:text-accent"
+            href={LINKEDIN}
+            target="_blank"
+            rel="noopener"
+          >
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

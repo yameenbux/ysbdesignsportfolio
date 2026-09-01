@@ -16,16 +16,21 @@ const {
   noindex = false,
 } = Astro.props;
 
+// The agreed sitemap (CLAUDE.md, "## Structure"). URLs keep the .html
+// extension because build.format is 'file'. Services is gone — its content
+// folds into About.
+//
+// NOTE: work.html, about.html and contact.html do not exist yet; they are
+// built later in Phase 3. This branch must not merge to main until they do,
+// or the live nav points at three 404s.
 const nav = [
-  { href: '/work/',     label: 'Work' },
-  { href: '/about/',    label: 'About' },
-  { href: '/services/', label: 'Services' },
-  { href: '/contact/',  label: 'Contact' },
+  { href: '/work.html',    label: 'Work' },
+  { href: '/about.html',   label: 'About' },
+  { href: '/contact.html', label: 'Contact' },
 ];
 
-// Trailing-slash-insensitive, so /work and /work/ both mark the tab active.
-const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const isCurrent = (href) => path === href.replace(/\/+$/, '');
+const path = Astro.url.pathname;
+const isCurrent = (href) => path === href;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const year = new Date().getFullYear();
