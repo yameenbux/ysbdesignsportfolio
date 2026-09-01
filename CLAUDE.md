@@ -264,11 +264,31 @@ confirmed. Every original URL still resolves.
 
 **Phase 2 — structure. DONE.** See `## Structure` above.
 
-**Phase 3 — rebrand, page by page.** Homepage → work index → case study
-template → about → services → contact. One page per prompt, one commit each.
+**Phase 3 — rebrand, page by page. DONE.** Homepage, work index, about
+(services folded in), contact, and all six case studies off one
+CaseLayout — including the three unlisted ones, so nothing is left on the
+retired design.
 
-**Phase 4 — ship.** Lighthouse 95+ performance and accessibility, CLS < 0.1.
-Every previous URL resolves. `CNAME` in `dist/`. Contact route verified.
+**Phase 4 — ship. DONE.** Lighthouse 100/100/100/100 on index, work, about,
+contact and taiyabah, CLS 0.000. All eleven historically-live URLs resolve,
+services.html redirects to about.html, CNAME lands in dist/, and one phone
+number and one WhatsApp number appear site-wide.
+
+### Known, unfixed
+
+- **Dark-mode accent fails contrast.** `#1F5A5C` on `#131416` is 2.35:1.
+  Dark mode is unreachable (nothing sets the class) so nothing is broken
+  today, but enabling it without lightening the accent would ship
+  unreadable links. The spec's "one token, both themes" is what causes
+  this; light mode is fine at 7.51:1.
+- **Typography unverified.** IBM Plex has never loaded in the build
+  sandbox — the proxy blocks Google Fonts — so every check to date ran on
+  fallback faces. Layout and colour are real; the type is not.
+- **Lighthouse scores are local.** Measured against a local server with
+  fonts blocked. The live site adds a render-blocking Google Fonts
+  request, so expect lower.
+- **Favicon is a placeholder**, not an identity.
+- **Portrait** is still absent by choice; About is built not to want one.
 
 ## Working rules
 
