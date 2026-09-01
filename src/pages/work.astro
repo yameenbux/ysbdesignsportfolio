@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * Work index. Redesign goal 2: projects presented as short case studies
+ * (problem → approach → outcome), not cards.
+ *
+ * Only the three lead projects appear here. ellash, buxtravel and luxescent
+ * stay reachable at their own URLs but are deliberately unlisted
+ * (CLAUDE.md, "Kept but unlisted").
+ *
+ * Every line below is drawn from the case study it links to. No metrics,
+ * ratings, testimonials or client counts.
+ */
+
+const projects = [
+  {
+    href: '/taiyabah.html',
+    name: 'Taiyabah Masjid',
+    kind: 'Community project',
+    stack: 'PWA · Website · Signage · Home display · Serverless backend',
+    problem:
+      'A Bolton masjid needed prayer times in front of its community every day — on phones, on the wall, and on the web. Three separate problems, all being solved by hand.',
+    approach:
+      'One system instead of three. An installable app with live audio and push alerts, a public website, two always-on screens inside the building, and a home display anyone can run on a spare tablet or TV. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice.',
+    outcome:
+      'The community opens the app daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it.',
+    img: '/assets/img/taiyabah-web.jpg',
+    alt: 'The Taiyabah Masjid website',
+  },
+  {
+    href: '/venetian.html',
+    name: 'The Venetian Company',
+    kind: 'Client',
+    stack: 'Website · Identity · Design → build → deploy',
+    problem:
+      'They lay Venetian plaster and microcement in homes across the country. The work is genuinely beautiful and it lived entirely on Instagram — nothing to send anyone, nothing that turned up in a search.',
+    approach:
+      'I built the site before being asked. One page, art-directed around their own photography: a full-bleed hero, the two materials explained side by side, how a job runs, what it costs, and one action running through all of it — book a call.',
+    outcome:
+      'Live on their own domain, with a monogram, a full icon set and a web manifest behind it, so it installs to a phone and shows a proper mark in the tab.',
+    img: '/assets/img/venetian-web.jpg',
+    alt: 'The Venetian Company website',
+  },
+  {
+    href: '/hairbychrissy.html',
+    name: 'Hair by Chrissy',
+    kind: 'Client',
+    stack: 'Booking platform · Front end · Backend · Payments',
+    problem:
+      'Chrissy fits hair extensions by hand in a private London studio. Bookings came through Instagram DMs — a thread per client, no calendar, and no way to stop two people asking for the same Saturday.',
+    approach:
+      'The site is not a brochure, it is the booking system. Pick a service, see genuine live availability, take a slot, pay a deposit. Behind it sits a real calendar, an admin view, deposit handling and automatic confirmation emails.',
+    outcome:
+      'Built with no framework and no dependencies — a plain Node server, a JSON store and a hand-written front end, so there is nothing to patch, nothing to renew and nothing to go stale.',
+    img: '/assets/img/hbc-web.jpg',
+    alt: 'The Hair by Chrissy booking site',
+  },
+];
+
+const description =
+  'Three projects, each written up as problem, approach and outcome — a masjid running on one system, a plaster specialist who had only Instagram, and a booking platform that replaced DMs.';
+---
+
+<BaseLayout title="Work" description={description}>
+  <section>
+    <p class="label">Three projects</p>
+    <h1 class="mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.15] tracking-[-0.015em]">
+      Work
+    </h1>
+    <p class="measure mt-6 text-[17px] leading-[1.6] text-muted">
+      What the problem was, what I built, and where it ended up. Each one links
+      to the full case study with the screens.
+    </p>
+  </section>
+
+  {projects.map((p) => (
+    <section class="mt-20 border-t border-rule pt-3">
+      {/* The kind is a label, not a heading — three sections called
+          "Client" would make the document outline meaningless. The project
+          name is the heading. */}
+      <p class="label m-0">{p.kind}</p>
+
+      <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
+        {/* narrow metadata column */}
+        <div class="md:col-span-3">
+          <p class="label m-0 normal-case tracking-normal">{p.stack}</p>
+        </div>
+
+        <div class="md:col-span-9">
+          <h2 class="m-0 text-[26px] font-semibold tracking-[-0.015em]">
+            <a
+              href={p.href}
+              class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 ease-out hover:text-accent"
+            >
+              {p.name}
+              <span
+                aria-hidden="true"
+                class="text-[17px] text-muted transition-transform duration-150 ease-out group-hover:translate-x-[3px] group-hover:text-accent"
+              >→</span>
+            </a>
+          </h2>
+
+          <dl class="mt-8 space-y-6">
+            <div>
+              <dt class="label m-0">Problem</dt>
+              <dd class="measure m-0 mt-2 text-[17px] leading-[1.6] text-muted">{p.problem}</dd>
+            </div>
+            <div>
+              <dt class="label m-0">Approach</dt>
+              <dd class="measure m-0 mt-2 text-[17px] leading-[1.6] text-muted">{p.approach}</dd>
+            </div>
+            <div>
+              <dt class="label m-0">Outcome</dt>
+              <dd class="measure m-0 mt-2 text-[17px] leading-[1.6] text-muted">{p.outcome}</dd>
+            </div>
+          </dl>
+
+          <a href={p.href} class="mt-8 block" tabindex="-1" aria-hidden="true">
+            <img
+              src={p.img}
+              alt={p.alt}
+              width="760"
+              height="475"
+              loading="lazy"
+              decoding="async"
+              class="w-full border border-rule"
+            />
+          </a>
+
+          <p class="mt-6">
+            <a
+              href={p.href}
+              class="label text-ink underline decoration-rule underline-offset-4 transition-colors duration-150 ease-out hover:text-accent hover:decoration-accent"
+            >
+              Read the {p.name} case study →
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Start something</h2>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="md:col-span-9 md:col-start-4">
+        <p class="measure m-0 text-[17px] leading-[1.6]">
+          If any of that sounds like your problem, tell me about it and I'll
+          tell you what it takes.
+        </p>
+        <p class="mt-8">
+          <a
+            href="https://wa.me/447404901859"
+            target="_blank"
+            rel="noopener"
+            class="border border-accent px-5 py-3 text-[15px] font-medium text-accent no-underline transition-colors duration-150 ease-out hover:bg-accent hover:text-bg"
+            style="border-radius: var(--radius-sm)"
+          >
+            Message me on WhatsApp
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
