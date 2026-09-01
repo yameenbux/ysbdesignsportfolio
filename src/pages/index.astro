@@ -59,7 +59,7 @@ const description =
           <div class="mt-4 flex flex-col gap-1.5">
             {[['Interface', p.layers.interface], ['Software', p.layers.software], ['Infrastructure', p.layers.infra]].map(([name, w]) => (
               <div class="label m-0 flex items-center gap-2.5">
-                <i class="block h-1.5 bg-blue/25 transition-[width]" style={`width:${w}%`}></i>{name}
+                <i class="layer-bar block h-1.5 bg-blue/25" style={`width:${w}%`}></i>{name}
               </div>
             ))}
           </div>
@@ -120,3 +120,11 @@ const description =
   </section>
 
 </BaseLayout>
+
+<style>
+  /* Hovering a project brightens its layer read-out. This was in the approved
+     treatment and got dropped when the bars were rebuilt as utilities. */
+  .layer-bar { transition: opacity 0.3s var(--ease-draft), width 0.9s var(--ease-draft); }
+  article:hover .layer-bar { opacity: 0.62; }
+  @media (prefers-reduced-motion: reduce) { .layer-bar { transition: none; } }
+</style>
