@@ -76,20 +76,40 @@ const { shot, shotAlt } = Astro.props;
 
   .rig-layer .anno { position: absolute; left: calc(100% + 14px); top: 14px; margin: 0; }
 
-  /* Below 700px there is not enough room to fan three labelled sheets in 3D
-     without the annotations colliding, so the diagram becomes a plain
-     labelled stack. Same information, legible on a phone. The drag and
-     keyboard affordances are hidden with it — the estimator is the
-     interactive element that actually earns its place on a small screen.
-     Reduced motion gets the identical treatment at every width. */
-  @media (max-width: 700px), (prefers-reduced-motion: reduce) {
+  /* Below 700px the sheets become a deck rather than a 3D fan: stacked with
+     each lower card peeking out below, draggable to spread. Leader lines
+     have nowhere to go at this width, so each label moves inside its own
+     card's visible strip — which is what collided when they floated outside. */
+  @media (max-width: 700px) {
+    #rig { height: 470px; perspective: 900px; }
+    /* The screenshot is cropped short on a phone so all three sheets fit the
+       deck in reading order with each label clear of the sheet above it. */
+    .rig-layer[data-depth="3"] .sheet { height: 132px; }
+    .rig-layer[data-depth="3"] img { height: 100%; object-fit: cover; object-position: top center; }
+    /* Anchored left/right rather than left:50% + translateX(-50%): the
+       untransformed box of a 50%-offset absolute element overhangs the
+       viewport and lands in scrollWidth even though the transform pulls it
+       back visually. That was ~99px of phantom horizontal scroll. */
+    .rig-layer { left: 6%; right: 6%; top: 0; width: auto; }
+    .rig-layer .anno {
+      left: 12px; top: 10px; right: auto;
+      background: var(--color-paper); border: 1px solid var(--color-line);
+      border-radius: var(--radius-sm); padding: 4px 9px;
+    }
+    .rig-layer .anno .dash { display: none; }
+  }
+
+  /* Reduced motion, at any width: a plain labelled stack, nothing moving. */
+  @media (prefers-reduced-motion: reduce) {
     #rig {
-      height: auto; display: flex; flex-direction: column; gap: 26px;
+      height: auto !important; display: flex; flex-direction: column; gap: 26px;
       cursor: default; perspective: none;
     }
     .rig-layer { position: static; width: 100%; transform: none !important; transition: none; }
-    .rig-layer .anno { position: static; margin-top: 10px; }
-    .rig-layer .anno .dash { display: none; }
+    .rig-layer .anno {
+      position: static; margin-top: 10px;
+      background: none; border: 0; padding: 0;
+    }
     .rig-hint { display: none; }
   }
 </style>
@@ -97,8 +117,9 @@ const { shot, shotAlt } = Astro.props;
 <script>
   const rig = document.getElementById('rig');
   if (rig) {
-    // Static whenever the fan is not rendered: reduced motion, or narrow.
-    const staticMode = matchMedia('(prefers-reduced-motion: reduce), (max-width: 700px)').matches;
+    // Only reduced motion is static now. Narrow screens get the deck.
+    const staticMode = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const deck = () => matchMedia('(max-width: 700px)').matches;
     const layers = [...rig.querySelectorAll('.rig-layer')];
 
     if (staticMode) {
@@ -119,13 +140,27 @@ const { shot, shotAlt } = Astro.props;
         px += (tx - px) * 0.09;
         py += (ty - py) * 0.09;
         spread += (target - spread) * 0.1;
+        const isDeck = deck();
         for (const l of layers) {
           const d = +l.dataset.depth;
-          const z = (d - 2) * (60 + spread * 150);
-          const lift = (d - 2) * (spread * 46);
-          l.style.transform =
-            `translate(-50%,-50%) rotateX(${10 + py * 7}deg) rotateY(${px * 12}deg)` +
-            ` translate3d(${px * d * 7}px, ${-lift + py * d * 5}px, ${z}px)`;
+          if (isDeck) {
+            // A deck in reading order — 01 at the top, 03 at the bottom,
+            // matching the fan on wider screens. The step clears the sheet
+            // above, so every label stays uncovered.
+            const step = 150 + spread * 58;
+            l.style.zIndex = String(d);
+            // No percentage translate here — the layer is anchored by
+            // left/right, so any -50% would reintroduce the overhang.
+            l.style.transform =
+              `rotateX(${4 + py * 3}deg) translate3d(${px * 4}px, ${(3 - d) * step}px, 0)`;
+          } else {
+            const z = (d - 2) * (60 + spread * 150);
+            const lift = (d - 2) * (spread * 46);
+            l.style.zIndex = '';
+            l.style.transform =
+              `translate(-50%,-50%) rotateX(${10 + py * 7}deg) rotateY(${px * 12}deg)` +
+              ` translate3d(${px * d * 7}px, ${-lift + py * d * 5}px, ${z}px)`;
+          }
         }
         // Settle: once the rig has stopped moving and nothing is driving it,
         // stop burning frames until something changes.
@@ -186,6 +221,8 @@ const { shot, shotAlt } = Astro.props;
       });
 
       document.getElementById('rigReset')?.addEventListener('click', () => { target = 0; announce(); kick(); });
+
+      matchMedia('(max-width: 700px)').addEventListener('change', kick);
 
       // Open once on load so the affordance is obvious, then settle apart
       // enough that it reads as three sheets rather than one.

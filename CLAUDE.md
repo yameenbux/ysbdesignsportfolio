@@ -242,13 +242,21 @@ still structural:
 
 - The hero rig separates on pointer movement and can be dragged or keyed
   apart. It settles to a resting spread so it reads as three sheets.
+- Below 700px it becomes a deck rather than a 3D fan — sheets stepped in
+  reading order, each label inside its own card's clear strip, still
+  draggable. It must animate on a phone: making it static there was a
+  regression against the approved treatment.
 - Scroll reveals: 14px rise and a fade, 700ms.
 - Hover: 2px lift on buttons, a slow scale on project shots.
 
 Rules that hold:
 
-- `prefers-reduced-motion` collapses the rig to a static labelled stack and
-  disables every transition.
+- `prefers-reduced-motion` — and only that, not screen width — collapses the
+  rig to a static labelled stack and disables every transition.
+- A layer anchored with `left:50%` plus `translateX(-50%)` puts its
+  untransformed box past the viewport and into `scrollWidth`, which reads as
+  phantom horizontal scroll even though nothing looks wrong. Anchor with
+  `left`/`right` instead.
 - The rig stops requesting frames when it settles *and* when it scrolls out
   of view.
 - Reveals are applied only under `.js` — a script error must never leave the
