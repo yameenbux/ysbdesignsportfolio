@@ -43,19 +43,27 @@ Migrating from hand-written static HTML to a build step.
 
 - **Astro**, static output. No React, no framework integrations. If a component
   seems to need React, it doesn't.
-- **Tailwind** via `@astrojs/tailwind`.
+- **Tailwind 4** via `@tailwindcss/vite`. Not `@astrojs/tailwind` — that
+  integration supports Astro 3–5 only and is deprecated, and this runs Astro 7.
+  Tokens live in `@theme` in `src/styles/global.css`, not a `tailwind.config.js`.
 - **GitHub Pages**, custom domain `www.ysbdesigns.uk`. DNS at one.com, unchanged.
 
 ### Deploy — read before touching the build
 
-Today Pages serves the **repo root** directly; there is no `.github/workflows/`
-and no build step. Astro changes that. Either commit `dist/`, or add an Actions
-workflow that builds and publishes it. Adding the workflow is the intended
-route, but it is a deploy-configuration change, not just code — treat it as its
-own commit and verify the site still serves before moving on.
+`.github/workflows/deploy.yml` builds the site and publishes `dist/` to Pages
+on every push to `main`, plus `workflow_dispatch` for a manual run. The Pages
+source is **GitHub Actions**, not a branch. Live since `41767c8`.
 
-`CNAME` currently sits at the repo root and must end up in `dist/` after every
-build, or the custom domain drops.
+`build.format: 'file'` is deliberate: it emits `/ellash.html` rather than
+`/ellash/`. Changing it breaks every existing and indexed URL.
+
+`public/CNAME` is the only CNAME and is copied into `dist/` on every build.
+The workflow fails the build if it goes missing, because a build that silently
+drops it takes the custom domain down while still reporting success.
+
+There is no fallback. The old hand-written HTML was removed in `41767c8`, so
+pointing Pages back at a branch would now serve nothing — a bad build has to
+be fixed forward or reverted in git.
 
 ## Commands
 
@@ -250,13 +258,11 @@ template. Do not produce:
 
 ## Sequence
 
-**Phase 1 — migrate, don't redesign.** Scaffold Astro alongside the existing
-HTML; delete nothing. Build `BaseLayout.astro` (head, nav, footer). Then port
-pages one at a time, content and appearance unchanged, one commit each.
-Confirm every existing URL still resolves. Only then delete the old HTML.
+**Phase 1 — migrate, don't redesign. DONE.** Astro scaffolded, all eight pages
+ported verbatim, Pages workflow added, old HTML deleted once the live site was
+confirmed. Every original URL still resolves.
 
-**Phase 2 — structure.** Propose sitemap and homepage section order in
-markdown. No code. Agree it, then commit it here under `## Structure`.
+**Phase 2 — structure. DONE.** See `## Structure` above.
 
 **Phase 3 — rebrand, page by page.** Homepage → work index → case study
 template → about → services → contact. One page per prompt, one commit each.
