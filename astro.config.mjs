@@ -12,5 +12,14 @@ export default defineConfig({
   // that shape; the default 'directory' would emit /ellash/ and break every
   // link and every indexed URL.
   build: { format: 'file' },
+
+  // services.html is live and indexed. Its content folded into about.html in
+  // Phase 3, so the URL redirects rather than 404s. Static output emits a
+  // meta-refresh page for this. The key is extensionless: with
+  // build.format 'file' Astro appends .html itself, and '/services.html'
+  // emits services.html.html — which 404s the real URL.
+  redirects: {
+    '/services': '/about.html',
+  },
   vite: { plugins: [tailwind()] },
 });

@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * Contact. WhatsApp-first, no form — confirmed rather than assumed.
+ *
+ * Static hosting has no server, so a form would need a third-party endpoint.
+ * The spec's position is that WhatsApp converts better for this audience
+ * anyway, and a form nobody uses is worse than no form.
+ *
+ * No email address here. There is no mailbox, and publishing one that
+ * bounces is worse than publishing none (CLAUDE.md, "## Contact").
+ */
+
+const WHATSAPP = 'https://wa.me/447404901859';
+const TEL = '+447404901859';
+const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
+
+// What makes a first message answerable in one reply rather than four.
+const helpful = [
+  ['What you do', 'The business, and who your customers are.'],
+  ['What you need', "A site, a booking system, something that talks to software you already use — or just the problem, if you're not sure what fixes it."],
+  ['When', 'A date you need it by, if you have one.'],
+];
+
+const description =
+  "Message me on WhatsApp and I'll tell you what it takes — usually the same day. No form, no obligation.";
+---
+
+<BaseLayout title="Contact" description={description}>
+  <section>
+    <p class="label">Contact</p>
+    <h1 class="mt-5 text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.15] tracking-[-0.015em]">
+      Tell me what you need.
+    </h1>
+    <p class="measure mt-6 text-[17px] leading-[1.6] text-muted">
+      I'll tell you what it takes and what it costs, usually the same day.
+      No obligation, and I'll say so if I'm not the right fit for it.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a
+        href={WHATSAPP}
+        target="_blank"
+        rel="noopener"
+        class="border border-accent px-5 py-3 text-[15px] font-medium text-accent no-underline transition-colors duration-150 ease-out hover:bg-accent hover:text-bg"
+        style="border-radius: var(--radius-sm)"
+      >
+        Message me on WhatsApp
+      </a>
+      <a class="label transition-colors duration-150 ease-out hover:text-accent" href={`tel:${TEL}`}>
+        Call 07404 901859
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Worth putting in the first message</h2>
+
+    <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+      {helpful.map(([term, detail]) => (
+        <div class="contents">
+          <dt class="label m-0 md:col-span-3">{term}</dt>
+          <dd class="measure m-0 text-[17px] leading-[1.6] text-muted md:col-span-9">{detail}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <p class="measure m-0 text-[17px] leading-[1.6] text-muted md:col-span-9 md:col-start-4">
+        None of it is required. "I need a website for my shop" is a fine place
+        to start.
+      </p>
+    </div>
+  </section>
+
+  <section class="mt-20 border-t border-rule pt-3">
+    <h2 class="label m-0">Where and how</h2>
+
+    <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+      <div class="contents">
+        <dt class="label m-0 md:col-span-3">Based</dt>
+        <dd class="measure m-0 text-[17px] leading-[1.6] text-muted md:col-span-9">
+          Greater Manchester. The work has gone to London, Birmingham, Coventry
+          and Nuneaton, so where you are is not the deciding factor.
+        </dd>
+      </div>
+      <div class="contents">
+        <dt class="label m-0 md:col-span-3">Elsewhere</dt>
+        <dd class="m-0 text-[17px] leading-[1.6] text-muted md:col-span-9">
+          <a
+            href={LINKEDIN}
+            target="_blank"
+            rel="noopener"
+            class="underline decoration-rule underline-offset-4 transition-colors duration-150 ease-out hover:text-accent hover:decoration-accent"
+          >LinkedIn</a>
+        </dd>
+      </div>
+    </dl>
+  </section>
+</BaseLayout>
