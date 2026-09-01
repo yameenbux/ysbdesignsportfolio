@@ -1,0 +1,97 @@
+---
+/**
+ * "Build your stack" — a rough figure without a form, an email or a lead
+ * capture. Nothing is sent anywhere; it exists so a visitor can find out
+ * roughly what they are in for before they message.
+ *
+ * Prices are the real tiers from CLAUDE.md, decomposed into the pieces a
+ * person actually recognises. The layer each option touches is what drives
+ * the "layers touched" readout, tying it back to the hero diagram.
+ */
+const options = [
+  { id: 'site',    price: 495, care: 20, layer: 1, name: 'A site people can find',            note: 'A few pages, fast, turns a search into a phone call.' },
+  { id: 'pages',   price: 400, care: 15, layer: 1, name: 'More pages, photos, enquiry form',  note: 'For a business that wants enquiries, not just a listing.' },
+  { id: 'booking', price: 900, care: 20, layer: 2, name: 'Bookings or ordering',              note: 'Live availability, deposits, a real calendar behind it.' },
+  { id: 'admin',   price: 750, care: 15, layer: 2, name: 'An account area or admin',          note: 'Somewhere you or your customers log in and manage things.' },
+  { id: 'app',     price: 600, care: 20, layer: 3, name: 'An installable app',                note: 'Adds to a phone home screen, works offline, sends alerts.' },
+];
+---
+
+<div class="grid grid-cols-1 gap-9 lg:grid-cols-[1fr_380px] lg:gap-14">
+  <div class="flex flex-col gap-2.5" id="estOpts">
+    {options.map((o, i) => (
+      <button
+        type="button"
+        class="est-opt sheet flex items-center gap-3.5 px-[18px] py-4 text-left"
+        aria-pressed={i === 0 ? 'true' : 'false'}
+        data-price={o.price}
+        data-care={o.care}
+        data-layer={o.layer}
+      >
+        <span class="est-box relative block h-[15px] w-[15px] flex-none border border-ink-2"></span>
+        <span>
+          <b class="block font-semibold">{o.name}</b>
+          <small class="text-[14px] text-ink-2">{o.note}</small>
+        </span>
+      </button>
+    ))}
+  </div>
+
+  <aside class="sticky top-6 self-start bg-ink p-7 text-paper" aria-live="polite">
+    <p class="label m-0 mb-2.5 text-paper/60">From, one-off build</p>
+    <p id="estFig" class="m-0 font-disp text-[3rem] font-extrabold leading-none tracking-[-0.03em] tabular-nums">£495</p>
+    <ul class="m-0 mt-[18px] flex list-none flex-col gap-[7px] p-0">
+      <li class="label text-paper/60"><b id="estCare" class="font-medium text-paper">£20</b> a month to keep it running</li>
+      <li class="label text-paper/60">Layers touched <b id="estLayers" class="font-medium text-paper">1 of 3</b></li>
+      <li class="label text-paper/60">50% to book, 50% on launch</li>
+    </ul>
+    <p class="mt-5 text-[13.5px] leading-[1.55] text-paper/60">
+      A real number needs a real conversation — this is the shape of it, not a
+      quote. Nothing here is sent anywhere.
+    </p>
+    <a class="btn mt-5 border-paper bg-paper text-ink hover:border-paper hover:bg-paper hover:text-blue" href="/contact.html">Talk it through</a>
+  </aside>
+</div>
+
+<style>
+  .est-opt { cursor: pointer; font: inherit; color: inherit; transition: transform 0.18s var(--ease-draft), border-color 0.18s var(--ease-draft); }
+  .est-opt:hover { transform: translateX(3px); }
+  .est-opt[aria-pressed="true"] { border-color: var(--color-blue); box-shadow: inset 3px 0 0 var(--color-blue); }
+  .est-opt[aria-pressed="true"] .est-box { background: var(--color-blue); border-color: var(--color-blue); }
+  .est-opt[aria-pressed="true"] .est-box::after {
+    content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
+    border: solid var(--color-plane); border-width: 0 2px 2px 0; transform: rotate(42deg);
+  }
+</style>
+
+<script>
+  const opts = [...document.querySelectorAll('.est-opt')];
+  const fig = document.getElementById('estFig');
+  const care = document.getElementById('estCare');
+  const lay = document.getElementById('estLayers');
+
+  if (opts.length && fig && care && lay) {
+    const money = (n) => '£' + n.toLocaleString('en-GB');
+    const recalc = () => {
+      let total = 0, careTotal = 0;
+      const layers = new Set();
+      for (const o of opts) {
+        if (o.getAttribute('aria-pressed') === 'true') {
+          total += +o.dataset.price;
+          careTotal += +o.dataset.care;
+          layers.add(o.dataset.layer);
+        }
+      }
+      fig.textContent = total ? money(total) : '—';
+      care.textContent = money(careTotal);
+      lay.textContent = `${layers.size} of 3`;
+    };
+    for (const o of opts) {
+      o.addEventListener('click', () => {
+        o.setAttribute('aria-pressed', o.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        recalc();
+      });
+    }
+    recalc();
+  }
+</script>

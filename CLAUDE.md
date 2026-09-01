@@ -161,23 +161,20 @@ add the redirect until `/about.html` exists, or it points at a 404.
 
 ### Homepage section order
 
-1. **Positioning** — the sentence, set as a statement. No hero container, no
-   viewport-filling name. Name and role live in the nav; the first thing on
-   the page is the claim.
-2. **Selected work** — the three case studies, each as label / name / one line
-   of outcome / thumbnail, separated by rules. This section does the
-   convincing, so it sits above anything about Yameen.
-3. **What I do** — a short capability list, mono labels, no icons. Three or
-   four lines. Not a services grid.
-4. **About, compressed** — two or three sentences, then a link to
-   `/about.html`.
-5. **Contact** — WhatsApp as the primary action, phone and LinkedIn beside it.
+Revised in Phase 5 when the rig and the estimator arrived.
 
-Evidence before biography, because goal 1 says lead with positioning and the
-strongest projects. The CTA appears both inline at the end and in the footer,
-because goal 3 says a convinced visitor needs something obvious to do.
-Sections 3 and 4 are deliberately thin — they serve the reader who is already
-interested, not the scanner.
+1. **Positioning + the rig** — the claim, and beside it the three-layer
+   diagram it describes. No hero container, no viewport-filling name.
+2. **Selected work** — the three, each with kind, outcome and a layer
+   read-out showing which of the three layers that project actually needed.
+3. **What I do** — a short capability list, mono labels, no icons.
+4. **Build your stack** — the estimator. Takes the abstract "three layers"
+   claim and makes it something a visitor can price.
+5. **Contact** — WhatsApp as the primary action.
+
+Evidence before biography. The compressed About section was dropped: the
+estimator does more for a visitor deciding whether to get in touch, and About
+is one click away in the nav.
 
 ### Still open
 
@@ -188,73 +185,84 @@ interested, not the scanner.
 
 ## Aesthetic direction
 
-**Technical document.** Reads like well-set engineering documentation or a
-technical journal — a specification, a systems paper, a good changelog.
-Information-dense, restrained, typographic. Artefacts are the hero content,
-not decoration.
+**Drafting table.** The positioning line names three layers — the website, the
+software behind it, the hosting it runs on. The identity is built on that:
+paper sheets on a drafting grid, blueprint annotation with leader lines, and
+things that come apart so you can see inside. Precise rather than decorative;
+the motion exists to show structure, not to entertain.
+
+Chosen from three treatments pitched as working pages. The two rejected
+directions were a kinetic editorial one and a dark cinematic evolution of the
+old forest-green brand.
 
 ### Type
 
-- Headings and body: **IBM Plex Sans**.
-- Labels, metadata, eyebrows, code: **IBM Plex Mono**, uppercase, ~11px,
-  letter-spacing `0.08em`. This is the primary technical signal — section
-  labels, dates, tags, project metadata.
-- Body 16–17px, line-height 1.6, measure capped at **68ch**. Never full-width
-  prose.
-- Modest heading scale: h1 `clamp(2rem, 4vw, 3rem)`. Restraint over size.
+- Display: **Archivo** (variable width). Headings run wide (`wdth 112`);
+  secondary heading lines drop to `wdth 88` and `--color-ink-2`.
+- Body: **Instrument Sans**, 17px, line-height 1.62.
+- Annotation: **IBM Plex Mono**, 11.5px, uppercase, letter-spacing `0.14em`.
+  This carries every label, kicker, caption and figure on the site.
+- Body measure capped at 68ch. h1 `clamp(2.4rem, 5.6vw, 4rem)`.
 
-### Colour
+### Colour — single light theme, deliberately
 
-Light is default and primary. Dark must work but is secondary — and is
-optional if it costs time.
+The paper ground *is* the identity; there is no dark counterpart that means
+the same thing. Dark mode is gone rather than half-built, which also retires
+the `#1F5A5C`-on-`#131416` accent that shipped at 2.35:1.
 
 ```
-Light                          Dark
-  bg       #FAFAF8               bg       #131416
-  surface  #F2F2EE               surface  #1B1D20
-  ink      #17181A               ink      #E8E8E4
-  muted    #6B7076               muted    #92979D
-  rule     #DFDFD9               rule     #2A2D31
-
-  accent   #1F5A5C   deep teal — one token, both themes
+paper    #E8E6DE   the ground: warm grey drafting paper
+paper-2  #DFDCD2   recessed areas
+plane    #FBFAF7   a sheet laid on the ground
+ink      #16191C   14.12:1 on paper
+ink-2    #5A6068    5.08:1 on paper — AA
+blue     #1F45CC    6.04:1 on paper — structure, annotation, active state
+signal   #A8410F    4.90:1 on paper — live indicators, the one warm note
+line     rgba(22,25,28,.14)
+grid     rgba(31,69,204,.07)
 ```
 
-Accent covers **under 5%** of any screen: links, one hover state, the active
-tag. Never a gradient. Never on a large fill. Define it once as a Tailwind
-token; never hardcode the hex.
+Every pair above was measured, not eyeballed. The brighter `#2D5BFF` and
+`#E0632A` from the pitch failed AA on the 11.5px mono labels they are used
+for, so both were darkened until they passed.
 
 ### Layout
 
-- 12-column grid. **Hairline rules (1px, `rule`) are the main structural
-  device.** Borders separate content — not shadows, not rounded cards.
-- 8px spacing base. Dense but not cramped: sections breathe via rules and
-  alignment, not large empty margins.
-- Border-radius **2px maximum**. Effectively square.
-- Left-aligned throughout. No centred body text.
-- Metadata sits in a narrow column against the main content — a documentation
-  layout, not a marketing layout.
+- Hairline rules still separate sections. Sheets carry a 1px border and a
+  2px radius; the only shadow on the site is the lift under a floating sheet
+  in the hero rig.
+- Metadata in a narrow column against the content — the documentation layout
+  survives from the previous direction.
+- Left-aligned throughout. 8px spacing base.
 
 ### Motion
 
-Near-zero. Opacity fades and 2–4px translations only, 150–200ms, ease-out. No
-parallax, no scroll-jacking, no 3D tilt, no staggered reveal cascades. Honour
-`prefers-reduced-motion` by disabling all of it.
+Motion is now part of the design rather than something to minimise, but it is
+still structural:
 
-The marquee on `services.html` goes. (It is on that page only — the homepage
-never had one.)
+- The hero rig separates on pointer movement and can be dragged or keyed
+  apart. It settles to a resting spread so it reads as three sheets.
+- Scroll reveals: 14px rise and a fade, 700ms.
+- Hover: 2px lift on buttons, a slow scale on project shots.
+
+Rules that hold:
+
+- `prefers-reduced-motion` collapses the rig to a static labelled stack and
+  disables every transition.
+- The rig stops requesting frames when it settles *and* when it scrolls out
+  of view.
+- Reveals are applied only under `.js` — a script error must never leave the
+  page blank below the fold.
 
 ### Explicitly forbidden
 
-This direction sits one wrong decision away from the cloned engineer-portfolio
-template. Do not produce:
-
-- Dark navy or near-black default background
-- Neon or electric accents (cyan, lime, violet) on dark
-- Terminal or command-prompt motifs, blinking cursors, typewriter effects
-- Gradient text, glassmorphism, glow effects, animated mesh backgrounds
-- Card grids with rounded corners and drop shadows
+- Dark navy or near-black grounds; neon or electric accents
+- Gradient text, glassmorphism, glow, animated mesh backgrounds
+- Terminal motifs, typewriter effects, blinking cursors
+- Rounded drop-shadowed card grids
 - Emoji as section iconography
-- Viewport-filling hero containing only a name
+- Parallax on text, scroll-jacking, staggered reveal cascades
+- Motion that does not describe structure
 
 ## Sequence
 
@@ -269,26 +277,25 @@ confirmed. Every original URL still resolves.
 CaseLayout — including the three unlisted ones, so nothing is left on the
 retired design.
 
-**Phase 4 — ship. DONE.** Lighthouse 100/100/100/100 on index, work, about,
-contact and taiyabah, CLS 0.000. All eleven historically-live URLs resolve,
+**Phase 4 — ship. DONE.** All eleven historically-live URLs resolve,
 services.html redirects to about.html, CNAME lands in dist/, and one phone
 number and one WhatsApp number appear site-wide.
 
+**Phase 5 — "drafting table" rebrand. DONE.** The technical-document direction
+shipped and read as too plain. Replaced across all ten pages. Lighthouse
+99/100/100/100 on the homepage (the interactive one) and 100 across work,
+about, contact and the case template; CLS 0.000 everywhere.
+
 ### Known, unfixed
 
-- **Dark-mode accent fails contrast.** `#1F5A5C` on `#131416` is 2.35:1.
-  Dark mode is unreachable (nothing sets the class) so nothing is broken
-  today, but enabling it without lightening the accent would ship
-  unreadable links. The spec's "one token, both themes" is what causes
-  this; light mode is fine at 7.51:1.
-- **Typography unverified.** IBM Plex has never loaded in the build
-  sandbox — the proxy blocks Google Fonts — so every check to date ran on
-  fallback faces. Layout and colour are real; the type is not.
-- **Lighthouse scores are local.** Measured against a local server with
-  fonts blocked. The live site adds a render-blocking Google Fonts
-  request, so expect lower.
+- **Typography still unverified against the real webfont.** The build sandbox
+  blocks Google Fonts, so every check has run on fallback faces. Layout,
+  colour and interaction are real; the type is not.
+- **Lighthouse scores are local**, measured with fonts blocked. The live site
+  adds a render-blocking font request, so expect lower.
 - **Favicon is a placeholder**, not an identity.
 - **Portrait** is still absent by choice; About is built not to want one.
+- **Contact form mechanism** is still unchosen. WhatsApp-first stands.
 
 ## Working rules
 
@@ -298,7 +305,14 @@ number and one WhatsApp number appear site-wide.
 - One concern per change. No opportunistic refactors, dependency bumps or
   file moves.
 - Do not add a library when Tailwind or an existing dependency covers it.
-- Tailwind utilities only; no CSS modules or styled-components.
+- Tailwind utilities for layout; recurring visual primitives (`.label`,
+  `.btn`, `.sheet`, `.chip`, `.wire`, `.pulse`, `.anno`, `.rv`) live in
+  `@layer components` in `src/styles/global.css`. Component-local CSS goes in
+  the `.astro` file's own `<style>`. No CSS modules or styled-components.
+- Anything interactive needs a keyboard path and an `aria` state, and must
+  behave under `prefers-reduced-motion`.
+- Never put `.rv` on a `display:contents` element — it generates no box, so
+  IntersectionObserver never fires and the content stays hidden for good.
 - Images need explicit width/height, and always an `alt`.
 - One `h1` per page; headings form a single logical hierarchy.
 - After any change: `npm run build`, then check the affected route at **375px

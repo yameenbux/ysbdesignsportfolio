@@ -2,23 +2,18 @@
 import '../styles/global.css';
 
 /**
- * The shell every page sits in: head, nav, footer.
+ * The shell every page sits in: head, masthead, footer.
  *
- * Structure is deliberately thin — Phase 2 agrees the sitemap, so `nav` reads
- * from one array rather than hand-written markup. Changing the site's shape
- * should be an edit to that array, not to this file's structure.
+ * The nav reads from one array (CLAUDE.md, "## Structure") so the site's
+ * shape is an edit to that array, not to this file's structure.
  */
 
 const {
   title,
   description = "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.",
-  /** Set on the one page that should not be indexed, if any. */
   noindex = false,
 } = Astro.props;
 
-// The agreed sitemap (CLAUDE.md, "## Structure"). URLs keep the .html
-// extension because build.format is 'file'. Services is gone — its content
-// folded into About, and /services.html redirects there.
 const nav = [
   { href: '/work.html',    label: 'Work' },
   { href: '/about.html',   label: 'About' },
@@ -46,9 +41,6 @@ const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
     <title>{title ? `${title} — YSB Designs` : 'YSB Designs'}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-
-    {/* Placeholder mark. Without any favicon every page load logged a 404
-        for /favicon.ico. Swap for a real one when there is one. */}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {noindex && <meta name="robots" content="noindex" />}
 
@@ -61,84 +53,72 @@ const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
     />
+
+    {/* Set before paint so reveal elements are never hidden without a
+        script able to reveal them again. */}
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
 
-  <body class="bg-bg text-ink antialiased">
+  <body class="bg-paper text-ink antialiased text-[17px] leading-[1.62]">
     <a
       href="#main"
-      class="label sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-surface focus:px-3 focus:py-2 focus:text-ink focus:outline focus:outline-accent"
-    >
-      Skip to content
-    </a>
+      class="label sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-plane focus:px-3 focus:py-2 focus:text-ink"
+    >Skip to content</a>
 
-    <!-- Rules do the separating, not shadows. -->
-    <header class="border-b border-rule">
-      <div class="mx-auto flex max-w-5xl items-baseline justify-between gap-8 px-6 py-5">
-        <a href="/" class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink">
-          YSB Designs
-        </a>
+    <div class="relative z-[1]">
+      <header class="mx-auto max-w-[1180px] px-7">
+        <div class="flex items-baseline justify-between gap-8 border-b border-line py-5">
+          <a href="/" class="label label-ink no-underline">YSB Designs</a>
+          <nav aria-label="Primary">
+            <ul class="m-0 flex list-none items-baseline gap-6 p-0">
+              {nav.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={isCurrent(item.href) ? 'page' : undefined}
+                    class:list={[
+                      'label no-underline transition-colors duration-150 hover:text-blue',
+                      isCurrent(item.href) && 'label-ink',
+                    ]}
+                  >{item.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </header>
 
-        <nav aria-label="Primary">
-          <ul class="flex list-none items-baseline gap-6 p-0 m-0">
-            {nav.map((item) => (
-              <li>
-                <a
-                  href={item.href}
-                  aria-current={isCurrent(item.href) ? 'page' : undefined}
-                  class:list={[
-                    'label transition-colors duration-150 ease-out hover:text-accent',
-                    isCurrent(item.href) && 'text-ink',
-                  ]}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+      <main id="main" class="mx-auto max-w-[1180px] px-7">
+        <slot />
+      </main>
+
+      <footer class="mx-auto max-w-[1180px] px-7">
+        <div class="mt-24 flex flex-col gap-4 border-t border-line py-9 sm:flex-row sm:items-baseline sm:justify-between">
+          <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
+          <ul class="m-0 flex list-none flex-wrap gap-6 p-0">
+            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a></li>
+            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`tel:${TEL}`}>Call</a></li>
+            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={LINKEDIN} target="_blank" rel="noopener">LinkedIn</a></li>
           </ul>
-        </nav>
-      </div>
-    </header>
+        </div>
+      </footer>
+    </div>
 
-    <main id="main" class="mx-auto max-w-5xl px-6 py-16">
-      <slot />
-    </main>
+    <script>
+      // Scroll reveals. One observer for the whole page; each element is
+      // unobserved once shown, so this costs nothing after first paint.
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        }
+      }, { rootMargin: '0px 0px -12% 0px' });
 
-    <footer class="mt-24 border-t border-rule">
-      <div
-        class="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-baseline sm:justify-between"
-      >
-        <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
-
-        <ul class="flex list-none flex-wrap gap-6 p-0 m-0">
-          <li>
-            <a
-              class="label transition-colors duration-150 ease-out hover:text-accent"
-              href={`https://wa.me/${WHATSAPP}`}
-              target="_blank"
-              rel="noopener"
-            >
-              WhatsApp
-            </a>
-          </li>
-          <li>
-            <a class="label transition-colors duration-150 ease-out hover:text-accent" href={`tel:${TEL}`}>
-              Call
-            </a>
-          </li>
-          <li>
-            <a
-              class="label transition-colors duration-150 ease-out hover:text-accent"
-              href={LINKEDIN}
-              target="_blank"
-              rel="noopener"
-            >
-              LinkedIn
-            </a>
-          </li>
-        </ul>
-      </div>
-    </footer>
+      document.querySelectorAll('.rv').forEach((el, i) => {
+        el.style.transitionDelay = `${(i % 4) * 70}ms`;
+        io.observe(el);
+      });
+    </script>
   </body>
 </html>

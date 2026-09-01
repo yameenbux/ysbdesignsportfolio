@@ -1,67 +1,145 @@
 @import "tailwindcss";
 
-/* Dark is class-based and secondary — light is the primary theme. */
-@custom-variant dark (&:where(.dark, .dark *));
+/* ============================================================================
+   YSB Designs — "Drafting table"
+
+   The positioning line names three layers: the website, the software behind
+   it, and the hosting it runs on. The whole identity is built on that — paper
+   sheets, blueprint annotation, things that come apart so you can see inside.
+
+   Single light theme, deliberately. The paper ground is the identity; there
+   is no dark counterpart that means the same thing. This also retires the
+   dark palette that shipped with a 2.35:1 accent.
+   ========================================================================= */
 
 @theme {
-  /* Light. The only palette that is required to work. */
-  --color-bg:      #FAFAF8;
-  --color-surface: #F2F2EE;
-  --color-ink:     #17181A;
-  --color-muted:   #6B7076;
-  --color-rule:    #DFDFD9;
+  --color-paper:   #E8E6DE;  /* the ground: warm grey drafting paper        */
+  --color-paper-2: #DFDCD2;  /* a shade down, for recessed areas            */
+  --color-plane:   #FBFAF7;  /* a sheet laid on the ground                  */
+  --color-ink:     #16191C;
+  --color-ink-2:   #5A6068;  /* 5.08:1 on paper — AA                        */
 
-  /* One accent, both themes. Under 5% of any screen. Never hardcode the hex. */
-  --color-accent:  #1F5A5C;
+  /* Blueprint blue: structure, annotation, the active state.
+     #1F45CC is 6.04:1 on paper — the brighter #2D5BFF failed AA on the
+     11px mono labels it is used for. */
+  --color-blue:    #1F45CC;
+  /* Signal: live indicators and the one warm note. 4.90:1 on paper. */
+  --color-signal:  #A8410F;
 
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-line:    rgba(22, 25, 28, 0.14);
+  --color-grid:    rgba(31, 69, 204, 0.07);
+
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+  --font-disp: "Archivo", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Effectively square. */
   --radius-sm: 2px;
-}
-
-/* Dark tokens. Same names, so components never branch on theme. */
-.dark {
-  --color-bg:      #131416;
-  --color-surface: #1B1D20;
-  --color-ink:     #E8E8E4;
-  --color-muted:   #92979D;
-  --color-rule:    #2A2D31;
+  --ease-draft: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @layer base {
   html {
-    background-color: var(--color-bg);
+    background-color: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
   }
+  body { margin: 0; overflow-x: hidden; }
 
-  body { margin: 0; }
+  h1, h2, h3 { font-family: var(--font-disp); margin: 0; text-wrap: balance; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--color-blue); outline-offset: 3px; }
 
-  /* Body copy never runs full width. */
+  /* The drafting grid. Fixed so it reads as the surface the page sits on,
+     masked so it fades out rather than tiling to the footer. */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      linear-gradient(var(--color-grid) 1px, transparent 1px) 0 0 / 100% 32px,
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px) 0 0 / 32px 100%;
+    -webkit-mask-image: radial-gradient(125% 75% at 50% 0, #000 38%, transparent 100%);
+    mask-image: radial-gradient(125% 75% at 50% 0, #000 38%, transparent 100%);
+  }
+
   .measure { max-width: 68ch; }
+}
 
-  /* The primary technical signal: mono, uppercase, tracked out. */
+@layer components {
+  /* --- annotation type ---------------------------------------------- */
   .label {
     font-family: var(--font-mono);
-    font-size: 11px;
-    line-height: 1.4;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-muted);
+    font-size: 11.5px; line-height: 1.4; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--color-ink-2);
+  }
+  .label-ink  { color: var(--color-ink); }
+  .label-blue { color: var(--color-blue); }
+
+  /* --- buttons ------------------------------------------------------- */
+  .btn {
+    display: inline-block; padding: 14px 22px;
+    background: var(--color-ink); color: var(--color-paper);
+    border: 1px solid var(--color-ink); border-radius: var(--radius-sm);
+    font-weight: 600; font-size: 15px; text-decoration: none;
+    transition: transform 0.18s var(--ease-draft), background 0.18s var(--ease-draft),
+                border-color 0.18s var(--ease-draft);
+  }
+  .btn:hover { transform: translateY(-2px); background: var(--color-blue); border-color: var(--color-blue); }
+  .btn-ghost { background: transparent; color: var(--color-ink); }
+  .btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+
+  /* --- a sheet on the drafting table --------------------------------- */
+  .sheet {
+    background: var(--color-plane);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+  }
+  .sheet-lift { box-shadow: 0 24px 60px -30px rgba(22, 25, 28, 0.5); }
+
+  /* schematic chips and dashed wires, used inside sheets */
+  .chip {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--color-ink-2);
+    border: 1px solid var(--color-line); background: var(--color-paper);
+    padding: 4px 8px; border-radius: var(--radius-sm); white-space: nowrap;
+  }
+  .wire {
+    flex: 1; height: 1px; opacity: 0.5;
+    background: repeating-linear-gradient(90deg, var(--color-ink-2) 0 4px, transparent 4px 9px);
   }
 
-  a { color: inherit; }
-
-  /* Near-zero motion, and none at all if the visitor asked for none. */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+  /* the live dot */
+  .pulse {
+    width: 7px; height: 7px; border-radius: 50%; flex: none;
+    background: var(--color-signal);
+    animation: ysb-pulse 2.4s infinite;
   }
+  @keyframes ysb-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(168, 65, 15, 0.5); }
+    70%  { box-shadow: 0 0 0 12px rgba(168, 65, 15, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(168, 65, 15, 0); }
+  }
+
+  /* --- leader-line annotation ---------------------------------------- */
+  .anno { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .anno .dash { width: 26px; height: 1px; background: var(--color-ink-2); display: block; }
+
+  /* --- scroll reveal --------------------------------------------------
+     Applied only once JS confirms it can take it off again — without the
+     .js guard a script error leaves the page blank below the fold. */
+  .js .rv {
+    opacity: 0; transform: translateY(14px);
+    transition: opacity 0.7s var(--ease-draft), transform 0.7s var(--ease-draft);
+  }
+  .js .rv.in { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js .rv { opacity: 1; transform: none; }
 }
