@@ -19,21 +19,19 @@ three-state (index / about / case) architecture all go.
 
 ## Positioning
 
-> I help new and growing businesses look established online — brand, site and
-> hosting handled end to end, so you can point people at something you're
-> proud of.
+> I help new and growing businesses look established online — the website, the
+> software behind it and the hosting it runs on, built and deployed end to
+> end, so you can point people at something you're proud of.
 
 Voice: **first person singular**. No "we", no "our clients", no claimed
 volume, no team language. One person is the offer, not a limitation.
 
-> **Flagged, unresolved.** This line is narrower than what the site says today
-> ("Websites, apps, backends, cloud. Designed, built and deployed end to end.")
-> and narrower than the full-stack breadth Taiyabah actually demonstrates —
-> serverless backends, a PWA, CI/CD, digital signage. It was agreed in the
-> handover; it is recorded here as agreed. If the intent was to lead softer on
-> the homepage while the case studies carry the technical depth, that works.
-> If the breadth was meant to survive, this line needs rewriting before the
-> homepage is built.
+Resolved in Phase 2. The handover's line stopped at "brand, site and hosting",
+which the work contradicts — Taiyabah alone is serverless backends, a PWA,
+CI/CD and digital signage. A homepage that promises hosting and then shows a
+distributed system argues with itself. "The software behind it" carries the
+breadth without turning the sentence into a stack list, which is what the old
+site did and what the audience does not read.
 
 Audience: someone who found YSB through a search or a referral and is deciding
 whether to hand money to a stranger. The site must work for a 20-second scan
@@ -111,17 +109,74 @@ There is **no email address on the site** and none is planned unless a mailbox
 is actually created. Routes are:
 
 - WhatsApp — `07404901859`
-- Phone — `tel:+447729247248`
+- Phone — `tel:+447404901859`
 - LinkedIn — `linkedin.com/in/yameenbux`
 
-> **Open item.** The two numbers disagree. WhatsApp goes to `07404901859`,
-> the Call link dials `07729247248`. One of them is wrong. Resolve before
-> building the contact page.
+Resolved in Phase 2. `07404901859` is the correct number. `07729247248` was
+wrong and had been on every Call link; fixed in `804ae30`. **One number, used
+everywhere** — if a second ever appears, one of them is a bug.
 
 A contact form needs a third-party endpoint (Formspree, Web3Forms) or
 `mailto:` — static hosting has no server. Not yet chosen. Until it is, the
 existing WhatsApp-first approach stands; it converts better than a form for
 this audience anyway.
+
+## Structure
+
+Agreed in Phase 2. Section order and sitemap are settled; Phase 3 builds
+against this rather than reopening it.
+
+### Sitemap
+
+Five navigable pages, three case studies, four unlisted.
+
+| URL | Page | In nav |
+|---|---|---|
+| `/` | Home | — |
+| `/work.html` | Work index — the three, as cases not cards | yes |
+| `/taiyabah.html` | Case study — community project | via work |
+| `/venetian.html` | Case study — client, live on own domain | via work |
+| `/hairbychrissy.html` | Case study — client | via work |
+| `/about.html` | About, with services folded in | yes |
+| `/contact.html` | Contact | yes |
+| `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept, unlisted | no |
+| `/services.html` | Redirects to `/about.html` | no |
+
+**URLs keep the `.html` extension.** `build.format: 'file'` is set for that
+reason, and new pages inherit it. Directory URLs would mean a permanent second
+URL per page plus redirect stubs, to gain nothing a visitor notices.
+
+**`services.html` becomes a redirect**, not a deletion — it is live and
+indexed. Its pricing and process content folds into `/about.html`. Use Astro's
+`redirects` config, which emits a meta-refresh page on static output. Do not
+add the redirect until `/about.html` exists, or it points at a 404.
+
+### Homepage section order
+
+1. **Positioning** — the sentence, set as a statement. No hero container, no
+   viewport-filling name. Name and role live in the nav; the first thing on
+   the page is the claim.
+2. **Selected work** — the three case studies, each as label / name / one line
+   of outcome / thumbnail, separated by rules. This section does the
+   convincing, so it sits above anything about Yameen.
+3. **What I do** — a short capability list, mono labels, no icons. Three or
+   four lines. Not a services grid.
+4. **About, compressed** — two or three sentences, then a link to
+   `/about.html`.
+5. **Contact** — WhatsApp as the primary action, phone and LinkedIn beside it.
+
+Evidence before biography, because goal 1 says lead with positioning and the
+strongest projects. The CTA appears both inline at the end and in the footer,
+because goal 3 says a convinced visitor needs something obvious to do.
+Sections 3 and 4 are deliberately thin — they serve the reader who is already
+interested, not the scanner.
+
+### Still open
+
+- **Contact form mechanism.** Formspree, Web3Forms or `mailto:`. Needed before
+  `/contact.html` is built. WhatsApp-first stands until then.
+- **Portrait.** `about.html` wants one; the asset is still the
+  `PORTRAIT PENDING` placeholder. Shoot it or design around its absence.
 
 ## Aesthetic direction
 
