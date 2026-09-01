@@ -54,12 +54,21 @@ const { shot, shotAlt } = Astro.props;
     </div>
   </div>
 
+  <ul class="rig-legend m-0 mt-4 hidden list-none flex-col gap-1.5 p-0">
+    <li class="label m-0"><span class="label-ink">01</span> · What people see</li>
+    <li class="label m-0"><span class="label-ink">02</span> · The software behind it</li>
+    <li class="label m-0"><span class="label-ink">03</span> · Where it runs</li>
+  </ul>
+
   <p class="rig-hint label mt-3 flex flex-wrap items-center gap-2">
-    <span class="sheet px-[7px] py-[2px] font-mono text-[10.5px]">drag</span>
-    <span>or</span>
-    <span class="sheet px-[7px] py-[2px] font-mono text-[10.5px]">↑ ↓</span>
-    <span class="max-[700px]:hidden">to pull the stack apart</span><span class="hidden max-[700px]:inline">scroll to pull the stack apart</span>
-    <button id="rigReset" type="button" class="ml-1 cursor-pointer underline underline-offset-2 hover:text-blue">reset</button>
+    {/* The chips name a gesture that only exists with a pointer; on touch,
+        scroll is what actually drives it. */}
+    <span class="sheet px-[7px] py-[2px] font-mono text-[10.5px] max-[700px]:hidden">drag</span>
+    <span class="max-[700px]:hidden">or</span>
+    <span class="sheet px-[7px] py-[2px] font-mono text-[10.5px] max-[700px]:hidden">↑ ↓</span>
+    <span class="max-[700px]:hidden">to pull the stack apart</span>
+    <span class="hidden max-[700px]:inline">Scroll to pull the stack apart</span>
+    <button id="rigReset" type="button" class="ml-1 cursor-pointer underline underline-offset-2 hover:text-blue max-[700px]:hidden">reset</button>
   </p>
 </div>
 
@@ -81,13 +90,17 @@ const { shot, shotAlt } = Astro.props;
      have nowhere to go at this width, so each label moves inside its own
      card's visible strip — which is what collided when they floated outside. */
   @media (max-width: 700px) {
-    /* touch-action must not be none here: the rig is 470px tall and blocking
-       it means a swipe over the hero does not scroll the page at all. */
-    #rig { height: 470px; perspective: 900px; touch-action: auto; }
-    /* The screenshot is cropped short on a phone so all three sheets fit the
-       deck in reading order with each label clear of the sheet above it. */
-    .rig-layer[data-depth="3"] .sheet { height: 132px; }
-    .rig-layer[data-depth="3"] img { height: 100%; object-fit: cover; object-position: top center; }
+    /* touch-action must not be none here: blocking it means a swipe over the
+       hero does not scroll the page at all. */
+    /* Height must clear the stack at FULL spread, not at rest: the sheets are
+       absolutely positioned so they do not grow the box, and at maximum spread
+       the bottom sheet was landing on top of the legend below. */
+    #rig { height: 396px; perspective: 900px; touch-action: auto; }
+    /* Labels move to a legend under the rig, which lets the sheets overlap
+       tightly the way they do on the treatment — cropping the screenshot to
+       fit three labelled sheets cost a third of the hero image. */
+    .rig-layer .anno { display: none; }
+    .rig-legend { display: flex; }
     /* Anchored left/right rather than left:50% + translateX(-50%): the
        untransformed box of a 50%-offset absolute element overhangs the
        viewport and lands in scrollWidth even though the transform pulls it
@@ -98,7 +111,6 @@ const { shot, shotAlt } = Astro.props;
       background: var(--color-paper); border: 1px solid var(--color-line);
       border-radius: var(--radius-sm); padding: 4px 9px;
     }
-    .rig-layer .anno .dash { display: none; }
   }
 
   /* Reduced motion, at any width: a plain labelled stack, nothing moving. */
@@ -113,6 +125,8 @@ const { shot, shotAlt } = Astro.props;
       background: none; border: 0; padding: 0;
     }
     .rig-hint { display: none; }
+    .rig-legend { display: flex !important; }
+    .rig-layer .anno { display: revert; }
   }
 </style>
 
@@ -151,7 +165,7 @@ const { shot, shotAlt } = Astro.props;
             // A deck in reading order — 01 at the top, 03 at the bottom,
             // matching the fan on wider screens. The step clears the sheet
             // above, so every label stays uncovered.
-            const step = 150 + spread * 58;
+            const step = 74 + spread * 66;
             l.style.zIndex = String(d);
             const e = Math.max(0, Math.min(1, (intro - (3 - d) * 0.13) / 0.62));
             const ease = 1 - Math.pow(1 - e, 3);

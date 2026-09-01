@@ -89,7 +89,27 @@ const description =
     </p>
   </section>
 
-  <section class="border-t border-line py-24">
+  {/* Moved here from the homepage: it was a fifth section there and made the
+      page a thousand pixels longer than it needed to be. It reads better next
+      to the process and the prices anyway. */}
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What I build</h2>
+    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-12">
+      {[
+        ['Sites', 'Marketing sites, one-pagers and shops that load fast and turn up in a search.'],
+        ['Apps', 'Booking systems, installable web apps, admin tools — the software a business actually runs on.'],
+        ['Behind it', 'Backends, APIs, databases, payments and email.'],
+        ['Keeping it up', 'Hosting, domains, deploys and the pipeline that ships changes.'],
+      ].map(([term, detail]) => (
+        <div class="contents">
+          <dt class="label m-0 lg:col-span-3">{term}</dt>
+          <dd class="measure m-0 text-ink-2 lg:col-span-9">{detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
     <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">How it works</h2>
 
     <div class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
@@ -104,7 +124,7 @@ const description =
     </div>
   </section>
 
-  <section class="border-t border-line py-24">
+  <section class="border-t border-line py-16 md:py-24">
     <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What a website costs</h2>
 
     <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
@@ -153,7 +173,7 @@ const description =
     </div>
   </section>
 
-  <section class="border-t border-line py-24">
+  <section class="border-t border-line py-16 md:py-24">
     <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Start something</h2>
 
     <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">

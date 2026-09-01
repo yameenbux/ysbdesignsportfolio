@@ -167,14 +167,16 @@ Revised in Phase 5 when the rig and the estimator arrived.
    diagram it describes. No hero container, no viewport-filling name.
 2. **Selected work** — the three, each with kind, outcome and a layer
    read-out showing which of the three layers that project actually needed.
-3. **What I do** — a short capability list, mono labels, no icons.
-4. **Build your stack** — the estimator. Takes the abstract "three layers"
+3. **Build your stack** — the estimator. Takes the abstract "three layers"
    claim and makes it something a visitor can price.
-5. **Contact** — WhatsApp as the primary action.
+4. **Contact** — WhatsApp as the primary action.
 
-Evidence before biography. The compressed About section was dropped: the
-estimator does more for a visitor deciding whether to get in touch, and About
-is one click away in the nav.
+Evidence before biography. Two sections have been cut from the homepage and
+neither should come back without a reason: the compressed About (the
+estimator does more for a visitor deciding whether to get in touch) and the
+capability list, which now lives on About under "What I build". Four
+sections beat five — the homepage was a thousand pixels longer than the
+approved treatment and read as less clean for it.
 
 ### Still open
 
@@ -242,15 +244,20 @@ still structural:
 
 - The hero rig separates on pointer movement and can be dragged or keyed
   apart. It settles to a resting spread so it reads as three sheets.
-- Below 700px it becomes a deck rather than a 3D fan — sheets stepped in
-  reading order, each label inside its own card's clear strip. There is no
+- Below 700px the sheets overlap in a tight fan and their labels move to a
+  legend under the rig. Labelling each sheet in place forced them apart,
+  which cost a third of the hero screenshot — 128px against the treatment's
+  189px. The screenshot is the hero; the labels are not. There is no
   cursor on a phone and drag would fight the page scroll, so **scroll drives
   the spread**: the sheets fan apart over the first ~420px of the page. Plus
   a staggered entrance on load, which is the motion a touch visitor sees
   first. It must animate on a phone — a rig that only responds to a cursor is
   a rig that does nothing on the device most visitors arrive on.
-- `touch-action` must never be `none` on the rig at phone width: it is 470px
-  tall and blocking it means a swipe over the hero does not scroll the page.
+- `touch-action` must never be `none` on the rig at phone width: blocking it
+  means a swipe over the hero does not scroll the page at all.
+- The rig's height must clear the stack at **full** spread, not at rest. The
+  sheets are absolutely positioned so they never grow the box, and at maximum
+  spread the bottom one lands on whatever follows.
 - Scroll reveals: 14px rise and a fade, 700ms.
 - Hover: 2px lift on buttons, a slow scale on project shots.
 

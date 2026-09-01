@@ -33,7 +33,7 @@ const description =
   </section>
 
   {/* ---- work -------------------------------------------------------- */}
-  <section class="border-t border-line py-24">
+  <section class="border-t border-line py-16 md:py-24">
     <div class="rv mb-13 flex items-baseline justify-between gap-5">
       <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Things I have actually shipped</h2>
       <a href="/work.html" class="label no-underline transition-colors duration-150 hover:text-blue">All work →</a>
@@ -76,29 +76,8 @@ const description =
     ))}
   </section>
 
-  {/* ---- what I do --------------------------------------------------- */}
-  <section class="border-t border-line py-24">
-    <h2 class="rv label m-0">What I do</h2>
-    {/* The reveal sits on the list, not the rows: a display:contents
-        element generates no box, so IntersectionObserver never fires for it
-        and the rows would stay invisible for good. */}
-    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-12">
-      {[
-        ['Sites', 'Marketing sites, one-pagers and shops that load fast and turn up in a search.'],
-        ['Apps', 'Booking systems, installable web apps, admin tools — the software a business actually runs on.'],
-        ['Behind it', 'Backends, APIs, databases, payments and email.'],
-        ['Keeping it up', 'Hosting, domains, deploys and the pipeline that ships changes.'],
-      ].map(([term, detail]) => (
-        <div class="contents">
-          <dt class="label m-0 lg:col-span-3">{term}</dt>
-          <dd class="measure m-0 text-ink-2 lg:col-span-9">{detail}</dd>
-        </div>
-      ))}
-    </dl>
-  </section>
-
   {/* ---- estimator --------------------------------------------------- */}
-  <section id="build" class="border-t border-line py-24">
+  <section id="build" class="border-t border-line py-16 md:py-24">
     <div class="rv mb-13 flex flex-wrap items-baseline justify-between gap-5">
       <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Build your stack</h2>
       <span class="label">Rough figure · no email required</span>
@@ -107,7 +86,7 @@ const description =
   </section>
 
   {/* ---- contact ----------------------------------------------------- */}
-  <section class="border-t border-line py-24">
+  <section class="border-t border-line py-16 md:py-24">
     <h2 class="rv text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Tell me what you need</h2>
     <p class="rv measure mt-6 text-ink-2">
       I'll tell you what it takes and what it costs, usually the same day. No
