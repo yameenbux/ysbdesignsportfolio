@@ -1,28 +1,221 @@
----
-// SCAFFOLD ONLY — not the ported homepage.
-// Exists so `astro build` has a route and BaseLayout can be verified before
-// any real page is ported. Phase 3 replaces this entirely.
-import BaseLayout from '../layouts/BaseLayout.astro';
----
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YSB Designs — Websites, apps and the systems behind them</title>
+<meta name="description" content="YSB Designs designs, builds and deploys complete systems — websites, installable apps, serverless backends, databases, cloud infrastructure and in-building digital signage. One person, end to end. Based in Greater Manchester, working with clients anywhere in the UK.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/portfolio.css">
+</head>
+<body>
 
-<BaseLayout title="Scaffold check">
-  <p class="label">Phase 1 · scaffold</p>
+<main class="index">
 
-  <h1 class="mt-4 text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight tracking-tight">
-    Astro builds, Tailwind resolves, BaseLayout renders.
-  </h1>
+  <div class="rail">
+    <header class="identity">
+      <h1>YSB Designs</h1>
+      <p class="positioning">Websites, apps, backends, cloud.<br>Designed, built and deployed end to end.</p>
+      <p class="bio" id="about-bio">I'm <strong>Yameen</strong>. I build the whole thing, not just the
+        page you see — the front end, the backend and database behind it,
+        the cloud that runs it, and the apps and screens it feeds. One
+        person, <strong>end to end</strong>. Based in Greater Manchester, working with
+        businesses <strong>anywhere</strong>. Tell me what you need and I'll
+        quote the same day.</p>
+      <ul class="caps" aria-label="What I build">
+        <li>Websites</li><li>Web apps</li><li>Installable PWAs</li>
+        <li>Serverless backends</li><li>APIs &amp; databases</li>
+        <li>Cloud &amp; CI/CD</li><li>Digital signage</li>
+      </ul>
+      <button class="disclose" type="button" aria-expanded="false" aria-controls="about-panel">
+        <span class="disclose-label">More</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <a class="wa-btn rail-wa" href="https://wa.me/447404901859?text=Hi%20YSB%20Designs%2C%20I%27d%20like%20a%20website%20quote" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.24-.85.83-.85 2.03s.87 2.35.99 2.51c.12.16 1.71 2.61 4.15 3.66.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
+        Message me
+      </a>
+    </header>
 
-  <p class="measure mt-6 text-[17px] leading-relaxed text-muted">
-    Placeholder. The existing static HTML is untouched and still serves the live
-    site. No page has been ported yet — see CLAUDE.md, “Sequence”.
-  </p>
+    <div class="plist">
+      <ul class="projects">
+        <li>
+          <a class="project" href="ellash.html" data-project="ellash">
+            <span class="p-name">èllash</span>
+            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="project" href="hairbychrissy.html" data-project="hbc">
+            <span class="p-name">Hair by Chrissy</span>
+            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="project" href="venetian.html" data-project="venetian">
+            <span class="p-name">The Venetian Company</span>
+            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="project" href="taiyabah.html" data-project="taiyabah">
+            <span class="p-name">Taiyabah Masjid</span>
+            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="project" href="buxtravel.html" data-project="bux">
+            <span class="p-name">Bux Travel</span>
+            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="project" href="luxescent.html" data-project="luxe">
+            <span class="p-name">LuxeScent UK</span>
+            <svg class="p-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-  <hr class="my-12 border-0 border-t border-rule" />
+  <!-- The scene never moves. Only the screen content changes.
+       Decorative: the list beside it carries the semantics. -->
+  <div class="stage" aria-hidden="true">
+    <div class="desk">
+      <div class="bloom-layer bloom-back">
+        <img class="bloom is-active" data-shot="ellash" src="assets/img/ellash-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="hbc" src="assets/img/hbc-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="taiyabah" src="assets/img/taiyabah-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="bux" src="assets/img/bux-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="luxe" src="assets/img/luxe-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="venetian" src="assets/img/venetian-web.jpg" alt="" aria-hidden="true" decoding="async">
+      </div>
 
-  <p class="label">Token check</p>
-  <ul class="measure mt-4 list-none space-y-2 p-0 text-[17px]">
-    <li>Body copy sits on <code class="font-mono text-[15px]">bg</code> in <code class="font-mono text-[15px]">ink</code>.</li>
-    <li class="text-muted">Secondary copy uses <code class="font-mono text-[15px]">muted</code>.</li>
-    <li><a class="text-accent underline underline-offset-4" href="/">An accent link</a> — the only place colour appears.</li>
-  </ul>
-</BaseLayout>
+      <svg class="desk-svg" viewBox="106 54 988 840" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="42%" r="58%">
+            <stop offset="0%" stop-color="rgba(245,234,227,.075)"/>
+            <stop offset="100%" stop-color="rgba(245,234,227,0)"/>
+          </radialGradient>
+          <linearGradient id="chassis" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--panel)"/>
+            <stop offset="100%" stop-color="var(--panel-2)"/>
+          </linearGradient>
+          <radialGradient id="ground" cx="50%" cy="34%" r="70%">
+            <stop offset="0%" stop-color="rgba(14,68,51,.34)"/>
+            <stop offset="62%" stop-color="rgba(14,68,51,.14)"/>
+            <stop offset="100%" stop-color="rgba(14,68,51,0)"/>
+          </radialGradient>
+          <linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--panel-2)"/>
+            <stop offset="100%" stop-color="var(--bg-deep)"/>
+          </linearGradient>
+          <linearGradient id="riser" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--bg-deep)"/>
+            <stop offset="100%" stop-color="var(--scrim)"/>
+          </linearGradient>
+          <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--panel)"/>
+            <stop offset="60%" stop-color="var(--panel-2)"/>
+            <stop offset="100%" stop-color="var(--bg-deep)"/>
+          </linearGradient>
+          <linearGradient id="deckplate" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(245,234,227,.12)"/>
+            <stop offset="18%" stop-color="var(--panel)"/>
+            <stop offset="100%" stop-color="var(--panel-2)"/>
+          </linearGradient>
+          <linearGradient id="mouseshell" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(245,234,227,.16)"/>
+            <stop offset="22%" stop-color="var(--panel)"/>
+            <stop offset="100%" stop-color="var(--bg-deep)"/>
+          </linearGradient>
+          <pattern id="keys" x="0" y="0" width="17.6" height="10.4" patternUnits="userSpaceOnUse">
+            <rect x="1.4" y="1.4" width="14.8" height="7.6" rx="2" fill="rgba(245,234,227,.085)"/>
+          </pattern>
+          <filter id="soft" x="-40%" y="-90%" width="180%" height="320%">
+            <feGaussianBlur stdDeviation="13"/>
+          </filter>
+          <filter id="contact" x="-60%" y="-200%" width="220%" height="520%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+        </defs>
+
+        <ellipse cx="600" cy="352" rx="580" ry="410" fill="url(#glow)"/>
+
+        <!-- The plinth the devices stand on. The reference has one — a slab
+             seen slightly from above, its top face in perspective and a front
+             face below it. The product photos were shot on white with nothing
+             under them, which said nothing either way; removing it was my
+             inference and it was wrong. -->
+        <polygon points="200,622 1000,622 1094,800 106,800" fill="url(#deck)"/>
+        <line x1="200" y1="622.5" x2="1000" y2="622.5" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <path d="M106 800 H1094 V838 a16 16 0 0 1 -16 16 H122 a16 16 0 0 1 -16 -16 Z" fill="url(#riser)"/>
+        <line x1="106" y1="800.5" x2="1094" y2="800.5" stroke="rgba(4,26,19,.7)" stroke-width="1"/>
+        <ellipse cx="600" cy="716" rx="470" ry="118" fill="url(#ground)"/>
+        <ellipse cx="600" cy="648" rx="250" ry="20" fill="#03130E" opacity=".6" filter="url(#soft)"/>
+
+        <!-- flat slab foot: the display sits on it, no neck -->
+        <ellipse cx="600" cy="641" rx="176" ry="9" fill="#03130E" opacity=".65" filter="url(#contact)"/>
+        <path d="M462 590 H738 L770 630 a9 9 0 0 1 -9 9 H439 a9 9 0 0 1 -9 -9 Z" fill="url(#foot)"/>
+        <path d="M462 590.5 H738" stroke="rgba(245,234,227,.16)" stroke-width="1.4"/>
+
+        <!-- monitor: body and screen rect are unchanged, the slot maps to them -->
+        <rect x="205" y="78" width="790" height="512" rx="22" fill="url(#chassis)" stroke="rgba(245,234,227,.14)" stroke-width="1"/>
+        <path d="M227 78 H973 a22 22 0 0 1 22 22" fill="none" stroke="rgba(245,234,227,.22)" stroke-width="1.5" stroke-linecap="round"/>
+        <rect x="221" y="94" width="758" height="474" rx="8" fill="var(--scrim)"/>
+
+        <!-- low-profile keyboard -->
+        <ellipse cx="600" cy="774" rx="228" ry="10" fill="#03130E" opacity=".55" filter="url(#contact)"/>
+        <rect x="378" y="714" width="444" height="60" rx="12" fill="url(#deckplate)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <rect x="390" y="722" width="420" height="31" fill="url(#keys)"/>
+        <rect x="481" y="755" width="238" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
+        <rect x="390" y="755" width="83" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
+        <rect x="727" y="755" width="83" height="8.4" rx="2" fill="rgba(245,234,227,.085)"/>
+
+        <!-- puck mouse -->
+        <ellipse cx="884" cy="772" rx="34" ry="9" fill="#03130E" opacity=".5" filter="url(#contact)"/>
+        <rect x="854" y="722" width="60" height="50" rx="25" fill="url(#mouseshell)" stroke="rgba(245,234,227,.13)" stroke-width="1"/>
+        <path d="M884 724 V742" stroke="rgba(245,234,227,.11)" stroke-width="1.2"/>
+      </svg>
+
+      <div class="bloom-layer bloom-front">
+        <img class="bloom is-active" data-shot="ellash" src="assets/img/ellash-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="hbc" src="assets/img/hbc-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="taiyabah" src="assets/img/taiyabah-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="bux" src="assets/img/bux-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="luxe" src="assets/img/luxe-web.jpg" alt="" aria-hidden="true" decoding="async">
+        <img class="bloom" data-shot="venetian" src="assets/img/venetian-web.jpg" alt="" aria-hidden="true" decoding="async">
+      </div>
+
+      <!-- the slot -->
+      <div class="screen-slot">
+        <img class="shot is-active" data-shot="ellash" src="assets/img/ellash-web.jpg" srcset="assets/img/ellash-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async" fetchpriority="high">
+        <img class="shot" data-shot="hbc" src="assets/img/hbc-web.jpg" srcset="assets/img/hbc-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
+        <img class="shot" data-shot="taiyabah" src="assets/img/taiyabah-web.jpg" srcset="assets/img/taiyabah-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
+        <img class="shot" data-shot="bux" src="assets/img/bux-web.jpg" srcset="assets/img/bux-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
+        <img class="shot" data-shot="luxe" src="assets/img/luxe-web.jpg" srcset="assets/img/luxe-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
+        <img class="shot" data-shot="venetian" src="assets/img/venetian-web.jpg" srcset="assets/img/venetian-web.jpg 760w" sizes="(max-width:900px) 100vw, 40vw" width="760" height="475" alt="" decoding="async">
+      </div>
+    </div>
+  </div>
+
+  <section class="about" id="about-panel">
+    <img class="portrait" src="assets/img/portrait.svg" width="900" height="1200"
+         alt="Yameen, founder of YSB Designs" decoding="async">
+  </section>
+
+</main>
+
+<footer class="index-foot">
+  <a class="wa-btn" href="https://wa.me/447404901859?text=Hi%20YSB%20Designs%2C%20I%27d%20like%20a%20website%20quote" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.24 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.14.16-.29.18-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.24-.85.83-.85 2.03s.87 2.35.99 2.51c.12.16 1.71 2.61 4.15 3.66.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
+    WhatsApp
+  </a>
+  <nav class="foot-links">
+    <a href="tel:+447729247248">Call</a>
+    <a href="https://www.linkedin.com/in/yameenbux" target="_blank" rel="noopener">LinkedIn</a>
+  </nav>
+</footer>
+
+<script is:inline src="assets/portfolio.js" defer></script>
+</body></html>
