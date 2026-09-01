@@ -1,0 +1,69 @@
+name: Deploy to GitHub Pages
+
+# Builds the Astro site and publishes dist/ to Pages.
+#
+# This replaces the previous arrangement, where Pages served the repository
+# root directly and there was no build step. It only takes effect once the
+# repository's Pages source is switched to "GitHub Actions" in
+# Settings -> Pages — that is a manual change and cannot be made from here.
+# Until it is switched, this workflow runs and succeeds but nothing it
+# produces is served.
+#
+# The custom domain comes from public/CNAME, which Astro copies into dist/ on
+# every build. If that file ever goes missing, www.ysbdesigns.uk stops
+# resolving to the site.
+
+on:
+  push:
+    branches: [main]
+  # So the build can be exercised from a branch before main is touched.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. Queue rather than cancel, so a run that is
+# already publishing is allowed to finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # A build that drops the CNAME still "succeeds" but silently takes the
+      # custom domain down, so fail loudly here instead.
+      - name: Check CNAME survived the build
+        run: |
+          test -f dist/CNAME || { echo "::error::dist/CNAME missing — custom domain would break"; exit 1; }
+          echo "dist/CNAME = $(cat dist/CNAME)"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
