@@ -1,0 +1,28 @@
+---
+// SCAFFOLD ONLY — not the ported homepage.
+// Exists so `astro build` has a route and BaseLayout can be verified before
+// any real page is ported. Phase 3 replaces this entirely.
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Scaffold check">
+  <p class="label">Phase 1 · scaffold</p>
+
+  <h1 class="mt-4 text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight tracking-tight">
+    Astro builds, Tailwind resolves, BaseLayout renders.
+  </h1>
+
+  <p class="measure mt-6 text-[17px] leading-relaxed text-muted">
+    Placeholder. The existing static HTML is untouched and still serves the live
+    site. No page has been ported yet — see CLAUDE.md, “Sequence”.
+  </p>
+
+  <hr class="my-12 border-0 border-t border-rule" />
+
+  <p class="label">Token check</p>
+  <ul class="measure mt-4 list-none space-y-2 p-0 text-[17px]">
+    <li>Body copy sits on <code class="font-mono text-[15px]">bg</code> in <code class="font-mono text-[15px]">ink</code>.</li>
+    <li class="text-muted">Secondary copy uses <code class="font-mono text-[15px]">muted</code>.</li>
+    <li><a class="text-accent underline underline-offset-4" href="/">An accent link</a> — the only place colour appears.</li>
+  </ul>
+</BaseLayout>

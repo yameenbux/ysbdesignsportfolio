@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* Dark is class-based and secondary — light is the primary theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Light. The only palette that is required to work. */
+  --color-bg:      #FAFAF8;
+  --color-surface: #F2F2EE;
+  --color-ink:     #17181A;
+  --color-muted:   #6B7076;
+  --color-rule:    #DFDFD9;
+
+  /* One accent, both themes. Under 5% of any screen. Never hardcode the hex. */
+  --color-accent:  #1F5A5C;
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Effectively square. */
+  --radius-sm: 2px;
+}
+
+/* Dark tokens. Same names, so components never branch on theme. */
+.dark {
+  --color-bg:      #131416;
+  --color-surface: #1B1D20;
+  --color-ink:     #E8E8E4;
+  --color-muted:   #92979D;
+  --color-rule:    #2A2D31;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body { margin: 0; }
+
+  /* Body copy never runs full width. */
+  .measure { max-width: 68ch; }
+
+  /* The primary technical signal: mono, uppercase, tracked out. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  a { color: inherit; }
+
+  /* Near-zero motion, and none at all if the visitor asked for none. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

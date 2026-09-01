@@ -1,0 +1,140 @@
+---
+import '../styles/global.css';
+
+/**
+ * The shell every page sits in: head, nav, footer.
+ *
+ * Structure is deliberately thin — Phase 2 agrees the sitemap, so `nav` reads
+ * from one array rather than hand-written markup. Changing the site's shape
+ * should be an edit to that array, not to this file's structure.
+ */
+
+const {
+  title,
+  description = "I help new and growing businesses look established online — brand, site and hosting handled end to end.",
+  /** Set on the one page that should not be indexed, if any. */
+  noindex = false,
+} = Astro.props;
+
+const nav = [
+  { href: '/work/',     label: 'Work' },
+  { href: '/about/',    label: 'About' },
+  { href: '/services/', label: 'Services' },
+  { href: '/contact/',  label: 'Contact' },
+];
+
+// Trailing-slash-insensitive, so /work and /work/ both mark the tab active.
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isCurrent = (href) => path === href.replace(/\/+$/, '');
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const year = new Date().getFullYear();
+
+// Single source of truth for contact routes. CLAUDE.md flags that the two
+// numbers disagree — deliberately not reconciled here, since guessing which
+// is correct would bury the question.
+const WHATSAPP = '447404901859';
+const TEL = '+447729247248';
+const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ? `${title} — YSB Designs` : 'YSB Designs'}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title ?? 'YSB Designs'} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    />
+  </head>
+
+  <body class="bg-bg text-ink antialiased">
+    <a
+      href="#main"
+      class="label sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-surface focus:px-3 focus:py-2 focus:text-ink focus:outline focus:outline-accent"
+    >
+      Skip to content
+    </a>
+
+    <!-- Rules do the separating, not shadows. -->
+    <header class="border-b border-rule">
+      <div class="mx-auto flex max-w-5xl items-baseline justify-between gap-8 px-6 py-5">
+        <a href="/" class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink">
+          YSB Designs
+        </a>
+
+        <nav aria-label="Primary">
+          <ul class="flex list-none items-baseline gap-6 p-0 m-0">
+            {nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                  class:list={[
+                    'label transition-colors duration-150 ease-out hover:text-accent',
+                    isCurrent(item.href) && 'text-ink',
+                  ]}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="mx-auto max-w-5xl px-6 py-16">
+      <slot />
+    </main>
+
+    <footer class="mt-24 border-t border-rule">
+      <div
+        class="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-baseline sm:justify-between"
+      >
+        <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
+
+        <ul class="flex list-none flex-wrap gap-6 p-0 m-0">
+          <li>
+            <a
+              class="label transition-colors duration-150 ease-out hover:text-accent"
+              href={`https://wa.me/${WHATSAPP}`}
+              target="_blank"
+              rel="noopener"
+            >
+              WhatsApp
+            </a>
+          </li>
+          <li>
+            <a class="label transition-colors duration-150 ease-out hover:text-accent" href={`tel:${TEL}`}>
+              Call
+            </a>
+          </li>
+          <li>
+            <a
+              class="label transition-colors duration-150 ease-out hover:text-accent"
+              href={LINKEDIN}
+              target="_blank"
+              rel="noopener"
+            >
+              LinkedIn
+            </a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+  </body>
+</html>
