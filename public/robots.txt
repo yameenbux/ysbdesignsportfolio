@@ -1,0 +1,8 @@
+# Everything here is meant to be found. The only exclusions are pages that
+# should never be the result someone lands on: the 404, and services.html,
+# which is a meta-refresh stub kept alive for an indexed URL.
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+Sitemap: https://www.ysbdesigns.uk/sitemap.xml

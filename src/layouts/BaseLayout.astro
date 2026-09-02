@@ -23,7 +23,12 @@ const nav = [
 const path = Astro.url.pathname;
 const isCurrent = (href) => path === href;
 
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// build.format 'file' makes the homepage's pathname '/index.html'. Canonical
+// to the bare domain instead — /index.html and / are the same page, and the
+// one people link to is the short one.
+const canonicalPath = Astro.url.pathname === '/index.html' ? '/' : Astro.url.pathname;
+const canonical = new URL(canonicalPath, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
 const year = new Date().getFullYear();
 
 // Single source of truth for contact routes. One number everywhere — if a
@@ -48,6 +53,17 @@ const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
     <meta property="og:title" content={title ?? 'YSB Designs'} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="YSB Designs" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="YSB Designs — three layers under every site I build" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? 'YSB Designs'} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     {/* Fonts are self-hosted (see src/styles/global.css) — same origin, so no
         preconnect and no render-blocking third-party stylesheet. Preload the
