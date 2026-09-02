@@ -71,8 +71,48 @@ const plans = [
   },
 ];
 
+/**
+ * The questions that actually come up before someone books, answered here
+ * rather than on a page of their own — the sitemap is settled at five
+ * navigable pages, and these belong next to the process and the prices.
+ *
+ * Nothing here states a timescale, a client count or a result I cannot
+ * evidence. Where the honest answer is "it depends", it says so and points
+ * at the quote, which is where the real number lives.
+ */
+const faqs = [
+  [
+    'How long does it take?',
+    "It depends on the size of the build and how quickly content reaches me — that second one is usually the deciding factor. You get a date in your quote before you pay anything, and I hold to it.",
+  ],
+  [
+    'Do I have to be near Manchester?',
+    "No. I'm in Greater Manchester and the work has gone to London, Birmingham, Coventry and Nuneaton. Everything happens over WhatsApp and a shared preview link, so where you are is not the deciding factor.",
+  ],
+  [
+    'I already have a website. Can you fix it rather than replace it?',
+    "Sometimes. Send me the address and I'll tell you honestly whether it is worth repairing or whether you'd get more for the money starting again. I'll say so if repairing is the better call.",
+  ],
+  [
+    'Do I have to take the care plan?',
+    "The care plan covers hosting, the domain, security updates and your monthly edits, so a site on a plan has somewhere to live. If you'd rather host it yourself, say so at the quote stage and I'll build it to hand over instead.",
+  ],
+  [
+    'Who owns the site when it is finished?',
+    "You do, once the final balance is paid — design, content and code, with the domain registered in your name. The terms page spells it out.",
+  ],
+  [
+    'Do you only build websites?',
+    "No. Booking systems, installable apps, the backends and databases behind them, and the hosting and deploy pipeline they run on. The prices above cover websites; anything with software behind it is quoted per project.",
+  ],
+  [
+    'What do you need from me to start?',
+    "A deposit to book the slot, and your content — text, photos, logo. If the photos are the thing holding you up, tell me early and we work around it rather than letting the project stall.",
+  ],
+];
+
 const description =
-  'One person, end to end — how I work, what the four steps are, and what a website costs. Software, backends and hosting are quoted per project.';
+  'One person, end to end — how I work, what the four steps are, what a website costs, and the questions that come up before booking.';
 ---
 
 <BaseLayout title="About" description={description}>
@@ -171,6 +211,19 @@ const description =
         </p>
       </div>
     </div>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Questions I get asked</h2>
+
+    <dl class="mt-10 space-y-0">
+      {faqs.map(([q, a]) => (
+        <div class="rv grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-12">
+          <dt class="m-0 text-[19px] font-semibold leading-[1.35] tracking-[-0.01em] md:col-span-5">{q}</dt>
+          <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-7">{a}</dd>
+        </div>
+      ))}
+    </dl>
   </section>
 
   <section class="border-t border-line py-16 md:py-24">

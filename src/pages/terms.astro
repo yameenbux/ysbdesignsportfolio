@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * Terms.
+ *
+ * Deliberately narrow. Every commercial term on this page is one that was
+ * already published on about.html — the 50/50 split, the monthly care plan by
+ * Direct Debit, 30 days' notice to cancel, prices covering websites with
+ * software quoted per project. Nothing new was invented to fill the page,
+ * because a term stated here is a term I am held to.
+ *
+ * The rest is site terms: whose content this is, and that a published price
+ * is an indication rather than a contract. The written quote is the
+ * agreement; this page says so explicitly so the two can never conflict.
+ */
+
+const updated = 'September 2026';
+
+const sections = [
+  {
+    h: 'This page',
+    p: [
+      "This summarises how I work and what the published prices mean. The written quote I send you is the actual agreement for your project — if anything here reads differently from your quote, your quote is the one that counts.",
+    ],
+  },
+  {
+    h: 'Prices',
+    p: [
+      "The prices on the about page are for websites, and they are a starting point rather than an offer. What you pay is the fixed figure in your quote, agreed before any work starts.",
+      "Booking systems, apps, backends and anything with a database behind it are quoted per project. Domains bought on your behalf and any third-party service your project needs are passed on at cost and are yours, in your name.",
+    ],
+  },
+  {
+    h: 'Paying',
+    p: [
+      "Builds split 50% deposit to book your slot and 50% on launch. The deposit is what reserves the time, so it is not refundable once I start work.",
+      "Care plans start when the site goes live and are collected by monthly Direct Debit. You can cancel with 30 days' notice. If the care plan stops, the hosting it pays for stops with it — I will tell you before anything goes offline, and I will hand over what you need to move it elsewhere.",
+    ],
+  },
+  {
+    h: 'What you provide',
+    p: [
+      "Text, photos, logos and anything else that goes on the site. You need the right to use them; I take what you send at face value. Work stalls if content does not arrive, and a slot I am holding open is a slot I am not filling.",
+    ],
+  },
+  {
+    h: 'Who owns what',
+    p: [
+      "Once the final balance is paid, the site I build for you is yours — the design, the content and the code. Your domain is registered in your name.",
+      "Tools, components and techniques I have built up across projects stay mine to reuse. That is what stops you paying to have solved problems solved again.",
+    ],
+  },
+  {
+    h: 'What I do not promise',
+    p: [
+      "I do not promise a search ranking, a number of enquiries or a revenue figure. Nobody can, and anyone who does is selling you something. I build the site properly and set it up to be found; where it lands is up to Google and your market.",
+      "I keep hosting fast, patched and backed up under a care plan, but no host is up every second of every year.",
+    ],
+  },
+  {
+    h: 'This site',
+    p: [
+      "The writing, design, code and screenshots on ysbdesigns.uk are mine, except client logos and brands, which belong to those businesses and appear here because the work was done for them.",
+      "The case studies describe what was built. They are not a guarantee that your project will go the same way.",
+    ],
+  },
+  {
+    h: 'Law',
+    p: [
+      "These terms and any work I do are governed by the law of England and Wales.",
+    ],
+  },
+];
+
+const description =
+  'How the published prices work, how payment is split, who owns what at the end, and what I do not promise. Your written quote is the actual agreement.';
+---
+
+<BaseLayout title="Terms" description={description}>
+  <section class="pt-16">
+    <p class="label m-0">Terms · Last updated {updated}</p>
+    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
+      The terms, in plain English.
+    </h1>
+    <p class="measure mt-6 text-ink-2">
+      Short, because there is not much to it. One person, a fixed quote, half
+      up front and half on launch.
+    </p>
+  </section>
+
+  {sections.map((s) => (
+    <section class="border-t border-line py-9 md:py-11">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-12">
+        <h2 class="label m-0 md:col-span-3">{s.h}</h2>
+        <div class="rv md:col-span-9">
+          {s.p.map((para) => (
+            <p class="measure mt-0 mb-4 text-ink-2 last:mb-0">{para}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Anything unclear</h2>
+    <p class="rv measure mt-6 text-ink-2">
+      Ask before you book, not after. I would rather spend ten minutes on it
+      now.
+    </p>
+    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
+      <a class="btn btn-ghost" href="/about.html">See what a website costs</a>
+    </div>
+  </section>
+</BaseLayout>

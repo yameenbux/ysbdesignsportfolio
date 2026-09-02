@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * Privacy policy.
+ *
+ * Written from what the site actually does, checked against the built HTML,
+ * not from a template. As of this commit the site has no forms, no analytics,
+ * no cookies, no tracking pixels and no third-party requests at all — the
+ * fonts moved to this origin, which is what lets the "third parties" section
+ * say "none" rather than name Google.
+ *
+ * If any of those change — an analytics script, a contact form endpoint — the
+ * corresponding section here is wrong and must be updated in the same commit.
+ */
+
+const updated = 'September 2026';
+
+const sections = [
+  {
+    h: 'Cookies',
+    p: [
+      "This site sets no cookies. There is no cookie banner because there is nothing to consent to.",
+    ],
+  },
+  {
+    h: 'Analytics',
+    p: [
+      "There is no analytics on this site. No Google Analytics, no Meta pixel, no heatmaps, no session recording. I do not know who visits, how many of you there are, or what you looked at.",
+    ],
+  },
+  {
+    h: 'Forms',
+    p: [
+      "There is no contact form. Nothing on this site collects your name, email address or anything else and sends it anywhere.",
+    ],
+  },
+  {
+    h: 'Third parties',
+    p: [
+      "There are none while you read the site. The typefaces are served from this domain rather than from Google Fonts, so your browser makes no request to anyone else and no third party learns you were here.",
+    ],
+  },
+  {
+    h: 'Hosting',
+    p: [
+      "The site is hosted on GitHub Pages, which is the one exception to the line above — it is the server, so it necessarily handles the request your browser makes in order to send the pages back. Like any web server it processes those requests. I do not have access to those logs.",
+    ],
+  },
+  {
+    h: 'When you get in touch',
+    p: [
+      "If you message me on WhatsApp, call me, or connect on LinkedIn, that conversation happens on that platform under that platform's terms, and I keep whatever we discuss so I can quote for and do the work.",
+      "I use it to reply to you and to run the job. I do not sell it, and I do not add you to a mailing list — there isn't one. If we don't end up working together I delete the thread. If we do, I keep the project correspondence for as long as I need it for the work and for tax records.",
+    ],
+  },
+  {
+    h: 'Your rights',
+    p: [
+      "Under UK GDPR you can ask what I hold about you, ask me to correct it, or ask me to delete it. Message me on WhatsApp or call and I'll do it. There is nothing to charge for and no form to fill in.",
+      "If you are not happy with how I handle it, you can complain to the Information Commissioner's Office at ico.org.uk.",
+    ],
+  },
+  {
+    h: 'Who I am',
+    p: [
+      "YSB Designs is Yameen, working alone from Greater Manchester. I am the data controller for anything you send me directly.",
+    ],
+  },
+];
+
+const description =
+  'What this site does and does not collect: no cookies, no analytics, no forms. What happens when you message me, and how to ask me to delete it.';
+---
+
+<BaseLayout title="Privacy" description={description}>
+  <section class="pt-16">
+    <p class="label m-0">Privacy · Last updated {updated}</p>
+    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
+      What this site knows about you.
+    </h1>
+    <p class="measure mt-6 text-ink-2">
+      Almost nothing, and I would rather say that plainly than bury it. No
+      cookies, no analytics, no forms. The short version is the whole version.
+    </p>
+  </section>
+
+  {sections.map((s) => (
+    <section class="border-t border-line py-9 md:py-11">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-12">
+        <h2 class="label m-0 md:col-span-3">{s.h}</h2>
+        <div class="rv md:col-span-9">
+          {s.p.map((para) => (
+            <p class="measure mt-0 mb-4 text-ink-2 last:mb-0">{para}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Questions about any of it</h2>
+    <p class="rv measure mt-6 text-ink-2">Ask me directly. You'll get a straight answer.</p>
+    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
+      <a class="btn btn-ghost" href="tel:+447404901859">07404 901859</a>
+    </div>
+  </section>
+</BaseLayout>

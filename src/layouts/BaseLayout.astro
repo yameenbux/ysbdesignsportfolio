@@ -96,7 +96,13 @@ const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
 
       <footer class="mx-auto max-w-[1180px] px-7">
         <div class="mt-24 flex flex-col gap-4 border-t border-line py-9 sm:flex-row sm:items-baseline sm:justify-between">
-          <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
+          <div>
+            <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
+            <ul class="m-0 mt-2 flex list-none flex-wrap gap-5 p-0">
+              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/privacy.html">Privacy</a></li>
+              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/terms.html">Terms</a></li>
+            </ul>
+          </div>
           <ul class="m-0 flex list-none flex-wrap gap-6 p-0">
             <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a></li>
             <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`tel:${TEL}`}>Call</a></li>
