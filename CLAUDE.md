@@ -46,6 +46,13 @@ Migrating from hand-written static HTML to a build step.
 - **Tailwind 4** via `@tailwindcss/vite`. Not `@astrojs/tailwind` — that
   integration supports Astro 3–5 only and is deprecated, and this runs Astro 7.
   Tokens live in `@theme` in `src/styles/global.css`, not a `tailwind.config.js`.
+- **Fonts are self-hosted** from `public/fonts/`, latin subset, no italic —
+  the `@font-face` rules are at the top of `src/styles/global.css`. There is
+  no request to fonts.googleapis.com any more, which removed 710ms of
+  render-blocking, removed the only third party on the site, and finally made
+  local typography checks real. Archivo is the **wdth-axis** build: the
+  standard build has no width axis and would silently render the headings'
+  `'wdth' 112` / `88` at normal width.
 - **GitHub Pages**, custom domain `www.ysbdesigns.uk`. DNS at one.com, unchanged.
 
 ### Deploy — read before touching the build
@@ -149,6 +156,10 @@ Five navigable pages, three case studies, four unlisted.
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept, unlisted | no |
 | `/services.html` | Redirects to `/about.html` | no |
+| `/privacy.html` | Privacy — what the site collects, which is nothing | footer |
+| `/terms.html` | Terms — prices, payment, ownership | footer |
+| `/404.html` | Custom 404. `noindex`; GitHub Pages serves it automatically | no |
+| `/sitemap.xml` `/robots.txt` | Generated; sitemap is `src/pages/sitemap.xml.js` | no |
 
 **URLs keep the `.html` extension.** `build.format: 'file'` is set for that
 reason, and new pages inherit it. Directory URLs would mean a permanent second
@@ -205,6 +216,8 @@ old forest-green brand.
 - Annotation: **IBM Plex Mono**, 11.5px, uppercase, letter-spacing `0.14em`.
   This carries every label, kicker, caption and figure on the site.
 - Body measure capped at 68ch. h1 `clamp(2.4rem, 5.6vw, 4rem)`.
+- All three are self-hosted (see Stack). Adding a weight or an italic means
+  adding a file, not editing a URL.
 
 ### Colour — single light theme, deliberately
 
@@ -268,7 +281,18 @@ Rules that hold:
 - A layer anchored with `left:50%` plus `translateX(-50%)` puts its
   untransformed box past the viewport and into `scrollWidth`, which reads as
   phantom horizontal scroll even though nothing looks wrong. Anchor with
-  `left`/`right` instead.
+  `left:0; right:0; margin-inline:auto` instead — and if you do, **delete the
+  `translateX(-50%)` from the rig's JS transform in the same edit**. The two
+  are one mechanism; orphaning either half drags the sheets half their own
+  width out of their column and under the hero paragraph.
+- The rig's leader-line labels need about 190px to the right of the sheets.
+  Below 1180px the column cannot spare it, so the labels move to the legend
+  under the rig — the same trade the phone deck makes. Do not try to bound the
+  label box with `right:0`: `.anno`'s containing block is its own layer, so it
+  resolves against a 340px sheet and collapses the box to zero width.
+- `touch-action` is gated on `(pointer: coarse)`, not on width. A tablet at
+  768px is above the deck breakpoint but still has no cursor, and `none` there
+  means a swipe over the hero cannot scroll the page.
 - The rig stops requesting frames when it settles *and* when it scrolls out
   of view.
 - Reveals are applied only under `.js` — a script error must never leave the
@@ -306,16 +330,30 @@ shipped and read as too plain. Replaced across all ten pages. Lighthouse
 99/100/100/100 on the homepage (the interactive one) and 100 across work,
 about, contact and the case template; CLS 0.000 everywhere.
 
+**Phase 6 — the pre-launch audit. DONE.** Privacy, terms, a custom 404, an
+FAQ on About, `robots.txt`, a generated sitemap, `og:image` and Twitter card,
+a favicon in the current palette, and the fonts brought in-house. Two real
+bugs fell out of it: 184px of horizontal overflow from the rig's annotations
+at 1440, and 82–104px more between 768 and 960 from the `left:50%` anchor.
+Lighthouse, measured for the first time with the actual webfonts:
+96/100/100/100 on the homepage, 98–99 elsewhere, CLS 0.000 throughout.
+
 ### Known, unfixed
 
-- **Typography still unverified against the real webfont.** The build sandbox
-  blocks Google Fonts, so every check has run on fallback faces. Layout,
-  colour and interaction are real; the type is not.
-- **Lighthouse scores are local**, measured with fonts blocked. The live site
-  adds a render-blocking font request, so expect lower.
-- **Favicon is a placeholder**, not an identity.
+- **Lighthouse scores are still local.** They are no longer font-blocked, but
+  they are measured against `python -m http.server`, which sends no cache
+  headers — GitHub Pages will differ.
+- **Images are JPEG.** Lighthouse offers ~15KB from WebP on a below-fold
+  image. Not worth an image pipeline yet.
 - **Portrait** is still absent by choice; About is built not to want one.
 - **Contact form mechanism** is still unchosen. WhatsApp-first stands.
+- **Analytics: none, deliberately.** Adding any is what would make the privacy
+  policy legally required rather than merely honest, and a cookie-based one
+  (GA4) would also need a consent banner. A cookieless one (Plausible,
+  Cloudflare Web Analytics) would not. Unchosen.
+- **The terms page states real commercial terms.** Every clause on it was
+  already published on About or follows from it. Anything added there is a
+  commitment, so it is not a page to pad.
 
 ## Working rules
 
@@ -337,6 +375,9 @@ about, contact and the case template; CLS 0.000 everywhere.
 - One `h1` per page; headings form a single logical hierarchy.
 - After any change: `npm run build`, then check the affected route at **375px
   and 1440px**, in both themes if dark is in.
+- `privacy.html` describes what the site actually does. Adding an analytics
+  script, a form endpoint or a third-party embed makes it untrue — update it
+  in the same commit.
 - If a request conflicts with this document, say so rather than working
   around it.
 
