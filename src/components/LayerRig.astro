@@ -31,7 +31,7 @@ const { shot, shotAlt } = Astro.props;
       <div class="sheet sheet-lift overflow-hidden">
         <img src={shot} alt={shotAlt} width="760" height="475" class="block h-auto w-full" fetchpriority="high" decoding="async" />
       </div>
-      <p class="anno label"><span class="dash"></span><span class="label-ink">01 · What people see</span></p>
+      <p class="anno label"><span class="dash"></span><span class="label-ink">01 · What you see</span></p>
     </div>
 
     <!-- 02 — the software behind it -->
@@ -41,7 +41,7 @@ const { shot, shotAlt } = Astro.props;
         <div class="my-[9px] flex items-center gap-2.5"><span class="chip">Payments</span><span class="wire"></span><span class="chip">Email</span></div>
         <div class="my-[9px] flex items-center gap-2.5"><span class="chip">Database</span><span class="wire"></span><span class="chip">Admin</span></div>
       </div>
-      <p class="anno label"><span class="dash"></span><span class="label-ink">02 · The software behind it</span></p>
+      <p class="anno label"><span class="dash"></span><span class="label-ink">02 · The software</span></p>
     </div>
 
     <!-- 03 — where it runs -->
@@ -55,7 +55,7 @@ const { shot, shotAlt } = Astro.props;
   </div>
 
   <ul class="rig-legend m-0 mt-4 hidden list-none flex-col gap-1.5 p-0">
-    <li class="label m-0"><span class="label-ink">01</span> · What people see</li>
+    <li class="label m-0"><span class="label-ink">01</span> · What you see</li>
     <li class="label m-0"><span class="label-ink">02</span> · The software behind it</li>
     <li class="label m-0"><span class="label-ink">03</span> · Where it runs</li>
   </ul>
@@ -74,16 +74,39 @@ const { shot, shotAlt } = Astro.props;
 
 <style>
   .rig-layer {
-    position: absolute; left: 50%; top: 50%;
+    /* Centred with left:0 / right:0 / margin auto, never left:50%. A
+       50%-offset absolute box extends its untransformed width past the
+       column: between 768px and 960px that put 82-104px of real horizontal
+       scroll on the page, with nothing visibly wrong. */
+    position: absolute; left: 0; right: 0; margin-inline: auto; top: 50%;
     width: min(420px, 86%);
     transform-style: preserve-3d; will-change: transform;
     transition: transform 0.5s var(--ease-draft);
   }
-  /* On wide screens the sheets sit left of centre so the leader-line labels
-     have somewhere to go without pushing the page sideways. */
-  @media (min-width: 960px) { .rig-layer { left: 40%; width: min(360px, 78%); } }
+  /* The sheets sit at the left of their column so the leader-line labels
+     have real room. left:40% with a 360px sheet left them none: they ran
+     184px past the viewport and put a horizontal scrollbar on the desktop
+     homepage.
+     58% rather than 64%: at 1180 the column is 507px, so a 58% sheet ends at
+     294 and the widest label (179px) ends at 487 — inside, with room. */
+  /* Only once the labels are shown does the stack move off centre to make
+     room for them. Below that it stays centred in its column. */
+  @media (min-width: 1180px) {
+    .rig-layer { right: auto; margin-inline: 0; width: min(340px, 58%); }
+  }
 
   .rig-layer .anno { position: absolute; left: calc(100% + 14px); top: 14px; margin: 0; }
+
+  /* Leader-line labels need about 180px to the right of the sheet. Below
+     1180px the column cannot spare it, so the labels move to the legend
+     under the rig rather than running off the page — the same trade the deck
+     makes on a phone, for the same reason. Bounding the label box instead
+     would not work: .anno's containing block is its own layer, so `right:0`
+     resolves against a 340px sheet and collapses the box to zero. */
+  @media (max-width: 1179px) {
+    .rig-layer .anno { display: none; }
+    .rig-legend { display: flex; }
+  }
 
   /* Below 700px the sheets become a deck rather than a 3D fan: stacked with
      each lower card peeking out below, draggable to spread. Leader lines
@@ -105,13 +128,19 @@ const { shot, shotAlt } = Astro.props;
        untransformed box of a 50%-offset absolute element overhangs the
        viewport and lands in scrollWidth even though the transform pulls it
        back visually. That was ~99px of phantom horizontal scroll. */
-    .rig-layer { left: 6%; right: 6%; top: 0; width: auto; }
+    .rig-layer { left: 6%; right: 6%; top: 0; width: auto; margin-inline: 0; }
     .rig-layer .anno {
-      left: 12px; top: 10px; right: auto;
+      left: 12px; top: 10px; right: auto; white-space: nowrap;
       background: var(--color-paper); border: 1px solid var(--color-line);
       border-radius: var(--radius-sm); padding: 4px 9px;
     }
   }
+
+  /* Drag is a pointer gesture. On any touch device — including a tablet above
+     the 700px deck breakpoint — `touch-action: none` means a swipe over the
+     hero cannot scroll the page at all. Gate it on the input, not the width:
+     at 768px the rig was still blocking scroll on an iPad. */
+  @media (pointer: coarse) { #rig { touch-action: auto; } }
 
   /* Reduced motion, at any width: a plain labelled stack, nothing moving. */
   @media (prefers-reduced-motion: reduce) {
@@ -119,9 +148,9 @@ const { shot, shotAlt } = Astro.props;
       height: auto !important; display: flex; flex-direction: column; gap: 26px;
       cursor: default; perspective: none;
     }
-    .rig-layer { position: static; width: 100%; transform: none !important; transition: none; }
+    .rig-layer { position: static; width: 100%; margin-inline: 0; transform: none !important; transition: none; }
     .rig-layer .anno {
-      position: static; margin-top: 10px;
+      position: static; right: auto; margin-top: 10px;
       background: none; border: 0; padding: 0;
     }
     .rig-hint { display: none; }
@@ -183,7 +212,7 @@ const { shot, shotAlt } = Astro.props;
             l.style.opacity = String(ease);
             l.style.zIndex = '';
             l.style.transform =
-              `translate(-50%,-50%) rotateX(${10 + py * 7}deg) rotateY(${px * 12}deg)` +
+              `translateY(-50%) rotateX(${10 + py * 7}deg) rotateY(${px * 12}deg)` +
               ` translate3d(${px * d * 7}px, ${-lift + py * d * 5 + (1 - ease) * 42}px, ${z}px)`;
           }
         }

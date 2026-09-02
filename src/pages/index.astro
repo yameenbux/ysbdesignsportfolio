@@ -11,7 +11,10 @@ const description =
 <BaseLayout title="Websites, apps and the software behind them" description={description}>
 
   {/* ---- hero: the claim, and the stack it describes ------------------ */}
-  <section class="grid grid-cols-1 gap-11 pt-16 pb-10 md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-14">
+  {/* 0.95/1.05 rather than 1.05/0.95: the rig's leader-line labels need about
+      190px to the right of the sheets, and the narrower column left the widest
+      one 26px short. The text column is still wider than its 46ch measure. */}
+  <section class="grid grid-cols-1 gap-11 pt-16 pb-10 md:grid-cols-[0.95fr_1.05fr] md:items-center md:gap-14">
     <div>
       <p class="label m-0 mb-5">Greater Manchester · one person, end to end</p>
       <h1 class="text-[clamp(2.6rem,6.2vw,4.6rem)] font-extrabold leading-[0.98] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
