@@ -9,12 +9,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
  * anyway, and a form nobody uses is worse than no form.
  *
  * No email address here. There is no mailbox, and publishing one that
- * bounces is worse than publishing none (CLAUDE.md, "## Contact").
+ * bounces is worse than publishing none (CLAUDE.md, "## Contact"). The
+ * off-site profile link was removed at the user's request, so WhatsApp and
+ * the phone number are now the only two routes on the site.
  */
 
 const WHATSAPP = 'https://wa.me/447404901859';
 const TEL = '+447404901859';
-const LINKEDIN = 'https://www.linkedin.com/in/yameenbux';
 
 // What makes a first message answerable in one reply rather than four.
 const helpful = [
@@ -72,29 +73,17 @@ const description =
       </p>
     </div>
   </section>
-
+  {/* Was "Where and how", a two-row list whose second row was an off-site
+      profile link. With that route removed there is one fact left, and a
+      definition list of one term reads as a list with something missing. */}
   <section class="border-t border-line py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Where and how</h2>
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Where I work from</h2>
 
-    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
-      <div class="contents">
-        <dt class="label m-0 md:col-span-3">Based</dt>
-        <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
-          Greater Manchester. The work has gone to London, Birmingham, Coventry
-          and Nuneaton, so where you are is not the deciding factor.
-        </dd>
-      </div>
-      <div class="contents">
-        <dt class="label m-0 md:col-span-3">Elsewhere</dt>
-        <dd class="m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
-          <a
-            href={LINKEDIN}
-            target="_blank"
-            rel="noopener"
-            class="underline decoration-line underline-offset-4 transition-colors duration-150 ease-out hover:text-blue hover:decoration-blue"
-          >LinkedIn</a>
-        </dd>
-      </div>
-    </dl>
+    <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <p class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9 md:col-start-4">
+        Greater Manchester. The work has gone to London, Birmingham, Coventry
+        and Nuneaton, so where you are is not the deciding factor.
+      </p>
+    </div>
   </section>
 </BaseLayout>

@@ -125,7 +125,12 @@ is actually created. Routes are:
 
 - WhatsApp — `07404901859`
 - Phone — `tel:+447404901859`
-- LinkedIn — `linkedin.com/in/yameenbux`
+
+**LinkedIn was removed at the user's request.** It was in the footer of every
+page and was the second row of contact.html's "Where and how" list; that
+section is now a single paragraph, because a definition list of one term reads
+as a list with something missing. There are **two routes on the site**, both
+the same number — do not reintroduce a social profile without being asked.
 
 Resolved in Phase 2. `07404901859` is the correct number. `07729247248` was
 wrong and had been on every Call link; fixed in `804ae30`. **One number, used
