@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wheel from '../components/Wheel.astro';
+import Corridor from '../components/Corridor.astro';
 import Estimator from '../components/Estimator.astro';
 import { all } from '../data/projects.js';
 
@@ -18,7 +19,22 @@ const description =
 
 <BaseLayout title="Websites, apps and the software behind them" description={description} wide={true}>
 
-  {/* ---- the claim --------------------------------------------------- */}
+  {/* ---- the claim, over the corridor -------------------------------- */}
+  <Corridor
+    images={[
+      { src: '/assets/img/taiyabah-web.jpg' },
+      { src: '/assets/img/venetian-web.jpg' },
+      { src: '/assets/img/hbc-web.jpg' },
+      { src: '/assets/img/ellash-web.jpg' },
+      { src: '/assets/img/luxe-web.jpg' },
+      { src: '/assets/img/bux-web.jpg' },
+      { src: '/assets/img/taiyabah-home.jpg' },
+      { src: '/assets/img/venetian-finishes.jpg' },
+      { src: '/assets/img/hbc-booking.jpg' },
+    ]}
+    class="hero-corr"
+    wash={0.82}
+  >
   <section class="shell hero">
     <p class="eyebrow rv">Greater Manchester · one person, end to end</p>
     <h1 class="rv">I build the <em>whole</em> thing.</h1>
@@ -45,6 +61,7 @@ const description =
 
     <p class="hero-cue rv" aria-hidden="true">Scroll — every project below is measured against these three</p>
   </section>
+  </Corridor>
 
   {/* ---- the wheel --------------------------------------------------- */}
   <Wheel items={all} />
@@ -74,7 +91,8 @@ const description =
 </BaseLayout>
 
 <style>
-  .hero { padding-block: clamp(52px, 9vh, 104px) clamp(36px, 7vh, 76px); }
+  .hero-corr { min-height: 92vh; display: flex; align-items: center; }
+  .hero { padding-block: clamp(52px, 9vh, 104px) clamp(36px, 7vh, 76px); width: 100%; }
 
   .hero h1 {
     font-size: clamp(2.9rem, 8.4vw, 6.2rem);

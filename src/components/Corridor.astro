@@ -1,0 +1,193 @@
+---
+/**
+ * The corridor — a port of the `ImageStreamHero` React component.
+ *
+ * Two rails of cards ride from far behind the screen toward the viewer.
+ * Perspective alone does the work that looks like two animations: as a card's
+ * z grows it gets bigger *and* its screen x sweeps outward from the vanishing
+ * point, because the projection scales position and size by the same factor.
+ *
+ * The three shaping decisions are the original author's and each fixes a
+ * specific artefact — they are kept exactly:
+ *
+ *  1. Depth is authored as apparent size, geometrically: each card is a
+ *     constant ratio bigger than the one behind it. Spacing a straight
+ *     z-range evenly makes the near cards tear apart as the projection
+ *     blows up.
+ *  2. The rails open hard in the first stretch and then hold (`fan` > 1), so
+ *     the ribbon leaves the centre as a flat band, bends once, and only then
+ *     runs out on the diagonal. Parallel rails project to a straight cone
+ *     with no bend at all.
+ *  3. A card is born *across* the axis (`railBirth` negative), so the newest
+ *     card sweeps back through the centre and the throat is never uncovered.
+ *     Birthing on its own side leaves a hole at dead centre that blinks open
+ *     once a cycle.
+ *
+ * What the port changes, and why:
+ *
+ *  - No React. The keyframes are a pure function of the config, so they are
+ *    computed here at build time and shipped as static CSS. The original
+ *    recomputed them in a useMemo on every render; this ships zero JS for
+ *    the geometry.
+ *  - `cn()` and the `@/lib/utils` import are gone; Astro's class:list covers
+ *    it and the project has no `@/` alias.
+ *  - Added: the corridor stops animating when it scrolls out of view. The
+ *    original runs 18 cards on continuous 3D transforms for as long as the
+ *    tab is open, which is a compositor cost that never stops — and this
+ *    audience arrives on phones.
+ *
+ * Every length is in `cqw` — a percentage of the container's width — so the
+ * corridor keeps its proportions at any size.
+ */
+
+const {
+  images = [],
+  cards = 9,
+  speed = 18,
+  axis = 55,
+  path = {},
+  class: klass = '',
+  /**
+   * How far the corridor is pushed back behind the content. 0 is the
+   * component as written — full-strength images. Anything above 0 washes them
+   * toward the page ground so text stays legible on top.
+   *
+   * At full strength on this site the hero copy sits on top of moving
+   * screenshots and cannot be read, and the screenshots themselves are
+   * unrecognisable as work. Both are fixed by the same dial.
+   */
+  wash = 0,
+} = Astro.props;
+
+const PATH = {
+  perspective: 30,   // strength of the projection; lower is wider-angle
+  cardWidth: 18,
+  cardHeight: 25,
+  cardRadius: 0.4,
+  birthHeight: 2.6,  // on-screen card height at the waist
+  exitHeight: 46,    // on-screen card height as it leaves frame
+  railBirth: -11,    // negative: born across the axis (note 3)
+  railExit: 44,
+  fan: 3.3,          // >1 opens early then holds (note 2)
+  turnBirth: 6,
+  turnExit: 28,
+  stops: 24,
+  ...path,
+};
+
+const p = PATH;
+
+/** Sample the path once so the keyframes trace the real curve. */
+function keyframes(dir, name) {
+  const steps = [];
+  for (let s = 0; s <= p.stops; s++) {
+    const u = s / p.stops;
+    // Geometric in apparent size, so consecutive cards keep a constant ratio
+    // and the ribbon stays solid at both ends.
+    const scale = (p.birthHeight / p.cardHeight) * Math.pow(p.exitHeight / p.birthHeight, u);
+    const z = p.perspective * (1 - 1 / scale);
+    const rail = p.railExit - (p.railExit - p.railBirth) * Math.pow(1 - u, p.fan);
+    const turn = p.turnBirth + (p.turnExit - p.turnBirth) * u;
+    steps.push(
+      `${(u * 100).toFixed(2)}%{transform:translate3d(${(dir * rail).toFixed(2)}cqw,0,${z.toFixed(2)}cqw) rotateY(${(-dir * turn).toFixed(2)}deg)}`
+    );
+  }
+  return `@keyframes ${name}{${steps.join('')}}`;
+}
+
+const css = keyframes(1, 'corr-r') + keyframes(-1, 'corr-l')
+  // Pausing rather than disabling keeps the corridor whole: every card is
+  // already dropped mid-flight by its negative delay, so it freezes as a
+  // finished still instead of collapsing onto the axis.
+  + '@media(prefers-reduced-motion:reduce){.corr-card{animation-play-state:paused!important}}';
+
+const rails = ['corr-r', 'corr-l'];
+---
+
+<div class:list={['corr', klass]} data-corridor
+     style={`--wash:${wash};--card-op:${(1 - wash * 0.86).toFixed(3)};--card-sat:${(1 - wash * 0.8).toFixed(2)}`}>
+  <style is:inline set:html={css}></style>
+
+  <div class="corr-stage" aria-hidden="true"
+       style={`perspective:${p.perspective}cqw;perspective-origin:50% ${axis}%`}>
+    <div class="corr-space">
+      {rails.map((name) =>
+        Array.from({ length: cards }, (_, i) => {
+          // Both rails walk the same sequence, so the left mirrors the right
+          // at every depth.
+          const img = images[i % Math.max(images.length, 1)];
+          return (
+            <div
+              class="corr-card"
+              style={`left:50%;top:${axis}%;width:${p.cardWidth}cqw;height:${p.cardHeight}cqw;` +
+                     `margin-left:${-p.cardWidth / 2}cqw;margin-top:${-p.cardHeight / 2}cqw;` +
+                     `border-radius:${p.cardRadius}cqw;` +
+                     `animation:${name} ${speed}s linear infinite;` +
+                     /* Negative delay drops each card mid-flight, so the
+                        corridor is already full on the first frame. */
+                     `animation-delay:${-(i * speed) / cards}s`}
+            >
+              {img && (
+                <img src={img.src} alt="" width="760" height="475"
+                     loading="lazy" decoding="async" draggable="false" />
+              )}
+            </div>
+          );
+        })
+      )}
+    </div>
+  </div>
+
+  <div class="corr-veil" aria-hidden="true"></div>
+  <div class="corr-fore"><slot /></div>
+</div>
+
+<style>
+  .corr {
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .corr-stage { position: absolute; inset: 0; pointer-events: none; }
+  .corr-space { position: absolute; inset: 0; transform-style: preserve-3d; }
+
+  .corr-card {
+    position: absolute;
+    overflow: hidden;
+    backface-visibility: hidden;
+  }
+  .corr-card img {
+    display: block; height: 100%; width: 100%; object-fit: cover;
+    opacity: var(--card-op, 1);
+    filter: saturate(var(--card-sat, 1));
+  }
+
+  /* A veil of the page's own ground over the corridor, so the type above it
+     has something to sit on. Sized to the wash, so wash:0 leaves it absent. */
+  .corr-veil {
+    position: absolute; inset: 0; pointer-events: none;
+    background: var(--color-paper);
+    opacity: calc(var(--wash, 0) * 0.55);
+  }
+
+  .corr-fore { position: relative; z-index: 1; }
+
+  /* Off-screen the corridor stops moving. 18 cards on continuous 3D
+     transforms is a cost that otherwise never ends. */
+  .corr[data-idle] .corr-card { animation-play-state: paused; }
+</style>
+
+<script>
+  // The only script in the component: pause the corridor when it is not on
+  // screen. Geometry is static CSS computed at build time.
+  const el = document.querySelector('[data-corridor]');
+  if (el) {
+    new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) el.removeAttribute('data-idle');
+        else el.setAttribute('data-idle', '');
+      }
+    }, { rootMargin: '10% 0px' }).observe(el);
+  }
+</script>
