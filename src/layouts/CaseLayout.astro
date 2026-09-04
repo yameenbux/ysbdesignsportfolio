@@ -5,9 +5,13 @@ import BaseLayout from './BaseLayout.astro';
  * One template behind all six case studies. Content comes from
  * src/data/cases.js; nothing here is per-project.
  *
- * Problem → approach → outcome, then the screens, per the copy rule in
- * CLAUDE.md. Screenshots are the hero content, so the copy above them
- * exists to explain what the visitor is looking at.
+ * Problem → approach → outcome, then the screens. Screenshots are the hero
+ * content, so the copy above them exists to explain what the visitor is
+ * looking at — nobody recognises these brands the way they would a
+ * well-known product.
+ *
+ * The screens sit on bone rather than on the blue: a light-UI capture on a
+ * saturated ground needs a sheet under it or it reads as a hole in the page.
  */
 const { data } = Astro.props;
 const { title, kind, role, problem, approach, outcome, links, shots, description } = data;
@@ -16,69 +20,99 @@ const sections = [['Problem', problem], ['Approach', approach], ['Outcome', outc
 ---
 
 <BaseLayout title={title} description={description}>
-  <p class="pt-10">
-    <a href="/work.html" class="label no-underline transition-colors duration-150 hover:text-blue">← All work</a>
-  </p>
+  <p class="back"><a href="/work.html" class="eyebrow ul-draw">← All work</a></p>
 
-  <section class="mt-8">
-    <p class="label label-blue m-0">{kind}</p>
-    <h1 class="mt-4 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-      {title}
-    </h1>
+  <section class="case-head">
+    <p class="eyebrow eyebrow-accent m-0">{kind}</p>
+    <h1>{title}</h1>
+    <p class="case-role">{role}</p>
+
+    {links.length > 0 && (
+      <ul class="case-links">
+        {links.map((l) => (
+          <li><a href={l.href} target="_blank" rel="noopener" class="ul-draw">{l.text} ↗</a></li>
+        ))}
+      </ul>
+    )}
   </section>
 
-  <div class="mt-12 grid grid-cols-1 gap-x-9 gap-y-10 lg:grid-cols-12">
-    <aside class="lg:col-span-3">
-      <p class="label m-0 normal-case tracking-normal">{role}</p>
-
-      {links.length > 0 && (
-        <ul class="mt-6 flex list-none flex-col gap-2 p-0">
-          {links.map((l) => (
-            <li>
-              <a href={l.href} target="_blank" rel="noopener"
-                 class="label label-ink underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-blue hover:decoration-blue">{l.text} ↗</a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </aside>
-
-    <div class="lg:col-span-9">
-      <dl class="m-0 space-y-8">
-        {sections.map(([label, copy]) => (
-          <div>
-            <dt class="label m-0">{label}</dt>
-            <dd class="measure m-0 mt-2 text-ink-2 [&_strong]:font-medium [&_strong]:text-ink" set:html={copy} />
-          </div>
-        ))}
-      </dl>
-    </div>
+  <div class="case-body">
+    {sections.map(([label, copy]) => (
+      <div class="case-row rv">
+        <p class="eyebrow m-0">{label}</p>
+        <div class="case-copy" set:html={copy} />
+      </div>
+    ))}
   </div>
 
-  <section class="mt-20 border-t border-line py-16">
-    <h2 class="rv label m-0">The screens</h2>
-
-    <div class="mt-10 grid grid-cols-1 gap-x-9 lg:grid-cols-12">
-      <div class="flex flex-col gap-14 lg:col-span-9 lg:col-start-4">
-        {shots.map((s) => (
-          <figure class="rv m-0">
-            <div class="sheet overflow-hidden" class:list={[s.portrait && 'max-w-[300px]']}>
-              <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async"
-                   class="block h-auto w-full" />
-            </div>
-            <figcaption class="label mt-3">{s.caption}</figcaption>
-          </figure>
-        ))}
-      </div>
+  <section class="screens">
+    <h2 class="eyebrow m-0">The screens</h2>
+    <div class="shot-list">
+      {shots.map((s) => (
+        <figure class="rv shot" class:list={[s.portrait && 'is-portrait']}>
+          <div class="shot-frame">
+            <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async" />
+          </div>
+          <figcaption class="eyebrow">{s.caption}</figcaption>
+        </figure>
+      ))}
     </div>
   </section>
 
-  <section class="border-t border-line py-24">
-    <h2 class="rv text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">If this looks like your problem</h2>
-    <p class="rv measure mt-6 text-ink-2">Tell me about it and I'll tell you what it takes.</p>
-    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+  <section class="case-ask">
+    <h2 class="rv">If this looks like your problem</h2>
+    <p class="rv case-ask-p">Tell me about it and I'll tell you what it takes.</p>
+    <div class="rv case-ask-do">
       <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="/work.html">See the other projects</a>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .back { padding-top: 34px; margin: 0; }
+
+  .case-head { padding-top: 30px; padding-bottom: 8px; }
+  .case-head h1 {
+    font-size: clamp(2.5rem, 7.4vw, 5.2rem);
+    margin: 16px 0 0;
+    max-width: 16ch;
+  }
+  .case-role { margin: 20px 0 0; color: var(--color-ink-2); max-width: 54ch; }
+
+  .case-links { margin: 22px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 22px; }
+  .case-links a { font-weight: 600; }
+
+  .case-body { padding-block: clamp(44px, 7vh, 76px) 0; }
+  .case-row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding-block: 22px;
+  }
+  @media (min-width: 860px) {
+    .case-row { grid-template-columns: 170px 1fr; gap: 34px; }
+  }
+  .case-copy { max-width: 62ch; color: var(--color-ink-2); margin: 0; }
+  .case-copy :global(strong) { color: var(--color-ink); font-weight: 600; }
+
+  .screens { padding-block: clamp(52px, 9vh, 92px); }
+  .shot-list {
+    margin-top: 32px;
+    display: flex; flex-direction: column; gap: 56px;
+  }
+  .shot { margin: 0; }
+  .shot.is-portrait .shot-frame { max-width: 300px; }
+  .shot-frame {
+    background: var(--color-plane);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    overflow: hidden;
+  }
+  .shot-frame img { display: block; width: 100%; height: auto; border-radius: 1px; }
+  .shot figcaption { margin-top: 12px; }
+
+  .case-ask { padding-block: clamp(56px, 10vh, 104px); }
+  .case-ask h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .case-ask-p { margin: 20px 0 0; color: var(--color-ink-2); max-width: 46ch; }
+  .case-ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

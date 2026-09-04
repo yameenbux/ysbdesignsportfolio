@@ -1,77 +1,134 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { lead } from '../data/projects.js';
+import { lead, all } from '../data/projects.js';
+
+/**
+ * The work index. The three with enough captured material lead, written up
+ * as problem → approach → outcome; the other three are listed underneath so
+ * nothing on the site is unreachable from the nav.
+ *
+ * Deliberately not the wheel: the homepage already does that, and someone who
+ * clicked "Work" wants to read rather than scroll a mechanism.
+ */
+
+const rest = all.filter((p) => !lead.some((l) => l.slug === p.slug));
 
 const description =
   'Three projects written up as problem, approach and outcome — a masjid running on one system, a plaster specialist who had only Instagram, and a booking platform that replaced DMs.';
 ---
 
 <BaseLayout title="Work" description={description}>
-  <section class="pt-16 pb-4">
-    <p class="label m-0">Three projects</p>
-    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-      Work
-    </h1>
-    <p class="measure mt-6 text-ink-2">
-      What the problem was, what I built, and which of the three layers it
-      actually needed. Each one links to the full case study with the screens.
+  <section class="head">
+    <p class="eyebrow m-0">Six projects, three written up</p>
+    <h1>Work</h1>
+    <p class="head-p">
+      What the problem was, what I built, and what changed. Each one links to
+      the full case study with the screens.
     </p>
   </section>
 
-  {lead.map((p) => (
-    <section class="border-t border-line py-20">
-      <p class="rv label label-blue m-0">{p.kind} · {p.where}</p>
+  {lead.map((p, i) => (
+    <section class="entry">
+      <p class="eyebrow eyebrow-accent rv m-0">{String(i + 1).padStart(2, '0')} · {p.kind} · {p.where}</p>
 
-      <div class="mt-9 grid grid-cols-1 gap-7 lg:grid-cols-12 lg:gap-9">
-        <aside class="rv lg:col-span-3">
-          <p class="label m-0 normal-case tracking-normal">{p.stack}</p>
-          <div class="mt-6 flex flex-col gap-1.5">
-            {[['Interface', p.layers.interface], ['Software', p.layers.software], ['Infrastructure', p.layers.infra]].map(([name, w]) => (
-              <div class="label m-0 flex items-center gap-2.5">
-                <i class="block h-1.5 bg-blue/25" style={`width:${w}%`}></i>{name}
-              </div>
-            ))}
+      <h2 class="rv"><a href={p.href} class="ul-draw">{p.name}</a></h2>
+      <p class="entry-role rv">{p.stack}</p>
+
+      <a href={p.href} class="shot rv">
+        <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async" />
+      </a>
+
+      <dl class="entry-facts rv">
+        {[['Problem', p.problem], ['Approach', p.approach], ['Outcome', p.outcome]].map(([k, v]) => (
+          <div>
+            <dt class="eyebrow m-0">{k}</dt>
+            <dd>{v}</dd>
           </div>
-        </aside>
+        ))}
+      </dl>
 
-        <div class="lg:col-span-9">
-          <h2 class="rv text-[clamp(1.6rem,3.4vw,2.2rem)] font-bold tracking-[-0.025em]">
-            <a href={p.href} class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 hover:text-blue">
-              {p.name}
-              <span aria-hidden="true" class="text-[17px] text-ink-2 transition-transform duration-150 group-hover:translate-x-[3px] group-hover:text-blue">→</span>
-            </a>
-          </h2>
-
-          <dl class="rv mt-7 space-y-6">
-            {[['Problem', p.problem], ['Approach', p.approach], ['Outcome', p.outcome]].map(([k, v]) => (
-              <div>
-                <dt class="label m-0">{k}</dt>
-                <dd class="measure m-0 mt-2 text-ink-2">{v}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <a href={p.href} class="rv group mt-8 block overflow-hidden border border-line bg-plane">
-            <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async"
-                 class="block h-auto w-full transition-transform duration-700 group-hover:scale-[1.03]" />
-          </a>
-
-          <p class="rv mt-6">
-            <a href={p.href} class="label label-ink underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-blue hover:decoration-blue">
-              Read the {p.name} case study →
-            </a>
-          </p>
-        </div>
-      </div>
+      <p class="rv entry-go"><a href={p.href} class="ul-draw ul-draw-on">Read the {p.name} case study →</a></p>
     </section>
   ))}
 
-  <section class="border-t border-line py-24">
-    <h2 class="rv text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Sound like your problem?</h2>
-    <p class="rv measure mt-6 text-ink-2">Tell me about it and I'll tell you what it takes.</p>
-    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+  <section class="more">
+    <h2 class="rv">Also built</h2>
+    <p class="rv more-p">
+      Smaller pieces, written up the same way.
+    </p>
+    <ul class="more-list rv">
+      {rest.map((p) => (
+        <li>
+          <a href={p.href}>
+            <span class="more-name">{p.name}</span>
+            <span class="eyebrow">{p.kind} · {p.where}</span>
+            <span class="more-line">{p.line}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="ask">
+    <h2 class="rv">Sound like your problem?</h2>
+    <p class="rv ask-p">Tell me about it and I'll tell you what it takes.</p>
+    <div class="rv ask-do">
       <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="/contact.html">Other ways to reach me</a>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(3rem, 11vw, 7rem); margin: 14px 0 0; }
+  .head-p { margin: 24px 0 0; max-width: 50ch; color: var(--color-ink-2); font-size: 1.05rem; }
+
+  .entry { padding-block: clamp(56px, 9vh, 96px) 0; }
+  .entry h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 14px 0 0; }
+  .entry h2 a { text-decoration: none; }
+  .entry-role { margin: 14px 0 0; color: var(--color-ink-2); font-size: 15px; }
+
+  .shot {
+    display: block; margin-top: 30px;
+    background: var(--color-plane);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 10px; overflow: hidden;
+  }
+  .shot img {
+    display: block; width: 100%; height: auto; border-radius: 1px;
+    transition: transform 0.7s var(--ease-turn);
+  }
+  .shot:hover img { transform: scale(1.02); }
+
+  .entry-facts { margin: 34px 0 0; display: grid; gap: 22px; }
+  @media (min-width: 900px) { .entry-facts { grid-template-columns: repeat(3, 1fr); gap: 34px; } }
+  .entry-facts dd { margin: 8px 0 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
+
+  .entry-go { margin: 26px 0 0; font-weight: 600; }
+
+  .more { padding-block: clamp(64px, 10vh, 110px) 0; }
+  .more h2 { font-size: clamp(1.8rem, 4.4vw, 2.6rem); margin: 0; }
+  .more-p { margin: 16px 0 0; color: var(--color-ink-2); }
+  .more-list { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+  .more-list a {
+    display: grid; gap: 6px; padding: 22px;
+    text-decoration: none;
+    background: var(--color-line-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease-turn);
+  }
+  .more-list a:hover { background: var(--color-plane); border-color: var(--color-line); transform: translateX(5px); }
+  @media (min-width: 820px) {
+    .more-list a { grid-template-columns: 220px 190px 1fr; align-items: baseline; gap: 26px; }
+  }
+  .more-name { font-family: var(--font-disp); font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
+  .more-line { color: var(--color-ink-2); font-size: 15px; }
+
+  .ask { padding-block: clamp(64px, 11vh, 118px); }
+  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
+  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

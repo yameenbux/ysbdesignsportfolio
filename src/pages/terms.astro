@@ -78,39 +78,53 @@ const description =
 ---
 
 <BaseLayout title="Terms" description={description}>
-  <section class="pt-16">
-    <p class="label m-0">Terms · Last updated {updated}</p>
-    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-      The terms, in plain English.
-    </h1>
-    <p class="measure mt-6 text-ink-2">
-      Short, because there is not much to it. One person, a fixed quote, half
-      up front and half on launch.
+  <section class="head">
+    <p class="eyebrow m-0">Terms · Last updated {updated}</p>
+    <h1>The terms, in plain English.</h1>
+    <p class="head-p">
+      Short, because there is not much to it. One person, a fixed quote, half up front and half on launch.
     </p>
   </section>
 
-  {sections.map((s) => (
-    <section class="border-t border-line py-9 md:py-11">
-      <div class="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-12">
-        <h2 class="label m-0 md:col-span-3">{s.h}</h2>
-        <div class="rv md:col-span-9">
-          {s.p.map((para) => (
-            <p class="measure mt-0 mb-4 text-ink-2 last:mb-0">{para}</p>
-          ))}
+  <div class="doc">
+    {sections.map((s) => (
+      <section class="row rv">
+        <h2 class="eyebrow m-0">{s.h}</h2>
+        <div>
+          {s.p.map((para) => <p>{para}</p>)}
         </div>
-      </div>
-    </section>
-  ))}
+      </section>
+    ))}
+  </div>
 
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Anything unclear</h2>
-    <p class="rv measure mt-6 text-ink-2">
-      Ask before you book, not after. I would rather spend ten minutes on it
-      now.
-    </p>
-    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+  <section class="ask">
+    <h2 class="rv">Anything unclear</h2>
+    <p class="rv ask-p">Ask before you book, not after. I would rather spend ten minutes on it now.</p>
+    <div class="rv ask-do">
       <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="/about.html">See what a website costs</a>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(2.4rem, 7.6vw, 4.8rem); margin: 14px 0 0; max-width: 15ch; }
+  .head-p { margin: 26px 0 0; max-width: 54ch; color: var(--color-ink-2); font-size: 1.05rem; }
+
+  .doc { margin-top: clamp(40px, 7vh, 70px); display: grid; gap: 2px; }
+  .row {
+    display: grid; grid-template-columns: 1fr; gap: 10px;
+    padding: 24px 22px;
+    background: var(--color-line-2);
+    border-radius: var(--radius-sm);
+  }
+  @media (min-width: 860px) { .row { grid-template-columns: 210px 1fr; gap: 34px; } }
+  .row p { margin: 0; color: var(--color-ink-2); max-width: 62ch; }
+  .row p + p { margin-top: 14px; }
+
+  .ask { padding-block: clamp(60px, 10vh, 108px); }
+  .ask h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); max-width: 46ch; }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

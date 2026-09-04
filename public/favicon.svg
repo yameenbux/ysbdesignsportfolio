@@ -1,11 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="YSB Designs">
-  <!-- Three sheets, offset — the same "three layers" the site is built on.
-       Paper ground, blue structure line. Palette from CLAUDE.md; the old
-       #1F5A5C teal belonged to the retired forest-green direction. -->
+  <!-- The wheel: a circle whose centre sits below the frame, with the card at
+       top dead centre picked out in the accent. Same mark as the site's
+       signature; palette is the drafting-table one. -->
   <rect width="32" height="32" fill="#E8E6DE"/>
-  <g stroke="#16191C" stroke-width="1.4" fill="#FBFAF7">
-    <rect x="4.5"  y="15.5" width="17" height="11"/>
-    <rect x="7.5"  y="10.5" width="17" height="11"/>
-  </g>
-  <rect x="10.5" y="5.5" width="17" height="11" fill="#1F45CC" stroke="#16191C" stroke-width="1.4"/>
+  <circle cx="16" cy="30" r="14" fill="none" stroke="#16191C" stroke-width="1.4" opacity="0.28"/>
+  <rect x="4.4" y="24.2" width="7.6" height="5.6" rx="1" fill="#FBFAF7" stroke="#16191C" stroke-width="1.1" opacity="0.5" transform="rotate(-40 8.2 27)"/>
+  <rect x="20" y="24.2" width="7.6" height="5.6" rx="1" fill="#FBFAF7" stroke="#16191C" stroke-width="1.1" opacity="0.5" transform="rotate(40 23.8 27)"/>
+  <rect x="11.2" y="12.2" width="9.6" height="7.4" rx="1" fill="#FBFAF7" stroke="#1F45CC" stroke-width="1.8"/>
 </svg>

@@ -1,201 +1,194 @@
 @import "tailwindcss";
 
-/* ----------------------------------------------------------------------------
-   Fonts, self-hosted.
-
-   Previously a render-blocking <link> to fonts.googleapis.com. Serving the
-   files from the same origin fixes three things at once:
-     - Lighthouse measured 710ms of render-blocking on that stylesheet, and it
-       cost a preconnect to two extra hosts on top.
-     - It removed the only third party the browser talked to, so the privacy
-       page no longer has to disclose that Google receives visitors' IPs.
-     - Every layout check before this ran on fallback faces, because the build
-       sandbox cannot reach Google Fonts.
-
-   Latin subset only, and no italic: nothing on the site sets one. Archivo is
-   the wdth-axis build because the headings use font-variation-settings
-   'wdth' 112 and 88 — the standard build has no width axis and would render
-   those silently at normal width.
-   ------------------------------------------------------------------------- */
-
-@font-face {
-  font-family: "Archivo";
-  font-style: normal;
-  font-weight: 100 900;
-  font-stretch: 62% 125%;
-  font-display: swap;
-  src: url("/fonts/archivo-latin-wdth.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: "Instrument Sans";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("/fonts/instrument-sans-latin.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/ibm-plex-mono-latin-500.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-
 /* ============================================================================
-   YSB Designs — "Drafting table"
+   YSB Designs — v3
 
-   The positioning line names three layers: the website, the software behind
-   it, and the hosting it runs on. The whole identity is built on that — paper
-   sheets, blueprint annotation, things that come apart so you can see inside.
+   The drafting-table palette, on a new structure. An earlier v3 put all of
+   this in a saturated ultramarine room; the colour was rejected and the
+   structure was not, so the palette below is v2's, unchanged and already
+   approved, and everything else — the wheel, the centre axis, Syne and Karla,
+   no monospace — is new.
 
-   Single light theme, deliberately. The paper ground is the identity; there
-   is no dark counterpart that means the same thing. This also retires the
-   dark palette that shipped with a 2.35:1 accent.
+   The problem the blue was solving is still real: every screenshot on this
+   site is a light-UI capture, and dropped straight onto paper it sits flush
+   and disappears. Solved here the way v2 solved it, with a frame: every shot
+   sits on a plane sheet with a hairline border, and the active card on the
+   wheel takes a blue border and a lift.
+
+   Every pair was measured, not eyeballed:
+     ink    on paper   14.12:1  AAA      ink-2 on paper    5.08:1  AA
+     blue   on paper    6.04:1  AA       signal on paper   4.90:1  AA
+     paper  on ink     14.12:1  AAA      paper  on blue    6.04:1  AA
    ========================================================================= */
+
+/* Self-hosted, latin subset, no italic — same reasoning as v2: no
+   render-blocking third-party stylesheet, and no third party learning who
+   visits. Two families rather than three; dropping the mono is part of the
+   departure, not an omission. */
+@font-face {
+  font-family: "Syne";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("/fonts/syne-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Karla";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/karla-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
 
 @theme {
   --color-paper:   #E8E6DE;  /* the ground: warm grey drafting paper        */
-  --color-paper-2: #DFDCD2;  /* a shade down, for recessed areas            */
-  --color-plane:   #FBFAF7;  /* a sheet laid on the ground                  */
-  --color-ink:     #16191C;
-  --color-ink-2:   #5A6068;  /* 5.08:1 on paper — AA                        */
-
-  /* Blueprint blue: structure, annotation, the active state.
-     #1F45CC is 6.04:1 on paper — the brighter #2D5BFF failed AA on the
-     11px mono labels it is used for. */
-  --color-blue:    #1F45CC;
-  /* Signal: live indicators and the one warm note. 4.90:1 on paper. */
-  --color-signal:  #A8410F;
-
+  --color-paper-2: #DFDCD2;  /* a shade down, for recessed bands            */
+  --color-plane:   #FBFAF7;  /* a sheet laid on the ground; screenshot mats */
+  --color-ink:     #16191C;  /* primary type — 14.12:1 on paper             */
+  --color-ink-2:   #5A6068;  /* secondary type — 5.08:1, AA                 */
+  --color-blue:    #1F45CC;  /* the accent — 6.04:1. Active state, CTA      */
+  --color-signal:  #A8410F;  /* live indicators, the one warm note — 4.90:1 */
   --color-line:    rgba(22, 25, 28, 0.14);
-  --color-grid:    rgba(31, 69, 204, 0.07);
+  --color-line-2:  rgba(22, 25, 28, 0.05);
 
-  --font-sans: "Instrument Sans", system-ui, sans-serif;
-  --font-disp: "Archivo", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-disp: "Syne", system-ui, sans-serif;
+  --font-body: "Karla", system-ui, sans-serif;
 
-  --radius-sm: 2px;
-  --ease-draft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --radius-sm: 3px;
+  --ease-turn: cubic-bezier(0.22, 0.68, 0.24, 1);
 }
 
 @layer base {
-  html {
-    background-color: var(--color-paper);
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    background: var(--color-paper);
     color: var(--color-ink);
-    font-family: var(--font-sans);
-    -webkit-text-size-adjust: 100%;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  body { margin: 0; overflow-x: hidden; }
 
-  h1, h2, h3 { font-family: var(--font-disp); margin: 0; text-wrap: balance; }
+  h1, h2, h3 {
+    font-family: var(--font-disp);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+  }
+
   a { color: inherit; }
-  :focus-visible { outline: 2px solid var(--color-blue); outline-offset: 3px; }
 
-  /* The drafting grid. Fixed so it reads as the surface the page sits on,
-     masked so it fades out rather than tiling to the footer. */
-  body::before {
-    content: "";
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      linear-gradient(var(--color-grid) 1px, transparent 1px) 0 0 / 100% 32px,
-      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px) 0 0 / 32px 100%;
-    -webkit-mask-image: radial-gradient(125% 75% at 50% 0, #000 38%, transparent 100%);
-    mask-image: radial-gradient(125% 75% at 50% 0, #000 38%, transparent 100%);
+  ::selection { background: var(--color-blue); color: var(--color-paper); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+    border-radius: 1px;
   }
 
-  .measure { max-width: 68ch; }
+  .measure { max-width: 62ch; }
 }
 
 @layer components {
-  /* --- annotation type ---------------------------------------------- */
-  .label {
-    font-family: var(--font-mono);
-    font-size: 11.5px; line-height: 1.4; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--color-ink-2);
+  /* Replaces v2's monospaced .label. Same job — kicker, caption, figure —
+     in the body face, because there is no mono in this system. */
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
   }
-  .label-ink  { color: var(--color-ink); }
-  .label-blue { color: var(--color-blue); }
+  .eyebrow-accent { color: var(--color-blue); }
+  .eyebrow-ink { color: var(--color-ink); }
 
-  /* --- buttons ------------------------------------------------------- */
+  /* The loud one: solid ink, inverting to blue on hover. */
   .btn {
-    display: inline-block; padding: 14px 22px;
-    background: var(--color-ink); color: var(--color-paper);
-    border: 1px solid var(--color-ink); border-radius: var(--radius-sm);
-    font-weight: 600; font-size: 15px; text-decoration: none;
-    transition: transform 0.18s var(--ease-draft), background 0.18s var(--ease-draft),
-                border-color 0.18s var(--ease-draft);
+    display: inline-block;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-disp);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    padding: 14px 26px;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: transform 0.25s var(--ease-turn), background 0.25s,
+                color 0.25s, border-color 0.25s;
   }
-  .btn:hover { transform: translateY(-2px); background: var(--color-blue); border-color: var(--color-blue); }
-  .btn-ghost { background: transparent; color: var(--color-ink); }
+  .btn:hover { transform: translateY(-2px); background: var(--color-blue); border-color: var(--color-blue); color: var(--color-paper); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-line);
+  }
   .btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
 
-  /* --- a sheet on the drafting table --------------------------------- */
-  .sheet {
+  /* A sheet laid on the ground. Carries prices, legal copy and anything that
+     should read as a document rather than a display. */
+  .panel {
     background: var(--color-plane);
+    color: var(--color-ink);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
   }
-  .sheet-lift { box-shadow: 0 24px 60px -30px rgba(22, 25, 28, 0.5); }
 
-  /* schematic chips and dashed wires, used inside sheets */
-  .chip {
-    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--color-ink-2);
-    border: 1px solid var(--color-line); background: var(--color-paper);
-    padding: 4px 8px; border-radius: var(--radius-sm); white-space: nowrap;
-  }
-  .wire {
-    flex: 1; height: 1px; opacity: 0.5;
-    background: repeating-linear-gradient(90deg, var(--color-ink-2) 0 4px, transparent 4px 9px);
-  }
-
-  /* the live dot */
-  .pulse {
-    width: 7px; height: 7px; border-radius: 50%; flex: none;
+  /* Live indicator, carried over in role but not in look. */
+  .live {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
     background: var(--color-signal);
-    animation: ysb-pulse 2.4s infinite;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-signal) 70%, transparent);
+    animation: live-pulse 2.4s var(--ease-turn) infinite;
   }
-  @keyframes ysb-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(168, 65, 15, 0.5); }
-    70%  { box-shadow: 0 0 0 12px rgba(168, 65, 15, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(168, 65, 15, 0); }
+  @keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-signal) 70%, transparent); }
+    70%  { box-shadow: 0 0 0 7px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
   }
 
-  /* --- leader-line annotation ---------------------------------------- */
-  .anno { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-  .anno .dash { width: 26px; height: 1px; background: var(--color-ink-2); display: block; }
+  /* Underline that draws itself on hover — used on every text link that is
+     not a button. */
+  .ul-draw {
+    text-decoration: none;
+    background-image: linear-gradient(var(--color-blue), var(--color-blue));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    transition: background-size 0.35s var(--ease-turn), color 0.25s;
+    padding-bottom: 2px;
+  }
+  .ul-draw:hover, .ul-draw:focus-visible { background-size: 100% 2px; }
+  .ul-draw-on { background-size: 100% 2px; }
 
-  /* --- scroll reveal --------------------------------------------------
+  /* --- scroll reveal ---------------------------------------------------
      Applied only once JS confirms it can take it off again — without the
-     .js guard a script error leaves the page blank below the fold. */
+     .js guard a script error leaves the page blank below the fold. Never
+     put .rv on a display:contents element: it generates no box, so the
+     observer never fires and the content stays hidden for good. */
   .js .rv {
-    opacity: 0; transform: translateY(14px);
-    transition: opacity 0.7s var(--ease-draft), transform 0.7s var(--ease-draft);
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s var(--ease-turn), transform 0.7s var(--ease-turn);
   }
   .js .rv.in { opacity: 1; transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
   }
   .js .rv { opacity: 1; transform: none; }
 }

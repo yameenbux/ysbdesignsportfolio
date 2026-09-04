@@ -1,0 +1,385 @@
+---
+/**
+ * The wheel — v3's signature.
+ *
+ * Six projects on a large circle whose centre sits below the viewport, so
+ * only the top arc is visible. Scrolling turns the wheel; whichever card
+ * reaches top dead centre is upright, in full colour, and named in the
+ * read-out beneath it.
+ *
+ * That last part is the point. A wheel that only spins is decoration; this
+ * one is a control — the rotation says which project you are looking at, and
+ * the read-out is its display. Cards are tangential to the circle, so the
+ * active one is the only upright one and you can find it without being told.
+ *
+ * Ported from a React + GSAP ScrollTrigger component, deliberately not by
+ * installing React and GSAP:
+ *
+ *  - The pin is `position: sticky`, not ScrollTrigger's `pin: true`. Sticky
+ *    is the browser's own mechanism, so the scrollbar keeps its real length,
+ *    the page never jumps on refresh, and a swipe over the wheel scrolls the
+ *    page like a swipe anywhere else. No touch-action to get wrong.
+ *  - Rotation is read off scroll position in a rAF loop that stops when the
+ *    wheel leaves the viewport, so an idle page requests no frames.
+ *  - The cards are real links. The original used role="button" divs, which
+ *    cost the browser's own focus, middle-click and open-in-new-tab.
+ *
+ * Keyboard: tab through the cards and the wheel turns to bring each to top.
+ * Reduced motion: no sticky, no rotation, no fade — a plain grid of the same
+ * six links, with every card readable at once.
+ */
+
+const { items = [] } = Astro.props;
+
+const n = items.length;
+const step = 360 / n;
+---
+
+<section class="track" id="wheelTrack" aria-labelledby="wheelHeading">
+  <div class="stage">
+    <div class="stage-head">
+      <p class="eyebrow m-0" id="wheelHeading">Selected work · {n} projects</p>
+    </div>
+
+    <div class="ring-box">
+      <ul class="ring" id="ring" style={`--n:${n}`}>
+        {items.map((p, i) => (
+          <li class="spoke" style={`--a:${i * step}deg`} data-i={i}>
+            <a href={p.href} class="card" data-card={i}>
+              <span class="card-shot">
+                <img src={p.img} alt={p.alt} width="760" height="475" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
+              </span>
+              <span class="card-foot">
+                <span class="card-name">{p.name}</span>
+                <span class="eyebrow card-kind">{p.kind}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* The wheel's display. One block, swapped rather than re-rendered, so
+        the browser never reflows the sticky stage mid-scroll. */}
+    <div class="readout" id="readout" aria-live="polite">
+      {items.map((p, i) => (
+        <div class="read" data-read={i} hidden={i !== 0}>
+          <p class="eyebrow eyebrow-accent m-0">
+            <span class="live" aria-hidden="true"></span> {p.kind} · {p.where}
+          </p>
+          <h2 class="read-name">{p.name}</h2>
+          <p class="read-line">{p.line}</p>
+          <p class="read-go"><a href={p.href} class="ul-draw ul-draw-on">Read the case study →</a></p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* The scroll budget. 100vh of stage plus this much travel, which is what
+     the sticky element sticks through. One full turn over the whole run. */
+  .track { height: calc(100vh + 2600px); position: relative; }
+
+  .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .stage-head { padding: 26px 24px 0; text-align: center; flex: none; }
+
+  /* No clip here on purpose. Clipping a box that is exactly the circle's
+     bounding square makes Chromium paint the clip edge as a 1px seam — two
+     vertical lines at the circle's extremes, with no element that has a
+     border to blame. Nothing needs clipping at this level anyway: cards more
+     than 62deg from the top are at opacity 0, and .stage clips the rest. */
+  .ring-box {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* --r radius, --arc how much of the circle shows above the box's bottom
+     edge. Both are set per breakpoint and then corrected once by script from
+     the measured card height, so the top card is never clipped. */
+  /* The ring is a point, not a box: the circle's centre, sitting below the
+     visible area with the spokes hung off it. It was a 2r square, which is
+     the shape Chromium painted a 1px seam around at the circle's left and
+     right extremes — two vertical lines that no border, background or
+     outline in the page could account for. A zero-size element has no edge
+     to seam, and no width to reach into scrollWidth from left:50%. */
+  .ring {
+    --r: 560px;
+    --arc: 300px;
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--arc) - var(--r));
+    width: 0; height: 0;
+    margin: 0; padding: 0;
+    list-style: none;
+  }
+
+  /* Each spoke carries its own angle and the script advances all six, rather
+     than the ring being rotated as one. Rotating the ring meant compositing a
+     1120px mostly-empty layer, whose antialiased edges painted as hairline
+     diagonals across the stage — visible as two crossing lines with no
+     element to blame, since nothing on the page has a border. */
+  .spoke {
+    position: absolute;
+    left: 0; top: 0;
+    /* rotate, then step out along the new up-axis: the card lands at --a from
+       top dead centre and leans by exactly that much, so the card at the top
+       is the only upright one. */
+    transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(-1 * var(--r)));
+  }
+
+  .card {
+    display: block;
+    width: 300px;
+    text-decoration: none;
+    color: var(--color-ink);
+    transform-origin: 50% 50%;
+  }
+
+  /* Screenshots are light-UI captures; dropped straight onto paper they sit
+     flush and disappear. Every card is a sheet with a hairline border, and
+     the active one takes the accent and a lift. */
+  .card-shot {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    padding: 6px;
+    border: 1.5px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    background: var(--color-plane);
+    transition: border-color 0.4s var(--ease-turn), box-shadow 0.4s var(--ease-turn);
+  }
+  .card-shot img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  /* Only the card at top dead centre is named. On a faded card the label
+     composited to 2:1 against the ground — a real contrast failure, not a
+     rounding one — and the read-out underneath already names the active
+     project, so a label on a card nobody is looking at was duplicating it. */
+  .card-foot {
+    display: block; padding-top: 12px;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-turn);
+  }
+  .spoke.is-active .card-foot { opacity: 1; }
+  .card-name {
+    display: block;
+    font-family: var(--font-disp);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .card-kind { display: block; margin-top: 3px; font-size: 11px; }
+
+  /* The one at top dead centre. */
+  .spoke.is-active .card-shot {
+    border-color: var(--color-blue);
+    box-shadow: 0 10px 30px rgba(22, 25, 28, 0.13);
+  }
+
+  .readout {
+    flex: none;
+    padding: 0 24px 40px;
+    text-align: center;
+    min-height: 210px;
+    position: relative;
+    z-index: 2;
+  }
+  .read-name {
+    font-size: clamp(2rem, 5.4vw, 3.4rem);
+    margin: 12px 0 0;
+  }
+  .read-line {
+    margin: 12px auto 0;
+    max-width: 54ch;
+    color: var(--color-ink-2);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .read-go { margin: 18px 0 0; }
+  .read-go a { font-family: var(--font-disp); font-weight: 700; font-size: 14px; }
+
+  /* The read block fades in rather than snapping, but only ever one is in
+     the flow — the others are [hidden], so nothing stacks. */
+  .read { animation: read-in 0.45s var(--ease-turn) both; }
+  @keyframes read-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 1100px) {
+    .ring { --r: 440px; }
+    .card { width: 244px; }
+  }
+
+  @media (max-width: 760px) {
+    .ring { --r: 296px; }
+    .card { width: 186px; }
+    .card-name { font-size: 15px; }
+    .readout { min-height: 232px; padding-bottom: 28px; }
+    .track { height: calc(100vh + 2100px); }
+  }
+
+  /* No wheel at all. Six cards, all readable, no pin and nothing moving —
+     the same six links reached the same way. */
+  @media (prefers-reduced-motion: reduce) {
+    .track { height: auto; }
+    .stage { position: static; height: auto; min-height: 0; overflow: visible; display: block; }
+    .stage-head { padding: 0 0 28px; text-align: left; }
+    .ring {
+      position: static; left: auto; width: auto; height: auto; bottom: auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 30px;
+    }
+    .spoke { position: static; transform: none; }
+    .card { width: auto; opacity: 1 !important; filter: none !important; transform: none !important; }
+    .card-foot { opacity: 1; }
+    .card-shot { aspect-ratio: 16 / 10; }
+    .readout { display: none; }
+  }
+</style>
+
+<script>
+  const track = document.getElementById('wheelTrack');
+  const ring  = document.getElementById('ring');
+  const reads = document.querySelectorAll('[data-read]');
+
+  if (track && ring) {
+    const spokes = Array.from(ring.children);
+    const cards = spokes.map((s) => s.querySelector('.card'));
+    const n = spokes.length;
+    const step = 360 / n;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    let active = -1;
+    let raf = 0;
+    let visible = false;
+
+    // The card at top dead centre would be cut in half by the box's top edge
+    // if the visible arc were the full box height. Measure one card and pull
+    // the arc down by half its height plus a margin.
+    // How much of the circle shows above the box's bottom edge — which is
+    // what decides how high up the box the top card sits. Aim for a little
+    // above centre, then clamp so the card is neither clipped by the box top
+    // nor pushed down into the read-out.
+    const fitArc = () => {
+      const card = cards[0];
+      const box = ring.parentElement;
+      if (!card || !box) return;
+      const h = card.getBoundingClientRect().height;
+      const boxH = box.getBoundingClientRect().height;
+      // Lower on a phone: the box is proportionally taller there, and a
+      // 0.58 arc left a screen's worth of empty blue between the card and
+      // the read-out naming it.
+      const frac = window.innerWidth < 760 ? 0.46 : 0.58;
+      const arc = Math.min(Math.max(h / 2, boxH * frac), Math.max(h / 2, boxH - h / 2 - 8));
+      ring.style.setProperty('--arc', arc + 'px');
+    };
+
+    const show = (i) => {
+      if (i === active) return;
+      if (active >= 0) {
+        spokes[active]?.classList.remove('is-active');
+        reads[active]?.setAttribute('hidden', '');
+      }
+      spokes[i]?.classList.add('is-active');
+      // Re-adding the node restarts the fade without a class-toggle reflow.
+      reads[i]?.removeAttribute('hidden');
+      active = i;
+    };
+
+    const draw = () => {
+      const r = track.getBoundingClientRect();
+      // Travel available to the sticky stage: the track's height minus the
+      // one viewport it sticks for.
+      const run = Math.max(1, r.height - window.innerHeight);
+      const p = Math.min(1, Math.max(0, -r.top / run));
+
+      const rot = -p * 360;
+
+      // Fade, shrink and desaturate each card by how far it is from top dead
+      // centre, so the wheel reads as one project in focus rather than six
+      // competing. 62deg out it is nearly gone; the neighbours sit at 60.
+      for (let k = 0; k < n; k++) {
+        // 0 at top dead centre, 180 diametrically opposite.
+        const a = k * step + rot;
+        spokes[k].style.setProperty('--a', a.toFixed(2) + 'deg');
+
+        const d = Math.abs(((a % 360) + 540) % 360 - 180);
+        const t = Math.min(1, d / 78);
+        const o = Math.max(0, 1 - t * t);
+        const card = cards[k];
+        card.style.opacity = o.toFixed(3);
+        card.style.transform = `scale(${(1 - t * 0.24).toFixed(3)})`;
+        card.style.filter = `saturate(${(1 - t * 0.5).toFixed(2)})`;
+        card.style.pointerEvents = o < 0.12 ? 'none' : '';
+      }
+
+      // Whichever spoke is nearest top dead centre owns the read-out.
+      let i = Math.round(-rot / step) % n;
+      if (i < 0) i += n;
+      show(i);
+    };
+
+    const tick = () => {
+      draw();
+      raf = visible ? requestAnimationFrame(tick) : 0;
+    };
+
+    const start = () => { if (!raf && visible) raf = requestAnimationFrame(tick); };
+
+    // Frames are only requested while the wheel is on screen.
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) { fitArc(); start(); }
+    }, { rootMargin: '10% 0px' }).observe(track);
+
+    // Tabbing to a card turns the wheel to it, so the keyboard path shows the
+    // same thing the pointer path does rather than focusing a card buried
+    // under the mask.
+    spokes.forEach((spoke, i) => {
+      spoke.querySelector('.card')?.addEventListener('focus', () => {
+        if (reduced.matches) return;
+        const r = track.getBoundingClientRect();
+        const run = r.height - window.innerHeight;
+        const target = window.scrollY + r.top + (i / n) * run;
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      });
+    });
+
+    let resizeT;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeT);
+      resizeT = setTimeout(() => { fitArc(); draw(); }, 120);
+    });
+
+    const apply = () => {
+      if (reduced.matches) {
+        if (raf) { cancelAnimationFrame(raf); raf = 0; }
+        ring.style.removeProperty('--arc');
+        cards.forEach((c) => { c.style.cssText = ''; });
+        spokes.forEach((sp, k) => sp.style.setProperty('--a', k * step + 'deg'));
+        spokes.forEach((s) => s.classList.remove('is-active'));
+        reads.forEach((el) => el.setAttribute('hidden', ''));
+        active = -1;
+      } else {
+        fitArc();
+        start();
+      }
+    };
+    reduced.addEventListener('change', apply);
+    apply();
+  }
+</script>

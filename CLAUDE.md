@@ -7,15 +7,17 @@ end to end.
 
 Live at https://www.ysbdesigns.uk. Repo: `yameenbux/ysbdesignsportfolio`.
 
-**Currently mid-rebrand.** This file is the spec. It replaces the previous
-version, which described a dark forest-green site modelled on
-moritzpetersen.com — deep `#093526` canvas, Bricolage Grotesque, a 3D desk
-render with a screenshot slot and content-keyed ambient light. That direction
-is retired. The old spec is in git history at `d62dcfd:CLAUDE.md` if a
-decision needs checking, but it is not the spec any more.
+**This branch is v3 and is NOT live.** `main` still carries
+v2, "drafting table", and that is what ysbdesigns.uk serves. Do not merge this
+branch without being asked — the whole point of it is to be looked at first.
 
-The desk render, the ambient bloom, the hover-driven pill list and the
-three-state (index / about / case) architecture all go.
+This file is the spec for **this branch**. The v2 spec is on `main`; the v1
+"technical document" and the original forest-green direction are in history.
+
+v3 replaces the drafting table wholesale: the paper ground, the hairline
+rules, the blueprint annotation, the three-sheet hero rig, Archivo /
+Instrument Sans / IBM Plex Mono and the left-aligned documentation layout are
+all gone.
 
 ## Positioning
 
@@ -47,12 +49,13 @@ Migrating from hand-written static HTML to a build step.
   integration supports Astro 3–5 only and is deprecated, and this runs Astro 7.
   Tokens live in `@theme` in `src/styles/global.css`, not a `tailwind.config.js`.
 - **Fonts are self-hosted** from `public/fonts/`, latin subset, no italic —
-  the `@font-face` rules are at the top of `src/styles/global.css`. There is
-  no request to fonts.googleapis.com any more, which removed 710ms of
-  render-blocking, removed the only third party on the site, and finally made
-  local typography checks real. Archivo is the **wdth-axis** build: the
-  standard build has no width axis and would silently render the headings'
-  `'wdth' 112` / `88` at normal width.
+  the `@font-face` rules are at the top of `src/styles/global.css`. No request
+  to fonts.googleapis.com, which keeps the render unblocked, keeps every
+  third party off the site, and makes local typography checks real. Two
+  families in v3 (Syne, Karla), not three: there is no monospace.
+- **No React, no GSAP, no shadcn.** v3's wheel was ported from a React +
+  GSAP ScrollTrigger component by hand — see "The wheel" below for what that
+  bought. If a component seems to need a framework, it doesn't.
 - **GitHub Pages**, custom domain `www.ysbdesigns.uk`. DNS at one.com, unchanged.
 
 ### Deploy — read before touching the build
@@ -203,114 +206,143 @@ approved treatment and read as less clean for it.
 
 ## Aesthetic direction
 
-**Drafting table.** The positioning line names three layers — the website, the
-software behind it, the hosting it runs on. The identity is built on that:
-paper sheets on a drafting grid, blueprint annotation with leader lines, and
-things that come apart so you can see inside. Precise rather than decorative;
-the motion exists to show structure, not to entertain.
+**v2's palette, on a new structure.**
 
-Chosen from three treatments pitched as working pages. The two rejected
-directions were a kinetic editorial one and a dark cinematic evolution of the
-old forest-green brand.
+An earlier v3 put all of this in a saturated ultramarine room — deep blue
+ground, bone type, a warm sand accent. **The colour was rejected; the
+structure was not.** So the palette here is v2's, unchanged and already
+approved, and everything else is new: the wheel, the centre axis, Syne and
+Karla, and no monospace.
+
+Do not reintroduce a saturated ground. If a future direction needs one, it is
+a new decision, not a return to something that was already turned down.
+
+The problem the blue was solving is still real: every screenshot on this site
+is a light-UI capture, and dropped straight onto paper it sits flush and
+disappears. It is solved here the way v2 solved it — with a frame. Every shot
+sits on a `plane` sheet with a hairline border, and the active card on the
+wheel takes the accent border and a lift.
+
+Still a departure from v2 on every axis except colour: centre-axis rather
+than left-aligned, the wheel rather than the three-sheet rig, Syne and Karla
+rather than Archivo / Instrument Sans / IBM Plex Mono, and no monospace.
 
 ### Type
 
-- Display: **Archivo** (variable width). Headings run wide (`wdth 112`);
-  secondary heading lines drop to `wdth 88` and `--color-ink-2`.
-- Body: **Instrument Sans**, 17px, line-height 1.62.
-- Annotation: **IBM Plex Mono**, 11.5px, uppercase, letter-spacing `0.14em`.
-  This carries every label, kicker, caption and figure on the site.
-- Body measure capped at 68ch. h1 `clamp(2.4rem, 5.6vw, 4rem)`.
-- All three are self-hosted (see Stack). Adding a weight or an italic means
-  adding a file, not editing a URL.
+- Display: **Syne**, 400–800 variable. Wide, slightly odd, art-institution
+  rather than start-up. Carries every heading and every button.
+- Body: **Karla**, 200–800 variable, 17px, line-height 1.6.
+- Labels (`.eyebrow`): Karla 12px, 600, uppercase, letter-spacing `0.18em`.
+  This is the job the mono did in v2 — done in the body face, because **there
+  is no monospace in this system**. Do not add one back.
+- Body measure capped at 62ch. h1 up to `clamp(2.9rem, 8.4vw, 6.2rem)`.
+- Both are self-hosted (see Stack). Adding a weight means adding a file.
 
-### Colour — single light theme, deliberately
-
-The paper ground *is* the identity; there is no dark counterpart that means
-the same thing. Dark mode is gone rather than half-built, which also retires
-the `#1F5A5C`-on-`#131416` accent that shipped at 2.35:1.
+### Colour — v2's, unchanged
 
 ```
 paper    #E8E6DE   the ground: warm grey drafting paper
-paper-2  #DFDCD2   recessed areas
-plane    #FBFAF7   a sheet laid on the ground
+paper-2  #DFDCD2   recessed bands; footer
+plane    #FBFAF7   a sheet laid on the ground; screenshot mats
 ink      #16191C   14.12:1 on paper
 ink-2    #5A6068    5.08:1 on paper — AA
-blue     #1F45CC    6.04:1 on paper — structure, annotation, active state
+blue     #1F45CC    6.04:1 on paper — the accent
 signal   #A8410F    4.90:1 on paper — live indicators, the one warm note
 line     rgba(22,25,28,.14)
-grid     rgba(31,69,204,.07)
+line-2   rgba(22,25,28,.05)
 ```
 
-Every pair above was measured, not eyeballed. The brighter `#2D5BFF` and
-`#E0632A` from the pitch failed AA on the 11.5px mono labels they are used
-for, so both were darkened until they passed.
+Every pair measured, not eyeballed. These are the same values as `main`; do
+not re-derive or "refresh" them.
+
+**Blue appears in exactly three places** — the one word the headline turns on,
+the active card on the wheel, and the hover state of the primary button. It is
+the accent, not a second body colour.
 
 ### Layout
 
-- Hairline rules still separate sections. Sheets carry a 1px border and a
-  2px radius; the only shadow on the site is the lift under a floating sheet
-  in the hero rig.
-- Metadata in a narrow column against the content — the documentation layout
-  survives from the previous direction.
-- Left-aligned throughout. 8px spacing base.
+- **Colour bands separate sections, not rules.** A section that needs
+  separating gets `paper-2`; the footer sits on it.
+- `.panel` is a `plane` sheet with a hairline border, for prices, legal copy
+  and anything that should read as a document.
+- **Screenshots always sit on a `plane` mat with a `line` border.** A light-UI
+  capture placed straight on the paper sits flush and disappears — this is the
+  single most important rule in the direction, and the reason the earlier
+  saturated ground existed at all.
+- Centre-axis on the homepage (the wheel is centred by nature); left-aligned
+  on the reading pages. 1220px shell.
+
+### The wheel
+
+The signature, in `src/components/Wheel.astro`. Six projects on a circle whose
+centre is below the viewport; scrolling turns it; whichever card reaches top
+dead centre is upright, in full colour, and named in the read-out beneath.
+
+That last part is the whole point. A wheel that only spins is decoration; this
+one is a control — the rotation says which project you are looking at and the
+read-out is its display. Cards are tangential to the circle, so **the active
+card is the only upright one** and you can find it without being told.
+
+Ported by hand from a React + GSAP ScrollTrigger component. What that bought:
+
+- The pin is `position: sticky`, not ScrollTrigger's `pin: true`. Sticky is
+  the browser's own mechanism, so the scrollbar keeps its real length, the
+  page does not jump on refresh, and a swipe over the wheel scrolls the page
+  like a swipe anywhere else. `touch-action` stays `auto` at every width —
+  there is no gesture to get wrong.
+- The cards are real links. The original used `role="button"` divs, which
+  cost the browser's own focus, middle-click and open-in-new-tab.
+- ~115KB gzipped of React and GSAP not shipped.
 
 ### Motion
 
-Motion is now part of the design rather than something to minimise, but it is
-still structural:
+Motion is part of the design, and it is structural: it says which project you
+are looking at.
 
-- The hero rig separates on pointer movement and can be dragged or keyed
-  apart. It settles to a resting spread so it reads as three sheets.
-- Below 700px the sheets overlap in a tight fan and their labels move to a
-  legend under the rig. Labelling each sheet in place forced them apart,
-  which cost a third of the hero screenshot — 128px against the treatment's
-  189px. The screenshot is the hero; the labels are not. There is no
-  cursor on a phone and drag would fight the page scroll, so **scroll drives
-  the spread**: the sheets fan apart over the first ~420px of the page. Plus
-  a staggered entrance on load, which is the motion a touch visitor sees
-  first. It must animate on a phone — a rig that only responds to a cursor is
-  a rig that does nothing on the device most visitors arrive on.
-- `touch-action` must never be `none` on the rig at phone width: blocking it
-  means a swipe over the hero does not scroll the page at all.
-- The rig's height must clear the stack at **full** spread, not at rest. The
-  sheets are absolutely positioned so they never grow the box, and at maximum
-  spread the bottom one lands on whatever follows.
-- Scroll reveals: 14px rise and a fade, 700ms.
-- Hover: 2px lift on buttons, a slow scale on project shots.
+- The wheel turns with scroll over ~2600px of travel (2100px below 760px),
+  one full revolution.
+- Cards fade, shrink and desaturate by **angular distance from top dead
+  centre**, over 78°. Not 60°: at exactly 60 the two neighbours sit on the
+  cutoff and blink in and out as the wheel turns.
+- Scroll reveals: 18px rise and a fade, 700ms, staggered 80ms in fours.
+- Hover: 2px lift on buttons, an underline that draws itself on text links, a
+  slow scale on project shots.
 
 Rules that hold:
 
-- `prefers-reduced-motion` — and only that, not screen width — collapses the
-  rig to a static labelled stack and disables every transition.
-- A layer anchored with `left:50%` plus `translateX(-50%)` puts its
-  untransformed box past the viewport and into `scrollWidth`, which reads as
-  phantom horizontal scroll even though nothing looks wrong. Anchor with
-  `left:0; right:0; margin-inline:auto` instead — and if you do, **delete the
-  `translateX(-50%)` from the rig's JS transform in the same edit**. The two
-  are one mechanism; orphaning either half drags the sheets half their own
-  width out of their column and under the hero paragraph.
-- The rig's leader-line labels need about 190px to the right of the sheets.
-  Below 1180px the column cannot spare it, so the labels move to the legend
-  under the rig — the same trade the phone deck makes. Do not try to bound the
-  label box with `right:0`: `.anno`'s containing block is its own layer, so it
-  resolves against a 340px sheet and collapses the box to zero width.
-- `touch-action` is gated on `(pointer: coarse)`, not on width. A tablet at
-  768px is above the deck breakpoint but still has no cursor, and `none` there
-  means a swipe over the hero cannot scroll the page.
-- The rig stops requesting frames when it settles *and* when it scrolls out
-  of view.
+- **The ring is a point, not a box.** It was a 2r square, and Chromium painted
+  a 1px seam around its bounding edges — two diagonals across the stage when
+  the ring was rotated, a rectangle when it was not — with no border,
+  background or outline anywhere in the page to account for it. A zero-size
+  element has no edge to seam. Each spoke carries its own `--a` and the script
+  advances all six; **do not go back to rotating the container.**
+- Nothing in the wheel needs `overflow: hidden` below `.stage`. Clipping a box
+  that is exactly the circle's bounding square is what produced the seam
+  above, and cards more than 78° from the top are already at opacity 0.
+- **Only the active card is named.** On a faded card the label composited to
+  2:1 against the ground — a real contrast failure, and the read-out already
+  names the active project.
+- `prefers-reduced-motion` — and only that, not screen width — turns the wheel
+  into a plain grid of the same six links, drops the sticky pin and the scroll
+  budget, and disables every transition.
+- The wheel stops requesting frames when it scrolls out of view.
+- Tabbing to a card turns the wheel to bring it to the top, so the keyboard
+  path shows what the pointer path shows rather than focusing a card nobody
+  can see.
 - Reveals are applied only under `.js` — a script error must never leave the
   page blank below the fold.
+- `scroll-behavior: smooth` is set on `html`. Any script that scrolls the page
+  in steps must pass `behavior: 'instant'` or it will not land where it asks.
 
 ### Explicitly forbidden
 
-- Dark navy or near-black grounds; neon or electric accents
 - Gradient text, glassmorphism, glow, animated mesh backgrounds
 - Terminal motifs, typewriter effects, blinking cursors
-- Rounded drop-shadowed card grids
 - Emoji as section iconography
-- Parallax on text, scroll-jacking, staggered reveal cascades
+- Parallax on text
+- A second accent colour, or blue used as a body colour
+- A saturated or dark ground — tried as "Ultramarine" and rejected
+- Monospace anywhere
 - Motion that does not describe structure
 
 ## Sequence
@@ -334,6 +366,21 @@ number and one WhatsApp number appear site-wide.
 shipped and read as too plain. Replaced across all ten pages. Lighthouse
 99/100/100/100 on the homepage (the interactive one) and 100 across work,
 about, contact and the case template; CLS 0.000 everywhere.
+
+**Phase 7 — v3. ON THIS BRANCH, NOT LIVE.** A third direction
+built around a scroll-driven radial gallery, ported from a React + GSAP
+component into vanilla Astro rather than by installing React, GSAP and
+shadcn — which would have overridden four rules in this file at a cost of
+~115KB gzipped. All thirteen pages rebuilt.
+
+Built first in a saturated ultramarine palette, which was rejected on the
+colour alone; the structure was kept and the palette reverted to v2's. Verified across 13 pages × 375 /
+768 / 1440: no horizontal overflow, one h1 each, every image with alt and
+dimensions, no reveal left hidden, no empty links. Lighthouse 97/100/100/100
+on the homepage and 100 across work, about and the case template; CLS 0.000
+throughout. Keyboard, estimator arithmetic, reduced-motion and off-screen
+frame pausing all exercised directly. Lighthouse 98/100/100/100 on the
+homepage and 100 across work, about, contact and the case template.
 
 **Phase 6 — the pre-launch audit. DONE.** Privacy, terms, a custom 404, an
 FAQ on About, `robots.txt`, a generated sitemap, `og:image` and Twitter card,
@@ -368,10 +415,11 @@ Lighthouse, measured for the first time with the actual webfonts:
 - One concern per change. No opportunistic refactors, dependency bumps or
   file moves.
 - Do not add a library when Tailwind or an existing dependency covers it.
-- Tailwind utilities for layout; recurring visual primitives (`.label`,
-  `.btn`, `.sheet`, `.chip`, `.wire`, `.pulse`, `.anno`, `.rv`) live in
-  `@layer components` in `src/styles/global.css`. Component-local CSS goes in
-  the `.astro` file's own `<style>`. No CSS modules or styled-components.
+- Recurring visual primitives (`.eyebrow`, `.btn`, `.panel`, `.live`,
+  `.ul-draw`, `.rv`) live in `@layer components` in `src/styles/global.css`.
+  Component-local CSS goes in the `.astro` file's own `<style>`. v3 uses
+  scoped CSS rather than Tailwind utility soup for layout; no CSS modules or
+  styled-components.
 - Anything interactive needs a keyboard path and an `aria` state, and must
   behave under `prefers-reduced-motion`.
 - Never put `.rv` on a `display:contents` element — it generates no box, so

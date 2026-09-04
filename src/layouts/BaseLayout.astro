@@ -2,16 +2,22 @@
 import '../styles/global.css';
 
 /**
- * The shell every page sits in: head, masthead, footer.
+ * The shell every page sits in.
  *
- * The nav reads from one array (CLAUDE.md, "## Structure") so the site's
- * shape is an edit to that array, not to this file's structure.
+ * v3 puts the masthead over the ground rather than on a ruled band, and the
+ * footer on the one step-down colour (field-2) so the page ends on a shade
+ * rather than a line. Colour bands are this direction's separator; there are
+ * no hairline rules anywhere on the site.
+ *
+ * Two contact routes, both the same number. No email (there is no mailbox)
+ * and no social profile — see CLAUDE.md, "## Contact".
  */
 
 const {
   title,
-  description = "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.",
+  description = "I build the whole thing for new and growing businesses — the website, the software behind it and the hosting it runs on, designed and deployed by one person.",
   noindex = false,
+  wide = false,
 } = Astro.props;
 
 const nav = [
@@ -24,15 +30,13 @@ const path = Astro.url.pathname;
 const isCurrent = (href) => path === href;
 
 // build.format 'file' makes the homepage's pathname '/index.html'. Canonical
-// to the bare domain instead — /index.html and / are the same page, and the
-// one people link to is the short one.
-const canonicalPath = Astro.url.pathname === '/index.html' ? '/' : Astro.url.pathname;
+// to the bare domain: they are the same page, and the short one is what
+// people link to.
+const canonicalPath = path === '/index.html' ? '/' : path;
 const canonical = new URL(canonicalPath, Astro.site);
 const ogImage = new URL('/og.png', Astro.site);
 const year = new Date().getFullYear();
 
-// Single source of truth for contact routes. One number everywhere — if a
-// second ever appears, one of them is a bug.
 const WHATSAPP = '447404901859';
 const TEL = '+447404901859';
 ---
@@ -46,6 +50,7 @@ const TEL = '+447404901859';
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#1B2CC4" />
     {noindex && <meta name="robots" content="noindex" />}
 
     <meta property="og:type" content="website" />
@@ -57,88 +62,136 @@ const TEL = '+447404901859';
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="YSB Designs — three layers under every site I build" />
+    <meta property="og:image:alt" content="YSB Designs — the site, the software behind it and the hosting it runs on" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title ?? 'YSB Designs'} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    {/* Fonts are self-hosted (see src/styles/global.css) — same origin, so no
-        preconnect and no render-blocking third-party stylesheet. Preload the
-        two faces that paint above the fold; the mono labels can arrive with
-        the stylesheet. */}
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/instrument-sans-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/archivo-latin-wdth.woff2" crossorigin />
+    {/* Self-hosted, same origin — no render-blocking third-party stylesheet
+        and no third party learning who visits. */}
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/karla-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/syne-latin.woff2" crossorigin />
 
-    {/* Set before paint so reveal elements are never hidden without a
-        script able to reveal them again. */}
+    {/* Set before paint so reveal elements are never hidden without a script
+        able to reveal them again. */}
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
 
-  <body class="bg-paper text-ink antialiased text-[17px] leading-[1.62]">
-    <a
-      href="#main"
-      class="label sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-plane focus:px-3 focus:py-2 focus:text-ink"
-    >Skip to content</a>
+  <body>
+    <a href="#main" class="skip">Skip to content</a>
 
-    <div class="relative z-[1]">
-      <header class="mx-auto max-w-[1180px] px-7">
-        <div class="flex items-baseline justify-between gap-8 border-b border-line py-5">
-          <a href="/" class="label label-ink no-underline">YSB Designs</a>
-          <nav aria-label="Primary">
-            <ul class="m-0 flex list-none items-baseline gap-6 p-0">
-              {nav.map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    aria-current={isCurrent(item.href) ? 'page' : undefined}
-                    class:list={[
-                      'label no-underline transition-colors duration-150 hover:text-blue',
-                      isCurrent(item.href) && 'label-ink',
-                    ]}
-                  >{item.label}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+    <header class="shell mast">
+      <a href="/" class="wordmark">YSB<span>Designs</span></a>
+      <nav aria-label="Primary">
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class:list={['eyebrow navlink', isCurrent(item.href) && 'is-current']}
+              >{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main" class:list={[!wide && 'shell']}>
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="shell foot-in">
+        <div>
+          <p class="foot-mark">Let's build it.</p>
+          <p class="foot-routes">
+            <a class="ul-draw" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a>
+            <a class="ul-draw" href={`tel:${TEL}`}>07404 901859</a>
+          </p>
         </div>
-      </header>
-
-      <main id="main" class="mx-auto max-w-[1180px] px-7">
-        <slot />
-      </main>
-
-      <footer class="mx-auto max-w-[1180px] px-7">
-        <div class="mt-24 flex flex-col gap-4 border-t border-line py-9 sm:flex-row sm:items-baseline sm:justify-between">
-          <div>
-            <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
-            <ul class="m-0 mt-2 flex list-none flex-wrap gap-5 p-0">
-              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/privacy.html">Privacy</a></li>
-              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/terms.html">Terms</a></li>
-            </ul>
-          </div>
-          <ul class="m-0 flex list-none flex-wrap gap-6 p-0">
-            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a></li>
-            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`tel:${TEL}`}>Call</a></li>
-          </ul>
+        <div class="foot-meta">
+          <p class="eyebrow m-0">© {year} YSB Designs · Greater Manchester</p>
+          <p class="foot-legal">
+            <a class="eyebrow ul-draw" href="/privacy.html">Privacy</a>
+            <a class="eyebrow ul-draw" href="/terms.html">Terms</a>
+          </p>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
 
     <script>
-      // Scroll reveals. One observer for the whole page; each element is
-      // unobserved once shown, so this costs nothing after first paint.
+      // One observer for the page; each element is unobserved once shown, so
+      // this costs nothing after first paint.
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) {
           if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
         }
-      }, { rootMargin: '0px 0px -12% 0px' });
+      }, { rootMargin: '0px 0px -10% 0px' });
 
       document.querySelectorAll('.rv').forEach((el, i) => {
-        el.style.transitionDelay = `${(i % 4) * 70}ms`;
+        el.style.transitionDelay = `${(i % 4) * 80}ms`;
         io.observe(el);
       });
     </script>
   </body>
 </html>
+
+<style is:global>
+  .shell { max-width: 1220px; margin-inline: auto; padding-inline: 28px; }
+
+  .skip {
+    position: absolute;
+    width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+    background: var(--color-blue); color: var(--color-ink);
+    font-weight: 700; padding: 12px 18px; z-index: 90;
+    border-radius: var(--radius-sm);
+  }
+  .skip:focus {
+    left: 16px; top: 16px;
+    width: auto; height: auto; overflow: visible;
+    clip-path: none;
+  }
+
+  .mast {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 32px; padding-block: 26px 8px;
+  }
+  .wordmark {
+    font-family: var(--font-disp); font-weight: 800; font-size: 19px;
+    letter-spacing: -0.03em; text-decoration: none; color: var(--color-ink);
+  }
+  .wordmark span { color: var(--color-ink-2); font-weight: 500; margin-left: 6px; }
+  .mast nav ul { display: flex; gap: 26px; margin: 0; padding: 0; list-style: none; }
+  .navlink { text-decoration: none; transition: color 0.2s; }
+  .navlink:hover { color: var(--color-blue); }
+  .navlink.is-current { color: var(--color-ink); }
+
+  .foot { background: var(--color-paper-2); margin-top: 0; }
+  .foot-in {
+    display: flex; flex-wrap: wrap; gap: 36px;
+    align-items: flex-end; justify-content: space-between;
+    padding-block: 60px 46px;
+  }
+  .foot-mark {
+    font-family: var(--font-disp); font-weight: 800;
+    font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -0.03em;
+    margin: 0; line-height: 1;
+  }
+  .foot-routes { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 22px; font-size: 16px; }
+  .foot-meta { text-align: right; }
+  .foot-legal { margin: 8px 0 0; display: flex; gap: 18px; justify-content: flex-end; }
+
+  @media (max-width: 640px) {
+    .shell { padding-inline: 20px; }
+    .mast { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .mast nav ul { gap: 20px; }
+    .foot-meta { text-align: left; }
+    .foot-legal { justify-content: flex-start; }
+  }
+
+  .m-0 { margin: 0; }
+</style>

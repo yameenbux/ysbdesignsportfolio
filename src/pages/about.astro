@@ -2,24 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 /**
- * About, with the old services.html content folded in (CLAUDE.md,
- * "## Structure").
+ * About, with the old services.html content folded in.
  *
- * Deliberately carried over: the four-step process and the three price
- * tiers, verbatim on the numbers — those are real business terms and not
- * mine to reword.
+ * Carried across verbatim on the numbers: the four steps, the three price
+ * tiers and the payment terms are real business terms and not mine to
+ * reword. The FAQ likewise — no timescale, client count or result that
+ * cannot be evidenced.
  *
- * Deliberately left behind, each for a stated reason:
- *  - the LuxeScent testimonial — the copy rules say no testimonials
- *  - the "Most popular" badge on the Business tier — an unevidenced claim
- *    about volume, which the copy rules also bar
- *  - the YSB Ventures Ltd registration details — removed at the user's
- *    request earlier ("remove my limited business info")
- *  - "websites for trades and takeaways across Greater Manchester" — the
- *    old narrow positioning, superseded
+ * Deliberately left behind, each for a stated reason: the LuxeScent
+ * testimonial (the copy rules bar testimonials), the "Most popular" badge on
+ * the Business tier (an unevidenced volume claim), and the YSB Ventures Ltd
+ * registration details (removed at the user's request).
  *
- * No portrait: confirmed we design around its absence rather than ship the
- * PORTRAIT PENDING placeholder.
+ * No portrait: About is built not to want one.
  */
 
 const steps = [
@@ -71,15 +66,6 @@ const plans = [
   },
 ];
 
-/**
- * The questions that actually come up before someone books, answered here
- * rather than on a page of their own — the sitemap is settled at five
- * navigable pages, and these belong next to the process and the prices.
- *
- * Nothing here states a timescale, a client count or a result I cannot
- * evidence. Where the honest answer is "it depends", it says so and points
- * at the quote, which is where the real number lives.
- */
 const faqs = [
   [
     'How long does it take?',
@@ -111,17 +97,22 @@ const faqs = [
   ],
 ];
 
+const capability = [
+  ['Sites', 'Marketing sites, one-pagers and shops that load fast and turn up in a search.'],
+  ['Apps', 'Booking systems, installable web apps, admin tools — the software a business actually runs on.'],
+  ['Behind it', 'Backends, APIs, databases, payments and email.'],
+  ['Keeping it up', 'Hosting, domains, deploys and the pipeline that ships changes.'],
+];
+
 const description =
   'One person, end to end — how I work, what the four steps are, what a website costs, and the questions that come up before booking.';
 ---
 
 <BaseLayout title="About" description={description}>
-  <section class="pt-16">
-    <p class="label m-0">About</p>
-    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-      One person, start to finish.
-    </h1>
-    <p class="measure mt-6 text-[17px] leading-[1.6] text-ink-2">
+  <section class="head">
+    <p class="eyebrow m-0">About</p>
+    <h1>One person, start to finish.</h1>
+    <p class="head-p">
       I'm Yameen. I design it, build it, wire up whatever sits behind it, and
       put it on the internet — so there is no agency layer between you and the
       person doing the work, and one person who knows why every decision was
@@ -129,120 +120,144 @@ const description =
     </p>
   </section>
 
-  {/* Moved here from the homepage: it was a fifth section there and made the
-      page a thousand pixels longer than it needed to be. It reads better next
-      to the process and the prices anyway. */}
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What I build</h2>
-    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 lg:grid-cols-12">
-      {[
-        ['Sites', 'Marketing sites, one-pagers and shops that load fast and turn up in a search.'],
-        ['Apps', 'Booking systems, installable web apps, admin tools — the software a business actually runs on.'],
-        ['Behind it', 'Backends, APIs, databases, payments and email.'],
-        ['Keeping it up', 'Hosting, domains, deploys and the pipeline that ships changes.'],
-      ].map(([term, detail]) => (
-        <div class="contents">
-          <dt class="label m-0 lg:col-span-3">{term}</dt>
-          <dd class="measure m-0 text-ink-2 lg:col-span-9">{detail}</dd>
+  <section class="sec">
+    <h2>What I build</h2>
+    <dl class="rows rv">
+      {capability.map(([term, detail]) => (
+        <div class="row">
+          <dt class="eyebrow m-0">{term}</dt>
+          <dd>{detail}</dd>
         </div>
       ))}
     </dl>
   </section>
 
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">How it works</h2>
-
-    <div class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+  <section class="sec">
+    <h2>How it works</h2>
+    <dl class="rows rv">
       {steps.map(([name, detail], i) => (
-        <div class="contents">
-          <p class="label m-0 md:col-span-3">
-            {String(i + 1).padStart(2, '0')} · {name}
-          </p>
-          <p class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">{detail}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What a website costs</h2>
-
-    <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
-      <p class="measure m-0 text-[17px] leading-[1.6] md:col-span-9 md:col-start-4">
-        A one-off build to get you online, then a small monthly care plan to
-        keep it running. Pick the size that fits — you can move up later.
-      </p>
-    </div>
-
-    {/* Rows separated by rules, not cards. */}
-    <div class="mt-12 space-y-10">
-      {plans.map((p) => (
-        <div class="grid grid-cols-1 gap-x-8 gap-y-4 border-t border-line pt-6 md:grid-cols-12">
-          <div class="md:col-span-3">
-            <h3 class="m-0 text-[21px] font-semibold tracking-[-0.01em]">{p.name}</h3>
-            <p class="label m-0 mt-3">{p.build} build</p>
-            <p class="label m-0 mt-1">+ {p.care} care plan</p>
-          </div>
-
-          <div class="md:col-span-9">
-            <p class="measure m-0 text-[17px] leading-[1.6]">{p.blurb}</p>
-            <ul class="mt-4 list-none space-y-2 p-0">
-              {p.includes.map((item) => (
-                <li class="text-[17px] leading-[1.6] text-ink-2">{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <div class="mt-12 grid grid-cols-1 gap-x-8 md:grid-cols-12">
-      <div class="md:col-span-9 md:col-start-4">
-        <p class="label m-0">How payment works</p>
-        <p class="measure mt-3 text-[17px] leading-[1.6] text-ink-2">
-          Builds split 50% deposit to book your slot and 50% on launch. Care
-          plans start when the site goes live and are collected by monthly
-          Direct Debit — cancel any time with 30 days' notice.
-        </p>
-        <p class="measure mt-4 text-[17px] leading-[1.6] text-ink-2">
-          Those prices cover websites. Booking systems, apps, backends and
-          anything with a database behind it are quoted per project — tell me
-          what you need and I'll price it.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Questions I get asked</h2>
-
-    <dl class="mt-10 space-y-0">
-      {faqs.map(([q, a]) => (
-        <div class="rv grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-12">
-          <dt class="m-0 text-[19px] font-semibold leading-[1.35] tracking-[-0.01em] md:col-span-5">{q}</dt>
-          <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-7">{a}</dd>
+        <div class="row">
+          <dt class="eyebrow m-0">{String(i + 1).padStart(2, '0')} · {name}</dt>
+          <dd>{detail}</dd>
         </div>
       ))}
     </dl>
   </section>
 
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Start something</h2>
+  <section class="sec">
+    <h2>What a website costs</h2>
+    <p class="sec-p rv">
+      A one-off build to get you online, then a small monthly care plan to keep
+      it running. Pick the size that fits — you can move up later.
+    </p>
 
-    <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
-      <div class="md:col-span-9 md:col-start-4">
-        <p class="measure m-0 text-[17px] leading-[1.6]">
-          Tell me what you do and I'll tell you what it takes.
-        </p>
-        <p class="mt-8">
-          <a
-            href="/contact.html"
-            class="btn"
-          >
-            Get in touch
-          </a>
-        </p>
+    <div class="plans">
+      {plans.map((p) => (
+        <div class="plan panel rv">
+          <h3>{p.name}</h3>
+          <p class="plan-fig">{p.build}</p>
+          <p class="eyebrow plan-care">+ {p.care} care plan</p>
+          <p class="plan-blurb">{p.blurb}</p>
+          <ul>
+            {p.includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="rows rv terms-rows">
+      <div class="row">
+        <p class="eyebrow m-0">How payment works</p>
+        <div>
+          <p>
+            Builds split 50% deposit to book your slot and 50% on launch. Care
+            plans start when the site goes live and are collected by monthly
+            Direct Debit — cancel any time with 30 days' notice.
+          </p>
+          <p>
+            Those prices cover websites. Booking systems, apps, backends and
+            anything with a database behind it are quoted per project — tell me
+            what you need and I'll price it.
+          </p>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Questions I get asked</h2>
+    <dl class="faqs">
+      {faqs.map(([q, a]) => (
+        <div class="faq rv">
+          <dt>{q}</dt>
+          <dd>{a}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="ask">
+    <h2 class="rv">Start something</h2>
+    <p class="rv ask-p">Tell me what you do and I'll tell you what it takes.</p>
+    <div class="rv ask-do">
+      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
+      <a class="btn btn-ghost" href="/contact.html">Other ways to reach me</a>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(2.6rem, 8.4vw, 5.4rem); margin: 14px 0 0; max-width: 15ch; }
+  .head-p { margin: 26px 0 0; max-width: 56ch; color: var(--color-ink-2); font-size: 1.05rem; }
+
+  .sec { padding-block: clamp(54px, 9vh, 92px) 0; }
+  .sec h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .sec-p { margin: 20px 0 0; max-width: 54ch; color: var(--color-ink-2); }
+
+  .rows { margin: 30px 0 0; display: grid; gap: 2px; }
+  .row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 20px 22px;
+    background: var(--color-line-2);
+    border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
+  .row dd, .row p { margin: 0; color: var(--color-ink-2); }
+  .row div p + p { margin-top: 14px; }
+  .terms-rows { margin-top: 34px; }
+
+  .plans { margin: 32px 0 0; display: grid; gap: 18px; }
+  @media (min-width: 900px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+  .plan { padding: 26px; display: flex; flex-direction: column; }
+  .plan h3 { margin: 0; font-size: 1.35rem; }
+  .plan-fig {
+    margin: 14px 0 0; font-family: var(--font-disp); font-weight: 800;
+    font-size: 2.3rem; line-height: 1; letter-spacing: -0.04em;
+  }
+  .plan-care { margin: 8px 0 0; }
+  .plan-blurb { margin: 16px 0 0; font-size: 15px; line-height: 1.5; }
+  .plan ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+  .plan li {
+    font-size: 14.5px; padding-left: 18px; position: relative;
+    color: color-mix(in srgb, var(--color-ink) 74%, transparent);
+  }
+  .plan li::before {
+    content: ''; position: absolute; left: 0; top: 9px;
+    width: 7px; height: 7px; background: var(--color-blue); border-radius: 50%;
+  }
+
+  .faqs { margin: 30px 0 0; display: grid; gap: 2px; }
+  .faq {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 22px; background: var(--color-line-2); border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .faq { grid-template-columns: 1fr 1.25fr; gap: 34px; } }
+  .faq dt { font-family: var(--font-disp); font-weight: 700; font-size: 17px; letter-spacing: -0.015em; line-height: 1.3; }
+  .faq dd { margin: 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
+
+  .ask { padding-block: clamp(64px, 11vh, 118px); }
+  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
+  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

@@ -1,81 +1,83 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { all } from '../data/projects.js';
 
 /**
  * Custom 404. GitHub Pages serves /404.html for any unmatched path on a
- * custom domain with no extra configuration, so this needs no routing work.
+ * custom domain with no extra configuration.
  *
- * noindex, because a soft 404 in the index is worse than none: static hosting
- * returns this page with a real 404 status, but the meta tag makes the
- * intent explicit for anything that follows a stale link.
- *
- * The three unlisted case studies are deliberately linked from here. They are
- * live and indexed but not in the work index, so a visitor who lands on a
- * mistyped URL from an old link has somewhere to go.
+ * noindex, because a soft 404 in the index is worse than none. Every case
+ * study is linked, including the three not in the work index — a stale
+ * inbound link is most likely to be aimed at one of those.
  */
 
 const routes = [
-  ['/work.html', 'Work', 'The three projects, written up.'],
+  ['/work.html', 'Work', 'Six projects, three written up in full.'],
   ['/about.html', 'About', 'How I work, the four steps, and what it costs.'],
   ['/contact.html', 'Contact', 'WhatsApp and phone.'],
 ];
 ---
 
 <BaseLayout title="Page not found" description="That page isn't here. The work, the process and the ways to get in touch are." noindex={true}>
-  <section class="pt-16">
-    <p class="label label-blue m-0">Error 404</p>
-    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-      That page isn't here.
-    </h1>
-    <p class="measure mt-6 text-ink-2">
+  <section class="head">
+    <p class="eyebrow eyebrow-accent m-0">Error 404</p>
+    <h1>That page isn't here.</h1>
+    <p class="head-p">
       Either the link is wrong or I moved something and didn't tell you. Here
       is everything the site has.
     </p>
   </section>
 
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Where to go</h2>
-
-    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+  <section class="sec">
+    <h2>Where to go</h2>
+    <dl class="rows rv">
       {routes.map(([href, name, detail]) => (
-        <div class="contents">
-          <dt class="label m-0 md:col-span-3">
-            <a href={href} class="label-ink no-underline transition-colors duration-150 hover:text-blue">{name} →</a>
-          </dt>
-          <dd class="measure m-0 text-ink-2 md:col-span-9">{detail}</dd>
+        <div class="row">
+          <dt class="m-0"><a href={href} class="ul-draw route">{name} →</a></dt>
+          <dd>{detail}</dd>
         </div>
       ))}
     </dl>
   </section>
 
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Looking for a case study?</h2>
-    <p class="rv measure mt-6 text-ink-2">
-      Six are written up. Three are in the work index; the other three are
-      here.
-    </p>
-    <ul class="rv mt-6 flex list-none flex-wrap gap-x-7 gap-y-3 p-0">
-      {[
-        ['/taiyabah.html', 'Taiyabah Masjid'],
-        ['/venetian.html', 'The Venetian Company'],
-        ['/hairbychrissy.html', 'Hair by Chrissy'],
-        ['/ellash.html', 'Ellash'],
-        ['/buxtravel.html', 'Bux Travel'],
-        ['/luxescent.html', 'LuxeScent'],
-      ].map(([href, name]) => (
-        <li>
-          <a href={href} class="label label-ink underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-blue hover:decoration-blue">{name}</a>
-        </li>
-      ))}
+  <section class="sec">
+    <h2>Looking for a case study?</h2>
+    <ul class="cases rv">
+      {all.map((p) => <li><a href={p.href} class="ul-draw">{p.name}</a></li>)}
     </ul>
   </section>
 
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Or just ask me</h2>
-    <p class="rv measure mt-6 text-ink-2">Tell me what you were looking for and I'll point you at it.</p>
-    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+  <section class="sec last">
+    <h2>Or just ask me</h2>
+    <p class="sec-p rv">Tell me what you were looking for and I'll point you at it.</p>
+    <div class="do rv">
       <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="/">Back to the homepage</a>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(2.6rem, 8.4vw, 5.4rem); margin: 14px 0 0; max-width: 14ch; }
+  .head-p { margin: 26px 0 0; max-width: 50ch; color: var(--color-ink-2); font-size: 1.05rem; }
+
+  .sec { padding-block: clamp(48px, 8vh, 84px) 0; }
+  .sec.last { padding-bottom: clamp(64px, 11vh, 118px); }
+  .sec h2 { font-size: clamp(1.7rem, 4.4vw, 2.6rem); margin: 0; }
+  .sec-p { margin: 20px 0 0; color: var(--color-ink-2); }
+
+  .rows { margin: 28px 0 0; display: grid; gap: 2px; }
+  .row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 20px 22px; background: var(--color-line-2); border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
+  .row dd { margin: 0; color: var(--color-ink-2); }
+  .route { font-family: var(--font-disp); font-weight: 700; font-size: 17px; }
+
+  .cases { margin: 26px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 14px 28px; }
+  .cases a { font-family: var(--font-disp); font-weight: 700; font-size: 16px; }
+
+  .do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

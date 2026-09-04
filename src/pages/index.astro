@@ -1,101 +1,58 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import LayerRig from '../components/LayerRig.astro';
+import Wheel from '../components/Wheel.astro';
 import Estimator from '../components/Estimator.astro';
-import { lead } from '../data/projects.js';
+import { all } from '../data/projects.js';
+
+/**
+ * Four sections: the claim, the wheel, the estimator, the ask.
+ *
+ * The hero is a sentence and nothing else — no diagram beside it, because
+ * the wheel immediately below is the thing that argues the case, and putting
+ * a second graphic above it would split the attention it needs.
+ */
 
 const description =
-  "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.";
+  "I build the whole thing for new and growing businesses — the website, the software behind it and the hosting it runs on, designed and deployed by one person in Greater Manchester.";
 ---
 
-<BaseLayout title="Websites, apps and the software behind them" description={description}>
+<BaseLayout title="Websites, apps and the software behind them" description={description} wide={true}>
 
-  {/* ---- hero: the claim, and the stack it describes ------------------ */}
-  {/* 0.95/1.05 rather than 1.05/0.95: the rig's leader-line labels need about
-      190px to the right of the sheets, and the narrower column left the widest
-      one 26px short. The text column is still wider than its 46ch measure. */}
-  <section class="grid grid-cols-1 gap-11 pt-16 pb-10 md:grid-cols-[0.95fr_1.05fr] md:items-center md:gap-14">
-    <div>
-      <p class="label m-0 mb-5">Greater Manchester · one person, end to end</p>
-      <h1 class="text-[clamp(2.6rem,6.2vw,4.6rem)] font-extrabold leading-[0.98] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-        Three layers
-        <span class="block font-medium text-ink-2 [font-variation-settings:'wdth'_88]">under every site I build.</span>
-      </h1>
-      <p class="mt-6 max-w-[46ch] text-ink-2">
-        The website you see, the software behind it, and the hosting it runs
-        on. Most people only sell you the first one. Pull the stack apart and
-        have a look.
-      </p>
-      <div class="mt-8 flex flex-wrap items-center gap-3.5">
-        <a class="btn" href="#build">Price up a build</a>
-        <a class="btn btn-ghost" href="/work.html">See the work</a>
-      </div>
+  {/* ---- the claim --------------------------------------------------- */}
+  <section class="shell hero">
+    <p class="eyebrow rv">Greater Manchester · one person, end to end</p>
+    <h1 class="rv">I build the <em>whole</em> thing.</h1>
+    <p class="hero-sub rv">
+      The website you see, the software behind it, and the hosting it runs on.
+      Most people only sell you the first one.
+    </p>
+    <div class="hero-do rv">
+      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
+      <a class="btn btn-ghost" href="#price">Price up a build</a>
     </div>
-
-    <LayerRig shot={lead[0].img} shotAlt={lead[0].alt} />
+    <p class="hero-cue rv" aria-hidden="true">Scroll — the work turns</p>
   </section>
 
-  {/* ---- work -------------------------------------------------------- */}
-  <section class="border-t border-line py-16 md:py-24">
-    <div class="rv mb-13 flex items-baseline justify-between gap-5">
-      <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Things I have actually shipped</h2>
-      <a href="/work.html" class="label no-underline transition-colors duration-150 hover:text-blue">All work →</a>
+  {/* ---- the wheel --------------------------------------------------- */}
+  <Wheel items={all} />
+
+  {/* ---- price it ---------------------------------------------------- */}
+  <section id="price" class="band">
+    <div class="shell">
+      <p class="eyebrow rv">Build your stack · rough figure, no email required</p>
+      <h2 class="band-h rv">What would yours cost?</h2>
+      <div class="rv"><Estimator /></div>
     </div>
-
-    {lead.map((p) => (
-      <article class="rv grid grid-cols-1 gap-6 border-t border-line py-9 lg:grid-cols-[200px_1fr_300px] lg:items-start lg:gap-9">
-        <div>
-          <p class="label label-blue m-0">{p.kind}</p>
-          <p class="label m-0 mt-1.5">{p.where}</p>
-        </div>
-
-        <div>
-          <h3 class="text-[1.55rem] font-bold tracking-[-0.02em]">
-            <a href={p.href} class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 hover:text-blue">
-              {p.name}
-              <span aria-hidden="true" class="text-ink-2 transition-transform duration-150 group-hover:translate-x-[3px] group-hover:text-blue">→</span>
-            </a>
-          </h3>
-          <p class="mt-2.5 max-w-[52ch] text-ink-2">{p.outcome}</p>
-
-          {/* which of the three layers this project actually needed */}
-          <div class="mt-4 flex flex-col gap-1.5">
-            {[['Interface', p.layers.interface], ['Software', p.layers.software], ['Infrastructure', p.layers.infra]].map(([name, w]) => (
-              <div class="label m-0 flex items-center gap-2.5">
-                <i class="layer-bar block h-1.5 bg-blue/25" style={`width:${w}%`}></i>{name}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <a href={p.href} class="shot group relative block aspect-[16/10] overflow-hidden border border-line bg-plane">
-          <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async"
-               class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:-translate-y-[4%] group-hover:scale-[1.045]" />
-          <span class="absolute right-2.5 top-2.5 flex items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
-            <span class="pulse"></span><span class="label m-0 text-[10px]">Live</span>
-          </span>
-        </a>
-      </article>
-    ))}
   </section>
 
-  {/* ---- estimator --------------------------------------------------- */}
-  <section id="build" class="border-t border-line py-16 md:py-24">
-    <div class="rv mb-13 flex flex-wrap items-baseline justify-between gap-5">
-      <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Build your stack</h2>
-      <span class="label">Rough figure · no email required</span>
-    </div>
-    <div class="rv"><Estimator /></div>
-  </section>
-
-  {/* ---- contact ----------------------------------------------------- */}
-  <section class="border-t border-line py-16 md:py-24">
-    <h2 class="rv text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Tell me what you need</h2>
-    <p class="rv measure mt-6 text-ink-2">
+  {/* ---- the ask ----------------------------------------------------- */}
+  <section class="shell ask">
+    <h2 class="ask-h rv">Tell me what you need.</h2>
+    <p class="ask-p rv">
       I'll tell you what it takes and what it costs, usually the same day. No
       obligation, and I'll say so if I'm not the right fit for it.
     </p>
-    <div class="rv mt-8 flex flex-wrap items-center gap-3.5">
+    <div class="hero-do rv">
       <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="tel:+447404901859">07404 901859</a>
     </div>
@@ -104,9 +61,44 @@ const description =
 </BaseLayout>
 
 <style>
-  /* Hovering a project brightens its layer read-out. This was in the approved
-     treatment and got dropped when the bars were rebuilt as utilities. */
-  .layer-bar { transition: opacity 0.3s var(--ease-draft), width 0.9s var(--ease-draft); }
-  article:hover .layer-bar { opacity: 0.62; }
-  @media (prefers-reduced-motion: reduce) { .layer-bar { transition: none; } }
+  .hero { padding-block: clamp(56px, 11vh, 118px) clamp(40px, 8vh, 84px); }
+
+  .hero h1 {
+    font-size: clamp(2.9rem, 8.4vw, 6.2rem);
+    margin: 20px 0 0;
+    max-width: 15ch;
+  }
+  /* The one word the sentence turns on. Sand is used exactly here, on the
+     wheel's active card, and on the primary button — three places, one job. */
+  .hero h1 em { font-style: normal; color: var(--color-blue); }
+
+  .hero-sub {
+    margin: 30px 0 0;
+    max-width: 46ch;
+    font-size: clamp(1.05rem, 2vw, 1.32rem);
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  .hero-do { margin-top: 38px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  .hero-cue {
+    margin: clamp(44px, 8vh, 92px) 0 0;
+    font-family: var(--font-body);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ink-2);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-cue::after {
+    content: ''; height: 1px; flex: 1; max-width: 190px;
+    background: var(--color-line);
+  }
+
+  .band { background: var(--color-paper-2); padding-block: clamp(66px, 11vh, 118px); }
+  .band-h { font-size: clamp(2rem, 5.2vw, 3.4rem); margin: 16px 0 40px; }
+
+  .ask { padding-block: clamp(70px, 12vh, 130px); }
+  .ask-h { font-size: clamp(2.2rem, 6.4vw, 4.4rem); margin: 0; }
+  .ask-p { margin: 24px 0 0; max-width: 50ch; color: var(--color-ink-2); font-size: 1.05rem; }
 </style>

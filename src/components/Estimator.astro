@@ -5,63 +5,108 @@
  * roughly what they are in for before they message.
  *
  * Prices are the real tiers from CLAUDE.md, decomposed into the pieces a
- * person actually recognises. The layer each option touches is what drives
- * the "layers touched" readout, tying it back to the hero diagram.
+ * person actually recognises. The "layers" read-out ties the total back to
+ * the positioning line — the site, the software, the hosting.
+ *
+ * Every option is a real <button> with aria-pressed, so the whole thing works
+ * from the keyboard with no extra handling.
  */
 const options = [
-  { id: 'site',    price: 495, care: 20, layer: 1, name: 'A site people can find',            note: 'A few pages, fast, turns a search into a phone call.' },
-  { id: 'pages',   price: 400, care: 15, layer: 1, name: 'More pages, photos, enquiry form',  note: 'For a business that wants enquiries, not just a listing.' },
-  { id: 'booking', price: 900, care: 20, layer: 2, name: 'Bookings or ordering',              note: 'Live availability, deposits, a real calendar behind it.' },
-  { id: 'admin',   price: 750, care: 15, layer: 2, name: 'An account area or admin',          note: 'Somewhere you or your customers log in and manage things.' },
-  { id: 'app',     price: 600, care: 20, layer: 3, name: 'An installable app',                note: 'Adds to a phone home screen, works offline, sends alerts.' },
+  { id: 'site',    price: 495, care: 20, layer: 1, name: 'A site people can find',           note: 'A few pages, fast, turns a search into a phone call.' },
+  { id: 'pages',   price: 400, care: 15, layer: 1, name: 'More pages, photos, enquiry form', note: 'For a business that wants enquiries, not just a listing.' },
+  { id: 'booking', price: 900, care: 20, layer: 2, name: 'Bookings or ordering',             note: 'Live availability, deposits, a real calendar behind it.' },
+  { id: 'admin',   price: 750, care: 15, layer: 2, name: 'An account area or admin',         note: 'Somewhere you or your customers log in and manage things.' },
+  { id: 'app',     price: 600, care: 20, layer: 3, name: 'An installable app',               note: 'Adds to a phone home screen, works offline, sends alerts.' },
 ];
 ---
 
-<div class="grid grid-cols-1 gap-9 lg:grid-cols-[1fr_380px] lg:gap-14">
-  <div class="flex flex-col gap-2.5" id="estOpts">
+<div class="est">
+  <div class="est-list" id="estOpts">
     {options.map((o, i) => (
-      <button
-        type="button"
-        class="est-opt sheet flex items-center gap-3.5 px-[18px] py-4 text-left"
-        aria-pressed={i === 0 ? 'true' : 'false'}
-        data-price={o.price}
-        data-care={o.care}
-        data-layer={o.layer}
-      >
-        <span class="est-box relative block h-[15px] w-[15px] flex-none border border-ink-2"></span>
-        <span>
-          <b class="block font-semibold">{o.name}</b>
-          <small class="text-[14px] text-ink-2">{o.note}</small>
+      <button type="button" class="est-opt" aria-pressed={i === 0 ? 'true' : 'false'}
+              data-price={o.price} data-care={o.care} data-layer={o.layer}>
+        <span class="est-box" aria-hidden="true"></span>
+        <span class="est-txt">
+          <b>{o.name}</b>
+          <small>{o.note}</small>
         </span>
       </button>
     ))}
   </div>
 
-  <aside class="sticky top-6 self-start bg-ink p-7 text-paper" aria-live="polite">
-    <p class="label m-0 mb-2.5 text-paper/60">From, one-off build</p>
-    <p id="estFig" class="m-0 font-disp text-[3rem] font-extrabold leading-none tracking-[-0.03em] tabular-nums">£495</p>
-    <ul class="m-0 mt-[18px] flex list-none flex-col gap-[7px] p-0">
-      <li class="label text-paper/60"><b id="estCare" class="font-medium text-paper">£20</b> a month to keep it running</li>
-      <li class="label text-paper/60">Layers touched <b id="estLayers" class="font-medium text-paper">1 of 3</b></li>
-      <li class="label text-paper/60">50% to book, 50% on launch</li>
+  <aside class="est-out panel" aria-live="polite">
+    <p class="eyebrow m-0">From, one-off build</p>
+    <p id="estFig" class="est-fig">£495</p>
+    <ul class="est-facts">
+      <li><b id="estCare">£20</b> a month to keep it running</li>
+      <li>Layers touched <b id="estLayers">1 of 3</b></li>
+      <li>50% to book, 50% on launch</li>
     </ul>
-    <p class="mt-5 text-[13.5px] leading-[1.55] text-paper/60">
+    <p class="est-note">
       A real number needs a real conversation — this is the shape of it, not a
       quote. Nothing here is sent anywhere.
     </p>
-    <a class="btn mt-5 border-paper bg-paper text-ink hover:border-paper hover:bg-paper hover:text-blue" href="/contact.html">Talk it through</a>
+    <a class="btn est-cta" href="/contact.html">Talk it through</a>
   </aside>
 </div>
 
 <style>
-  .est-opt { cursor: pointer; font: inherit; color: inherit; transition: transform 0.18s var(--ease-draft), border-color 0.18s var(--ease-draft); }
-  .est-opt:hover { transform: translateX(3px); }
-  .est-opt[aria-pressed="true"] { border-color: var(--color-blue); box-shadow: inset 3px 0 0 var(--color-blue); }
+  .est { display: grid; grid-template-columns: 1fr; gap: 30px; }
+  @media (min-width: 940px) { .est { grid-template-columns: 1fr 372px; gap: 52px; } }
+
+  .est-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .est-opt {
+    display: flex; align-items: flex-start; gap: 15px;
+    padding: 17px 19px; text-align: left; cursor: pointer;
+    font: inherit; color: var(--color-ink);
+    background: var(--color-line-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    transition: transform 0.2s var(--ease-turn), background 0.2s, border-color 0.2s;
+  }
+  .est-opt:hover { transform: translateX(4px); background: var(--color-plane); border-color: var(--color-line); }
+  .est-opt[aria-pressed="true"] { border-color: var(--color-blue); background: color-mix(in srgb, var(--color-blue) 7%, var(--color-plane)); }
+
+  .est-box {
+    position: relative; flex: none;
+    width: 17px; height: 17px; margin-top: 3px;
+    border: 1.5px solid var(--color-ink-2);
+    border-radius: 2px;
+  }
   .est-opt[aria-pressed="true"] .est-box { background: var(--color-blue); border-color: var(--color-blue); }
   .est-opt[aria-pressed="true"] .est-box::after {
-    content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
-    border: solid var(--color-plane); border-width: 0 2px 2px 0; transform: rotate(42deg);
+    content: ''; position: absolute; left: 5px; top: 1px;
+    width: 4px; height: 9px;
+    border: solid var(--color-ink); border-width: 0 2px 2px 0;
+    transform: rotate(42deg);
   }
+
+  .est-txt b { display: block; font-family: var(--font-disp); font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+  .est-txt small { display: block; margin-top: 3px; font-size: 14px; color: var(--color-ink-2); }
+
+  .est-out { align-self: start; padding: 28px; }
+  .est-out .eyebrow { color: var(--color-ink-2); }
+  @media (min-width: 940px) { .est-out { position: sticky; top: 24px; } }
+
+  .est-fig {
+    margin: 10px 0 0;
+    font-family: var(--font-disp); font-weight: 800;
+    font-size: 3.1rem; line-height: 1; letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .est-facts {
+    margin: 20px 0 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 7px;
+    font-size: 14px;
+    color: color-mix(in srgb, var(--color-ink) 68%, transparent);
+  }
+  .est-facts b { color: var(--color-ink); font-weight: 700; }
+  .est-note {
+    margin: 20px 0 0; font-size: 13.5px; line-height: 1.55;
+    color: color-mix(in srgb, var(--color-ink) 62%, transparent);
+  }
+  .est-cta { margin-top: 22px; }
 </style>
 
 <script>

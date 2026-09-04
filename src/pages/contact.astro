@@ -5,19 +5,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
  * Contact. WhatsApp-first, no form — confirmed rather than assumed.
  *
  * Static hosting has no server, so a form would need a third-party endpoint.
- * The spec's position is that WhatsApp converts better for this audience
- * anyway, and a form nobody uses is worse than no form.
+ * WhatsApp converts better for this audience anyway, and a form nobody uses
+ * is worse than no form.
  *
- * No email address here. There is no mailbox, and publishing one that
- * bounces is worse than publishing none (CLAUDE.md, "## Contact"). The
- * off-site profile link was removed at the user's request, so WhatsApp and
- * the phone number are now the only two routes on the site.
+ * No email address (there is no mailbox, and publishing one that bounces is
+ * worse than publishing none) and no social profile — two routes, both the
+ * same number.
  */
 
 const WHATSAPP = 'https://wa.me/447404901859';
 const TEL = '+447404901859';
 
-// What makes a first message answerable in one reply rather than four.
 const helpful = [
   ['What you do', 'The business, and who your customers are.'],
   ['What you need', "A site, a booking system, something that talks to software you already use — or just the problem, if you're not sure what fixes it."],
@@ -29,61 +27,63 @@ const description =
 ---
 
 <BaseLayout title="Contact" description={description}>
-  <section class="pt-16">
-    <p class="label m-0">Contact</p>
-    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
-      Tell me what you need.
-    </h1>
-    <p class="measure mt-6 text-[17px] leading-[1.6] text-ink-2">
-      I'll tell you what it takes and what it costs, usually the same day.
-      No obligation, and I'll say so if I'm not the right fit for it.
+  <section class="head">
+    <p class="eyebrow m-0">Contact</p>
+    <h1>Tell me what you need.</h1>
+    <p class="head-p">
+      I'll tell you what it takes and what it costs, usually the same day. No
+      obligation, and I'll say so if I'm not the right fit for it.
     </p>
-
-    <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-      <a
-        href={WHATSAPP}
-        target="_blank"
-        rel="noopener"
-        class="btn"
-      >
-        Message me on WhatsApp
-      </a>
-      <a class="label transition-colors duration-150 ease-out hover:text-blue" href={`tel:${TEL}`}>
-        Call 07404 901859
-      </a>
+    <div class="do">
+      <a class="btn" href={WHATSAPP} target="_blank" rel="noopener">Message me on WhatsApp</a>
+      <a class="btn btn-ghost" href={`tel:${TEL}`}>07404 901859</a>
     </div>
   </section>
 
-  <section class="border-t border-line py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Worth putting in the first message</h2>
-
-    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+  <section class="sec">
+    <h2>Worth putting in the first message</h2>
+    <dl class="rows rv">
       {helpful.map(([term, detail]) => (
-        <div class="contents">
-          <dt class="label m-0 md:col-span-3">{term}</dt>
-          <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">{detail}</dd>
+        <div class="row">
+          <dt class="eyebrow m-0">{term}</dt>
+          <dd>{detail}</dd>
         </div>
       ))}
     </dl>
-
-    <div class="mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
-      <p class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9 md:col-start-4">
-        None of it is required. "I need a website for my shop" is a fine place
-        to start.
-      </p>
-    </div>
+    <p class="note rv">
+      None of it is required. "I need a website for my shop" is a fine place to
+      start.
+    </p>
   </section>
-  {/* Was "Where and how", a two-row list whose second row was an off-site
-      profile link. With that route removed there is one fact left, and a
-      definition list of one term reads as a list with something missing. */}
-  <section class="border-t border-line py-24">
-    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Where I work from</h2>
 
-    <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
-      <p class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9 md:col-start-4">
-        Greater Manchester. The work has gone to London, Birmingham, Coventry
-        and Nuneaton, so where you are is not the deciding factor.
-      </p>
-    </div>
+  <section class="sec">
+    <h2>Where I work from</h2>
+    <p class="sec-p rv">
+      Greater Manchester. The work has gone to London, Birmingham, Coventry and
+      Nuneaton, so where you are is not the deciding factor.
+    </p>
   </section>
 </BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(2.7rem, 9vw, 5.8rem); margin: 14px 0 0; max-width: 14ch; }
+  .head-p { margin: 26px 0 0; max-width: 52ch; color: var(--color-ink-2); font-size: 1.05rem; }
+  .do { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  .sec { padding-block: clamp(54px, 9vh, 92px) 0; }
+  .sec:last-of-type { padding-bottom: clamp(64px, 11vh, 118px); }
+  .sec h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .sec-p { margin: 22px 0 0; max-width: 54ch; color: var(--color-ink-2); }
+
+  .rows { margin: 30px 0 0; display: grid; gap: 2px; }
+  .row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 20px 22px;
+    background: var(--color-line-2);
+    border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
+  .row dd { margin: 0; color: var(--color-ink-2); }
+  .note { margin: 22px 0 0; max-width: 54ch; color: var(--color-ink-2); }
+</style>
