@@ -278,6 +278,17 @@ The signature, in `src/components/Wheel.astro`. Six projects on a circle whose
 centre is below the viewport; scrolling turns it; whichever card reaches top
 dead centre is upright, in full colour, and named in the read-out beneath.
 
+**The rail under the read-out is not decoration and must not be dropped.** A
+wheel driven by scroll shows a scanning visitor exactly one project unless
+they commit to the whole run, which is the mechanic's one real weakness. The
+rail is the way out: it says how many there are, which one you are on, and
+jumps to any of them. Real `<button>`s, so the keyboard path is free.
+
+The read-out carries each project's layer bars — which of the three layers it
+actually needed. That is where the positioning line stops being a claim and
+starts being evidence, project by project, and it is why the hero names the
+three layers before the wheel measures against them.
+
 That last part is the whole point. A wheel that only spins is decoration; this
 one is a control — the rotation says which project you are looking at and the
 read-out is its display. Cards are tangential to the circle, so **the active
@@ -326,6 +337,13 @@ Rules that hold:
   into a plain grid of the same six links, drops the sticky pin and the scroll
   budget, and disables every transition.
 - The wheel stops requesting frames when it scrolls out of view.
+- **The rail needs `position: relative` and a z-index above the spokes.** The
+  spokes are absolutely positioned, so they paint over a static sibling
+  however late it comes in the DOM — the cards were lying across the rail and
+  swallowing its clicks, which showed up as a target-size failure rather than
+  as anything visible.
+- Rail ticks clear 24x24 with padding, not by growing the visible mark; the
+  tick itself stays a 3px rule.
 - Tabbing to a card turns the wheel to bring it to the top, so the keyboard
   path shows what the pointer path shows rather than focusing a card nobody
   can see.
@@ -379,7 +397,7 @@ colour alone; the structure was kept and the palette reverted to v2's. Verified 
 dimensions, no reveal left hidden, no empty links. Lighthouse 97/100/100/100
 on the homepage and 100 across work, about and the case template; CLS 0.000
 throughout. Keyboard, estimator arithmetic, reduced-motion and off-screen
-frame pausing all exercised directly. Lighthouse 98/100/100/100 on the
+frame pausing all exercised directly. Lighthouse 97/100/100/100 on the
 homepage and 100 across work, about, contact and the case template.
 
 **Phase 6 — the pre-launch audit. DONE.** Privacy, terms, a custom 404, an

@@ -30,7 +30,20 @@ const description =
       <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="#price">Price up a build</a>
     </div>
-    <p class="hero-cue rv" aria-hidden="true">Scroll — the work turns</p>
+    <dl class="hero-layers rv">
+      {[
+        ['Interface', 'The site people actually see.'],
+        ['Software', 'Bookings, accounts, payments — whatever it runs on.'],
+        ['Infrastructure', 'Hosting, domains, and the pipeline that ships changes.'],
+      ].map(([name, what]) => (
+        <div class="hero-layer">
+          <dt class="eyebrow m-0">{name}</dt>
+          <dd>{what}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <p class="hero-cue rv" aria-hidden="true">Scroll — every project below is measured against these three</p>
   </section>
 
   {/* ---- the wheel --------------------------------------------------- */}
@@ -61,7 +74,7 @@ const description =
 </BaseLayout>
 
 <style>
-  .hero { padding-block: clamp(56px, 11vh, 118px) clamp(40px, 8vh, 84px); }
+  .hero { padding-block: clamp(52px, 9vh, 104px) clamp(36px, 7vh, 76px); }
 
   .hero h1 {
     font-size: clamp(2.9rem, 8.4vw, 6.2rem);
@@ -80,10 +93,24 @@ const description =
     color: var(--color-ink-2);
   }
 
-  .hero-do { margin-top: 38px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .hero-do { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  /* Names the vocabulary the wheel then measures every project against.
+     Three items, no boxes — a legend, not a feature grid. */
+  .hero-layers {
+    margin: clamp(38px, 6vh, 62px) 0 0;
+    display: grid; gap: 22px;
+    border-top: 1px solid var(--color-line);
+    padding-top: 24px;
+  }
+  @media (min-width: 900px) { .hero-layers { grid-template-columns: repeat(3, 1fr); gap: 34px; } }
+  .hero-layer dd {
+    margin: 7px 0 0; color: var(--color-ink-2);
+    font-size: 15px; line-height: 1.5; max-width: 34ch;
+  }
 
   .hero-cue {
-    margin: clamp(44px, 8vh, 92px) 0 0;
+    margin: clamp(30px, 5vh, 54px) 0 0;
     font-family: var(--font-body);
     font-size: 12px; font-weight: 600;
     letter-spacing: 0.18em; text-transform: uppercase;

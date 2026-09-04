@@ -38,7 +38,9 @@ const step = 360 / n;
 <section class="track" id="wheelTrack" aria-labelledby="wheelHeading">
   <div class="stage">
     <div class="stage-head">
-      <p class="eyebrow m-0" id="wheelHeading">Selected work · {n} projects</p>
+      <p class="eyebrow m-0" id="wheelHeading">Selected work</p>
+      <span class="head-sep" aria-hidden="true"></span>
+      <a class="eyebrow ul-draw head-all" href="/work.html">All {n}, written up →</a>
     </div>
 
     <div class="ring-box">
@@ -69,9 +71,38 @@ const step = 360 / n;
           </p>
           <h2 class="read-name">{p.name}</h2>
           <p class="read-line">{p.line}</p>
-          <p class="read-go"><a href={p.href} class="ul-draw ul-draw-on">Read the case study →</a></p>
+
+          {/* Which of the three layers this project actually needed. The
+              positioning line claims three; this is where the claim gets
+              evidence, project by project. */}
+          <ul class="layers" aria-label={`What ${p.name} needed`}>
+            {[['Interface', p.layers.interface], ['Software', p.layers.software], ['Infrastructure', p.layers.infra]].map(([name, w]) => (
+              <li>
+                <span class="eyebrow layer-name">{name}</span>
+                <span class="layer-bar"><i style={`width:${w}%`}></i></span>
+              </li>
+            ))}
+          </ul>
+
+          <p class="read-go"><a href={p.href} class="ul-draw ul-draw-on">Read the {p.name} case study →</a></p>
         </div>
       ))}
+    </div>
+    {/* The wheel turns with the scroll, which means a visitor scanning the
+        page sees one project unless they commit to the whole run. This rail
+        is the way out of that: it says how many there are, which one you are
+        on, and jumps straight to any of them. Real buttons, so it works from
+        the keyboard without extra handling. */}
+    <div class="rail">
+      <span class="eyebrow rail-count"><b id="railNow">1</b> / {n}</span>
+      <ol class="rail-ticks" id="rail">
+        {items.map((p, i) => (
+          <li>
+            <button type="button" data-go={i} aria-label={`Show ${p.name}`}
+                    aria-current={i === 0 ? 'true' : 'false'}><span></span></button>
+          </li>
+        ))}
+      </ol>
     </div>
   </div>
 </section>
@@ -79,7 +110,10 @@ const step = 360 / n;
 <style>
   /* The scroll budget. 100vh of stage plus this much travel, which is what
      the sticky element sticks through. One full turn over the whole run. */
-  .track { height: calc(100vh + 2600px); position: relative; }
+  /* One full turn over this much travel. It was 2600; six projects at that
+     rate is a long commitment for a visitor who is scanning, and the rail
+     below the read-out is the shortcut for anyone who does not want to. */
+  .track { height: calc(100vh + 2200px); position: relative; }
 
   .stage {
     position: sticky;
@@ -91,7 +125,13 @@ const step = 360 / n;
     overflow: hidden;
   }
 
-  .stage-head { padding: 26px 24px 0; text-align: center; flex: none; }
+  .stage-head {
+    padding: 26px 24px 0; flex: none;
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: center; gap: 6px 18px;
+  }
+  .head-all { text-decoration: none; }
+  .head-sep { width: 26px; height: 1px; background: var(--color-line); }
 
   /* No clip here on purpose. Clipping a box that is exactly the circle's
      bounding square makes Chromium paint the clip edge as a 1px seam — two
@@ -192,9 +232,55 @@ const step = 360 / n;
     box-shadow: 0 10px 30px rgba(22, 25, 28, 0.13);
   }
 
+  .layers {
+    margin: 18px auto 0; padding: 0; list-style: none;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px;
+  }
+  .layers li { display: flex; align-items: center; gap: 9px; }
+  .layer-name { font-size: 10.5px; }
+  .layer-bar {
+    display: block; width: 62px; height: 4px;
+    background: var(--color-line-2); border-radius: 2px; overflow: hidden;
+  }
+  .layer-bar i {
+    display: block; height: 100%;
+    background: color-mix(in srgb, var(--color-blue) 55%, transparent);
+  }
+
+  /* The spokes are absolutely positioned, so they paint above a static
+     sibling however late it comes in the DOM — the cards were lying over the
+     rail and swallowing its clicks. Positioned and lifted above them. */
+  .rail {
+    position: relative; z-index: 3;
+    flex: none;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    padding: 0 24px 30px;
+  }
+  .rail-count b { color: var(--color-ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .rail-ticks { display: flex; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  /* display:list-item still generates a ::marker box even at list-style:none,
+     and one of them was painting a stray dot above the third tick. */
+  .rail-ticks li { display: block; }
+  /* Padding, not the tick itself, carries the target: the visible mark stays
+     a 3px rule while the button clears the 24px minimum in both directions. */
+  .rail-ticks button {
+    display: flex; align-items: center;
+    min-width: 26px; min-height: 28px;
+    padding: 12px 6px; border: 0; background: none; cursor: pointer;
+  }
+  .rail-ticks span {
+    display: block; width: 26px; height: 3px; border-radius: 2px;
+    background: var(--color-line);
+    transition: background 0.3s var(--ease-turn), transform 0.3s var(--ease-turn);
+  }
+  .rail-ticks button:hover span { background: var(--color-ink-2); }
+  .rail-ticks button[aria-current="true"] span {
+    background: var(--color-blue); transform: scaleY(2);
+  }
+
   .readout {
     flex: none;
-    padding: 0 24px 40px;
+    padding: 0 24px 18px;
     text-align: center;
     min-height: 210px;
     position: relative;
@@ -228,8 +314,16 @@ const step = 360 / n;
     .ring { --r: 296px; }
     .card { width: 186px; }
     .card-name { font-size: 15px; }
-    .readout { min-height: 232px; padding-bottom: 28px; }
-    .track { height: calc(100vh + 2100px); }
+    /* Two eyebrows and a rule will not sit on one line at this width, and
+       wrapping them mid-phrase reads as a mistake. Stack them instead. */
+    .stage-head { padding-top: 18px; gap: 4px; }
+    .head-sep { display: none; }
+    .readout { min-height: 244px; padding-bottom: 14px; }
+    .layers { gap: 6px 16px; }
+    .layer-bar { width: 48px; }
+    .rail { gap: 12px; padding-bottom: 22px; }
+    .rail-ticks span { width: 20px; }
+    .track { height: calc(100vh + 1800px); }
   }
 
   /* No wheel at all. Six cards, all readable, no pin and nothing moving —
@@ -248,6 +342,9 @@ const step = 360 / n;
     .card-foot { opacity: 1; }
     .card-shot { aspect-ratio: 16 / 10; }
     .readout { display: none; }
+    .rail { display: none; }
+    .stage-head { justify-content: flex-start; }
+    .head-sep { display: none; }
   }
 </style>
 
@@ -288,17 +385,34 @@ const step = 360 / n;
       ring.style.setProperty('--arc', arc + 'px');
     };
 
+    const ticks = [...document.querySelectorAll('[data-go]')];
+    const railNow = document.getElementById('railNow');
+
     const show = (i) => {
       if (i === active) return;
       if (active >= 0) {
         spokes[active]?.classList.remove('is-active');
         reads[active]?.setAttribute('hidden', '');
+        ticks[active]?.setAttribute('aria-current', 'false');
       }
       spokes[i]?.classList.add('is-active');
       // Re-adding the node restarts the fade without a class-toggle reflow.
       reads[i]?.removeAttribute('hidden');
+      ticks[i]?.setAttribute('aria-current', 'true');
+      if (railNow) railNow.textContent = String(i + 1);
       active = i;
     };
+
+    // Scroll position that brings project i to top dead centre.
+    const scrollFor = (i) => {
+      const r = track.getBoundingClientRect();
+      return window.scrollY + r.top + (i / n) * (r.height - window.innerHeight);
+    };
+
+    ticks.forEach((t, i) => t.addEventListener('click', () => {
+      if (reduced.matches) { spokes[i].querySelector('.card')?.scrollIntoView({ block: 'center' }); return; }
+      window.scrollTo({ top: scrollFor(i), behavior: 'smooth' });
+    }));
 
     const draw = () => {
       const r = track.getBoundingClientRect();
@@ -352,10 +466,7 @@ const step = 360 / n;
     spokes.forEach((spoke, i) => {
       spoke.querySelector('.card')?.addEventListener('focus', () => {
         if (reduced.matches) return;
-        const r = track.getBoundingClientRect();
-        const run = r.height - window.innerHeight;
-        const target = window.scrollY + r.top + (i / n) * run;
-        window.scrollTo({ top: target, behavior: 'smooth' });
+        window.scrollTo({ top: scrollFor(i), behavior: 'smooth' });
       });
     });
 
@@ -373,6 +484,7 @@ const step = 360 / n;
         spokes.forEach((sp, k) => sp.style.setProperty('--a', k * step + 'deg'));
         spokes.forEach((s) => s.classList.remove('is-active'));
         reads.forEach((el) => el.setAttribute('hidden', ''));
+        ticks.forEach((t) => t.setAttribute('aria-current', 'false'));
         active = -1;
       } else {
         fitArc();
