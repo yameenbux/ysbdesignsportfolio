@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>YSB — system spec</title>
+<style>
+@font-face{font-family:"Archivo";font-weight:100 900;font-stretch:62% 125%;
+  src:url("../public/fonts/archivo-latin-wdth.woff2") format("woff2-variations");}
+@font-face{font-family:"Instrument Sans";font-weight:100 900;
+  src:url("../public/fonts/instrument-sans-latin.woff2") format("woff2-variations");}
+@font-face{font-family:"IBM Plex Mono";font-weight:400;
+  src:url("../public/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");}
+:root{
+  --paper:#E8E6DE; --paper-2:#DFDCD2; --plane:#FBFAF7;
+  --ink:#16191C; --ink-2:#5A6068;
+  --blue:#1F45CC; --signal:#A8410F;
+  --line:rgba(22,25,28,.14); --grid:rgba(31,69,204,.07);
+  --disp:"Archivo",system-ui,sans-serif;
+  --sans:"Instrument Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#777;padding:40px;font-family:var(--sans)}
+#map{position:relative;width:1200px;height:1500px;background:var(--paper);overflow:hidden}
+#map::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(var(--grid) 1px,transparent 1px) 0 0/100% 32px,
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/32px 100%;}
+.z{position:relative;z-index:1}
+
+.head{padding:40px 56px 0}
+.kick{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.16em;
+  color:var(--ink-2);display:flex;align-items:center;gap:11px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--signal);flex:none}
+h1{font-family:var(--disp);font-weight:800;font-variation-settings:"wdth" 112;
+  font-size:48px;line-height:1.03;letter-spacing:-.024em;color:var(--ink);margin-top:16px}
+h1 .hl{background:var(--signal);color:var(--paper);padding:0 11px 3px;
+  display:inline-block;margin:0 -3px;border-radius:2px}
+.sub{font-size:17px;line-height:1.45;color:var(--ink-2);margin-top:16px;max-width:610px}
+.sub b{color:var(--ink);font-weight:600}
+
+.key{position:absolute;top:40px;right:56px;width:436px;z-index:2;
+  background:var(--plane);border:1px solid var(--line);border-radius:2px;padding:15px 17px 13px}
+.key .kt{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-2);padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:12px;
+  display:flex;justify-content:space-between}
+.key .row{display:flex;gap:11px;margin-bottom:11px}
+.key .row:last-child{margin-bottom:0}
+.key .sw{width:11px;height:11px;border-radius:2px;flex:none;margin-top:3px}
+.key .g{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);line-height:1.4}
+.key .v{font-size:12px;line-height:1.4;color:var(--ink-2);margin-top:3px}
+
+.sec{margin:0 56px}
+.sech{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-2);margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.sech .wire{flex:1;height:1px;opacity:.5;
+  background:repeating-linear-gradient(90deg,var(--ink-2) 0 4px,transparent 4px 9px)}
+
+/* approval panel */
+.appr{display:grid;grid-template-columns:452px 1fr;gap:0;background:var(--plane);
+  border:1px solid var(--line);border-radius:2px}
+.appr .l{padding:16px 18px;border-right:1px solid var(--line)}
+.appr .r{padding:16px 18px}
+.appr h5{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);font-weight:400;margin-bottom:12px}
+.appr li{list-style:none;font-size:12.8px;line-height:1.45;color:var(--ink-2);
+  margin-bottom:8px;padding-left:16px;position:relative}
+.appr li:last-child{margin-bottom:0}
+.appr li::before{content:"";position:absolute;left:0;top:8px;width:8px;height:1px;background:var(--ink-2)}
+.appr li b{color:var(--ink);font-weight:600}
+.appr li.no::before{background:var(--signal)}
+code{font-family:var(--mono);font-size:11.5px;color:var(--ink);letter-spacing:.02em}
+
+table{width:100%;border-collapse:collapse;background:var(--plane);
+  border:1px solid var(--line);border-radius:2px}
+th{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-2);text-align:left;padding:9px 16px;border-bottom:1px solid var(--line);font-weight:400}
+td{padding:10px 16px;font-size:13.5px;color:var(--ink);border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+td.who{font-weight:600;width:29%}
+td.mono{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-2)}
+.yes{color:var(--blue);font-weight:600}
+.no{color:var(--signal);font-weight:600}
+
+.nums{position:absolute;left:0;right:0;bottom:0;height:142px;background:var(--ink);
+  display:flex;align-items:center;padding:0 56px;z-index:1}
+.nums .c{flex:1;border-right:1px solid rgba(244,244,242,.16);padding-right:18px}
+.nums .c:last-child{border-right:0;flex:0 0 186px;text-align:right;padding-right:0}
+.nums .v{font-family:var(--disp);font-weight:800;font-variation-settings:"wdth" 108;
+  font-size:40px;line-height:1;color:#F4F4F2;letter-spacing:-.02em}
+.nums .k{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;
+  color:rgba(244,244,242,.62);margin-top:8px;line-height:1.4}
+.nums .brand{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(244,244,242,.62);line-height:1.7}
+.nums .brand b{color:#F4F4F2;font-weight:400}
+
+svg .t-title{font-family:var(--disp);font-weight:700;font-size:14.5px;fill:#16191C;
+  font-variation-settings:"wdth" 104}
+svg .t-lab{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;
+  text-transform:uppercase;fill:#5A6068}
+svg .t-lab-b{fill:#1F45CC} svg .t-lab-s{fill:#A8410F}
+svg .t-body{font-family:"Instrument Sans",sans-serif;font-size:11.5px;fill:#5A6068}
+</style>
+</head>
+<body>
+<div id="map">
+
+  <div class="head z">
+    <div class="kick"><span class="dot"></span><span>System spec · client anonymised</span></div>
+    <h1>Four public forms.<br>One <span class="hl">policy boundary.</span></h1>
+    <p class="sub">Every submission lands in its own table, is gated <b>in Postgres</b> rather than
+    in the page, and is worked through by staff who can change three columns and nothing else.</p>
+  </div>
+
+  <div class="key">
+    <div class="kt"><span>Stack</span><span>Built solo, end to end</span></div>
+    <div class="row"><span class="sw" style="background:#1F45CC"></span><div>
+      <div class="g">01 · Public site</div>
+      <div class="v">Vanilla JS, no framework · one document, hash routing · self-hosted fonts · no cookies, no analytics</div></div></div>
+    <div class="row"><span class="sw" style="background:#A8410F"></span><div>
+      <div class="g">02 · Identity &amp; access</div>
+      <div class="v">Supabase Auth · TOTP second factor enforced by policy · roles in their own table</div></div></div>
+    <div class="row"><span class="sw" style="background:#16191C"></span><div>
+      <div class="g">03 · Data &amp; services</div>
+      <div class="v">Postgres 15 in London · RLS + column GRANTs · SECURITY DEFINER functions · Edge Functions · hosted payments</div></div></div>
+    <div class="row"><span class="sw" style="background:#5A6068"></span><div>
+      <div class="g">04 · Build &amp; proof</div>
+      <div class="v">Python 3 stdlib · a structural checker gates the build · Playwright + psql policy tests</div></div></div>
+  </div>
+
+  <!-- ================= FLOW ================= -->
+  <svg class="z" width="1088" height="470" viewBox="0 0 1088 470"
+       style="display:block;margin:76px 56px 0" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3.2" orient="auto">
+        <path d="M0,0 L8,3.2 L0,6.4 z" fill="#16191C"/></marker>
+      <marker id="arb" markerWidth="9" markerHeight="9" refX="8" refY="3.2" orient="auto">
+        <path d="M0,0 L8,3.2 L0,6.4 z" fill="#1F45CC"/></marker>
+      <marker id="ars" markerWidth="9" markerHeight="9" refX="8" refY="3.2" orient="auto">
+        <path d="M0,0 L8,3.2 L0,6.4 z" fill="#A8410F"/></marker>
+      <marker id="arg" markerWidth="9" markerHeight="9" refX="8" refY="3.2" orient="auto">
+        <path d="M0,0 L8,3.2 L0,6.4 z" fill="#5A6068"/></marker>
+    </defs>
+
+    <text x="0"   y="14" class="t-lab t-lab-b">01 · Submitted by the public</text>
+    <text x="330" y="14" class="t-lab" fill="#16191C">03 · Its own table</text>
+    <text x="616" y="14" class="t-lab" fill="#16191C">04 · Worked through by staff</text>
+
+    <!-- read-back arc -->
+    <path d="M420,72 C420,44 260,36 104,42 L104,70" fill="none" stroke="#5A6068" stroke-width="1.2"
+          stroke-dasharray="5 4" marker-end="url(#arg)" opacity=".85"/>
+    <text x="150" y="32" class="t-lab">The only read-back: a view of date + session. No names, ever.</text>
+
+    <!-- gate -->
+    <rect x="240" y="58" width="56" height="306" rx="3" fill="#A8410F" fill-opacity=".07"
+          stroke="#A8410F" stroke-width="2"/>
+    <text transform="translate(262,358) rotate(-90)" class="t-lab t-lab-s"
+          style="font-size:10px;letter-spacing:.16em">Row-level security</text>
+    <text transform="translate(280,358) rotate(-90)" class="t-lab t-lab-s"
+          style="font-size:10px;letter-spacing:.16em">Column grants · 2FA</text>
+    <text x="216" y="380" class="t-lab t-lab-s">02 · One boundary, four tables</text>
+
+    <!-- row 1 -->
+    <rect x="0" y="72" width="208" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="13" y="94" class="t-title">Venue booking</text>
+    <text x="13" y="113" class="t-body">12-month calendar · terms first</text>
+    <line x1="212" y1="100" x2="234" y2="100" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="302" y1="100" x2="324" y2="100" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <rect x="330" y="72" width="250" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="343" y="94" class="t-title">bookings</text>
+    <text x="343" y="113" class="t-body">Insert 7 named columns · read back none</text>
+
+    <!-- row 2 -->
+    <rect x="0" y="144" width="208" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="13" y="166" class="t-title">Date request</text>
+    <text x="13" y="185" class="t-body">Minimum notice · never shown free</text>
+    <line x1="212" y1="172" x2="234" y2="172" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="302" y1="172" x2="324" y2="172" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <rect x="330" y="144" width="250" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="343" y="166" class="t-title">requests</text>
+    <text x="343" y="185" class="t-body">Separate table · its own decided-at column</text>
+    <line x1="586" y1="150" x2="608" y2="150" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+
+    <!-- operations queue spans rows 1-2 -->
+    <rect x="614" y="72" width="474" height="128" rx="3" fill="#1F45CC" fill-opacity=".06"
+          stroke="#1F45CC" stroke-opacity=".5"/>
+    <text x="630" y="97" class="t-title">Operations queue — approve / decline</text>
+    <text x="630" y="118" class="t-body">Both kinds of request in one list, filtered by state.</text>
+    <text x="630" y="136" class="t-body">Staff ring the enquirer, agree it, then record the outcome.</text>
+    <text x="630" y="162" class="t-lab t-lab-b">Writes status, notes, decided-at — nothing else</text>
+    <text x="630" y="180" class="t-lab">Hidden without the role. RLS is what actually stops them.</text>
+
+    <!-- row 3 -->
+    <rect x="0" y="216" width="208" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="13" y="238" class="t-title">Course registration</text>
+    <text x="13" y="257" class="t-body">Capacity · waiting list</text>
+    <line x1="212" y1="244" x2="234" y2="244" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <line x1="302" y1="244" x2="324" y2="244" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <rect x="330" y="216" width="250" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="343" y="238" class="t-title">registrations</text>
+    <text x="343" y="257" class="t-body">The place column carries no grant at all</text>
+    <line x1="586" y1="244" x2="608" y2="244" stroke="#16191C" stroke-width="1.5" marker-end="url(#ar)"/>
+    <rect x="614" y="216" width="474" height="56" rx="3" fill="#1F45CC" fill-opacity=".06"
+          stroke="#1F45CC" stroke-opacity=".5"/>
+    <text x="630" y="238" class="t-title">Registrations desk — administrators only</text>
+    <text x="630" y="257" class="t-body">Offering a place runs a function that re-counts capacity first</text>
+
+    <!-- row 4 -->
+    <rect x="0" y="288" width="208" height="56" rx="3" fill="#FBFAF7" stroke="#A8410F" stroke-opacity=".55"/>
+    <text x="13" y="310" class="t-title">Enrolment application</text>
+    <text x="13" y="329" class="t-lab t-lab-s">Preview — cannot send</text>
+    <line x1="212" y1="316" x2="234" y2="316" stroke="#A8410F" stroke-width="1.5"
+          stroke-dasharray="5 4" marker-end="url(#ars)" opacity=".75"/>
+    <line x1="302" y1="316" x2="324" y2="316" stroke="#A8410F" stroke-width="1.5"
+          stroke-dasharray="5 4" marker-end="url(#ars)" opacity=".75"/>
+    <rect x="330" y="288" width="250" height="56" rx="3" fill="#FBFAF7" stroke="#16191C"
+          stroke-opacity=".2" stroke-dasharray="5 4"/>
+    <text x="343" y="310" class="t-title">applications</text>
+    <text x="343" y="329" class="t-body">Table applied · the form still sends nothing</text>
+    <line x1="586" y1="316" x2="608" y2="316" stroke="#16191C" stroke-opacity=".45" stroke-width="1.5"
+          stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <rect x="614" y="288" width="474" height="56" rx="3" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".2"/>
+    <text x="630" y="310" class="t-title">Records portal — role-scoped</text>
+    <text x="630" y="329" class="t-body">Special-category data. Held shut until the impact assessment is signed</text>
+
+    <!-- donations, around the outside -->
+    <rect x="0" y="384" width="208" height="56" rx="3" fill="#1F45CC" fill-opacity=".07"
+          stroke="#1F45CC" stroke-opacity=".55"/>
+    <text x="13" y="406" class="t-title">Donation</text>
+    <text x="13" y="425" class="t-body">Fixed tiers plus donor-chooses</text>
+    <path d="M212,412 L604,412" stroke="#1F45CC" stroke-width="1.5" stroke-dasharray="5 4"
+          marker-end="url(#arb)"/>
+    <text x="240" y="404" class="t-lab t-lab-b">Routed around the database entirely</text>
+    <rect x="614" y="384" width="474" height="56" rx="3" fill="#1F45CC" fill-opacity=".06"
+          stroke="#1F45CC" stroke-opacity=".5"/>
+    <text x="630" y="406" class="t-title">Hosted checkout</text>
+    <text x="630" y="425" class="t-body">No server, no webhook, no secret key, no card data, no PCI scope</text>
+
+    <text x="0" y="462" class="t-lab">An admin signpost lists only the areas that account may open — and reads no data of its own</text>
+  </svg>
+
+  <!-- ================= APPROVAL ================= -->
+  <div class="sec z" style="margin-top:26px">
+    <div class="sech"><span>Administration — what a decision may and may not do</span><span class="wire"></span></div>
+    <div class="appr">
+      <div class="l">
+        <h5>The only transitions that exist</h5>
+        <svg width="410" height="112" viewBox="0 0 410 112" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="2.8" orient="auto">
+            <path d="M0,0 L7,2.8 L0,5.6 z" fill="#16191C"/></marker></defs>
+          <rect x="0" y="34" width="92" height="30" rx="15" fill="#DFDCD2" stroke="#16191C" stroke-opacity=".25"/>
+          <text x="46" y="53" text-anchor="middle" class="t-lab" fill="#16191C">New</text>
+          <line x1="96" y1="40" x2="152" y2="22" stroke="#16191C" stroke-width="1.3" marker-end="url(#a2)"/>
+          <line x1="96" y1="58" x2="152" y2="76" stroke="#16191C" stroke-width="1.3" marker-end="url(#a2)"/>
+          <rect x="158" y="4" width="104" height="30" rx="15" fill="#1F45CC" fill-opacity=".1"
+                stroke="#1F45CC" stroke-opacity=".55"/>
+          <text x="210" y="23" text-anchor="middle" class="t-lab t-lab-b">Confirmed</text>
+          <rect x="158" y="62" width="104" height="30" rx="15" fill="#A8410F" fill-opacity=".08"
+                stroke="#A8410F" stroke-opacity=".5"/>
+          <text x="210" y="81" text-anchor="middle" class="t-lab t-lab-s">Declined</text>
+          <line x1="266" y1="19" x2="308" y2="19" stroke="#16191C" stroke-width="1.3" marker-end="url(#a2)"/>
+          <rect x="314" y="4" width="96" height="30" rx="15" fill="#FBFAF7" stroke="#16191C" stroke-opacity=".25"/>
+          <text x="362" y="23" text-anchor="middle" class="t-lab">Cancelled</text>
+          <path d="M362,38 C362,104 200,104 50,100 L50,68" fill="none" stroke="#5A6068" stroke-width="1.1"
+                stroke-dasharray="4 4" marker-end="url(#a2)" opacity=".75"/>
+          <text x="150" y="110" class="t-lab" style="font-size:8.5px">Reopen — the row is never deleted</text>
+        </svg>
+      </div>
+      <div class="r">
+        <h5>Rules the database holds, not the interface</h5>
+        <ul>
+          <li>A decision requires a session that is signed in <b>and second-factor verified</b>. Password alone reads nothing.</li>
+          <li>Staff may write <code>status</code>, <code>notes</code> and <code>decided-at</code>. Never the applicant's own name, address or requested date.</li>
+          <li class="no"><b>Nobody can delete.</b> A request is closed by moving its state, which leaves the trail intact.</li>
+          <li>Wrong details are declined and re-entered — so the record always shows what the person actually asked for.</li>
+          <li>Granting a place is not an update. That column carries no grant, so it goes through a function that re-counts capacity and refuses to overfill.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MATRIX ================= -->
+  <div class="sec z" style="margin-top:24px">
+    <table>
+      <tr><th>Who is asking</th><th>Can write</th><th>Can read back</th></tr>
+      <tr><td class="who">The public</td>
+        <td class="mono">7 named columns, insert only</td>
+        <td class="mono"><span class="no">0 rows.</span> Not one.</td></tr>
+      <tr><td class="who">Staff, second factor not entered</td>
+        <td class="mono"><span class="no">Nothing</span></td>
+        <td class="mono"><span class="no">Nothing</span> — the policy checks it, not the page</td></tr>
+      <tr><td class="who">Operations role, verified</td>
+        <td class="mono"><span class="yes">3 columns</span> — status, notes, decided-at</td>
+        <td class="mono">Its own queue, and provably nothing else</td></tr>
+      <tr><td class="who">Administrator, verified</td>
+        <td class="mono"><span class="yes">As granted</span> + capacity-checked function</td>
+        <td class="mono">Everything — so the role is given sparingly</td></tr>
+    </table>
+  </div>
+
+  <div class="nums">
+    <div class="c"><div class="v">0</div><div class="k">Rows the public key<br>can read back</div></div>
+    <div class="c"><div class="v">13</div><div class="k">Postgres migrations,<br>tested before they ship</div></div>
+    <div class="c"><div class="v">19</div><div class="k">Test suites, browser<br>and database</div></div>
+    <div class="c"><div class="v">0</div><div class="k">Rows anyone<br>can delete</div></div>
+    <div class="c"><div class="brand"><b>Yameen Bux</b><br>YSB Designs<br>ysbdesigns.uk</div></div>
+  </div>
+
+</div>
+</body>
+</html>
