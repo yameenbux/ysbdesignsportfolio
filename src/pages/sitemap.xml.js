@@ -23,6 +23,7 @@ const pages = [
   ['/taiyabah.html',      '0.7'],
   ['/venetian.html',      '0.7'],
   ['/hairbychrissy.html', '0.7'],
+  ['/diamond.html',       '0.7'],
   ['/ellash.html',        '0.5'],
   ['/buxtravel.html',     '0.5'],
   ['/luxescent.html',     '0.5'],

@@ -71,9 +71,16 @@ const description =
         <a href={p.href} class="shot group relative block aspect-[16/10] overflow-hidden border border-line bg-plane">
           <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async"
                class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:-translate-y-[4%] group-hover:scale-[1.045]" />
-          <span class="absolute right-2.5 top-2.5 flex items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
-            <span class="pulse"></span><span class="label m-0 text-[10px]">Live</span>
-          </span>
+          {p.live !== false && (
+            <span class="absolute right-2.5 top-2.5 flex items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
+              <span class="pulse"></span><span class="label m-0 text-[10px]">Live</span>
+            </span>
+          )}
+          {p.live === false && (
+            <span class="absolute right-2.5 top-2.5 flex items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
+              <span class="label m-0 text-[10px]">Built · not live yet</span>
+            </span>
+          )}
         </a>
       </article>
     ))}

@@ -5,10 +5,10 @@ export const cases = {
     "slug": "taiyabah",
     "title": "Taiyabah Masjid",
     "kind": "Community project",
-    "role": "PWA · Website · Signage · Home display · Serverless backend",
+    "role": "PWA · Website · Signage · Home display · Accounts & staff portals · Serverless backend",
     "problem": "A Bolton masjid needed prayer times in front of its community every day &mdash; on phones, on the wall, and on the web. Three separate problems, all being solved by hand.",
-    "approach": "I built <strong>one system</strong>: an installable app with live audio and push alerts, a public website, two always-on display screens inside the building, and a home display anyone can run on a spare tablet or TV that sounds the Adhan and Iqamah on time. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice.",
-    "outcome": "The community opens the app daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it.",
+    "approach": "I built <strong>one system</strong>: an installable app with live audio and push alerts, a public website, two always-on display screens inside the building, and a home display anyone can run on a spare tablet or TV that sounds the Adhan and Iqamah on time. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice. The website has since been rebuilt around <strong>accounts and staff portals</strong>. Visitors register, confirm their email and sign in with two-step verification; four staff areas sit behind one set of accounts and one set of roles — hall and nikāḥ bookings, adult course sign-ups, a madrasah portal for parents and teachers, and an admin view over all of it. Hall hire takes a whole day, <strong>holds the date for thirty minutes</strong> while the hirer pays a deposit through Stripe, and confirms the booking without an office step; the rate is stored on the booking, so one taken in March keeps March's price. Roles are enforced in the database rather than in the interface, so the hall office role reaches hall bookings and provably nothing else.",
+    "outcome": "The community opens the app daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it. The rebuilt site, the accounts and the four portals are finished and staged, waiting on the move to the masjid's own domain. Online booking is deliberately switched off on the public page until the office's diary goes in — the calendar shows how it will work and says plainly that it is not live yet.",
     "links": [
       {
         "href": "https://taiyabahapp.ysbdesigns.uk/",
@@ -63,9 +63,25 @@ export const cases = {
         "h": 675,
         "caption": "New-build appeal · foyer",
         "portrait": true
+      },
+      {
+        "src": "/assets/img/taiyabah-hallhire.jpg",
+        "alt": "The Taiyabah Centre hall hire page, showing the availability calendar and the venue details",
+        "w": 760,
+        "h": 528,
+        "caption": "Hall hire · availability, slots and terms",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/taiyabah-venue.jpg",
+        "alt": "The venue hire portal, showing incoming hall booking requests for staff to confirm or decline",
+        "w": 760,
+        "h": 532,
+        "caption": "Venue hire portal · the office's working screen",
+        "portrait": false
       }
     ],
-    "description": "A prayer-times app, public website and two always-on display screens, designed, built and deployed for a Bolton masjid."
+    "description": "A prayer-times app, public website, two always-on display screens, and the accounts and staff portals behind them — designed, built and deployed for a Bolton masjid."
   },
   "venetian": {
     "slug": "venetian",
@@ -166,6 +182,43 @@ export const cases = {
       }
     ],
     "description": "A booking platform for a London hair extension specialist — live availability, deposits and an admin calendar, built with no framework and no dependencies."
+  },
+  "diamond": {
+    "slug": "diamond",
+    "title": "Diamond Heating & Plumbing",
+    "kind": "Client",
+    "role": "Single-page site · WhatsApp photo handoff · Static export",
+    "problem": "A Bolton heating engineer, 26 years on the tools, gets rung by people who cannot describe what is wrong. &ldquo;The boiler&rsquo;s not working&rdquo; costs a visit to find out it was a part he could have carried in the van. What he needs before he sets off is a photo.",
+    "approach": "One page, built for a phone, whose only job is to get a customer&rsquo;s details <strong>and photos of the fault</strong> into his WhatsApp in about a minute. That is harder than it sounds, because <strong>a WhatsApp link cannot carry an image</strong> — there is no parameter or trick that attaches one. So the form takes the only route that exists from a web page: the operating system&rsquo;s share sheet, opened with the message text and the photos already in it. On desktop, where browsers cannot share files, it falls back to a plain link and the confirmation screen tells the customer their photos did not travel and to add them with the paperclip. The message body says <strong>&ldquo;photos to follow&rdquo; rather than &ldquo;attached&rdquo;</strong>, so he is never promised photos that are not there. Photos are resized in the browser and <strong>never touch a server</strong> — which keeps the hosting free and avoids holding customers&rsquo; photographs of the inside of their homes.",
+    "outcome": "Built and handed over, waiting on a mailbox and on real photography of the van and the work before it goes live. The design is taken off the vehicle rather than invented: black bodywork, orange keyline lettering, the dot-separated service list from the doors, and Gas Safe yellow used only where it appears on the van.",
+    "links": [],
+    "shots": [
+      {
+        "src": "/assets/img/diamond-web.jpg",
+        "alt": "The Diamond Heating and Plumbing home page, with the van drawn in orange keyline on black",
+        "w": 760,
+        "h": 475,
+        "caption": "Home · the van, drawn in keyline",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/diamond-form.jpg",
+        "alt": "The job form, which turns the customer's answers and photos into one WhatsApp message",
+        "w": 760,
+        "h": 528,
+        "caption": "The form · one WhatsApp message, photos attached",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/diamond-phone.jpg",
+        "alt": "The Diamond Heating and Plumbing site on a phone, with call and WhatsApp always in reach",
+        "w": 340,
+        "h": 736,
+        "caption": "On a phone · the sticky call and WhatsApp bar",
+        "portrait": true
+      }
+    ],
+    "description": "A one-page site for a Bolton heating engineer, built so a customer can get photos of the fault into WhatsApp in under a minute."
   },
   "ellash": {
     "slug": "ellash",

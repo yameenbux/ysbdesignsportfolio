@@ -85,18 +85,31 @@ Run `npm run build` before claiming a change works.
 
 ## Content
 
-### The three case studies
+### The lead case studies
 
-Chosen on evidence, not recency — these are the three with enough captured
+Chosen on evidence, not recency — these are the ones with enough captured
 material to carry a screenshot-led layout.
 
 | Project | Type — label it accurately | Assets |
 |---|---|---|
-| Taiyabah Masjid | Community project | 5 captures |
+| Taiyabah Masjid | Community project | 7 captures |
 | The Venetian Company | Paying client, live on their own domain | 4 |
 | Hair by Chrissy | Paying client | 4 |
+| Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
 
-Do not imply all three were commissions. Taiyabah is community work; say so.
+Do not imply these were all commissions, and do not imply they are all live.
+Taiyabah is community work; say so. Diamond is finished and handed over but
+has no public address yet.
+
+**`live: false` in `projects.js`** is what drives that. The homepage badge
+reads it: `live` gets the pulsing "Live" chip, `live: false` gets
+"Built · not live yet". A Live badge on a site nobody can visit is exactly the
+kind of claim the copy rules bar, so set the flag rather than removing the
+badge.
+
+Client business facts — a trading number, a Gas Safe registration, an office
+line — belong in the client's own screenshots, never in YSB's copy. The only
+number that appears as text on this site is YSB's own.
 
 ### Kept but unlisted
 
@@ -157,6 +170,7 @@ Five navigable pages, three case studies, four unlisted.
 | `/taiyabah.html` | Case study — community project | via work |
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
+| `/diamond.html` | Case study — client, built and not live yet | via work |
 | `/about.html` | About, with services folded in | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept, unlisted | no |
@@ -342,6 +356,21 @@ bugs fell out of it: 184px of horizontal overflow from the rig's annotations
 at 1440, and 82–104px more between 768 and 960 from the `left:50%` anchor.
 Lighthouse, measured for the first time with the actual webfonts:
 96/100/100/100 on the homepage, 98–99 elsewhere, CLS 0.000 throughout.
+
+**Phase 8 — catch the site up with the work. DONE.** Two projects' worth of
+new material, gathered from the source repositories rather than from memory:
+
+- **Taiyabah** grew a website rebrand with accounts and four staff portals —
+  hall and nikāḥ bookings with Stripe deposits and a thirty-minute date hold,
+  adult course sign-ups, a madrasah portal, and roles enforced in the database
+  rather than the interface. Two new captures. Stated as staged, not live: the
+  masjid's own hall-hire page says online booking is not switched on, and
+  `robots.txt` there blocks crawlers pending the domain move.
+- **Diamond Heating & Plumbing**, a new client case study. Its screenshots did
+  not exist, so the site was built from source and rendered at 1440 and 390.
+
+Checked before publishing: the venue-portal capture uses Ofcom's reserved
+`07700 900xxx` drama range, not real bookings.
 
 ### Known, unfixed
 
