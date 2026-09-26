@@ -220,6 +220,43 @@ export const cases = {
     ],
     "description": "A one-page site for a Bolton heating engineer, built so a customer can get photos of the fault into WhatsApp in under a minute."
   },
+  "masjidone": {
+    "slug": "masjidone",
+    "title": "MasjidOne",
+    "kind": "Own product",
+    "role": "Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres · Stripe · OneSignal",
+    "problem": "A masjid runs its week across half a dozen systems that have never heard of each other &mdash; prayer times in one, the website in another, the madrasah register on paper, fees in a book, donations somewhere else again. The office knows the same family three separate times and can only join them up by remembering. Plenty of products do the congregation side well; the part nobody does is the <strong>madrasah's daily operations</strong> &mdash; the register marked each evening, the sabaq heard, the fee due &mdash; in the same system, and then giving a parent a view of their own child.",
+    "approach": "So MasjidOne is one record of one family, reachable from both sides. Four surfaces per masjid &mdash; the website, the in-building screens, a congregation app and the office portal &mdash; on one Supabase Postgres, where <strong>every table carries a masjid_id</strong> and every policy and function filters on it. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing that makes the product work happens <em>inside</em> one masjid rather than between them, so the separation would have bought nothing and cost a great deal to run. Row Level Security and SECURITY DEFINER functions scope every query to one masjid; Stripe runs an account per masjid at 0% commission on donations.",
+    "outcome": "This is the part of it I have built and can show: the marketing site a committee lands on after a conversation. Next.js 15 exported to static files, so there is nothing running at request time and nothing to keep patched. <strong>The madrasah portal and parent access are not built yet</strong>, and the pricing page says so in the plan itself rather than in a footnote &mdash; one plan reads <em>in development</em>, the other <em>live</em>. Every interface shown on the site is labelled as a preview with example data and no masjid named.",
+    "links": [],
+    "shots": [
+      {
+        "src": "/assets/img/masjidone-web.jpg",
+        "alt": "The MasjidOne home page: the madrasah and the congregation, on one system",
+        "w": 760,
+        "h": 475,
+        "caption": "The marketing site · previews labelled as previews",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/masjidone-pricing.jpg",
+        "alt": "The pricing page, with the madrasah plan tagged in development and the complete plan tagged live",
+        "w": 760,
+        "h": 475,
+        "caption": "Pricing · what is built says live, what is not says in development",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/masjidone-phone.jpg",
+        "alt": "The MasjidOne site on a phone",
+        "w": 340,
+        "h": 736,
+        "caption": "On a phone",
+        "portrait": true
+      }
+    ],
+    "description": "A product putting a masjid's madrasah and its congregation on one system — one record of one family, on Supabase with a masjid_id on every table."
+  },
   "ellash": {
     "slug": "ellash",
     "title": "èllash",

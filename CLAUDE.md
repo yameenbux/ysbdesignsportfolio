@@ -96,16 +96,19 @@ material to carry a screenshot-led layout.
 | The Venetian Company | Paying client, live on their own domain | 4 |
 | Hair by Chrissy | Paying client | 4 |
 | Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
+| MasjidOne | **Own product**, part-built — not client work | 3 |
 
 Do not imply these were all commissions, and do not imply they are all live.
 Taiyabah is community work; say so. Diamond is finished and handed over but
 has no public address yet.
 
-**`live: false` in `projects.js`** is what drives that. The homepage badge
-reads it: `live` gets the pulsing "Live" chip, `live: false` gets
-"Built · not live yet". A Live badge on a site nobody can visit is exactly the
-kind of claim the copy rules bar, so set the flag rather than removing the
-badge.
+**`status` in `projects.js`** drives the homepage badge. Omit it and the
+project gets the pulsing "Live" chip; set it and that exact string prints flat
+instead — currently "Built · not live yet" for Diamond and "In development"
+for MasjidOne. It replaced a boolean, which could only say live or not and had
+no way to describe a published marketing site in front of a part-built
+product. A Live badge on either is the kind of claim the copy rules bar, so
+put the honest label here rather than dropping the badge.
 
 Client business facts — a trading number, a Gas Safe registration, an office
 line — belong in the client's own screenshots, never in YSB's copy. The only
@@ -171,6 +174,7 @@ Five navigable pages, three case studies, four unlisted.
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
 | `/diamond.html` | Case study — client, built and not live yet | via work |
+| `/masjidone.html` | Case study — own product, in development | via work |
 | `/about.html` | About, with services folded in | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept, unlisted | no |
@@ -402,6 +406,27 @@ where Google truncates. All are now under 160 characters.
 `og:description` and the `twitter:description`, so the phrase that was wrong
 about Hair by Chrissy appeared three times in that page's head after the body
 copy had already been fixed. Grep the built HTML, not the source.
+
+**Phase 10 — MasjidOne. DONE.** Added as a fifth lead case and the first
+entry that is not client work: a product putting a masjid's madrasah and its
+congregation on one Supabase Postgres, with a `masjid_id` on every table.
+
+Its repository is only the marketing site; the platform lives elsewhere, and
+the write-up says so rather than implying the whole thing is built. Three
+constraints came from MasjidOne's own `CLAUDE.md` and are binding here too:
+**never claim a feature that is not built** (the madrasah portal and parent
+access are in development), never say no competitor does the whole masjid,
+and compliance is a commitment rather than a fact. The pricing screenshot is
+the best evidence for all of it — their own plan cards read *in development*
+and *live*.
+
+The architecture SVG was rendered and rejected: it relies on a font that is
+not available here, so mermaid's text metrics overflow every box and the
+labels clip. Do not ship it without the font.
+
+`YSB Ventures Ltd` appears in that repository's README and is deliberately
+**not** carried across — the limited-company details were removed from this
+site at the user's request and stay off.
 
 ### Known, unfixed
 
