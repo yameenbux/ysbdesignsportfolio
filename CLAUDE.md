@@ -114,19 +114,17 @@ The split is driven by **`product: true`** in `src/data/projects.js`, not by
 matching on the `kind` string — `kind` is display copy and would be a fragile
 thing to branch on.
 
-**`status` is the badge printed over each homepage shot.** Omit it and the
-project gets the pulsing "Live" chip; set it and that exact string is shown
-flat instead. Keep it to about two words: the chip is sized for "Live", and a
-long one lies across the shot and covers the client's own logo, which is how
-"Built · not live yet" became "Not live yet".
+**`status` in `projects.js`** drives the badge printed over each homepage
+shot. Omit it and the project gets the pulsing "Live" chip; set it and that
+exact string prints flat instead — currently "Not live yet" for Diamond and
+"In development" for MasjidOne. It replaced a boolean, which could only say
+live or not and had no way to describe a published marketing site in front of
+a part-built product. A Live badge on either is the kind of claim the copy
+rules bar, so put the honest label here rather than dropping the badge.
 
-**`status` in `projects.js`** drives the homepage badge. Omit it and the
-project gets the pulsing "Live" chip; set it and that exact string prints flat
-instead — currently "Built · not live yet" for Diamond and "In development"
-for MasjidOne. It replaced a boolean, which could only say live or not and had
-no way to describe a published marketing site in front of a part-built
-product. A Live badge on either is the kind of claim the copy rules bar, so
-put the honest label here rather than dropping the badge.
+**Keep a status to about two words.** The chip is sized for "Live"; a long one
+lies across the shot and covers the client's own logo, which is how
+"Built · not live yet" became "Not live yet".
 
 Client business facts — a trading number, a Gas Safe registration, an office
 line — belong in the client's own screenshots, never in YSB's copy. The only
@@ -182,12 +180,12 @@ against this rather than reopening it.
 
 ### Sitemap
 
-Five navigable pages, three case studies, four unlisted.
+Four navigable pages, five case studies, three unlisted.
 
 | URL | Page | In nav |
 |---|---|---|
 | `/` | Home | — |
-| `/work.html` | Work index — the three, as cases not cards | yes |
+| `/work.html` | Work index — the five, in two groups, as cases not cards | yes |
 | `/taiyabah.html` | Case study — community project | via work |
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
