@@ -40,7 +40,7 @@ const step = 360 / n;
     <div class="stage-head">
       <p class="eyebrow m-0" id="wheelHeading">Selected work</p>
       <span class="head-sep" aria-hidden="true"></span>
-      <a class="eyebrow ul-draw head-all" href="/work.html">All {n}, written up →</a>
+      <a class="eyebrow ul-draw head-all" href="/work.html">See all {n} →</a>
     </div>
 
     <div class="ring-box">
@@ -67,7 +67,9 @@ const step = 360 / n;
       {items.map((p, i) => (
         <div class="read" data-read={i} hidden={i !== 0}>
           <p class="eyebrow eyebrow-accent m-0">
-            <span class="live" aria-hidden="true"></span> {p.kind} · {p.where}
+            {p.status
+              ? <span class="read-status">{p.status}</span>
+              : <span class="live" aria-hidden="true"></span>} {p.kind} · {p.where}
           </p>
           <h2 class="read-name">{p.name}</h2>
           <p class="read-line">{p.line}</p>
@@ -225,6 +227,15 @@ const step = 360 / n;
     line-height: 1.15;
   }
   .card-kind { display: block; margin-top: 3px; font-size: 11px; }
+
+  /* Stands in for the live dot on anything that is not live. Bordered rather
+     than filled so it reads as a caveat, not a second accent. */
+  .read-status {
+    display: inline-block; margin-right: 4px; padding: 1px 6px;
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-2);
+    font-size: 10px; letter-spacing: 0.14em;
+  }
 
   /* The one at top dead centre. */
   .spoke.is-active .card-shot {

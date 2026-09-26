@@ -5,16 +5,29 @@
  * `line` is the wheel's read-out copy: one sentence, drawn from that case
  * study's own problem or outcome. Nothing here is a metric, a rating or a
  * client count.
+ *
+ * `product: true` separates the things I own from the things I was asked to
+ * build. The work index groups on this, not on the `kind` string, which is
+ * display copy and would be a fragile thing to branch on.
+ *
+ * `status` is the badge printed over a shot. Omit it and the project gets the
+ * pulsing "Live" chip; set it and that exact string is shown flat instead. A
+ * Live badge on something nobody can visit, or on a product that is part-built,
+ * is the one kind of claim the copy rules bar — so the honest label goes here
+ * rather than the badge being removed. Keep it to about two words: a long one
+ * lies across the shot and covers the client's own logo.
  */
 
-// All six, in the order they sit on the wheel. Taiyabah first because it is
-// the largest piece of work and the strongest screenshot; the two smallest
-// sit opposite each other so no half of the wheel is weaker than the other.
+// Everything, in the order it sits on the wheel.
 export const all = [
   {
     slug: 'taiyabah', href: '/taiyabah.html', name: 'Taiyabah Masjid',
     kind: 'Community project', where: 'Bolton',
-    line: 'Prayer times in front of a whole community every day. One system feeds a phone app, a public website, two always-on screens in the building and a home display.',
+    line: 'Prayer times in front of a whole community every day, and the office work behind them: one system feeding a phone app, a website, two screens in the building and a home display.',
+    stack: 'PWA + Cloudflare Worker · Supabase/Postgres · Stripe · OneSignal push · Signage',
+    outcome: 'Prayer times in front of a whole community every day, and the office work behind them. One system feeds a phone app, a public website, two always-on screens in the building and a home display — and the rebuilt site now carries accounts, hall and nikāḥ bookings with Stripe deposits, course sign-ups and a madrasah portal.',
+    problem: 'A Bolton masjid needed prayer times in front of its community every day — on phones, on the wall, and on the web. Three separate problems, all being solved by hand.',
+    approach: 'One system instead of three. An installable app with live audio and push alerts, a public website, two always-on screens inside the building, and a home display anyone can run on a spare tablet or TV. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice.',
     layers: { interface: 96, software: 88, infra: 92 },
     img: '/assets/img/taiyabah-web.jpg', alt: 'The Taiyabah Masjid website',
   },
@@ -22,15 +35,12 @@ export const all = [
     slug: 'venetian', href: '/venetian.html', name: 'The Venetian Company',
     kind: 'Client', where: 'Nationwide',
     line: 'Plaster and microcement work that lived entirely on Instagram. Now a site on their own domain, art-directed around their own photography.',
+    stack: 'Astro · Tailwind · TypeScript · Identity · Design → build → deploy',
+    outcome: 'Venetian plaster and microcement work that lived entirely on Instagram — nothing to send anyone, nothing that turned up in a search. Now a site on their own domain, art-directed around their own photography.',
+    problem: 'They lay Venetian plaster and microcement in homes across the country. The work is genuinely beautiful and it lived entirely on Instagram — nothing to send anyone, nothing that turned up in a search.',
+    approach: 'I built the site before being asked. One page, art-directed around their own photography: a full-bleed hero, the two materials explained side by side, how a job runs, what it costs, and one action running through all of it — book a call.',
     layers: { interface: 94, software: 34, infra: 62 },
     img: '/assets/img/venetian-web.jpg', alt: 'The Venetian Company website',
-  },
-  {
-    slug: 'hairbychrissy', href: '/hairbychrissy.html', name: 'Hair by Chrissy',
-    kind: 'Client', where: 'London',
-    line: 'Bookings arrived as Instagram DMs, with no calendar. The site is the booking system: live availability, deposits and a real calendar behind it.',
-    layers: { interface: 80, software: 98, infra: 70 },
-    img: '/assets/img/hbc-web.jpg', alt: 'The Hair by Chrissy booking site',
   },
   {
     slug: 'ellash', href: '/ellash.html', name: 'èllash',
@@ -40,11 +50,34 @@ export const all = [
     img: '/assets/img/ellash-web.jpg', alt: 'The èllash booking page',
   },
   {
+    slug: 'diamond', href: '/diamond.html', name: 'Diamond Heating & Plumbing',
+    kind: 'Client', where: 'Bolton',
+    status: 'Not live yet',
+    line: 'A heating engineer rung by people who could not describe the fault. The site gets their details and photos of the problem into his WhatsApp in about a minute.',
+    stack: 'Next.js 15, static export · TypeScript · Tailwind 4 · shadcn/ui',
+    outcome: 'A heating engineer who kept being rung by people who could not describe the fault. The site gets their details and photos of the problem into his WhatsApp in about a minute, so he arrives with the right part.',
+    problem: 'A Bolton heating engineer gets rung by people who cannot describe what is wrong. "The boiler\'s not working" costs a visit to find out it was a part he could have carried in the van.',
+    approach: 'One page, built for a phone. A WhatsApp link cannot carry an image, so the form uses the operating system\'s share sheet — message text and photos already in it — and falls back to a plain link on desktop, where it tells the customer their photos did not travel. Photos are resized in the browser and never touch a server.',
+    layers: { interface: 92, software: 54, infra: 36 },
+    img: '/assets/img/diamond-web.jpg', alt: 'The Diamond Heating and Plumbing home page',
+  },
+  {
     slug: 'buxtravel', href: '/buxtravel.html', name: 'Bux Travel',
     kind: 'In-house', where: 'Bolton',
     line: 'A minibus operator whose customers rang to ask the same questions. The site answers them before the phone goes.',
     layers: { interface: 88, software: 24, infra: 56 },
     img: '/assets/img/bux-web.jpg', alt: 'The Bux Travel website',
+  },
+  {
+    slug: 'hairbychrissy', href: '/hairbychrissy.html', name: 'Hair by Chrissy',
+    kind: 'Client', where: 'London',
+    line: 'Bookings arrived as Instagram DMs, with no calendar. The site is the booking system: live availability, deposits and a real calendar behind it.',
+    stack: 'Node API on Render · Supabase/Postgres · Stripe Checkout · Unbuilt front end',
+    outcome: 'Bookings arrived as Instagram DMs, with no calendar and no way to stop two people asking for the same Saturday. The site is the booking system: live availability, cash or card with a Stripe deposit, and a dashboard where she sets her own days, hours and time off.',
+    problem: 'Chrissy fits hair extensions by hand in a private London studio. Bookings came through Instagram DMs — a thread per client, no calendar, and no way to stop two people asking for the same Saturday.',
+    approach: 'The site is not a brochure, it is the booking system. One unbuilt front end served two ways: a Node API on Render with Supabase behind it runs the live calendar, the dashboard and Stripe Checkout, and the copy published to Pages falls back to enquiry mode rather than showing a calendar that only looks live.',
+    layers: { interface: 80, software: 98, infra: 70 },
+    img: '/assets/img/hbc-web.jpg', alt: 'The Hair by Chrissy booking site',
   },
   {
     slug: 'luxescent', href: '/luxescent.html', name: 'LuxeScent UK',
@@ -53,30 +86,22 @@ export const all = [
     layers: { interface: 90, software: 30, infra: 42 },
     img: '/assets/img/luxe-web.jpg', alt: 'The LuxeScent UK website',
   },
+  {
+    slug: 'masjidone', href: '/masjidone.html', name: 'MasjidOne',
+    kind: 'Own product', where: 'Bolton',
+    product: true,
+    status: 'In development',
+    line: 'A masjid’s madrasah and its congregation on one record of one family — four surfaces on one Postgres, with a masjid_id on every table.',
+    stack: 'Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres · Stripe',
+    outcome: 'Four surfaces on one Supabase Postgres, with a masjid_id on every table and Row Level Security scoping every query to one masjid. The marketing site is built and published; the madrasah portal and parent access are in development, and the pricing page says which is which on the plan card itself.',
+    problem: 'The office knows the same family three separate times — prayer times in one system, the website in another, the register on paper, fees in a book — and can only join them up by remembering.',
+    approach: 'One Supabase Postgres behind four surfaces per masjid, with Row Level Security scoping every query to one masjid. What I have built and can show is the marketing site: Next.js 15 exported to static files. The madrasah portal and parent access are not built yet, and the pricing page says so in the plan itself.',
+    layers: { interface: 88, software: 94, infra: 82 },
+    img: '/assets/img/masjidone-web.jpg', alt: 'The MasjidOne marketing site',
+  },
 ];
 
-// The three with enough captured material to carry a screenshot-led layout
-// (CLAUDE.md, "The three case studies"). The work index leads on these.
-export const lead = [
-  {
-    ...all[0],
-    stack: 'PWA · Website · Signage · Home display · Serverless backend',
-    outcome: 'Prayer times in front of a whole community every day. One system feeds a phone app, a public website, two always-on screens inside the building, and a home display for a spare tablet.',
-    problem: 'A Bolton masjid needed prayer times in front of its community every day — on phones, on the wall, and on the web. Three separate problems, all being solved by hand.',
-    approach: 'One system instead of three. An installable app with live audio and push alerts, a public website, two always-on screens inside the building, and a home display anyone can run on a spare tablet or TV. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice.',
-  },
-  {
-    ...all[1],
-    stack: 'Website · Identity · Design → build → deploy',
-    outcome: 'Venetian plaster and microcement work that lived entirely on Instagram — nothing to send anyone, nothing that turned up in a search. Now a site on their own domain, art-directed around their own photography.',
-    problem: 'They lay Venetian plaster and microcement in homes across the country. The work is genuinely beautiful and it lived entirely on Instagram — nothing to send anyone, nothing that turned up in a search.',
-    approach: 'I built the site before being asked. One page, art-directed around their own photography: a full-bleed hero, the two materials explained side by side, how a job runs, what it costs, and one action running through all of it — book a call.',
-  },
-  {
-    ...all[2],
-    stack: 'Booking platform · Front end · Backend · Payments',
-    outcome: 'Bookings arrived as Instagram DMs, with no calendar and no way to stop two people asking for the same Saturday. The site is the booking system: live availability, deposits, and a real calendar behind it.',
-    problem: 'Chrissy fits hair extensions by hand in a private London studio. Bookings came through Instagram DMs — a thread per client, no calendar, and no way to stop two people asking for the same Saturday.',
-    approach: 'The site is not a brochure, it is the booking system. Pick a service, see genuine live availability, take a slot, pay a deposit. Behind it sits a real calendar, an admin view, deposit handling and automatic confirmation emails.',
-  },
-];
+// The ones with enough captured material to carry a screenshot-led write-up.
+// Derived from a field rather than by index, so reordering the wheel above
+// cannot silently change which projects the work index writes up.
+export const lead = all.filter((p) => p.problem);

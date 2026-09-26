@@ -88,25 +88,63 @@ Run `npm run build` before claiming a change works.
 
 ## Content
 
-### The three case studies
+### The lead case studies
 
-Chosen on evidence, not recency — these are the three with enough captured
+Chosen on evidence, not recency — these are the ones with enough captured
 material to carry a screenshot-led layout.
 
 | Project | Type — label it accurately | Assets |
 |---|---|---|
-| Taiyabah Masjid | Community project | 5 captures |
+| Taiyabah Masjid | Community project | 7 captures |
 | The Venetian Company | Paying client, live on their own domain | 4 |
 | Hair by Chrissy | Paying client | 4 |
+| Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
+| MasjidOne | **Own product**, part-built — not client work | 3 |
 
-Do not imply all three were commissions. Taiyabah is community work; say so.
+Do not imply these were all commissions, and do not imply they are all live.
+Taiyabah is community work; say so. Diamond is finished and handed over but
+has no public address yet.
+
+### Two groups: work for others, and my own products
+
+**The work index** splits its written-up projects in two — **"Built for
+other people"** (three paying clients plus Taiyabah) and **"Built for
+myself"** (MasjidOne). A product I own is a different claim from work someone
+paid me for, and mixing them lets the products read as clients, which would
+be the site inventing a client count.
+
+The homepage does not split: it is the wheel, one ring over everything. See
+"Homepage section order".
+
+The split is driven by **`product: true`** in `src/data/projects.js`, not by
+matching on the `kind` string — `kind` is display copy and would be a fragile
+thing to branch on.
+
+**`status` in `projects.js`** says a project is not simply live. Omit it and
+the wheel's read-out shows the pulsing live dot; set it and that exact string
+prints in a bordered chip where the dot would be — currently "Not live yet"
+for Diamond and "In development" for MasjidOne. The read-out printed the dot
+unconditionally until Phase 11; a live indicator on something nobody can
+visit, or on a product that is part-built, is exactly the claim the copy
+rules bar, so **anything that is not live needs a `status` here.**
+
+**Keep a status to about two words.** It sits inline in a 12px label; a long
+one wraps the line it shares with `kind` and `where`.
+
+Client business facts — a trading number, a Gas Safe registration, an office
+line — belong in the client's own screenshots, never in YSB's copy. The only
+number that appears as text on this site is YSB's own.
 
 ### Kept but unlisted
 
-`ellash.html`, `buxtravel.html`, `luxescent.html` are live and indexed. They
-stay building and reachable at their existing URLs, simply not linked from the
-work index. This satisfies "every existing URL resolves" with no redirect
-machinery. Do not delete them.
+`ellash.html`, `buxtravel.html`, `luxescent.html` are live and indexed, and
+must keep building and resolving at their existing URLs. Do not delete them.
+
+**On this branch they are no longer unlisted.** The wheel is one ring over
+everything, so they appear on it, and the work index lists them under "Also
+built" rather than pretending they do not exist. They are still not written
+up as full cases — there is not enough captured material — which is what
+`lead` selects for.
 
 ### Copy rules
 
@@ -151,18 +189,20 @@ against this rather than reopening it.
 
 ### Sitemap
 
-Five navigable pages, three case studies, four unlisted.
+Four navigable pages, five case studies, three unlisted.
 
 | URL | Page | In nav |
 |---|---|---|
 | `/` | Home | — |
-| `/work.html` | Work index — the three, as cases not cards | yes |
+| `/work.html` | Work index — the five, in two groups, as cases not cards | yes |
 | `/taiyabah.html` | Case study — community project | via work |
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
+| `/diamond.html` | Case study — client, built and not live yet | via work |
+| `/masjidone.html` | Case study — own product, in development | via work |
 | `/about.html` | About, with services folded in | yes |
 | `/contact.html` | Contact | yes |
-| `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept, unlisted | no |
+| `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept; on the wheel and under "Also built" | via work |
 | `/services.html` | Redirects to `/about.html` | no |
 | `/privacy.html` | Privacy — what the site collects, which is nothing | footer |
 | `/terms.html` | Terms — prices, payment, ownership | footer |
@@ -180,12 +220,14 @@ add the redirect until `/about.html` exists, or it points at a 404.
 
 ### Homepage section order
 
-Revised in Phase 5 when the rig and the estimator arrived.
+Four sections. Revised in Phase 11, when main's content merged in.
 
-1. **Positioning + the rig** — the claim, and beside it the three-layer
-   diagram it describes. No hero container, no viewport-filling name.
-2. **Selected work** — the three, each with kind, outcome and a layer
-   read-out showing which of the three layers that project actually needed.
+1. **The claim, over the corridor** — the positioning sentence and the three
+   layers named, on the image stream. No diagram beside it: the wheel below
+   is what argues the case, and a second graphic above it would split the
+   attention the wheel needs.
+2. **The wheel** — every project, one per card, with the read-out naming the
+   active one and showing which of the three layers it needed.
 3. **Build your stack** — the estimator. Takes the abstract "three layers"
    claim and makes it something a visitor can price.
 4. **Contact** — WhatsApp as the primary action.
@@ -196,6 +238,11 @@ estimator does more for a visitor deciding whether to get in touch) and the
 capability list, which now lives on About under "What I build". Four
 sections beat five — the homepage was a thousand pixels longer than the
 approved treatment and read as less clean for it.
+
+**The homepage does not split work into groups; the work index does.** The
+wheel is one ring over everything, and cutting it in two would halve the
+mechanic for no gain. The distinction is carried on the cards instead, by
+`kind` and by the status chip.
 
 ### Still open
 
@@ -274,7 +321,7 @@ the accent, not a second body colour.
 
 ### The wheel
 
-The signature, in `src/components/Wheel.astro`. Six projects on a circle whose
+The signature, in `src/components/Wheel.astro`. Every project on a circle whose
 centre is below the viewport; scrolling turns it; whichever card reaches top
 dead centre is upright, in full colour, and named in the read-out beneath.
 
@@ -313,8 +360,11 @@ are looking at.
 - The wheel turns with scroll over ~2600px of travel (2100px below 760px),
   one full revolution.
 - Cards fade, shrink and desaturate by **angular distance from top dead
-  centre**, over 78°. Not 60°: at exactly 60 the two neighbours sit on the
-  cutoff and blink in and out as the wheel turns.
+  centre**, over 78°. Not 60°: at six cards the step was exactly 60, so the
+  two neighbours sat on the cutoff and blinked in and out as the wheel
+  turned. **The cutoff is a constant and the step is `360 / n`** — adding a
+  project moves every card, so re-check that no card lands on 78 and that the
+  ring is not crowded. At eight the step is 45.
 - Scroll reveals: 18px rise and a fade, 700ms, staggered 80ms in fours.
 - Hover: 2px lift on buttons, an underline that draws itself on text links, a
   slow scale on project shots.
@@ -334,7 +384,7 @@ Rules that hold:
   2:1 against the ground — a real contrast failure, and the read-out already
   names the active project.
 - `prefers-reduced-motion` — and only that, not screen width — turns the wheel
-  into a plain grid of the same six links, drops the sticky pin and the scroll
+  into a plain grid of the same links, drops the sticky pin and the scroll
   budget, and disables every transition.
 - The wheel stops requesting frames when it scrolls out of view.
 - **The rail needs `position: relative` and a z-index above the spokes.** The
@@ -408,7 +458,112 @@ at 1440, and 82–104px more between 768 and 960 from the `left:50%` anchor.
 Lighthouse, measured for the first time with the actual webfonts:
 96/100/100/100 on the homepage, 98–99 elsewhere, CLS 0.000 throughout.
 
+**Phase 8 — catch the site up with the work. DONE.** Two projects' worth of
+new material, gathered from the source repositories rather than from memory:
+
+- **Taiyabah** grew a website rebrand with accounts and four staff portals —
+  hall and nikāḥ bookings with Stripe deposits and a thirty-minute date hold,
+  adult course sign-ups, a madrasah portal, and roles enforced in the database
+  rather than the interface. Two new captures. Stated as staged, not live: the
+  masjid's own hall-hire page says online booking is not switched on, and
+  `robots.txt` there blocks crawlers pending the domain move.
+- **Diamond Heating & Plumbing**, a new client case study. Its screenshots did
+  not exist, so the site was built from source and rendered at 1440 and 390.
+
+Checked before publishing: the venue-portal capture uses Ofcom's reserved
+`07700 900xxx` drama range, not real bookings.
+
+**Phase 9 — stack lines and copy re-checked against the repositories. DONE.**
+Every project visible on the site was read from its source repo rather than
+from the existing copy, and the `role` / `stack` lines now name real
+technologies instead of capability words.
+
+What had actually gone stale:
+
+- **Hair by Chrissy** was described as "a plain Node server, a JSON store and
+  hand-written front end, no framework and no dependencies". It is now a Node
+  API on Render with **Supabase/Postgres and Stripe Checkout** behind it, plus
+  a dashboard Chrissy runs her own diary from. The case study also implied the
+  published link runs the booking engine — it does not: GitHub Pages cannot,
+  so that copy deliberately falls back to **enquiry mode**, and the write-up
+  now says so.
+- **Bux Travel** was described as one site with sections. It is **twenty
+  pages** — one per vehicle size, per job and per town — with Node tooling for
+  WebP, the sitemap and cache-stamping.
+- **Venetian** is Astro, Tailwind and TypeScript; **Diamond** is Next.js 15
+  static export with TypeScript, Tailwind 4 and shadcn/ui; **Taiyabah** runs a
+  Cloudflare Worker, OneSignal push, Supabase/Postgres, Stripe and a Python
+  build.
+
+Two things that had drifted structurally: the work index hardcoded "Three
+projects" and now reads `lead.length`, and four meta descriptions ran past
+where Google truncates. All are now under 160 characters.
+
+**A stale `description` costs three times.** It is the meta description, the
+`og:description` and the `twitter:description`, so the phrase that was wrong
+about Hair by Chrissy appeared three times in that page's head after the body
+copy had already been fixed. Grep the built HTML, not the source.
+
+**Phase 10 — MasjidOne. DONE.** Added as a fifth lead case and the first
+entry that is not client work: a product putting a masjid's madrasah and its
+congregation on one Supabase Postgres, with a `masjid_id` on every table.
+
+Its repository is only the marketing site; the platform lives elsewhere, and
+the write-up says so rather than implying the whole thing is built. Three
+constraints came from MasjidOne's own `CLAUDE.md` and are binding here too:
+**never claim a feature that is not built** (the madrasah portal and parent
+access are in development), never say no competitor does the whole masjid,
+and compliance is a commitment rather than a fact. The pricing screenshot is
+the best evidence for all of it — their own plan cards read *in development*
+and *live*.
+
+The architecture SVG was rendered and rejected: it relies on a font that is
+not available here, so mermaid's text metrics overflow every box and the
+labels clip. Do not ship it without the font.
+
+`YSB Ventures Ltd` appears in that repository's README and is deliberately
+**not** carried across — the limited-company details were removed from this
+site at the user's request and stay off.
+
+**Phase 11 — main merged in. DONE.** This branch was three commits behind
+`main` and carried none of Diamond, MasjidOne or the two-group split. Merged
+rather than rebuilt, keeping v3's design on every axis and taking main's
+content wholesale.
+
+`projects.js` was the real work: the two sides had incompatible shapes. v3
+had `all` (six, for the wheel) with `lead` spreading `...all[0]`, `...all[1]`,
+`...all[2]`; main had a flat `lead` of five, self-contained. Merged to one
+array of eight with `lead` derived by predicate — **`all.filter(p =>
+p.problem)`** — because index-based spreading breaks silently the moment the
+wheel is reordered, and reordering it is exactly what adding a project does.
+
+v3's prose was stale and main's was not: v3 branched before Phase 9 re-checked
+every stack line against its repository, so all five write-ups came from main.
+Only the wheel's `line` copy is v3's, and Taiyabah's was rewritten because it
+predated the portals and the bookings.
+
+Three things the merge broke that the build would not have caught:
+
+- **The wheel's read-out printed the live dot unconditionally**, so Diamond
+  and MasjidOne arrived badged as live. A project with a `status` now prints
+  that string in a bordered chip instead. This was latent before the merge —
+  there was simply nothing on the wheel that was not live.
+- **The corridor cycles `i % images.length` over nine card slots**, so the
+  two new screenshots would have been invisible appended at the end. The list
+  is now nine, one per project.
+- **"All 6, written up"** on the wheel's header, and "Six projects, three
+  written up" on the 404, were both wrong before the merge and wronger after.
+  The header now reads "See all n"; only `lead` is written up.
+
 ### Known, unfixed
+
+- **The corridor hero costs the homepage 7 Lighthouse points.** 90/100/100/100
+  with it, against the 97 recorded for the wheel-only homepage above. LCP is
+  3.6s; FCP 1.1s, Speed Index 1.1s and TBT 0ms are all fine, so it is the hero
+  imagery alone. Measured on `d59e6e7` and after the Phase 11 merge with an
+  identical result, so this is the corridor, not the merge. The corridor went
+  in "for evaluation" and has not been ruled on — this is the number that
+  should decide it.
 
 - **Lighthouse scores are still local.** They are no longer font-blocked, but
   they are measured against `python -m http.server`, which sends no cache

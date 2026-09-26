@@ -5,10 +5,10 @@ export const cases = {
     "slug": "taiyabah",
     "title": "Taiyabah Masjid",
     "kind": "Community project",
-    "role": "PWA · Website · Signage · Home display · Serverless backend",
+    "role": "PWA + Cloudflare Worker · OneSignal push · Supabase/Postgres · Stripe · Signage · Python build",
     "problem": "A Bolton masjid needed prayer times in front of its community every day &mdash; on phones, on the wall, and on the web. Three separate problems, all being solved by hand.",
-    "approach": "I built <strong>one system</strong>: an installable app with live audio and push alerts, a public website, two always-on display screens inside the building, and a home display anyone can run on a spare tablet or TV that sounds the Adhan and Iqamah on time. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice.",
-    "outcome": "The community opens the app daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it.",
+    "approach": "I built <strong>one system</strong>: an installable app with live audio and push alerts, a public website, two always-on display screens inside the building, and a home display anyone can run on a spare tablet or TV that sounds the Adhan and Iqamah on time. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice. The website has since been rebuilt around <strong>accounts and staff portals</strong>. Visitors register, confirm their email and sign in with two-step verification; four staff areas sit behind one set of accounts and one set of roles — hall and nikāḥ bookings, adult course sign-ups, a madrasah portal for parents and teachers, and an admin view over all of it. Hall hire takes a whole day, <strong>holds the date for thirty minutes</strong> while the hirer pays a deposit through Stripe, and confirms the booking without an office step; the rate is stored on the booking, so one taken in March keeps March's price. Roles are enforced in the database rather than in the interface, so the hall office role reaches hall bookings and provably nothing else.",
+    "outcome": "The community opens the app daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it. The rebuilt site, the accounts and the four portals are finished and staged, waiting on the move to the masjid's own domain. Online booking is deliberately switched off on the public page until the office's diary goes in — the calendar shows how it will work and says plainly that it is not live yet.",
     "links": [
       {
         "href": "https://taiyabahapp.ysbdesigns.uk/",
@@ -63,15 +63,31 @@ export const cases = {
         "h": 675,
         "caption": "New-build appeal · foyer",
         "portrait": true
+      },
+      {
+        "src": "/assets/img/taiyabah-hallhire.jpg",
+        "alt": "The Taiyabah Centre hall hire page, showing the availability calendar and the venue details",
+        "w": 760,
+        "h": 528,
+        "caption": "Hall hire · availability, slots and terms",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/taiyabah-venue.jpg",
+        "alt": "The venue hire portal, showing incoming hall booking requests for staff to confirm or decline",
+        "w": 760,
+        "h": 532,
+        "caption": "Venue hire portal · the office's working screen",
+        "portrait": false
       }
     ],
-    "description": "A prayer-times app, public website and two always-on display screens, designed, built and deployed for a Bolton masjid."
+    "description": "A prayer-times app, website, two always-on screens and the accounts and staff portals behind them, for a Bolton masjid."
   },
   "venetian": {
     "slug": "venetian",
     "title": "The Venetian Company",
     "kind": "Client",
-    "role": "Website · Identity · Design → build → deploy",
+    "role": "Astro · Tailwind · TypeScript · Identity · Design → build → deploy",
     "problem": "The Venetian Company lay Venetian plaster and microcement in homes across the country. Their work is genuinely beautiful and it lived entirely on Instagram — no website, nothing to send anyone, nothing that turns up in a search.",
     "approach": "I built the site before being asked. One page, art-directed around their own photography: a full-bleed hero, the two materials explained side by side, how a job runs, what it costs, and a single action running through all of it — <strong>book a call</strong>.",
     "outcome": "It is now <strong>live on their own domain</strong>, with a monogram, a full icon set and a web manifest behind it, so it installs to a phone and shows a proper mark in the tab rather than a blank glyph. Astro, hand-built, deployed end to end.",
@@ -121,10 +137,10 @@ export const cases = {
     "slug": "hairbychrissy",
     "title": "Hair by Chrissy",
     "kind": "Client",
-    "role": "Booking platform · Front end · Backend · Payments",
+    "role": "Node API on Render · Supabase/Postgres · Stripe Checkout · Unbuilt front end",
     "problem": "Chrissy fits hair extensions by hand in a private London studio. Bookings came through Instagram DMs — a thread per client, no calendar, and no way to stop two people asking for the same Saturday.",
-    "approach": "So the site is not a brochure, it is the booking system. Pick a service, see <strong>genuine live availability</strong>, take a slot, pay a deposit. Behind it sits a real calendar, an admin view for Chrissy, deposit handling and automatic confirmation emails.",
-    "outcome": "Built with <strong>no framework and no dependencies</strong> — a plain Node server, a JSON store and hand-written front end, so there is nothing to patch, nothing to renew and nothing to go stale.",
+    "approach": "So the site is not a brochure, it is the booking system. Pick a service, see <strong>genuine live availability</strong>, take a slot, and pay by cash or card — card takes a deposit through Stripe Checkout to hold the slot, with the balance on the day. Behind it Chrissy has her own dashboard: she sets working days, hours, breaks and time off, and the client calendar updates the moment she saves. Her day comes back as a run sheet, gaps included.",
+    "outcome": "One front end, <strong>unbuilt and unbundled</strong>, served two ways. The booking engine — live calendar, dashboard, payments — runs as a small Node API on Render with Supabase behind it. GitHub Pages cannot run any of that, so the published copy deliberately falls back to <strong>enquiry mode</strong>: the real price list and an enquiry, rather than a calendar that looks live and is not. A build step snapshots the database to static JSON so the public page still shows her real services and prices.",
     "links": [
       {
         "href": "https://hairbychrissy.ysbdesigns.uk/",
@@ -165,13 +181,87 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "A booking platform for a London hair extension specialist — live availability, deposits and an admin calendar, built with no framework and no dependencies."
+    "description": "A booking platform for a London hair extension specialist — live availability, a Stripe deposit, and a dashboard she runs her own diary from."
+  },
+  "diamond": {
+    "slug": "diamond",
+    "title": "Diamond Heating & Plumbing",
+    "kind": "Client",
+    "role": "Next.js 15, static export · TypeScript · Tailwind 4 · shadcn/ui",
+    "problem": "A Bolton heating engineer, 26 years on the tools, gets rung by people who cannot describe what is wrong. &ldquo;The boiler&rsquo;s not working&rdquo; costs a visit to find out it was a part he could have carried in the van. What he needs before he sets off is a photo.",
+    "approach": "One page, built for a phone, whose only job is to get a customer&rsquo;s details <strong>and photos of the fault</strong> into his WhatsApp in about a minute. That is harder than it sounds, because <strong>a WhatsApp link cannot carry an image</strong> — there is no parameter or trick that attaches one. So the form takes the only route that exists from a web page: the operating system&rsquo;s share sheet, opened with the message text and the photos already in it. On desktop, where browsers cannot share files, it falls back to a plain link and the confirmation screen tells the customer their photos did not travel and to add them with the paperclip. The message body says <strong>&ldquo;photos to follow&rdquo; rather than &ldquo;attached&rdquo;</strong>, so he is never promised photos that are not there. Photos are resized in the browser and <strong>never touch a server</strong> — which keeps the hosting free and avoids holding customers&rsquo; photographs of the inside of their homes.",
+    "outcome": "Built and handed over, waiting on a mailbox and on real photography of the van and the work before it goes live. The design is taken off the vehicle rather than invented: black bodywork, orange keyline lettering, the dot-separated service list from the doors, and Gas Safe yellow used only where it appears on the van.",
+    "links": [],
+    "shots": [
+      {
+        "src": "/assets/img/diamond-web.jpg",
+        "alt": "The Diamond Heating and Plumbing home page, with the van drawn in orange keyline on black",
+        "w": 760,
+        "h": 475,
+        "caption": "Home · the van, drawn in keyline",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/diamond-form.jpg",
+        "alt": "The job form, which turns the customer's answers and photos into one WhatsApp message",
+        "w": 760,
+        "h": 528,
+        "caption": "The form · one WhatsApp message, photos attached",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/diamond-phone.jpg",
+        "alt": "The Diamond Heating and Plumbing site on a phone, with call and WhatsApp always in reach",
+        "w": 340,
+        "h": 736,
+        "caption": "On a phone · the sticky call and WhatsApp bar",
+        "portrait": true
+      }
+    ],
+    "description": "A one-page site for a Bolton heating engineer, built so a customer can get photos of the fault into WhatsApp in under a minute."
+  },
+  "masjidone": {
+    "slug": "masjidone",
+    "title": "MasjidOne",
+    "kind": "Own product",
+    "role": "Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres · Stripe · OneSignal",
+    "problem": "A masjid runs its week across half a dozen systems that have never heard of each other &mdash; prayer times in one, the website in another, the madrasah register on paper, fees in a book, donations somewhere else again. The office knows the same family three separate times and can only join them up by remembering. Plenty of products do the congregation side well; the part nobody does is the <strong>madrasah's daily operations</strong> &mdash; the register marked each evening, the sabaq heard, the fee due &mdash; in the same system, and then giving a parent a view of their own child.",
+    "approach": "So MasjidOne is one record of one family, reachable from both sides. Four surfaces per masjid &mdash; the website, the in-building screens, a congregation app and the office portal &mdash; on one Supabase Postgres, where <strong>every table carries a masjid_id</strong> and every policy and function filters on it. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing that makes the product work happens <em>inside</em> one masjid rather than between them, so the separation would have bought nothing and cost a great deal to run. Row Level Security and SECURITY DEFINER functions scope every query to one masjid; Stripe runs an account per masjid at 0% commission on donations.",
+    "outcome": "This is the part of it I have built and can show: the marketing site a committee lands on after a conversation. Next.js 15 exported to static files, so there is nothing running at request time and nothing to keep patched. <strong>The madrasah portal and parent access are not built yet</strong>, and the pricing page says so in the plan itself rather than in a footnote &mdash; one plan reads <em>in development</em>, the other <em>live</em>. Every interface shown on the site is labelled as a preview with example data and no masjid named.",
+    "links": [],
+    "shots": [
+      {
+        "src": "/assets/img/masjidone-web.jpg",
+        "alt": "The MasjidOne home page: the madrasah and the congregation, on one system",
+        "w": 760,
+        "h": 475,
+        "caption": "The marketing site · previews labelled as previews",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/masjidone-pricing.jpg",
+        "alt": "The pricing page, with the madrasah plan tagged in development and the complete plan tagged live",
+        "w": 760,
+        "h": 475,
+        "caption": "Pricing · what is built says live, what is not says in development",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/masjidone-phone.jpg",
+        "alt": "The MasjidOne site on a phone",
+        "w": 340,
+        "h": 736,
+        "caption": "On a phone",
+        "portrait": true
+      }
+    ],
+    "description": "A product putting a masjid's madrasah and its congregation on one system — one record of one family, on Supabase with a masjid_id on every table."
   },
   "ellash": {
     "slug": "ellash",
     "title": "èllash",
     "kind": "Client",
-    "role": "Booking page · Calendar · Deposits · Mobile-first",
+    "role": "One page, no build step, no dependencies · Travel-day calendar · Deposits",
     "problem": "Beauty businesses lose a slice of every booking to the big platforms, or pay a monthly fee for a diary they barely use. For a mobile lash technician working across three towns, that overhead buys very little — and none of it understands that Tuesday is a Coventry day.",
     "approach": "So èllash gets its own booking page instead. Four steps — treatment, date and time, details, confirm — with availability built around <strong>travel days rather than a salon diary</strong>: pick an area and only the days she is actually in that area come back. A deposit secures the slot, and the confirmation carries her aftercare guide.",
     "outcome": "One page, no build step, no dependencies, no per-booking commission and <strong>no monthly platform fee</strong>. It is the simple version of what Fresha and Treatwell sell, for a business that needs a calendar rather than a marketplace.",
@@ -207,16 +297,16 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "A booking page for a mobile lash technician — live availability built around travel days, deposits and aftercare, with no per-booking commission and no monthly platform fee."
+    "description": "A booking page for a mobile lash technician — availability built around travel days, with no commission and no monthly platform fee."
   },
   "buxtravel": {
     "slug": "buxtravel",
     "title": "Bux Travel",
     "kind": "In-house",
-    "role": "Website · Design → deploy",
+    "role": "Twenty static pages · Service × town local SEO · WebP, sitemap and cache-stamp tooling",
     "problem": "A Bolton minibus and private-hire operator was losing work to whoever showed up first on Google. There was nowhere to send people.",
-    "approach": "I built the whole site &mdash; services, fleet, coverage area, reviews, booking form and FAQ &mdash; structured so local group-travel searches land on it, and so <strong>every page is one tap from a WhatsApp message or a phone call</strong>.",
-    "outcome": "The questions a customer would have rung up to ask are answered before they ring, which shortens the gap between finding the business and booking it.",
+    "approach": "I built the whole site &mdash; services, fleet, coverage area, reviews, booking form and FAQ &mdash; and then <strong>split it the way people actually search</strong>: a page per vehicle size, a page per job (airport runs, school transport, weddings, days out, corporate, wheelchair accessible), and a page per town it covers. Twenty pages in all, each one tap from a WhatsApp message or a phone call.",
+    "outcome": "The questions a customer would have rung up to ask are answered before they ring, which shortens the gap between finding the business and booking it. Still no framework and no build step: small Node scripts generate the WebP images, the sitemap and the cache-busting stamps, and pushing to <code>main</code> is the deploy.",
     "links": [
       {
         "href": "https://buxtravel.co.uk/",
@@ -241,13 +331,13 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "A full minibus and private-hire website for a Bolton operator, built to turn local searches into WhatsApp enquiries."
+    "description": "A twenty-page minibus and private-hire site for a Bolton operator — a page per vehicle, job and town, built to catch local searches."
   },
   "luxescent": {
     "slug": "luxescent",
     "title": "LuxeScent UK",
     "kind": "Client",
-    "role": "Website · Brand · Client project",
+    "role": "One-page static site · Self-hosted variable fonts · Scent finder · Etsy deep-links",
     "problem": "A Bolton maker of designer-inspired car diffusers was selling on Etsy alone, where an &pound;8.79 product looks like every other &pound;8.79 product.",
     "approach": "I built an editorial storefront for the nine-fragrance collection: a product carousel, an <strong>interactive scent finder</strong> for undecided buyers, and a Shop action on every product that deep-links to the right Etsy listing. The site does the selling; Etsy takes the payment.",
     "outcome": "It gives the brand a face that carries its price, and a guided path for buyers who would otherwise have bounced off a grid of near-identical bottles.",

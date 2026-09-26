@@ -3,23 +3,45 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { lead, all } from '../data/projects.js';
 
 /**
- * The work index. The three with enough captured material lead, written up
- * as problem → approach → outcome; the other three are listed underneath so
- * nothing on the site is unreachable from the nav.
+ * The work index. The ones with enough captured material lead, written up as
+ * problem → approach → outcome; the rest are listed underneath so nothing on
+ * the site is unreachable from the nav.
  *
  * Deliberately not the wheel: the homepage already does that, and someone who
  * clicked "Work" wants to read rather than scroll a mechanism.
+ *
+ * The written-up ones are split by `product`, not by the `kind` string. A
+ * product I own is a different claim from work someone paid me for, and
+ * mixing them lets the products read as clients — which would be the site
+ * inventing a client count.
  */
+
+const groups = [
+  {
+    title: 'Built for other people',
+    blurb: 'Paid client work, and one community project.',
+    items: lead.filter((p) => !p.product),
+  },
+  {
+    title: 'Built for myself',
+    blurb: 'Products I own rather than work I was asked to do.',
+    items: lead.filter((p) => p.product),
+  },
+].filter((g) => g.items.length);
 
 const rest = all.filter((p) => !lead.some((l) => l.slug === p.slug));
 
+// Numbering runs across the whole written-up list rather than restarting per
+// group, so two entries never share a number.
+const numberOf = (p) => String(lead.findIndex((l) => l.slug === p.slug) + 1).padStart(2, '0');
+
 const description =
-  'Three projects written up as problem, approach and outcome — a masjid running on one system, a plaster specialist who had only Instagram, and a booking platform that replaced DMs.';
+  'Client and community work written up as problem, approach and outcome, and the products built alongside it — a masjid running on one system, a heating engineer, a booking platform and a plaster specialist.';
 ---
 
 <BaseLayout title="Work" description={description}>
   <section class="head">
-    <p class="eyebrow m-0">Six projects, three written up</p>
+    <p class="eyebrow m-0">{all.length} projects, {lead.length} written up</p>
     <h1>Work</h1>
     <p class="head-p">
       What the problem was, what I built, and what changed. Each one links to
@@ -27,28 +49,37 @@ const description =
     </p>
   </section>
 
-  {lead.map((p, i) => (
-    <section class="entry">
-      <p class="eyebrow eyebrow-accent rv m-0">{String(i + 1).padStart(2, '0')} · {p.kind} · {p.where}</p>
+  {groups.map((g) => (
+    <>
+      <section class="group">
+        <h2 class="rv">{g.title}</h2>
+        <p class="rv group-p">{g.blurb}</p>
+      </section>
 
-      <h2 class="rv"><a href={p.href} class="ul-draw">{p.name}</a></h2>
-      <p class="entry-role rv">{p.stack}</p>
+      {g.items.map((p) => (
+        <section class="entry">
+          <p class="eyebrow eyebrow-accent rv m-0">{numberOf(p)} · {p.kind} · {p.where}</p>
 
-      <a href={p.href} class="shot rv">
-        <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async" />
-      </a>
+          <h3 class="rv"><a href={p.href} class="ul-draw">{p.name}</a></h3>
+          <p class="entry-role rv">{p.stack}</p>
 
-      <dl class="entry-facts rv">
-        {[['Problem', p.problem], ['Approach', p.approach], ['Outcome', p.outcome]].map(([k, v]) => (
-          <div>
-            <dt class="eyebrow m-0">{k}</dt>
-            <dd>{v}</dd>
-          </div>
-        ))}
-      </dl>
+          <a href={p.href} class="shot rv">
+            <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async" />
+          </a>
 
-      <p class="rv entry-go"><a href={p.href} class="ul-draw ul-draw-on">Read the {p.name} case study →</a></p>
-    </section>
+          <dl class="entry-facts rv">
+            {[['Problem', p.problem], ['Approach', p.approach], ['Outcome', p.outcome]].map(([k, v]) => (
+              <div>
+                <dt class="eyebrow m-0">{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <p class="rv entry-go"><a href={p.href} class="ul-draw ul-draw-on">Read the {p.name} case study →</a></p>
+        </section>
+      ))}
+    </>
   ))}
 
   <section class="more">
@@ -84,9 +115,15 @@ const description =
   .head h1 { font-size: clamp(3rem, 11vw, 7rem); margin: 14px 0 0; }
   .head-p { margin: 24px 0 0; max-width: 50ch; color: var(--color-ink-2); font-size: 1.05rem; }
 
-  .entry { padding-block: clamp(56px, 9vh, 96px) 0; }
-  .entry h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 14px 0 0; }
-  .entry h2 a { text-decoration: none; }
+  /* A group label sits above the entries it names, so it needs more air over
+     it than under it or it reads as belonging to the entry before. */
+  .group { padding-block: clamp(56px, 9vh, 96px) 0; }
+  .group h2 { font-size: clamp(1.8rem, 4.4vw, 2.6rem); margin: 0; }
+  .group-p { margin: 14px 0 0; color: var(--color-ink-2); }
+
+  .entry { padding-block: clamp(40px, 6vh, 64px) 0; }
+  .entry h3 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 14px 0 0; }
+  .entry h3 a { text-decoration: none; }
   .entry-role { margin: 14px 0 0; color: var(--color-ink-2); font-size: 15px; }
 
   .shot {
