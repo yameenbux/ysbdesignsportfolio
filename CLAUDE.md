@@ -372,6 +372,37 @@ new material, gathered from the source repositories rather than from memory:
 Checked before publishing: the venue-portal capture uses Ofcom's reserved
 `07700 900xxx` drama range, not real bookings.
 
+**Phase 9 — stack lines and copy re-checked against the repositories. DONE.**
+Every project visible on the site was read from its source repo rather than
+from the existing copy, and the `role` / `stack` lines now name real
+technologies instead of capability words.
+
+What had actually gone stale:
+
+- **Hair by Chrissy** was described as "a plain Node server, a JSON store and
+  hand-written front end, no framework and no dependencies". It is now a Node
+  API on Render with **Supabase/Postgres and Stripe Checkout** behind it, plus
+  a dashboard Chrissy runs her own diary from. The case study also implied the
+  published link runs the booking engine — it does not: GitHub Pages cannot,
+  so that copy deliberately falls back to **enquiry mode**, and the write-up
+  now says so.
+- **Bux Travel** was described as one site with sections. It is **twenty
+  pages** — one per vehicle size, per job and per town — with Node tooling for
+  WebP, the sitemap and cache-stamping.
+- **Venetian** is Astro, Tailwind and TypeScript; **Diamond** is Next.js 15
+  static export with TypeScript, Tailwind 4 and shadcn/ui; **Taiyabah** runs a
+  Cloudflare Worker, OneSignal push, Supabase/Postgres, Stripe and a Python
+  build.
+
+Two things that had drifted structurally: the work index hardcoded "Three
+projects" and now reads `lead.length`, and four meta descriptions ran past
+where Google truncates. All are now under 160 characters.
+
+**A stale `description` costs three times.** It is the meta description, the
+`og:description` and the `twitter:description`, so the phrase that was wrong
+about Hair by Chrissy appeared three times in that page's head after the body
+copy had already been fixed. Grep the built HTML, not the source.
+
 ### Known, unfixed
 
 - **Lighthouse scores are still local.** They are no longer font-blocked, but
