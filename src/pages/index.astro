@@ -4,6 +4,12 @@ import LayerRig from '../components/LayerRig.astro';
 import Estimator from '../components/Estimator.astro';
 import { lead } from '../data/projects.js';
 
+// Same split as the work index, for the same reason: a product I own is a
+// different claim from work someone paid me for, and the heading below says
+// "shipped" — which MasjidOne is not yet.
+const shipped = lead.filter((p) => !p.product);
+const mine = lead.filter((p) => p.product);
+
 const description =
   "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.";
 ---
@@ -38,11 +44,16 @@ const description =
   {/* ---- work -------------------------------------------------------- */}
   <section class="border-t border-line py-16 md:py-24">
     <div class="rv mb-13 flex items-baseline justify-between gap-5">
-      <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Things I have actually shipped</h2>
+      <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Selected work</h2>
       <a href="/work.html" class="label no-underline transition-colors duration-150 hover:text-blue">All work →</a>
     </div>
 
-    {lead.map((p) => (
+    <div class="rv mb-1">
+      <h3 class="text-[1.25rem] font-bold tracking-[-0.02em]">Things I have actually shipped</h3>
+      <p class="measure mt-2 text-ink-2">Paid client work, and one community project.</p>
+    </div>
+
+    {shipped.map((p) => (
       <article class="rv grid grid-cols-1 gap-6 border-t border-line py-9 lg:grid-cols-[200px_1fr_300px] lg:items-start lg:gap-9">
         <div>
           <p class="label label-blue m-0">{p.kind}</p>
@@ -50,12 +61,12 @@ const description =
         </div>
 
         <div>
-          <h3 class="text-[1.55rem] font-bold tracking-[-0.02em]">
+          <h4 class="text-[1.55rem] font-bold tracking-[-0.02em]">
             <a href={p.href} class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 hover:text-blue">
               {p.name}
               <span aria-hidden="true" class="text-ink-2 transition-transform duration-150 group-hover:translate-x-[3px] group-hover:text-blue">→</span>
             </a>
-          </h3>
+          </h4>
           <p class="mt-2.5 max-w-[52ch] text-ink-2">{p.outcome}</p>
 
           {/* which of the three layers this project actually needed */}
@@ -71,7 +82,50 @@ const description =
         <a href={p.href} class="shot group relative block aspect-[16/10] overflow-hidden border border-line bg-plane">
           <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async"
                class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:-translate-y-[4%] group-hover:scale-[1.045]" />
-          <span class="absolute right-2.5 top-2.5 flex items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
+          <span class="absolute right-2.5 top-2.5 flex max-w-[calc(100%-1.25rem)] items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
+            {!p.status && <span class="pulse"></span>}
+            <span class="label m-0 text-[10px]">{p.status ?? 'Live'}</span>
+          </span>
+        </a>
+      </article>
+    ))}
+
+    {mine.length > 0 && (
+      <div class="rv mt-16 border-t border-line pt-9">
+        <h3 class="text-[1.25rem] font-bold tracking-[-0.02em]">Built for myself</h3>
+        <p class="measure mt-2 text-ink-2">Products I own rather than work I was asked to do.</p>
+      </div>
+    )}
+
+    {mine.map((p) => (
+      <article class="rv grid grid-cols-1 gap-6 border-t border-line py-9 lg:grid-cols-[200px_1fr_300px] lg:items-start lg:gap-9">
+        <div>
+          <p class="label label-blue m-0">{p.kind}</p>
+          <p class="label m-0 mt-1.5">{p.where}</p>
+        </div>
+
+        <div>
+          <h4 class="text-[1.55rem] font-bold tracking-[-0.02em]">
+            <a href={p.href} class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 hover:text-blue">
+              {p.name}
+              <span aria-hidden="true" class="text-ink-2 transition-transform duration-150 group-hover:translate-x-[3px] group-hover:text-blue">→</span>
+            </a>
+          </h4>
+          <p class="mt-2.5 max-w-[52ch] text-ink-2">{p.outcome}</p>
+
+          <div class="mt-4 flex flex-col gap-1.5">
+            {[['Interface', p.layers.interface], ['Software', p.layers.software], ['Infrastructure', p.layers.infra]].map(([name, w]) => (
+              <div class="label m-0 flex items-center gap-2.5">
+                <i class="layer-bar block h-1.5 bg-blue/25" style={`width:${w}%`}></i>{name}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <a href={p.href} class="shot group relative block aspect-[16/10] overflow-hidden border border-line bg-plane">
+          <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async"
+               class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover:-translate-y-[4%] group-hover:scale-[1.045]" />
+          <span class="absolute right-2.5 top-2.5 flex max-w-[calc(100%-1.25rem)] items-center gap-1.5 border border-line bg-plane/90 px-2 py-1">
             {!p.status && <span class="pulse"></span>}
             <span class="label m-0 text-[10px]">{p.status ?? 'Live'}</span>
           </span>

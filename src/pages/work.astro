@@ -2,13 +2,38 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { lead } from '../data/projects.js';
 
+/**
+ * Two groups, because they are not the same claim. Work done for someone else
+ * is evidence that people hire me and I deliver; a product I own is evidence
+ * of something else entirely, and mixing them lets the second dilute the
+ * first for a visitor scanning for the first.
+ *
+ * The first group is "client and community", not "client" — Taiyabah is
+ * community work and filing it under clients would imply a commission that
+ * never happened. Each entry still carries its own kind.
+ */
+const groups = [
+  {
+    id: 'for-others',
+    title: 'Built for other people',
+    blurb: 'Paid client work, and one community project.',
+    items: lead.filter((p) => !p.product),
+  },
+  {
+    id: 'products',
+    title: 'Built for myself',
+    blurb: 'Products I own rather than work I was asked to do.',
+    items: lead.filter((p) => p.product),
+  },
+].filter((g) => g.items.length);
+
 const description =
-  'Four projects written up as problem, approach and outcome: what the problem was, what I built, and what changed.';
+  'Client and community work written up as problem, approach and outcome, and the products built alongside it.';
 ---
 
 <BaseLayout title="Work" description={description}>
   <section class="pt-16 pb-4">
-    <p class="label m-0">{lead.length} projects</p>
+    <p class="label m-0">{lead.length} projects · {groups.length} kinds</p>
     <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
       Work
     </h1>
@@ -18,8 +43,15 @@ const description =
     </p>
   </section>
 
-  {lead.map((p) => (
-    <section class="border-t border-line py-20">
+  {groups.map((g) => (
+    <>
+      <section class="border-t border-line pt-16" aria-labelledby={g.id}>
+        <h2 id={g.id} class="rv text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">{g.title}</h2>
+        <p class="rv measure mt-4 text-ink-2">{g.blurb}</p>
+      </section>
+
+      {g.items.map((p) => (
+    <section class="py-20">
       <p class="rv label label-blue m-0">{p.kind} · {p.where}</p>
 
       <div class="mt-9 grid grid-cols-1 gap-7 lg:grid-cols-12 lg:gap-9">
@@ -35,12 +67,12 @@ const description =
         </aside>
 
         <div class="lg:col-span-9">
-          <h2 class="rv text-[clamp(1.6rem,3.4vw,2.2rem)] font-bold tracking-[-0.025em]">
+          <h3 class="rv text-[clamp(1.6rem,3.4vw,2.2rem)] font-bold tracking-[-0.025em]">
             <a href={p.href} class="group inline-flex items-baseline gap-2 no-underline transition-colors duration-150 hover:text-blue">
               {p.name}
               <span aria-hidden="true" class="text-[17px] text-ink-2 transition-transform duration-150 group-hover:translate-x-[3px] group-hover:text-blue">→</span>
             </a>
-          </h2>
+          </h3>
 
           <dl class="rv mt-7 space-y-6">
             {[['Problem', p.problem], ['Approach', p.approach], ['Outcome', p.outcome]].map(([k, v]) => (
@@ -64,6 +96,8 @@ const description =
         </div>
       </div>
     </section>
+      ))}
+    </>
   ))}
 
   <section class="border-t border-line py-24">

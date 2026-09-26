@@ -3,6 +3,10 @@
 // Outcome lines are drawn from each case study; nothing here is a metric,
 // a rating or a client count.
 //
+// `product: true` separates the things I own from the things I was asked to
+// build. The work index groups on this, not on the `kind` string, which is
+// display copy and would be a fragile thing to branch on.
+//
 // `status` is the badge the homepage prints over each shot. Omit it and the
 // project gets the pulsing "Live" chip; set it and that exact string is shown
 // flat instead. A Live badge on something nobody can visit, or on a product
@@ -42,7 +46,7 @@ export const lead = [
   {
     slug: 'diamond', href: '/diamond.html', name: 'Diamond Heating & Plumbing',
     kind: 'Client', where: 'Bolton',
-    status: 'Built · not live yet',
+    status: 'Not live yet',
     stack: 'Next.js 15, static export · TypeScript · Tailwind 4 · shadcn/ui',
     outcome: 'A heating engineer who kept being rung by people who could not describe the fault. The site gets their details and photos of the problem into his WhatsApp in about a minute, so he arrives with the right part.',
     problem: 'A Bolton heating engineer gets rung by people who cannot describe what is wrong. "The boiler\'s not working" costs a visit to find out it was a part he could have carried in the van.',
@@ -53,9 +57,10 @@ export const lead = [
   {
     slug: 'masjidone', href: '/masjidone.html', name: 'MasjidOne',
     kind: 'Own product', where: 'Bolton',
+    product: true,
     status: 'In development',
     stack: 'Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres · Stripe',
-    outcome: 'A masjid runs its week across half a dozen systems that have never heard of each other. MasjidOne puts the madrasah and the congregation on one record of one family — four surfaces, one Postgres, a masjid_id on every table.',
+    outcome: 'Four surfaces on one Supabase Postgres, with a masjid_id on every table and Row Level Security scoping every query to one masjid. The marketing site is built and published; the madrasah portal and parent access are in development, and the pricing page says which is which on the plan card itself.',
     problem: 'The office knows the same family three separate times — prayer times in one system, the website in another, the register on paper, fees in a book — and can only join them up by remembering.',
     approach: 'One Supabase Postgres behind four surfaces per masjid, with Row Level Security scoping every query to one masjid. What I have built and can show is the marketing site: Next.js 15 exported to static files. The madrasah portal and parent access are not built yet, and the pricing page says so in the plan itself.',
     layers: { interface: 88, software: 94, infra: 82 },

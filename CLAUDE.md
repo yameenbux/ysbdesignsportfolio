@@ -102,6 +102,24 @@ Do not imply these were all commissions, and do not imply they are all live.
 Taiyabah is community work; say so. Diamond is finished and handed over but
 has no public address yet.
 
+### Two groups: work for others, and my own products
+
+Home and the work index both split the list in two — **"Built for other
+people"** (three paying clients plus Taiyabah) and **"Built for myself"**
+(MasjidOne). A product I own is a different claim from work someone paid me
+for, and mixing them lets the products read as clients, which would be the
+site inventing a client count.
+
+The split is driven by **`product: true`** in `src/data/projects.js`, not by
+matching on the `kind` string — `kind` is display copy and would be a fragile
+thing to branch on.
+
+**`status` is the badge printed over each homepage shot.** Omit it and the
+project gets the pulsing "Live" chip; set it and that exact string is shown
+flat instead. Keep it to about two words: the chip is sized for "Live", and a
+long one lies across the shot and covers the client's own logo, which is how
+"Built · not live yet" became "Not live yet".
+
 **`status` in `projects.js`** drives the homepage badge. Omit it and the
 project gets the pulsing "Live" chip; set it and that exact string prints flat
 instead — currently "Built · not live yet" for Diamond and "In development"
@@ -199,8 +217,13 @@ Revised in Phase 5 when the rig and the estimator arrived.
 
 1. **Positioning + the rig** — the claim, and beside it the three-layer
    diagram it describes. No hero container, no viewport-filling name.
-2. **Selected work** — the three, each with kind, outcome and a layer
-   read-out showing which of the three layers that project actually needed.
+2. **Selected work** — the projects in their two groups, each with kind,
+   outcome and a layer read-out showing which of the three layers that
+   project actually needed. The heading is "Selected work", not "Things I
+   have actually shipped" — that line is now the first group's subhead,
+   because it is not true of a product still in development and an h2 that
+   argues with the card under it is worse than a plainer h2. Outline is
+   h2 section → h3 group → h4 project, the same shape the work index uses.
 3. **Build your stack** — the estimator. Takes the abstract "three layers"
    claim and makes it something a visitor can price.
 4. **Contact** — WhatsApp as the primary action.
