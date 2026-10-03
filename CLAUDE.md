@@ -99,7 +99,7 @@ material to carry a screenshot-led layout.
 | The Venetian Company | Paying client, live on their own domain | 4 |
 | Hair by Chrissy | Paying client | 4 |
 | Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
-| MasjidOne | **Own product**, part-built — not client work | 3 |
+| MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 
 Do not imply these were all commissions, and do not imply they are all live.
 Taiyabah is community work; say so. Diamond is finished and handed over but
@@ -123,10 +123,10 @@ thing to branch on.
 **`status` in `projects.js`** says a project is not simply live. Omit it and
 the wheel's read-out shows the pulsing live dot; set it and that exact string
 prints in a bordered chip where the dot would be — currently "Not live yet"
-for Diamond and "In development" for MasjidOne. The read-out printed the dot
+for Diamond and "In one masjid" for MasjidOne. The read-out printed the dot
 unconditionally until Phase 11; a live indicator on something nobody can
-visit, or on a product that is part-built, is exactly the claim the copy
-rules bar, so **anything that is not live needs a `status` here.**
+visit, or on a product with no paying customers, is exactly the claim the
+copy rules bar, so **anything that is not simply live needs a `status` here.**
 
 **Keep a status to about two words.** It sits inline in a 12px label; a long
 one wraps the line it shares with `kind` and `where`.
@@ -199,7 +199,7 @@ Four navigable pages, five case studies, three unlisted.
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
 | `/diamond.html` | Case study — client, built and not live yet | via work |
-| `/masjidone.html` | Case study — own product, in development | via work |
+| `/masjidone.html` | Case study — own product, running at one masjid | via work |
 | `/about.html` | About, with services folded in | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept; on the wheel and under "Also built" | via work |
@@ -554,6 +554,40 @@ Three things the merge broke that the build would not have caught:
 - **"All 6, written up"** on the wheel's header, and "Six projects, three
   written up" on the 404, were both wrong before the merge and wronger after.
   The header now reads "See all n"; only `lead` is written up.
+
+**Phase 12 — MasjidOne re-checked against its repository. DONE.** Seventy
+commits had landed there since the case study was written, and the write-up had
+gone wrong in the **expensive direction**: it said the madrasah portal and
+parent access "are not built yet". Both are built and enforcing, and that
+repository's own `CLAUDE.md` records the same error being corrected on its
+site on 1 October 2026 — features were tagged *in development* because their
+tables were empty. **Zero rows means nobody has used it yet, not that it does
+not exist.** The test is whether the functions exist and enforce, not whether
+rows do.
+
+What the copy now says, split the way that repository splits it, because the
+two halves are genuinely at different stages:
+
+- **The congregation side runs every day** in a Bolton masjid — a year of
+  prayer times published, jamāʿah notifications firing off the timetable on
+  their own. That is defensible and was being needlessly withheld.
+- **The madrasah side is built and holds that masjid's full roll**, but no
+  register has been marked on it, so it is *not* described as running. "Built"
+  and "in a masjid" are the limit; "running" and "in daily use" are not, and
+  must not be borrowed from the congregation half.
+- **Nothing is said about reach.** The notifications go to a handful of
+  devices. "It runs every day" is true; "a congregation uses it" is not, and
+  the demo's reach fixture is invented sample data that must never appear in a
+  sentence about a real masjid.
+
+The stale pricing screenshot was deleted rather than recaptioned: it showed
+*in development* tags that no longer exist anywhere on that site. Two
+screenshots replace it, both from the demonstration tenant on invented data
+with its banner in frame — a teacher's register, and parent access, which is
+the single best evidence for the thing the old copy denied.
+
+`YSB Ventures Ltd` is named in that repository and is still deliberately not
+carried across.
 
 ### Known, unfixed
 
