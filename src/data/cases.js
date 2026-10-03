@@ -5,10 +5,10 @@ export const cases = {
     "slug": "taiyabah",
     "title": "Taiyabah Masjid",
     "kind": "Community project",
-    "role": "PWA + Cloudflare Worker · OneSignal push · Supabase/Postgres · Stripe · Signage · Python build",
+    "role": "PWA + Android app on Google Play · Cloudflare Worker · OneSignal push · Supabase/Postgres with Row Level Security · Stripe · Signage · Python build",
     "problem": "A Bolton masjid needed prayer times in front of its community every day &mdash; on phones, on the wall, and on the web. Three separate problems, all being solved by hand.",
-    "approach": "I built <strong>one system</strong>: an installable app with live audio and push alerts, a public website, two always-on display screens inside the building, and a home display anyone can run on a spare tablet or TV that sounds the Adhan and Iqamah on time. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice. The website has since been rebuilt around <strong>accounts and staff portals</strong>. Visitors register, confirm their email and sign in with two-step verification; four staff areas sit behind one set of accounts and one set of roles — hall and nikāḥ bookings, adult course sign-ups, a madrasah portal for parents and teachers, and an admin view over all of it. Hall hire takes a whole day, <strong>holds the date for thirty minutes</strong> while the hirer pays a deposit through Stripe, and confirms the booking without an office step; the rate is stored on the booking, so one taken in March keeps March's price. Roles are enforced in the database rather than in the interface, so the hall office role reaches hall bookings and provably nothing else.",
-    "outcome": "The community opens the app daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it. The rebuilt site, the accounts and the four portals are finished and staged, waiting on the move to the masjid's own domain. Online booking is deliberately switched off on the public page until the office's diary goes in — the calendar shows how it will work and says plainly that it is not live yet.",
+    "approach": "I built <strong>one system</strong>: an installable app with live audio and push alerts, a public website, two always-on display screens inside the building, and a home display anyone can run on a spare tablet or TV that sounds the Adhan and Iqamah on time. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice. The typefaces are served from the masjid’s own origin and kept by the service worker, so the Arabic still renders properly in the basement.<br><br>The website has since been rebuilt around <strong>accounts and an Admin Centre</strong>. Visitors register, confirm their email and sign in with two-step verification. Behind one set of accounts sit the screens the masjid runs itself — the prayer timetable it publishes a year at a time, notices, the appeal figure, hall rates, adult classes, Gift Aid rows for HMRC, food bank volunteers, charity collections, and a button that sends a notification to every phone with the app on it. <strong>Nobody needs a developer and nobody needs to push to GitHub.</strong> Hall hire takes a whole day, <strong>holds the date for thirty minutes</strong> while the hirer pays a deposit through Stripe, and confirms without an office step; the rate is stored on the booking, so one taken in March keeps March’s price.<br><br><strong>Six roles and three gates, every one of them enforced in Postgres</strong> rather than in the page — a rail that hides a row in the browser is not a lock. The hall office role reaches hall bookings and provably nothing else.<br><br>The newest piece is the <strong>imam’s inbox</strong>, and it is the shape the rest is built in: a congregant writes from the phone app, and <em>no imam’s address exists anywhere</em> to be harvested or handed over. The question becomes a row the app cannot read back; the imam signs in with an authenticator like everybody else and answers; the server sends the reply by reading the answer out of the row rather than trusting anything the request said. That table has Row Level Security on and <strong>no policies at all</strong>, with every grant revoked — which is the denial, not an oversight — and the check that opens it deliberately does not fall back to admin, because somebody writing to the imam in confidence is not writing to the committee.",
+    "outcome": "<strong>The app is on Google Play</strong>, as a Trusted Web Activity verified against both signing certificates so a store install opens with no browser bar, and the same app stays installable straight from the web. The community opens it daily, the screens refresh themselves, and the new-build appeal runs in the foyer without anyone touching it.<br><br>The rebuilt website, the accounts and the Admin Centre are finished and <strong>staged</strong>, waiting on the move to the masjid’s own domain — robots.txt blocks crawlers until then, so the temporary address is never indexed and there is no duplicate to clean up afterwards. Online booking stays switched off on the public page until the office’s diary goes in: the calendar shows how it will work and says plainly that it is not live yet. The madrasah application form is published the same way, as a preview that cannot send, until the data-protection assessment is signed off.<br><br>iOS is the one still open. It needs a D-U-N-S number for the charity before an Apple developer account can exist at all, and Apple’s rules mean a wrapped app has to hand donations to the system browser rather than take them in-app — which is the shape the Stripe links already have.",
     "links": [
       {
         "href": "https://taiyabahapp.ysbdesigns.uk/",
@@ -50,10 +50,10 @@ export const cases = {
       },
       {
         "src": "/assets/img/taiyabah-app.jpg",
-        "alt": "The Taiyabah prayer-times app on a phone",
+        "alt": "The Taiyabah Masjid app on a phone, showing the next jamaʿah and the day’s beginning and jamaʿah times",
         "w": 340,
         "h": 735,
-        "caption": "App · daily prayer times",
+        "caption": "App · on Google Play, and installable from the web",
         "portrait": true
       },
       {
@@ -81,7 +81,7 @@ export const cases = {
         "portrait": false
       }
     ],
-    "description": "A prayer-times app, website, two always-on screens and the accounts and staff portals behind them, for a Bolton masjid."
+    "description": "A prayer-times app on Google Play, a website, two always-on screens, and the Admin Centre a Bolton masjid runs all of it from."
   },
   "venetian": {
     "slug": "venetian",
