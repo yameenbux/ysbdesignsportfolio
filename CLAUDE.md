@@ -586,6 +586,11 @@ screenshots replace it, both from the demonstration tenant on invented data
 with its banner in frame — a teacher's register, and parent access, which is
 the single best evidence for the thing the old copy denied.
 
+The case study links out to **masjidone.co.uk**, confirmed live by the user.
+It could not be checked from here — the agent proxy refuses that host, as it
+does ysbdesigns.uk — so the screenshots were taken from a local build of that
+repository rather than from the live site.
+
 `YSB Ventures Ltd` is named in that repository and is still deliberately not
 carried across.
 
