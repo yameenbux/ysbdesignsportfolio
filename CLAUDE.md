@@ -96,7 +96,7 @@ material to carry a screenshot-led layout.
 | The Venetian Company | Paying client, live on their own domain | 4 |
 | Hair by Chrissy | Paying client | 4 |
 | Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
-| MasjidOne | **Own product**, part-built — not client work | 3 |
+| MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 
 Do not imply these were all commissions, and do not imply they are all live.
 Taiyabah is community work; say so. Diamond is finished and handed over but
@@ -117,7 +117,7 @@ thing to branch on.
 **`status` in `projects.js`** drives the badge printed over each homepage
 shot. Omit it and the project gets the pulsing "Live" chip; set it and that
 exact string prints flat instead — currently "Not live yet" for Diamond and
-"In development" for MasjidOne. It replaced a boolean, which could only say
+"In one masjid" for MasjidOne. It replaced a boolean, which could only say
 live or not and had no way to describe a published marketing site in front of
 a part-built product. A Live badge on either is the kind of claim the copy
 rules bar, so put the honest label here rather than dropping the badge.
@@ -190,7 +190,7 @@ Four navigable pages, five case studies, three unlisted.
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
 | `/diamond.html` | Case study — client, built and not live yet | via work |
-| `/masjidone.html` | Case study — own product, in development | via work |
+| `/masjidone.html` | Case study — own product, running at one masjid | via work |
 | `/about.html` | About, with services folded in | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept, unlisted | no |
@@ -219,7 +219,7 @@ Revised in Phase 5 when the rig and the estimator arrived.
    outcome and a layer read-out showing which of the three layers that
    project actually needed. The heading is "Selected work", not "Things I
    have actually shipped" — that line is now the first group's subhead,
-   because it is not true of a product still in development and an h2 that
+   because it is not true of a product with no paying customers yet, and an h2 that
    argues with the card under it is worse than a plainer h2. Outline is
    h2 section → h3 group → h4 project, the same shape the work index uses.
 3. **Build your stack** — the estimator. Takes the abstract "three layers"
@@ -448,6 +448,40 @@ labels clip. Do not ship it without the font.
 `YSB Ventures Ltd` appears in that repository's README and is deliberately
 **not** carried across — the limited-company details were removed from this
 site at the user's request and stay off.
+
+**Phase 12 — MasjidOne re-checked against its repository. DONE.** Seventy
+commits had landed there since the case study was written, and the write-up had
+gone wrong in the **expensive direction**: it said the madrasah portal and
+parent access "are not built yet". Both are built and enforcing, and that
+repository's own `CLAUDE.md` records the same error being corrected on its
+site on 1 October 2026 — features were tagged *in development* because their
+tables were empty. **Zero rows means nobody has used it yet, not that it does
+not exist.** The test is whether the functions exist and enforce, not whether
+rows do.
+
+What the copy now says, split the way that repository splits it, because the
+two halves are genuinely at different stages:
+
+- **The congregation side runs every day** in a Bolton masjid — a year of
+  prayer times published, jamāʿah notifications firing off the timetable on
+  their own. That is defensible and was being needlessly withheld.
+- **The madrasah side is built and holds that masjid's full roll**, but no
+  register has been marked on it, so it is *not* described as running. "Built"
+  and "in a masjid" are the limit; "running" and "in daily use" are not, and
+  must not be borrowed from the congregation half.
+- **Nothing is said about reach.** The notifications go to a handful of
+  devices. "It runs every day" is true; "a congregation uses it" is not, and
+  the demo's reach fixture is invented sample data that must never appear in a
+  sentence about a real masjid.
+
+The stale pricing screenshot was deleted rather than recaptioned: it showed
+*in development* tags that no longer exist anywhere on that site. Two
+screenshots replace it, both from the demonstration tenant on invented data
+with its banner in frame — a teacher's register, and parent access, which is
+the single best evidence for the thing the old copy denied.
+
+`YSB Ventures Ltd` is named in that repository and is still deliberately not
+carried across.
 
 ### Known, unfixed
 

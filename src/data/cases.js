@@ -224,10 +224,10 @@ export const cases = {
     "slug": "masjidone",
     "title": "MasjidOne",
     "kind": "Own product",
-    "role": "Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres · Stripe · OneSignal",
-    "problem": "A masjid runs its week across half a dozen systems that have never heard of each other &mdash; prayer times in one, the website in another, the madrasah register on paper, fees in a book, donations somewhere else again. The office knows the same family three separate times and can only join them up by remembering. Plenty of products do the congregation side well; the part nobody does is the <strong>madrasah's daily operations</strong> &mdash; the register marked each evening, the sabaq heard, the fee due &mdash; in the same system, and then giving a parent a view of their own child.",
-    "approach": "So MasjidOne is one record of one family, reachable from both sides. Four surfaces per masjid &mdash; the website, the in-building screens, a congregation app and the office portal &mdash; on one Supabase Postgres, where <strong>every table carries a masjid_id</strong> and every policy and function filters on it. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing that makes the product work happens <em>inside</em> one masjid rather than between them, so the separation would have bought nothing and cost a great deal to run. Row Level Security and SECURITY DEFINER functions scope every query to one masjid; Stripe runs an account per masjid at 0% commission on donations.",
-    "outcome": "This is the part of it I have built and can show: the marketing site a committee lands on after a conversation. Next.js 15 exported to static files, so there is nothing running at request time and nothing to keep patched. <strong>The madrasah portal and parent access are not built yet</strong>, and the pricing page says so in the plan itself rather than in a footnote &mdash; one plan reads <em>in development</em>, the other <em>live</em>. Every interface shown on the site is labelled as a preview with example data and no masjid named.",
+    "role": "Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres with Row Level Security · Stripe · OneSignal · Cloudflare Worker",
+    "problem": "A masjid runs its week across half a dozen systems that have never heard of each other &mdash; prayer times in one, the website in another, the madrasah register on paper, fees in a book, donations somewhere else again. The office knows the same family three separate times and can only join them up by remembering; right now <em>the masjid is the integration</em>. Plenty of products do the congregation side well. The part nobody does is the <strong>madrasah’s daily operations</strong> &mdash; the register marked each evening, the sabaq heard, the fee due &mdash; in the same system, and then giving a parent a view of their own child.",
+    "approach": "One record of one family, reachable from both sides. Four surfaces per masjid &mdash; the website, the in-building screens, a congregation app and the office portal &mdash; on one Supabase Postgres, where <strong>every table carries a masjid_id</strong> and every policy and function filters on it. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing that makes the product work happens <em>inside</em> one masjid rather than between them, so the separation would have bought nothing and cost a great deal to run. Row Level Security and SECURITY DEFINER functions scope every query to one masjid; Stripe runs an account per masjid at 0% commission on donations.<br><br>The doors are deliberately separate rather than one portal behind a permissions matrix. A teacher sees their own classes and nothing else &mdash; not the roll, not fees, not another teacher’s register. And <strong>a parent is not a smaller administrator</strong>: they arrive to answer one question about their own child, and should never land on a screen implying the rest of the madrasah is theirs to look at.",
+    "outcome": "The madrasah portal is built &mdash; registers, fees, Hifz and sabaq progress, and parent access &mdash; and it holds a Bolton masjid’s full roll. <strong>The two halves are at different stages and the copy says so separately</strong>, because they are not in the same place: the congregation side runs every day, with a year of prayer times published and jamāʿah notifications firing off the timetable on their own, while the madrasah side is built and loaded but the office has not started marking registers on it — so it is not described as running. One piece is genuinely unbuilt and still labelled as such: knowing whether a hall screen is switched on and talking back.<br><br>Getting that right needed a rule rather than a glance. Features were being tagged <em>in development</em> because their tables were empty &mdash; but <strong>zero rows means nobody has used it yet, not that it does not exist</strong>. The test is whether the functions exist and enforce, not whether rows do.<br><br>Alongside the public site sit five module pages, a demonstration tenant anyone can walk through on invented data, and a support console that is the one page touching the real platform. Every gate on it is in Postgres rather than in the page: the anonymous role holds no EXECUTE, a platform admin needs a completed second factor, and entering a masjid you do not belong to writes a support-access row into <em>their</em> audit trail.",
     "links": [],
     "shots": [
       {
@@ -235,15 +235,23 @@ export const cases = {
         "alt": "The MasjidOne home page: the madrasah and the congregation, on one system",
         "w": 760,
         "h": 475,
-        "caption": "The marketing site · previews labelled as previews",
+        "caption": "The marketing site · every interface on it labelled as a preview",
         "portrait": false
       },
       {
-        "src": "/assets/img/masjidone-pricing.jpg",
-        "alt": "The pricing page, with the madrasah plan tagged in development and the complete plan tagged live",
+        "src": "/assets/img/masjidone-teacher.jpg",
+        "alt": "A teacher's register in the demonstration tenant, with invented pupils marked in, late or absent",
         "w": 760,
         "h": 475,
-        "caption": "Pricing · what is built says live, what is not says in development",
+        "caption": "Tonight’s register · a teacher sees their own classes and nothing else",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/masjidone-parent.jpg",
+        "alt": "Parent access in the demonstration tenant: two invented children, their attendance for the week and a button to report an absence",
+        "w": 760,
+        "h": 475,
+        "caption": "Parent access · their own children, their attendance, and a way to report an absence",
         "portrait": false
       },
       {
@@ -255,7 +263,7 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "A product putting a masjid's madrasah and its congregation on one system — one record of one family, on Supabase with a masjid_id on every table."
+    "description": "A product joining a masjid's madrasah to its congregation: one record of one family on Supabase, with a masjid_id on every table."
   },
   "ellash": {
     "slug": "ellash",
