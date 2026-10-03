@@ -23,12 +23,12 @@ export const all = [
   {
     slug: 'taiyabah', href: '/taiyabah.html', name: 'Taiyabah Masjid',
     kind: 'Community project', where: 'Bolton',
-    line: 'Prayer times in front of a whole community every day, and the office work behind them: one system feeding a phone app, a website, two screens in the building and a home display.',
-    stack: 'PWA + Cloudflare Worker · Supabase/Postgres · Stripe · OneSignal push · Signage',
-    outcome: 'Prayer times in front of a whole community every day, and the office work behind them. One system feeds a phone app, a public website, two always-on screens in the building and a home display — and the rebuilt site now carries accounts, hall and nikāḥ bookings with Stripe deposits, course sign-ups and a madrasah portal.',
+    line: 'Prayer times in front of a whole community every day, and the office work behind them: an app on Google Play, a website, two screens in the building and a home display, all fed by one timetable.',
+    stack: 'PWA + Android app on Google Play · Cloudflare Worker · Supabase/Postgres with RLS · Stripe · OneSignal push · Signage',
+    outcome: 'Prayer times in front of a whole community every day, and the office work behind them. The app is now on Google Play, and one system feeds it, a public website, two always-on screens in the building and a home display — while the rebuilt site carries accounts and an Admin Centre the masjid runs itself, from the timetable and notices to hall bookings, Gift Aid and a push to every phone.',
     problem: 'A Bolton masjid needed prayer times in front of its community every day — on phones, on the wall, and on the web. Three separate problems, all being solved by hand.',
-    approach: 'One system instead of three. An installable app with live audio and push alerts, a public website, two always-on screens inside the building, and a home display anyone can run on a spare tablet or TV. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice.',
-    layers: { interface: 96, software: 88, infra: 92 },
+    approach: 'One system instead of three. An installable app with live audio and push alerts, a public website, two always-on screens inside the building, and a home display anyone can run on a spare tablet or TV. A Python pipeline feeds all of them from a single timetable, so nothing is typed twice. Six roles and three gates sit in Postgres rather than in the page, and the imam’s inbox is the sharpest case: no address exists to be harvested, and the table that holds a question has Row Level Security on with no policies at all.',
+    layers: { interface: 96, software: 94, infra: 95 },
     img: '/assets/img/taiyabah-web.jpg', alt: 'The Taiyabah Masjid website',
   },
   {

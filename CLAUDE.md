@@ -594,6 +594,45 @@ repository rather than from the live site.
 `YSB Ventures Ltd` is named in that repository and is still deliberately not
 carried across.
 
+**Phase 13 — Taiyabah re-checked against its repositories. DONE.** Four repos
+back it; two had moved. The screens and the home display are untouched since
+September, so the write-up for those still stands. The app and the website
+rebrand had both changed substantially.
+
+- **The app is on Google Play**, as a Trusted Web Activity verified against
+  both signing certificates so a store install opens with no browser bar. The
+  case study said only "an installable app". It is still installable from the
+  web as well, and both facts are now on the page.
+- **Four staff areas became an Admin Centre.** The masjid publishes its own
+  prayer timetable a year at a time, writes notices, edits the appeal figure
+  and the hall rates, opens and closes adult classes, pulls Gift Aid rows for
+  HMRC, tracks food bank volunteers and charity collections, and pushes a
+  notification to every phone with the app — without a developer and without
+  pushing to GitHub. That is the outcome the old copy understated most.
+- **Six roles and three gates, all in Postgres.** The sharpest piece is the
+  **imam's inbox**: no imam address exists anywhere to be harvested, the
+  question is a row the app cannot read back, and the table has Row Level
+  Security on with *no policies at all* and every grant revoked — denial by
+  default, reachable only through functions that check the role themselves.
+  The check deliberately does not fall back to `admin`.
+- **The website is still staged.** `robots.txt` there still blocks crawlers
+  pending the move to the masjid's own domain, so "finished and staged" was
+  correct and stays. Online booking and the madrasah application form are both
+  deliberately published as previews that cannot send.
+- **iOS is the open item**, blocked on a D-U-N-S number for the charity.
+
+**Two standing constraints came out of this.** First, **the staff portals
+cannot be screenshotted from here** — every one of them is behind a sign-in
+against the live database, which holds children's records including medical
+and SEND notes. The existing venue capture is safe because it was taken
+against drama-range data; do not try to extend the set by signing in. Second,
+that repository publishes **role counts and a roll size**. Those are the
+masjid's operational facts, not YSB's, and they stay off this site for the
+same reason MasjidOne's pupil counts do.
+
+The app screenshot was retaken because the old one predated the current
+design; it needs no sign-in and shows only a public timetable.
+
 ### Known, unfixed
 
 - **The corridor hero costs the homepage 7 Lighthouse points.** 90/100/100/100
