@@ -236,8 +236,8 @@ approved treatment and read as less clean for it.
 
 ### Settled, 5 October
 
-Both of these sat in "Still open" for months. They are decisions now, not
-questions, and reopening either needs a reason rather than a mood.
+All three sat in "Still open" for months. They are decisions now, not
+questions, and reopening one needs a reason rather than a mood.
 
 - **No contact form. WhatsApp and the phone number are the two routes**, and
   that is the final answer rather than a holding position. It keeps the site
@@ -576,9 +576,9 @@ names its masjid" landed there on 5 October. That is a genuinely good story,
 but it is a week old and still moving; revisit it when it settles rather than
 describing a half-applied migration as architecture.
 
-Also noted, because this site has the same open question: **Bux Travel solved
-its static-hosting form with Web3Forms.** The contact-form mechanism below is
-still unchosen, but there is now a worked example in the same estate.
+Also noted: **Bux Travel solved its static-hosting form with Web3Forms.** That
+was written while this site's own form was still an open question. It is not
+one any more — see "Settled, 5 October": there is deliberately no form here.
 
 ### Known, unfixed
 
