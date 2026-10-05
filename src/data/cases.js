@@ -4,6 +4,7 @@ export const cases = {
   "taiyabah": {
     "slug": "taiyabah",
     "title": "Taiyabah Masjid",
+    "seoTitle": "Taiyabah Masjid — mosque app, website, screens",
     "kind": "Community project",
     "role": "PWA + Android app on Google Play · Cloudflare Worker · OneSignal push · Supabase/Postgres with Row Level Security · Stripe · Signage · Python build",
     "problem": "A Bolton masjid needed prayer times in front of its community every day &mdash; on phones, on the wall, and on the web. Three separate problems, all being solved by hand.",
@@ -86,6 +87,7 @@ export const cases = {
   "venetian": {
     "slug": "venetian",
     "title": "The Venetian Company",
+    "seoTitle": "The Venetian Company — a plasterer's website",
     "kind": "Client",
     "role": "Astro · Tailwind · TypeScript · Identity · Design → build → deploy",
     "problem": "The Venetian Company lay Venetian plaster and microcement in homes across the country. Their work is genuinely beautiful and it lived entirely on Instagram — no website, nothing to send anyone, nothing that turns up in a search.",
@@ -136,6 +138,7 @@ export const cases = {
   "hairbychrissy": {
     "slug": "hairbychrissy",
     "title": "Hair by Chrissy",
+    "seoTitle": "Hair by Chrissy — a salon booking system",
     "kind": "Client",
     "role": "Node API on Render · Supabase/Postgres · Stripe Checkout · Unbuilt front end",
     "problem": "Chrissy fits hair extensions by hand in a private London studio. Bookings came through Instagram DMs — a thread per client, no calendar, and no way to stop two people asking for the same Saturday.",
@@ -144,7 +147,7 @@ export const cases = {
     "links": [
       {
         "href": "https://hairbychrissy.ysbdesigns.uk/",
-        "text": "See it live"
+        "text": "See the published site"
       }
     ],
     "shots": [
@@ -186,6 +189,7 @@ export const cases = {
   "diamond": {
     "slug": "diamond",
     "title": "Diamond Heating & Plumbing",
+    "seoTitle": "Diamond Heating & Plumbing — a trade website",
     "kind": "Client",
     "role": "Next.js 15, static export · TypeScript · Tailwind 4 · shadcn/ui",
     "problem": "A Bolton heating engineer, 26 years on the tools, gets rung by people who cannot describe what is wrong. &ldquo;The boiler&rsquo;s not working&rdquo; costs a visit to find out it was a part he could have carried in the van. What he needs before he sets off is a photo.",
@@ -223,6 +227,7 @@ export const cases = {
   "masjidone": {
     "slug": "masjidone",
     "title": "MasjidOne",
+    "seoTitle": "MasjidOne — madrasah and congregation software",
     "kind": "Own product",
     "role": "Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres with Row Level Security · Stripe · OneSignal · Cloudflare Worker → Resend",
     "problem": "A masjid runs its week across half a dozen systems that have never heard of each other &mdash; prayer times in one, the website in another, the madrasah register on paper, fees in a book, donations somewhere else again. The office knows the same family three separate times and can only join them up by remembering; right now <em>the masjid is the integration</em>. Plenty of products do the congregation side well. The part nobody does is the <strong>madrasah’s daily operations</strong> &mdash; the register marked each evening, the sabaq heard, the fee due &mdash; in the same system, and then giving a parent a view of their own child.",
@@ -273,6 +278,7 @@ export const cases = {
   "ellash": {
     "slug": "ellash",
     "title": "èllash",
+    "seoTitle": "èllash — a beauty booking page",
     "kind": "Client",
     "role": "One page, no build step, no dependencies · Travel-day calendar · Deposits",
     "problem": "Beauty businesses lose a slice of every booking to the big platforms, or pay a monthly fee for a diary they barely use. For a mobile lash technician working across three towns, that overhead buys very little — and none of it understands that Tuesday is a Coventry day.",
@@ -315,6 +321,7 @@ export const cases = {
   "buxtravel": {
     "slug": "buxtravel",
     "title": "Bux Travel",
+    "seoTitle": "Bux Travel — minibus hire site for Bolton",
     "kind": "In-house",
     "role": "Twenty static pages · Service × town local SEO · Quote form with an email route · Quotation, invoice and receipt templates · WebP, sitemap and cache-stamp tooling",
     "problem": "A Bolton minibus and private-hire operator was losing work to whoever showed up first on Google. There was nowhere to send people.",
@@ -349,6 +356,7 @@ export const cases = {
   "luxescent": {
     "slug": "luxescent",
     "title": "LuxeScent UK",
+    "seoTitle": "LuxeScent UK — a fragrance brand storefront",
     "kind": "Client",
     "role": "One-page static site · Self-hosted variable fonts · Scent finder · Etsy deep-links",
     "problem": "A Bolton maker of designer-inspired car diffusers was selling on Etsy alone, where an &pound;8.79 product looks like every other &pound;8.79 product.",

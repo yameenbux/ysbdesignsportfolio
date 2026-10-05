@@ -10,12 +10,16 @@ import BaseLayout from './BaseLayout.astro';
  * exists to explain what the visitor is looking at.
  */
 const { data } = Astro.props;
-const { title, kind, role, problem, approach, outcome, links, shots, description } = data;
+const { title, seoTitle, kind, role, problem, approach, outcome, links, shots, description } = data;
+
+// `title` is the h1 and stays the project name. `seoTitle` is what the tab
+// and the search result say, because "Taiyabah Masjid" alone matches nothing
+// anybody searches for.
 
 const sections = [['Problem', problem], ['Approach', approach], ['Outcome', outcome]];
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={seoTitle ?? title} description={description}>
   <p class="pt-10">
     <a href="/work.html" class="label no-underline transition-colors duration-150 hover:text-blue">← All work</a>
   </p>
