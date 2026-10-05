@@ -633,6 +633,47 @@ same reason MasjidOne's pupil counts do.
 The app screenshot was retaken because the old one predated the current
 design; it needs no sign-in and shows only a public timetable.
 
+**Phase 14 — every project re-checked, 5 October. DONE.** Push dates compared
+against the date each project's copy was last verified, then only the ones that
+had moved were read. **Unchanged and still correct: Venetian, Hair by Chrissy,
+Diamond, èllash, LuxeScent and Taiyabah's two screen repos.** Four had moved.
+
+- **MasjidOne** now states a canonical **five products**, and that list carries
+  a warning in its own repository because it has been got wrong twice — a
+  capability PDF went out omitting the website, and the correction still
+  omitted the in-mosque screens. This site said "four surfaces" and left out
+  the parent portal, so it is now the five, named their way. Its form Worker
+  also moved from Cloudflare Email to **Resend**. Its pricing became banded by
+  madrasah size, which this site never quoted, so nothing there had to change —
+  and 0% commission on giving is still accurate.
+- **Taiyabah's app** runs in **three languages**, and its Qur'anic, hadith and
+  duʿā text is checked verbatim against source on every build. Both were
+  missing here. "Verified against both signing certificates" became "verified
+  through Google's Digital Asset Links", because the fingerprint count is now
+  three and a number that moves does not belong in copy.
+- **Taiyabah's website** calls it **seven staff areas behind one sign-in**, so
+  that is the phrasing used rather than a list implying a count.
+- **Bux Travel** gained a working **email route beside WhatsApp** (Web3Forms),
+  a reference that ties the WhatsApp message, the logged record and the
+  acknowledgement together, quotation/invoice/receipt templates, an email
+  signature, a review page and a printable review card, and the deposit stated
+  on the page. It also **removed the aggregateRating it had declared about
+  itself** — which is the same rule this site keeps, so it is worth saying.
+
+**Two things found and deliberately not published.** Taiyabah has a **native
+React Native rebuild** under way to replace the Trusted Web Activity; its own
+README says steps 1 and 2 of 4 are done and *"nothing here is on the Play
+listing yet"*, so it stays off a portfolio governed by "never claim a feature
+that is not built". And the **MasjidOne platform is being built inside the
+Taiyabah website's database** — migrations for billing, plans and "every call
+names its masjid" landed there on 5 October. That is a genuinely good story,
+but it is a week old and still moving; revisit it when it settles rather than
+describing a half-applied migration as architecture.
+
+Also noted, because this site has the same open question: **Bux Travel solved
+its static-hosting form with Web3Forms.** The contact-form mechanism below is
+still unchosen, but there is now a worked example in the same estate.
+
 ### Known, unfixed
 
 - **The corridor hero costs the homepage 7 Lighthouse points.** 90/100/100/100

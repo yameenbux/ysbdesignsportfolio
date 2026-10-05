@@ -92,7 +92,7 @@ export const all = [
     product: true,
     status: 'In one masjid',
     line: 'The congregation side runs every day; the madrasah side is built and holds a Bolton masjid’s full roll — both on one record of one family.',
-    stack: 'Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres with RLS · Stripe · OneSignal · Cloudflare Worker',
+    stack: 'Next.js 15, static export · TypeScript · Tailwind · shadcn/ui · Supabase Postgres with RLS · Stripe · OneSignal · Cloudflare Worker → Resend',
     outcome: 'Four surfaces on one Supabase Postgres, with a masjid_id on every table and Row Level Security scoping every query to one masjid. The congregation side runs every day in a Bolton masjid; the madrasah portal — registers, fees, Hifz and sabaq, parent access — is built and holds that masjid’s full roll.',
     problem: 'The office knows the same family three separate times — prayer times in one system, the website in another, the register on paper, fees in a book — and can only join them up by remembering.',
     approach: 'One Supabase Postgres behind four surfaces per masjid, with Row Level Security and SECURITY DEFINER functions scoping every query to one masjid. The doors are separate rather than one portal behind a permissions matrix: a teacher sees their own classes and nothing else, and a parent is not a smaller administrator. The support console touches the real platform, and every gate on it is in Postgres rather than in the page.',
