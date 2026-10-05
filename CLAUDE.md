@@ -168,10 +168,11 @@ Resolved in Phase 2. `07404901859` is the correct number. `07729247248` was
 wrong and had been on every Call link; fixed in `804ae30`. **One number, used
 everywhere** — if a second ever appears, one of them is a bug.
 
-A contact form needs a third-party endpoint (Formspree, Web3Forms) or
-`mailto:` — static hosting has no server. Not yet chosen. Until it is, the
-existing WhatsApp-first approach stands; it converts better than a form for
-this audience anyway.
+A contact form would need a third-party endpoint (Formspree, Web3Forms) or
+`mailto:`, because static hosting has no server. **Decided on 5 October: there
+is no form.** WhatsApp and the phone number are the two routes, and that is
+the position rather than a placeholder for one. Do not add a form, an endpoint
+or an address without being asked.
 
 ## Structure
 
@@ -233,12 +234,23 @@ capability list, which now lives on About under "What I build". Four
 sections beat five — the homepage was a thousand pixels longer than the
 approved treatment and read as less clean for it.
 
-### Still open
+### Settled, 5 October
 
-- **Contact form mechanism.** Formspree, Web3Forms or `mailto:`. Needed before
-  `/contact.html` is built. WhatsApp-first stands until then.
-- **Portrait.** `about.html` wants one; the asset is still the
-  `PORTRAIT PENDING` placeholder. Shoot it or design around its absence.
+Both of these sat in "Still open" for months. They are decisions now, not
+questions, and reopening either needs a reason rather than a mood.
+
+- **No contact form. WhatsApp and the phone number are the two routes**, and
+  that is the final answer rather than a holding position. It keeps the site
+  with no third-party processor, no form endpoint and nothing for the privacy
+  page to disclose. The cost is real and accepted: somebody who will not
+  message or ring a stranger has no way in.
+- **No portrait, permanently.** `about.html` carries no image at all and is
+  built not to want one; the orphaned `PORTRAIT PENDING` placeholder has been
+  deleted rather than left inviting someone to wire it up. The page argues
+  with words and evidence instead of a face.
+- **No testimonials for now.** Not a copy-rules problem — real ones would be
+  welcome — simply none collected. The case studies carry the whole job of
+  convincing a stranger until that changes.
 
 ## Aesthetic direction
 
@@ -575,8 +587,8 @@ still unchosen, but there is now a worked example in the same estate.
   headers — GitHub Pages will differ.
 - **Images are JPEG.** Lighthouse offers ~15KB from WebP on a below-fold
   image. Not worth an image pipeline yet.
-- **Portrait** is still absent by choice; About is built not to want one.
-- **Contact form mechanism** is still unchosen. WhatsApp-first stands.
+- **Portrait and contact form are settled, not open** — see "Settled,
+  5 October" above. Neither is a gap waiting to be filled.
 - **Analytics: none, deliberately.** Adding any is what would make the privacy
   policy legally required rather than merely honest, and a cookie-based one
   (GA4) would also need a consent banner. A cookieless one (Plausible,
