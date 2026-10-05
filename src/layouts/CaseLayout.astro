@@ -14,12 +14,16 @@ import BaseLayout from './BaseLayout.astro';
  * saturated ground needs a sheet under it or it reads as a hole in the page.
  */
 const { data } = Astro.props;
-const { title, kind, role, problem, approach, outcome, links, shots, description } = data;
+const { title, seoTitle, kind, role, problem, approach, outcome, links, shots, description } = data;
+
+// `title` is the h1 and stays the project name. `seoTitle` is what the tab
+// and the search result say, because "Taiyabah Masjid" alone matches nothing
+// anybody searches for.
 
 const sections = [['Problem', problem], ['Approach', approach], ['Outcome', outcome]];
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={seoTitle ?? title} description={description}>
   <p class="back"><a href="/work.html" class="eyebrow ul-draw">← All work</a></p>
 
   <section class="case-head">
