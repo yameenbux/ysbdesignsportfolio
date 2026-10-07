@@ -154,6 +154,16 @@ machinery. Do not delete them.
 
 - **No invented metrics, logos, ratings, testimonials or client counts.** Not
   anywhere, not as placeholder text.
+- **No logos or vendor badges at all — including certification badges that
+  are genuinely earned.** Confirmed 7 October. The certifications are set as
+  text and stay that way. Four reasons, so this is not re-argued:
+  Microsoft's certification badges are trademark-governed and issued through
+  Credly with their own usage terms, and a generic Azure mark is not that
+  badge; a coloured vendor logo is wrong against a type-only palette with no
+  imagery outside the screenshots; the booked exam has no badge to show, so a
+  badge row would either sit half-empty or imply one that has not been
+  earned; and the exam code in plain text is the part a reader can verify,
+  while the badge is decoration.
 - Sentence case, plain verbs, active voice. A button says what happens when
   it is pressed.
 - Client-location facts stay as written — "a Bolton masjid", "a Bolton minibus
