@@ -165,17 +165,29 @@ machinery. Do not delete them.
 
 ## Contact
 
-There is **no email address on the site** and none is planned unless a mailbox
-is actually created. Routes are:
+Three routes, since the 7 October pivot:
 
 - WhatsApp — `07404901859`
 - Phone — `tel:+447404901859`
+- Email — `yameen_bee@hotmail.co.uk`
+
+**Email was added on 7 October and reverses the long-standing "no address"
+position.** That position was taken for a prospect, and prospects do message a
+mobile; the audience is now a hiring manager, and recruiters email. A `mailto:`
+collects nothing, needs no endpoint and adds no third party, so the privacy
+page stays true — it was updated in the same commit to say that an email sits
+in a mailbox with an email provider.
+
+**It is a hotmail.co.uk address on a site at ysbdesigns.uk.** Flagged to the
+user as a small credibility cost for this audience; the domain and one.com
+hosting are already there if a `yameen@ysbdesigns.uk` box is ever wanted.
+Until then this is the real address and a real address beats a smart one.
 
 **LinkedIn was removed at the user's request.** It was in the footer of every
 page and was the second row of contact.html's "Where and how" list; that
 section is now a single paragraph, because a definition list of one term reads
-as a list with something missing. There are **two routes on the site**, both
-the same number — do not reintroduce a social profile without being asked.
+as a list with something missing. The off-site profile link stays off — do not
+reintroduce a social profile without being asked.
 
 Resolved in Phase 2. `07404901859` is the correct number. `07729247248` was
 wrong and had been on every Call link; fixed in `804ae30`. **One number, used
@@ -260,13 +272,9 @@ approved treatment and read as less clean for it.
 All three sat in "Still open" for months. They are decisions now, not
 questions, and reopening one needs a reason rather than a mood.
 
-- **No contact form. WhatsApp and the phone number are the two routes**, and
-  that is the final answer rather than a holding position.
-  **Re-opened in effect by the 7 October pivot and not yet re-decided:** that
-  call was made for a prospect, and prospects do message a mobile. Recruiters
-  and hiring managers email. A hiring site with no address may simply not be
-  contacted. Flagged to the user; the decision stands until they say
-  otherwise. It keeps the site
+- **No contact form** — that part still holds, and there is still no endpoint
+  and no third-party processor. **The no-email half was reversed on 7 October**
+  when the audience changed: see "## Contact". Three routes now, still no form. It keeps the site
   with no third-party processor, no form endpoint and nothing for the privacy
   page to disclose. The cost is real and accepted: somebody who will not
   message or ring a stranger has no way in.
@@ -685,6 +693,27 @@ abbreviating a label.
 **Certifications are pending.** The user has some and is sending the list.
 There is deliberately **no placeholder slot** on About: the copy rules bar
 claiming anything unevidenced, and that includes training.
+
+**Phase 17 — certifications and an email address, 7 October.** The two things
+the pivot was waiting on.
+
+- **AZ-900 (Microsoft Azure Fundamentals) is held** and is on About.
+  **AZ-140 (Azure Virtual Desktop) is booked and not sat**, and is listed
+  under a separate "Booked" term, in italics, described as *a plan rather
+  than a qualification*. A booked exam is a real fact and shows direction;
+  it is not a credential, and the markup must never let it read as one.
+  **If it is passed, move it up. If it is postponed, take it off** — this is
+  the one claim on the site with an expiry date.
+- **The Azure certificate does not soften the experience caveat.** About now
+  says it outright: the certificate is Azure, the systems are not, and a
+  fundamentals exam is not production experience. That sentence is load
+  bearing — without it, an Azure badge next to a list of cloud work implies
+  Azure cloud work.
+- **Email is live as a third route**, in the footer and on Contact. The
+  privacy page was updated in the same commit, as the working rules require:
+  "there is no contact form" and "nothing on this site collects your name,
+  email address or anything else" both stay true of a `mailto:`, but the
+  "when you get in touch" and data-rights paragraphs now name email.
 
 ### Known, unfixed
 

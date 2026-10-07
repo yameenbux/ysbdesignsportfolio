@@ -36,6 +36,9 @@ const year = new Date().getFullYear();
 // second ever appears, one of them is a bug.
 const WHATSAPP = '447404901859';
 const TEL = '+447404901859';
+// Added 7 October with the pivot: recruiters email, and a hiring site with
+// no address may simply not be contacted.
+const EMAIL = 'yameen_bee@hotmail.co.uk';
 ---
 
 <!doctype html>
@@ -122,6 +125,7 @@ const TEL = '+447404901859';
           <ul class="m-0 flex list-none flex-wrap gap-6 p-0">
             <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a></li>
             <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`tel:${TEL}`}>Call</a></li>
+            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`mailto:${EMAIL}`}>Email</a></li>
           </ul>
         </div>
       </footer>

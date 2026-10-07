@@ -8,14 +8,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
  * The spec's position is that WhatsApp converts better for this audience
  * anyway, and a form nobody uses is worse than no form.
  *
- * No email address here. There is no mailbox, and publishing one that
- * bounces is worse than publishing none (CLAUDE.md, "## Contact"). The
- * off-site profile link was removed at the user's request, so WhatsApp and
- * the phone number are now the only two routes on the site.
+ * Email was added on 7 October, when the site pivoted to a hiring audience.
+ * The earlier no-address position was taken for a prospect, and prospects do
+ * message a mobile; recruiters email. Three routes now, no form — a mailto
+ * collects nothing and needs no third party, so the privacy page stays true.
+ *
+ * The off-site profile link was removed at the user's request and stays off.
  */
 
 const WHATSAPP = 'https://wa.me/447404901859';
 const TEL = '+447404901859';
+const EMAIL = 'yameen_bee@hotmail.co.uk';
 
 // What makes a first message answerable in one reply rather than four.
 const helpful = [
@@ -25,7 +28,7 @@ const helpful = [
 ];
 
 const description =
-  "Message me on WhatsApp and I'll tell you what it takes — usually the same day. No form, no obligation.";
+  "WhatsApp, phone or email — I'll tell you what it takes, usually the same day. No form, no obligation.";
 ---
 
 <BaseLayout title="Contact — get a quote" description={description}>
@@ -50,6 +53,9 @@ const description =
       </a>
       <a class="label transition-colors duration-150 ease-out hover:text-blue" href={`tel:${TEL}`}>
         Call 07404 901859
+      </a>
+      <a class="label transition-colors duration-150 ease-out hover:text-blue" href={`mailto:${EMAIL}`}>
+        Email me
       </a>
     </div>
   </section>

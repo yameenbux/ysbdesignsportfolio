@@ -9,9 +9,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
  * No portrait: settled on 5 October, and the decision holds. The page argues
  * with evidence rather than a face.
  *
- * Certifications: the user has some and is sending the list. The slot below
- * is deliberately absent rather than filled with a placeholder — the copy
- * rules bar claiming anything unevidenced, and that includes training.
+ * Certifications, added 7 October. AZ-900 is held. AZ-140 is booked and not
+ * sat, and is marked as such in the markup and in the copy — a booked exam is
+ * a plan, not a qualification, and the copy rules bar claiming anything
+ * unevidenced. If it is passed, move it up; if it is postponed, take it off.
  */
 
 const build = [
@@ -40,7 +41,7 @@ const how = [
 ];
 
 const description =
-  'Yameen — platform and DevOps engineer in Greater Manchester. What I build, how I work, and what I am looking for.';
+  'Yameen — platform and DevOps engineer in Greater Manchester. AZ-900 certified. What I build, how I work, and what I am looking for.';
 ---
 
 <BaseLayout title="About — platform and DevOps engineer" description={description}>
@@ -89,6 +90,29 @@ const description =
   </section>
 
   <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Certifications</h2>
+
+    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+      <dt class="label m-0 md:col-span-3">Held</dt>
+      <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
+        <strong class="text-ink">AZ-900</strong> — Microsoft Azure Fundamentals.
+      </dd>
+
+      <dt class="label m-0 md:col-span-3">Booked</dt>
+      <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
+        <strong class="text-ink">AZ-140</strong> — Azure Virtual Desktop.{' '}
+        <em>Exam booked, not yet sat</em>, and listed here as a plan rather
+        than a qualification.
+      </dd>
+    </dl>
+
+    <p class="measure mt-8 text-[16px] leading-[1.6] text-ink-2">
+      A fundamentals certificate is not production experience and this page
+      does not pretend otherwise — what I have actually run is below.
+    </p>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
     <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What I'm looking for</h2>
 
     <div class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
@@ -107,11 +131,12 @@ const description =
 
       <p class="label m-0 md:col-span-3">Honestly</p>
       <p class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
-        My production experience is Cloudflare, Supabase, GitHub Actions and
-        Render rather than AWS, Azure or GCP. The concepts carry — tenancy,
-        least privilege, build gating, webhook idempotency, deploy
-        verification — but I would rather be straight about which consoles I
-        have actually run things in.
+        The certificate above is Azure; the systems above it are not. What I
+        have run in production is Cloudflare, Supabase, GitHub Actions and
+        Render. The concepts carry — tenancy, least privilege, build gating,
+        webhook idempotency, deploy verification — but I would rather be
+        straight about which consoles I have actually operated in than let a
+        fundamentals exam imply more than it is.
       </p>
     </div>
   </section>
