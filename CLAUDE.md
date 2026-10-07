@@ -698,7 +698,7 @@ claiming anything unevidenced, and that includes training.
 the pivot was waiting on.
 
 - **AZ-900 (Microsoft Azure Fundamentals) is held** and is on About.
-  **AZ-140 (Azure Virtual Desktop) is booked and not sat**, and is listed
+  **AZ-104 (Azure Administrator) is booked and not sat**, and is listed
   under a separate "Booked" term, in italics, described as *a plan rather
   than a qualification*. A booked exam is a real fact and shows direction;
   it is not a credential, and the markup must never let it read as one.
