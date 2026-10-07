@@ -15,9 +15,10 @@ const {
 } = Astro.props;
 
 const nav = [
-  { href: '/work.html',    label: 'Work' },
-  { href: '/about.html',   label: 'About' },
-  { href: '/contact.html', label: 'Contact' },
+  { href: '/work.html',        label: 'Work' },
+  { href: '/engineering.html', label: 'Engineering' },
+  { href: '/about.html',       label: 'About' },
+  { href: '/contact.html',     label: 'Contact' },
 ];
 
 const path = Astro.url.pathname;
@@ -84,10 +85,10 @@ const TEL = '+447404901859';
 
     <div class="relative z-[1]">
       <header class="mx-auto max-w-[1180px] px-7">
-        <div class="flex items-baseline justify-between gap-8 border-b border-line py-5">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3 border-b border-line py-5">
           <a href="/" class="label label-ink no-underline">YSB Designs</a>
           <nav aria-label="Primary">
-            <ul class="m-0 flex list-none items-baseline gap-6 p-0">
+            <ul class="m-0 flex list-none items-baseline gap-x-5 gap-y-2 p-0 sm:gap-x-6">
               {nav.map((item) => (
                 <li>
                   <a

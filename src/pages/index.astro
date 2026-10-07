@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LayerRig from '../components/LayerRig.astro';
-import Estimator from '../components/Estimator.astro';
 import { lead } from '../data/projects.js';
 
 // Same split as the work index, for the same reason: a product I own is a
@@ -11,10 +10,10 @@ const shipped = lead.filter((p) => !p.product);
 const mine = lead.filter((p) => p.product);
 
 const description =
-  "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.";
+  "I build and run production systems on my own \u2014 multi-tenant Postgres, edge compute, and CI that refuses to ship what it has not seen run. Greater Manchester.";
 ---
 
-<BaseLayout title="Websites and software, Greater Manchester" description={description}>
+<BaseLayout title="Platform and DevOps engineer, Greater Manchester" description={description}>
 
   {/* ---- hero: the claim, and the stack it describes ------------------ */}
   {/* 0.95/1.05 rather than 1.05/0.95: the rig's leader-line labels need about
@@ -22,18 +21,19 @@ const description =
       one 26px short. The text column is still wider than its 46ch measure. */}
   <section class="grid grid-cols-1 gap-11 pt-16 pb-10 md:grid-cols-[0.95fr_1.05fr] md:items-center md:gap-14">
     <div>
-      <p class="label m-0 mb-5">Greater Manchester · one person, end to end</p>
+      <p class="label m-0 mb-5">Greater Manchester · platform and DevOps</p>
       <h1 class="text-[clamp(2.6rem,6.2vw,4.6rem)] font-extrabold leading-[0.98] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
         Three layers
-        <span class="block font-medium text-ink-2 [font-variation-settings:'wdth'_88]">under every site I build.</span>
+        <span class="block font-medium text-ink-2 [font-variation-settings:'wdth'_88]">and I run all of them.</span>
       </h1>
       <p class="mt-6 max-w-[46ch] text-ink-2">
-        The website you see, the software behind it, and the hosting it runs
-        on. Most people only sell you the first one. Pull the stack apart and
-        have a look.
+        The interface, the data model behind it, and the pipeline that ships
+        it. I build and operate small production systems single-handed —
+        multi-tenant Postgres, edge compute, and CI that refuses to ship what
+        it has not seen run.
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-3.5">
-        <a class="btn" href="#build">Price up a build</a>
+        <a class="btn" href="/engineering.html">How it is built and run</a>
         <a class="btn btn-ghost" href="/work.html">See the work</a>
       </div>
     </div>
@@ -132,15 +132,6 @@ const description =
         </a>
       </article>
     ))}
-  </section>
-
-  {/* ---- estimator --------------------------------------------------- */}
-  <section id="build" class="border-t border-line py-16 md:py-24">
-    <div class="rv mb-13 flex flex-wrap items-baseline justify-between gap-5">
-      <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Build your stack</h2>
-      <span class="label">Rough figure · no email required</span>
-    </div>
-    <div class="rv"><Estimator /></div>
   </section>
 
   {/* ---- contact ----------------------------------------------------- */}

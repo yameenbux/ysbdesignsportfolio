@@ -6,9 +6,9 @@
  * Eleven URLs do not need a dependency.
  *
  * Listed here: the ten real pages, including the three unlisted case studies
- * — they are live and indexed and staying that way. Not listed: /404.html,
- * and /services.html, which is a redirect stub whose canonical already points
- * at /about.html.
+ * — they are live and indexed and staying that way. Not listed: /404.html.
+ * /services.html stopped being a redirect stub on 7 October and is a real
+ * page again, so it is listed.
  */
 
 const SITE = 'https://www.ysbdesigns.uk';
@@ -18,7 +18,9 @@ const SITE = 'https://www.ysbdesigns.uk';
 const pages = [
   ['/',                   '1.0'],
   ['/work.html',          '0.9'],
+  ['/engineering.html',   '0.9'],
   ['/about.html',         '0.9'],
+  ['/services.html',      '0.8'],
   ['/contact.html',       '0.8'],
   ['/taiyabah.html',      '0.7'],
   ['/venetian.html',      '0.7'],

@@ -13,13 +13,10 @@ export default defineConfig({
   // link and every indexed URL.
   build: { format: 'file' },
 
-  // services.html is live and indexed. Its content folded into about.html in
-  // Phase 3, so the URL redirects rather than 404s. Static output emits a
-  // meta-refresh page for this. The key is extensionless: with
-  // build.format 'file' Astro appends .html itself, and '/services.html'
-  // emits services.html.html — which 404s the real URL.
-  redirects: {
-    '/services': '/about.html',
-  },
+  // '/services' redirected to about.html from Phase 3 until 7 October. The
+  // site then pivoted to a hiring audience: about.html became the candidate
+  // page and services.astro took back the commercial content, so the URL is
+  // a real page again and the redirect would shadow it.
+
   vite: { plugins: [tailwind()] },
 });

@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * The technical read, for a platform or DevOps reader rather than a client.
+ *
+ * Everything on this page is checkable: each claim points at a workflow file,
+ * a migration or a config in a public repository. Nothing here is a
+ * capability word — "I know CI/CD" is not evidence, a release gate that
+ * refuses to build is.
+ *
+ * Where a thing is not built, or not switched on, it says so. The copy rules
+ * in CLAUDE.md apply to this page exactly as they apply to the case studies.
+ */
+
+const pipelines = [
+  {
+    name: 'Release gated on a real device',
+    where: 'native-release.yml',
+    detail:
+      'The Play bundle workflow refuses to run unless that exact commit already has a successful smoke run against it. It asks the GitHub API for runs of <em>native-smoke.yml</em> at <code>head_sha</code> and exits non-zero if the count is zero. The failure message says why the gate exists: a bundle that packages correctly and crashes on launch passes every other check in the workflow.',
+    why: 'It exists because that is precisely what happened — five green builds that were a red error screen, which is the entry below.',
+  },
+  {
+    name: 'Verifying against the source of truth, not the artefact',
+    where: 'android-build.yml',
+    detail:
+      'Before building, the job asks <strong>Google’s Digital Asset Links API</strong> whether the live site actually verifies the app, rather than trusting the <code>assetlinks.json</code> sitting in the repository. The two can disagree, and only one of them decides whether a store install opens without a browser bar.',
+    why: 'A file in git is a statement of intent. The API is the fact.',
+  },
+  {
+    name: 'Contract tests across two codebases',
+    where: 'native-build.yml, native-smoke.yml',
+    detail:
+      'The native app and the website are separate repositories that must not drift. CI asserts that the app says what the website says — in English too — that every link points where the website points, and that every colour it draws matches. A screen-reader naming check runs in the same job.',
+    why: 'Two surfaces describing the same masjid differently is a content bug nobody would catch by hand.',
+  },
+  {
+    name: 'Deploy, then confirm',
+    where: 'deploy-worker.yml',
+    detail:
+      'The notification Worker deploys with Wrangler and the job then re-requests it and fails if it is not answering. A deploy step that exits zero means the upload worked, not that the thing is up.',
+    why: 'Green is not the same as live.',
+  },
+  {
+    name: 'A build that fails rather than silently breaking the domain',
+    where: 'ysbdesignsportfolio — deploy.yml',
+    detail:
+      'This site publishes to GitHub Pages from Actions. The workflow fails the build if <code>CNAME</code> is missing from the output, because a build that drops it takes the custom domain down while still reporting success.',
+    why: 'The failure mode worth guarding is the one that reports success.',
+  },
+];
+
+const data = [
+  {
+    h: 'One database, not one per customer',
+    p: 'MasjidOne runs every masjid on a single Postgres. <strong>Every table carries a <code>masjid_id</code> that is <code>not null</code> with no default</strong>, and every write function fills it from <code>current_masjid()</code>. Row Level Security and <code>SECURITY DEFINER</code> functions scope every read and write. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing the product does happens <em>inside</em> one masjid rather than between them — so the separation would have bought nothing and cost a great deal to run.',
+  },
+  {
+    h: 'Denial by default, as a design rather than a policy',
+    p: 'The imam’s advice table has RLS enabled and <strong>no policies at all</strong>, with every grant revoked. No policy means no row passes; the only way in is through functions that check the role themselves. The check deliberately does not fall back to administrator, because somebody writing to the imam in confidence is not writing to the committee.',
+  },
+  {
+    h: 'Gates in the database, not in the page',
+    p: 'A support console reaches real tenants. The anonymous role holds no <code>EXECUTE</code>; the platform-admin check requires <code>is_aal2()</code>, a completed second factor; and entering a masjid you do not belong to writes a support-access row into <strong>that masjid’s own audit trail</strong>. Editing the JavaScript in a browser gets you nothing, because the rail hiding a row is not a lock.',
+  },
+  {
+    h: 'Schema drift caught by the schema',
+    p: 'A <code>health_check()</code> function asserts invariants the code cannot be trusted to hold — including that every table carries its tenant column. It caught a table built exactly as its design drawing showed, where the drawing had no <code>masjid_id</code> at all. 166 migrations are applied and tracked by hand, and a migration that rebuilds a function prints the function rather than pointing at history.',
+  },
+];
+
+const failures = [
+  {
+    h: 'Five green builds that had never run',
+    p: 'The iOS job built <code>-configuration Debug</code>, which does not embed the JavaScript bundle — it expects a Metro dev server no CI runner has. So the app launched, stayed alive, wrote no crash report, and executed none of the project’s code. Five runs went green. The screenshots were 72% black with a red error banner and nothing was looking at them. Building Release surfaced a real crash within one run.',
+    lesson:
+      'A check that cannot fail is worse than no check, because it buys confidence. The fix was the device gate above, plus making the job look at the screenshot it already took.',
+  },
+  {
+    h: 'A reconciler that threw every time it had work',
+    p: 'A scheduled job wrote an audit row with a null tenant id into a <code>not null</code> column, after its loop — so the first item it resolved raised <code>23502</code> and rolled back everything it had just written. It had been green every five minutes for weeks purely because nothing was ever queued for it.',
+    lesson:
+      'An idle scheduled job is not a passing one. Its check now runs the function against all three answers the upstream can give.',
+  },
+  {
+    h: 'Zero rows read as "not built"',
+    p: 'Features were tagged <em>in development</em> across a product site because their tables were empty. They were complete and enforcing; nobody had used them yet. Months of telling customers a shipped feature was coming.',
+    lesson:
+      'Ask whether the functions exist and enforce, not whether rows do. Emptiness is a usage fact, not a capability fact.',
+  },
+];
+---
+
+<BaseLayout
+  title="Engineering — pipelines, data and failure modes"
+  description="How I build and run things: CI/CD across seven workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
+>
+  <section class="pt-16">
+    <p class="label m-0">Engineering</p>
+    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
+      Pipelines, data and<br /><span class="text-ink-2 [font-variation-settings:'wdth'_88]">the failures that taught me.</span>
+    </h1>
+    <p class="measure mt-6 text-[17px] leading-[1.62] text-ink-2">
+      Every claim on this page points at a file in a public repository — a
+      workflow, a migration, a config. Where something is built but not
+      switched on, it says so.
+    </p>
+  </section>
+
+  {/* ---- pipelines --------------------------------------------------- */}
+  <section class="border-t border-line pt-14 mt-16">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Delivery</h2>
+    <p class="measure mt-3 text-ink-2">
+      Seven workflows across one app repository, plus a deploy pipeline per
+      site. The interesting ones are not the builds — they are the gates.
+    </p>
+
+    <ol class="mt-10 grid grid-cols-1 gap-px bg-line">
+      {pipelines.map((x, i) => (
+        <li class="rv bg-paper py-8">
+          <div class="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-12">
+            <p class="label m-0 md:col-span-3">
+              {String(i + 1).padStart(2, '0')} · {x.where}
+            </p>
+            <div class="md:col-span-9">
+              <h3 class="text-[1.15rem] font-bold tracking-[-0.01em]">{x.name}</h3>
+              <p class="measure mt-2 text-[16px] leading-[1.6] text-ink-2" set:html={x.detail} />
+              <p class="measure mt-2 text-[15px] leading-[1.6] text-ink-2 italic" set:html={x.why} />
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {/* ---- data and access --------------------------------------------- */}
+  <section class="border-t border-line pt-14 mt-16">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Data and access</h2>
+    <p class="measure mt-3 text-ink-2">
+      Multi-tenant Postgres on Supabase, with the rules in the database rather
+      than in the interface.
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
+      {data.map((x) => (
+        <div class="rv">
+          <h3 class="text-[1.15rem] font-bold tracking-[-0.01em]">{x.h}</h3>
+          <p class="mt-2 text-[16px] leading-[1.6] text-ink-2" set:html={x.p} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* ---- what it runs on --------------------------------------------- */}
+  <section class="border-t border-line pt-14 mt-16">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What it runs on</h2>
+    <p class="measure mt-3 text-ink-2">
+      Static-first by default, with compute only where something has to happen
+      server-side. Nothing here is on a box I have to patch.
+    </p>
+
+    <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+      {[
+        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com. Astro and Next.js both to static output; no server at request time.'],
+        ['Edge', 'Cloudflare Workers behind Wrangler for the jobs a static site cannot do — notification fan-out, form intake. Secrets as Wrangler secrets, never in the repository.'],
+        ['Data', 'Supabase Postgres with RLS, SECURITY DEFINER functions, scheduled jobs and edge functions. 166 tracked migrations on the largest of them.'],
+        ['Payments', 'Stripe — Checkout, deposits with a held slot, webhooks, and Bacs Direct Debit for recurring billing. Webhook handlers read both of the shapes Stripe has used for invoice fields.'],
+        ['Messaging', 'OneSignal web push, fired automatically off a published timetable. Resend for transactional mail, behind a Worker rather than a form company.'],
+        ['Clients', 'PWAs with service workers and offline behaviour, a Trusted Web Activity on Google Play, and a React Native rebuild beside it.'],
+      ].map(([k, v]) => (
+        <>
+          <dt class="label m-0 md:col-span-3">{k}</dt>
+          <dd class="measure m-0 text-[16px] leading-[1.6] text-ink-2 md:col-span-9">{v}</dd>
+        </>
+      ))}
+    </dl>
+
+    <p class="measure mt-8 text-[15px] leading-[1.6] text-ink-2">
+      <strong>Not AWS, Azure or GCP.</strong> The work above is Cloudflare,
+      Supabase, GitHub Actions and Render. The concepts move — tenancy,
+      least privilege, build gating, webhook idempotency, deploy verification —
+      but I would rather say what I have run than imply a console I have not.
+    </p>
+  </section>
+
+  {/* ---- failures ----------------------------------------------------- */}
+  <section class="border-t border-line pt-14 mt-16">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Things that broke, and what changed</h2>
+    <p class="measure mt-3 text-ink-2">
+      The ones worth reading are where the check itself was the problem.
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 gap-px bg-line">
+      {failures.map((x) => (
+        <article class="rv bg-paper py-8">
+          <div class="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-12">
+            <h3 class="text-[1.05rem] font-bold leading-[1.3] tracking-[-0.01em] md:col-span-3">{x.h}</h3>
+            <div class="md:col-span-9">
+              <p class="measure m-0 text-[16px] leading-[1.6] text-ink-2" set:html={x.p} />
+              <p class="measure mt-3 text-[16px] leading-[1.6]"><strong>{x.lesson}</strong></p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {/* ---- ask ---------------------------------------------------------- */}
+  <section class="border-t border-line py-16 mt-16">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Want the detail?</h2>
+    <p class="measure mt-4 text-ink-2">
+      Every repository above is public and the commit messages explain the
+      reasoning, not just the change. Happy to walk through any of it.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
+      <a class="btn btn-ghost" href="/contact.html">Other ways to reach me</a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Estimator from '../components/Estimator.astro';
+import { steps, plans, faqs } from '../data/services.js';
+
+/**
+ * The freelance page. `/services.html` was a redirect to about.html from
+ * Phase 3 until 7 October; the site then pivoted to a hiring audience and
+ * about.html became the candidate page, so this URL carries the commercial
+ * content it originally had.
+ *
+ * Deliberately not in the main nav. A hiring manager does not need a price
+ * list, and a prospect who has been sent here or who arrives on the old
+ * indexed URL gets exactly what they came for.
+ *
+ * The numbers are real business terms, carried over verbatim.
+ */
+
+const description =
+  'Websites and the software behind them for small businesses — the four-step process, what a build costs, and the questions that come up before booking.';
+---
+
+<BaseLayout title="Websites for small businesses — process and prices" description={description}>
+  <section class="pt-16">
+    <p class="label m-0">Freelance work</p>
+    <h1 class="mt-5 text-[clamp(2.4rem,5.6vw,4rem)] font-extrabold leading-[1] tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
+      Websites, and the software behind them.
+    </h1>
+    <p class="measure mt-6 text-[17px] leading-[1.6] text-ink-2">
+      I take on a small number of builds alongside my own work. Fixed quote
+      before you pay anything, one person doing all of it, and the site is
+      yours when it is finished.
+    </p>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">How it works</h2>
+
+    <div class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
+      {steps.map(([name, detail], i) => (
+        <div class="contents">
+          <p class="label m-0 md:col-span-3">
+            {String(i + 1).padStart(2, '0')} · {name}
+          </p>
+          <p class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">{detail}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">What a website costs</h2>
+
+    <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <p class="measure m-0 text-[17px] leading-[1.6] md:col-span-9 md:col-start-4">
+        A one-off build to get you online, then a small monthly care plan to
+        keep it running. Pick the size that fits — you can move up later.
+      </p>
+    </div>
+
+    <div class="mt-12 space-y-10">
+      {plans.map((p) => (
+        <div class="grid grid-cols-1 gap-x-8 gap-y-4 border-t border-line pt-6 md:grid-cols-12">
+          <div class="md:col-span-3">
+            <h3 class="m-0 text-[21px] font-semibold tracking-[-0.01em]">{p.name}</h3>
+            <p class="label m-0 mt-3">{p.build} build</p>
+            <p class="label m-0 mt-1">+ {p.care} care plan</p>
+          </div>
+
+          <div class="md:col-span-9">
+            <p class="measure m-0 text-[17px] leading-[1.6]">{p.blurb}</p>
+            <ul class="mt-4 list-none space-y-2 p-0">
+              {p.includes.map((item) => (
+                <li class="text-[17px] leading-[1.6] text-ink-2">{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="md:col-span-9 md:col-start-4">
+        <p class="label m-0">How payment works</p>
+        <p class="measure mt-3 text-[17px] leading-[1.6] text-ink-2">
+          Builds split 50% deposit to book your slot and 50% on launch. Care
+          plans start when the site goes live and are collected by monthly
+          Direct Debit — cancel any time with 30 days' notice.
+        </p>
+        <p class="measure mt-4 text-[17px] leading-[1.6] text-ink-2">
+          Those prices cover websites. Booking systems, apps, backends and
+          anything with a database behind it are quoted per project — tell me
+          what you need and I'll price it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* Moved off the homepage on 7 October: a price estimator is the wrong
+      first impression on a page a hiring manager lands on, and it belongs
+      next to the prices anyway. */}
+  <section id="build" class="border-t border-line py-16 md:py-24">
+    <div class="rv mb-13 flex flex-wrap items-baseline justify-between gap-5">
+      <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Build your stack</h2>
+      <span class="label">Rough figure · no email required</span>
+    </div>
+    <div class="rv"><Estimator /></div>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Questions I get asked</h2>
+
+    <dl class="mt-10 space-y-0">
+      {faqs.map(([q, a]) => (
+        <div class="rv grid grid-cols-1 gap-x-8 gap-y-3 border-t border-line py-7 md:grid-cols-12">
+          <dt class="m-0 text-[19px] font-semibold leading-[1.35] tracking-[-0.01em] md:col-span-5">{q}</dt>
+          <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-7">{a}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="border-t border-line py-16 md:py-24">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Start something</h2>
+
+    <div class="rv mt-10 grid grid-cols-1 gap-x-8 md:grid-cols-12">
+      <div class="md:col-span-9 md:col-start-4">
+        <p class="measure m-0 text-[17px] leading-[1.6]">
+          Tell me what you do and I'll tell you what it takes.
+        </p>
+        <p class="mt-8">
+          <a href="/contact.html" class="btn">Get in touch</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
