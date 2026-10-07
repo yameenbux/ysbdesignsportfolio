@@ -580,6 +580,40 @@ Also noted: **Bux Travel solved its static-hosting form with Web3Forms.** That
 was written while this site's own form was still an open question. It is not
 one any more — see "Settled, 5 October": there is deliberately no form here.
 
+**Phase 15 — re-checked, 7 October.** Push dates against the 5 October check:
+three repos had moved, and the rest had not. **Unchanged: Venetian, Hair by
+Chrissy, Diamond, èllash, LuxeScent, Bux Travel and Taiyabah's two screen
+repos.**
+
+- **Taiyabah's native rebuild is now feature-complete**, and so it goes on the
+  page. On 5 October it was two steps of four with nothing on the Play
+  listing, which is why it was held back then; it now carries every screen the
+  web app has, is exercised on a real Android emulator in CI, and three of its
+  forms write through the same Postgres functions the website calls, so the
+  office gets one queue rather than two. **Its release position is stated, not
+  implied**: it is deliberately not on the Play listing, and the web app stays
+  live and maintained until the native one is better.
+- **The iOS line was wrong by omission.** It said the blocker was the Apple
+  account. There are two: the rebuild runs on Android and does not yet run on
+  an iPhone, and the account is still in Apple's queue. The copy now says
+  both, because "waiting on an account" implied code that was ready.
+- **MasjidOne needed no change at all.** Its five-product list, the Resend
+  route, the support console being the one page touching the real platform,
+  and all three of its Postgres gates were re-read and are still exactly as
+  this site describes them. Billing by Direct Debit was built in those two
+  days but is gated behind an unset endpoint, so it is not claimed.
+
+**The D-U-N-S detail was pulled back after it was written.** The first draft
+named the specific error in the charity's D&B record. That is the client's
+administrative business, not YSB's, and the rule a few sections up says so —
+the copy now says the record needed correcting without publishing what was
+wrong with it.
+
+**Still deliberately unpublished: the MasjidOne platform living inside the
+Taiyabah website's database.** Migrations 140–144 landed over those same two
+days, with billing among them. Two days ago this was "revisit when it
+settles"; it has not settled, it has accelerated. Same answer.
+
 ### Known, unfixed
 
 - **Lighthouse scores are still local.** They are no longer font-blocked, but
