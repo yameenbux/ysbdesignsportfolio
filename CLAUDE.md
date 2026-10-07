@@ -163,16 +163,18 @@ up as full cases — there is not enough captured material — which is what
 
 - **No invented metrics, logos, ratings, testimonials or client counts.** Not
   anywhere, not as placeholder text.
-- **No logos or vendor badges at all — including certification badges that
-  are genuinely earned.** Confirmed 7 October. The certifications are set as
-  text and stay that way. Four reasons, so this is not re-argued:
-  Microsoft's certification badges are trademark-governed and issued through
-  Credly with their own usage terms, and a generic Azure mark is not that
-  badge; a coloured vendor logo is wrong against a type-only palette with no
-  imagery outside the screenshots; the booked exam has no badge to show, so a
-  badge row would either sit half-empty or imply one that has not been
-  earned; and the exam code in plain text is the part a reader can verify,
-  while the badge is decoration.
+- **No vendor logos, with one narrow exception: a certification badge the
+  issuer actually issued.** Corrected 7 October — an earlier version of this
+  rule banned badges outright, which was a misreading and is why
+  `src/data/certs.js` exists. A badge may appear only as **the genuine
+  artefact**: the image Credly issued for a credential that is held, ideally
+  beside its public verification URL, which is the part a reader can check.
+  Never a redrawn, approximated or generic Azure mark — Microsoft's badges
+  are trademark-governed and issued through Credly under their own terms, so
+  a lookalike is a forgery aimed at the one audience most likely to spot it.
+  Never a badge on an exam that has not been sat: a `held: false` entry is
+  wired never to render one. Everything else stays type-only — no client
+  logos, no stack badges, no imagery outside the screenshots.
 - Sentence case, plain verbs, active voice. A button says what happens when
   it is pressed.
 - Client-location facts stay as written — "a Bolton masjid", "a Bolton minibus
