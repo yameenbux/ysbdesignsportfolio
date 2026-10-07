@@ -21,9 +21,10 @@ const {
 } = Astro.props;
 
 const nav = [
-  { href: '/work.html',    label: 'Work' },
-  { href: '/about.html',   label: 'About' },
-  { href: '/contact.html', label: 'Contact' },
+  { href: '/work.html',        label: 'Work' },
+  { href: '/engineering.html', label: 'Engineering' },
+  { href: '/about.html',       label: 'About' },
+  { href: '/contact.html',     label: 'Contact' },
 ];
 
 const path = Astro.url.pathname;
@@ -39,6 +40,9 @@ const year = new Date().getFullYear();
 
 const WHATSAPP = '447404901859';
 const TEL = '+447404901859';
+// Added 7 October with the pivot: recruiters email, and a hiring site with
+// no address may simply not be contacted.
+const EMAIL = 'yameen_bee@hotmail.co.uk';
 ---
 
 <!doctype html>
@@ -110,6 +114,7 @@ const TEL = '+447404901859';
           <p class="foot-routes">
             <a class="ul-draw" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a>
             <a class="ul-draw" href={`tel:${TEL}`}>07404 901859</a>
+            <a class="ul-draw" href={`mailto:${EMAIL}`}>Email</a>
           </p>
         </div>
         <div class="foot-meta">

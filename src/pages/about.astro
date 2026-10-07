@@ -2,192 +2,95 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 /**
- * About, with the old services.html content folded in.
+ * The candidate page. Carried the freelance process, prices and FAQs until
+ * 7 October; those moved to services.astro with the pivot to a hiring
+ * audience.
  *
- * Carried across verbatim on the numbers: the four steps, the three price
- * tiers and the payment terms are real business terms and not mine to
- * reword. The FAQ likewise — no timescale, client count or result that
- * cannot be evidenced.
+ * No portrait — settled 5 October and the decision holds.
  *
- * Deliberately left behind, each for a stated reason: the LuxeScent
- * testimonial (the copy rules bar testimonials), the "Most popular" badge on
- * the Business tier (an unevidenced volume claim), and the YSB Ventures Ltd
- * registration details (removed at the user's request).
- *
- * No portrait: About is built not to want one.
+ * AZ-900 is held. AZ-140 is booked and not sat, and is kept under its own
+ * term, in italics, called a plan rather than a qualification. If it is
+ * passed, move it up; if it is postponed, take it off.
  */
 
-const steps = [
-  ['Chat', "Message me on WhatsApp. We talk through what you need and I give you a fixed quote — no obligation."],
-  ['Book', 'A 50% deposit books your slot, and I start gathering your content and photos.'],
-  ['Build', "I design and build it, share a live preview, and refine it with you until it's right."],
-  ['Launch', 'Final balance, we go live, and the care plan keeps it fast, secure and up to date.'],
+const build = [
+  ['Interfaces', 'Static sites in Astro and Next.js, PWAs with service workers and offline behaviour, and a React Native app. Accessibility checked in CI, not at the end.'],
+  ['Software', 'Multi-tenant Postgres on Supabase with row level security, SECURITY DEFINER functions, scheduled jobs and edge functions. Stripe for payments, webhooks included.'],
+  ['Delivery', 'GitHub Actions across seven workflows — build, smoke, release gating, worker deploys. Static output to GitHub Pages on custom domains; Cloudflare Workers where compute is unavoidable.'],
 ];
 
-const plans = [
-  {
-    name: 'Starter',
-    build: '£495',
-    care: '£20/mo',
-    blurb: 'A sharp one-page presence for a small local business.',
-    includes: [
-      '1–3 page mobile website',
-      'WhatsApp and click-to-call buttons',
-      'Google Business Profile set up',
-      'Hosting, domain and security included',
-      'Up to 30 minutes of edits each month',
-    ],
-  },
-  {
-    name: 'Business',
-    build: '£895',
-    care: '£35/mo',
-    blurb: 'For businesses that want enquiries, not just a listing.',
-    includes: [
-      '4–6 page website',
-      'Photo gallery and enquiry form',
-      'Customer reviews section',
-      'Basic local SEO to rank in your area',
-      'Up to 1 hour of edits each month',
-    ],
-  },
-  {
-    name: 'Premium',
-    build: 'from £1,500',
-    care: '£55/mo',
-    blurb: 'Bigger sites with menus, ordering or content built in.',
-    includes: [
-      '6+ pages, or a custom build',
-      'Menus or online ordering integration',
-      'Blog or news section',
-      'Ongoing SEO monitoring',
-      'Priority support and content updates',
-    ],
-  },
+const how = [
+  ['The check has to be able to fail', 'A CI job that cannot catch the thing it exists for is worse than no job, because it buys confidence. I have shipped that mistake, and it is why my release workflow now refuses to build a bundle no device has opened.'],
+  ['Write down why, not what', 'The diff shows what changed. The commit message is for whoever finds this in a year and needs to know which constraint made it the right call — and whether that constraint still holds.'],
+  ['Say what is not built', 'Every project here states what is finished, what is staged and what is blocked. Overstating readiness costs more than admitting a gap, and it is the error I have had to correct most often.'],
+  ['Put the rule where it cannot be bypassed', 'Hiding a row in the interface is not access control. If it matters it belongs in the database, behind a grant and a policy, so editing the JavaScript in a browser gets you nothing.'],
 ];
 
-const faqs = [
-  [
-    'How long does it take?',
-    "It depends on the size of the build and how quickly content reaches me — that second one is usually the deciding factor. You get a date in your quote before you pay anything, and I hold to it.",
-  ],
-  [
-    'Do I have to be near Manchester?',
-    "No. I'm in Greater Manchester and the work has gone to London, Birmingham, Coventry and Nuneaton. Everything happens over WhatsApp and a shared preview link, so where you are is not the deciding factor.",
-  ],
-  [
-    'I already have a website. Can you fix it rather than replace it?',
-    "Sometimes. Send me the address and I'll tell you honestly whether it is worth repairing or whether you'd get more for the money starting again. I'll say so if repairing is the better call.",
-  ],
-  [
-    'Do I have to take the care plan?',
-    "The care plan covers hosting, the domain, security updates and your monthly edits, so a site on a plan has somewhere to live. If you'd rather host it yourself, say so at the quote stage and I'll build it to hand over instead.",
-  ],
-  [
-    'Who owns the site when it is finished?',
-    "You do, once the final balance is paid — design, content and code, with the domain registered in your name. The terms page spells it out.",
-  ],
-  [
-    'Do you only build websites?',
-    "No. Booking systems, installable apps, the backends and databases behind them, and the hosting and deploy pipeline they run on. The prices above cover websites; anything with software behind it is quoted per project.",
-  ],
-  [
-    'What do you need from me to start?',
-    "A deposit to book the slot, and your content — text, photos, logo. If the photos are the thing holding you up, tell me early and we work around it rather than letting the project stall.",
-  ],
-];
-
-const capability = [
-  ['Sites', 'Marketing sites, one-pagers and shops that load fast and turn up in a search.'],
-  ['Apps', 'Booking systems, installable web apps, admin tools — the software a business actually runs on.'],
-  ['Behind it', 'Backends, APIs, databases, payments and email.'],
-  ['Keeping it up', 'Hosting, domains, deploys and the pipeline that ships changes.'],
+const looking = [
+  ['Roles', 'Platform, DevOps or infrastructure engineering. I am most useful where delivery is the problem — pipelines that do not catch what they should, environments that drift, deploys nobody trusts.'],
+  ['Where', 'Greater Manchester, or remote. The work above has gone to London, Birmingham, Coventry and Nuneaton without me being in the room.'],
+  ['Honestly', 'The certificate above is Azure; the systems are not. What I have run in production is Cloudflare, Supabase, GitHub Actions and Render. The concepts carry — tenancy, least privilege, build gating, webhook idempotency, deploy verification — but I would rather be straight about which consoles I have actually operated in than let a fundamentals exam imply more than it is.'],
 ];
 
 const description =
-  'One person, end to end — how I work, what the four steps are, what a website costs, and the questions that come up before booking.';
+  'Yameen — platform and DevOps engineer in Greater Manchester. AZ-900 certified. What I build, how I work, and what I am looking for.';
 ---
 
-<BaseLayout title="About: one developer in Greater Manchester" description={description}>
+<BaseLayout title="About — platform and DevOps engineer" description={description}>
   <section class="head">
     <p class="eyebrow m-0">About</p>
     <h1>One person, start to finish.</h1>
     <p class="head-p">
-      I'm Yameen. I design it, build it, wire up whatever sits behind it, and
-      put it on the internet — so there is no agency layer between you and the
-      person doing the work, and one person who knows why every decision was
-      made.
+      I'm Yameen, in Greater Manchester. I design the interface, model the data
+      behind it, write the pipeline that ships it and operate the thing once it
+      is live — for a masjid with an app on Google Play, a product of my own,
+      and a handful of businesses. Working alone means there is nowhere to hand
+      a problem on to, which is the part I have learned most from.
     </p>
   </section>
 
   <section class="sec">
     <h2>What I build</h2>
     <dl class="rows rv">
-      {capability.map(([term, detail]) => (
+      {build.map(([term, detail]) => (
         <div class="row">
           <dt class="eyebrow m-0">{term}</dt>
           <dd>{detail}</dd>
         </div>
       ))}
     </dl>
-  </section>
-
-  <section class="sec">
-    <h2>How it works</h2>
-    <dl class="rows rv">
-      {steps.map(([name, detail], i) => (
-        <div class="row">
-          <dt class="eyebrow m-0">{String(i + 1).padStart(2, '0')} · {name}</dt>
-          <dd>{detail}</dd>
-        </div>
-      ))}
-    </dl>
-  </section>
-
-  <section class="sec">
-    <h2>What a website costs</h2>
     <p class="sec-p rv">
-      A one-off build to get you online, then a small monthly care plan to keep
-      it running. Pick the size that fits — you can move up later.
+      The detail, with the workflow files and migrations behind each claim, is
+      on <a class="ul-draw ul-draw-on" href="/engineering.html">the engineering page</a>.
     </p>
-
-    <div class="plans">
-      {plans.map((p) => (
-        <div class="plan panel rv">
-          <h3>{p.name}</h3>
-          <p class="plan-fig">{p.build}</p>
-          <p class="eyebrow plan-care">+ {p.care} care plan</p>
-          <p class="plan-blurb">{p.blurb}</p>
-          <ul>
-            {p.includes.map((item) => <li>{item}</li>)}
-          </ul>
-        </div>
-      ))}
-    </div>
-
-    <div class="rows rv terms-rows">
-      <div class="row">
-        <p class="eyebrow m-0">How payment works</p>
-        <div>
-          <p>
-            Builds split 50% deposit to book your slot and 50% on launch. Care
-            plans start when the site goes live and are collected by monthly
-            Direct Debit — cancel any time with 30 days' notice.
-          </p>
-          <p>
-            Those prices cover websites. Booking systems, apps, backends and
-            anything with a database behind it are quoted per project — tell me
-            what you need and I'll price it.
-          </p>
-        </div>
-      </div>
-    </div>
   </section>
 
   <section class="sec">
-    <h2>Questions I get asked</h2>
+    <h2>Certifications</h2>
+    <dl class="rows rv">
+      <div class="row">
+        <dt class="eyebrow m-0">Held</dt>
+        <dd><strong>AZ-900</strong> — Microsoft Azure Fundamentals.</dd>
+      </div>
+      <div class="row">
+        <dt class="eyebrow m-0">Booked</dt>
+        <dd>
+          <strong>AZ-140</strong> — Azure Virtual Desktop.{' '}
+          <em>Exam booked, not yet sat</em>, and listed here as a plan rather
+          than a qualification.
+        </dd>
+      </div>
+    </dl>
+    <p class="sec-p rv">
+      A fundamentals certificate is not production experience and this page
+      does not pretend otherwise — what I have actually run is below.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>How I work</h2>
     <dl class="faqs">
-      {faqs.map(([q, a]) => (
+      {how.map(([q, a]) => (
         <div class="faq rv">
           <dt>{q}</dt>
           <dd>{a}</dd>
@@ -196,12 +99,28 @@ const description =
     </dl>
   </section>
 
+  <section class="sec">
+    <h2>What I'm looking for</h2>
+    <dl class="rows rv">
+      {looking.map(([term, detail]) => (
+        <div class="row">
+          <dt class="eyebrow m-0">{term}</dt>
+          <dd>{detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
   <section class="ask">
-    <h2 class="rv">Start something</h2>
-    <p class="rv ask-p">Tell me what you do and I'll tell you what it takes.</p>
+    <h2 class="rv">Get in touch</h2>
+    <p class="rv ask-p">
+      Hiring, or want to talk through any of the work above? Either route below
+      reaches me. Still taking freelance builds alongside this —
+      <a class="ul-draw ul-draw-on" href="/services.html">process and prices here</a>.
+    </p>
     <div class="rv ask-do">
-      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
-      <a class="btn btn-ghost" href="/contact.html">Other ways to reach me</a>
+      <a class="btn" href="/contact.html">Get in touch</a>
+      <a class="btn btn-ghost" href="/engineering.html">The technical read</a>
     </div>
   </section>
 </BaseLayout>

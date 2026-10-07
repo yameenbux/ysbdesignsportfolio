@@ -1,0 +1,255 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/**
+ * The technical read, for a platform or DevOps reader rather than a client.
+ *
+ * Everything on this page is checkable: each claim points at a workflow file,
+ * a migration or a config in a public repository. Nothing here is a
+ * capability word — "I know CI/CD" is not evidence, a release gate that
+ * refuses to build is.
+ *
+ * Where a thing is not built, or not switched on, it says so. The copy rules
+ * in CLAUDE.md apply to this page exactly as they apply to the case studies.
+ */
+
+const pipelines = [
+  {
+    name: 'Release gated on a real device',
+    where: 'native-release.yml',
+    detail:
+      'The Play bundle workflow refuses to run unless that exact commit already has a successful smoke run against it. It asks the GitHub API for runs of <em>native-smoke.yml</em> at <code>head_sha</code> and exits non-zero if the count is zero. The failure message says why the gate exists: a bundle that packages correctly and crashes on launch passes every other check in the workflow.',
+    why: 'It exists because that is precisely what happened — five green builds that were a red error screen, which is the entry below.',
+  },
+  {
+    name: 'Verifying against the source of truth, not the artefact',
+    where: 'android-build.yml',
+    detail:
+      'Before building, the job asks <strong>Google’s Digital Asset Links API</strong> whether the live site actually verifies the app, rather than trusting the <code>assetlinks.json</code> sitting in the repository. The two can disagree, and only one of them decides whether a store install opens without a browser bar.',
+    why: 'A file in git is a statement of intent. The API is the fact.',
+  },
+  {
+    name: 'Contract tests across two codebases',
+    where: 'native-build.yml, native-smoke.yml',
+    detail:
+      'The native app and the website are separate repositories that must not drift. CI asserts that the app says what the website says — in English too — that every link points where the website points, and that every colour it draws matches. A screen-reader naming check runs in the same job.',
+    why: 'Two surfaces describing the same masjid differently is a content bug nobody would catch by hand.',
+  },
+  {
+    name: 'Deploy, then confirm',
+    where: 'deploy-worker.yml',
+    detail:
+      'The notification Worker deploys with Wrangler and the job then re-requests it and fails if it is not answering. A deploy step that exits zero means the upload worked, not that the thing is up.',
+    why: 'Green is not the same as live.',
+  },
+  {
+    name: 'A build that fails rather than silently breaking the domain',
+    where: 'ysbdesignsportfolio — deploy.yml',
+    detail:
+      'This site publishes to GitHub Pages from Actions. The workflow fails the build if <code>CNAME</code> is missing from the output, because a build that drops it takes the custom domain down while still reporting success.',
+    why: 'The failure mode worth guarding is the one that reports success.',
+  },
+];
+
+const data = [
+  {
+    h: 'One database, not one per customer',
+    p: 'MasjidOne runs every masjid on a single Postgres. <strong>Every table carries a <code>masjid_id</code> that is <code>not null</code> with no default</strong>, and every write function fills it from <code>current_masjid()</code>. Row Level Security and <code>SECURITY DEFINER</code> functions scope every read and write. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing the product does happens <em>inside</em> one masjid rather than between them — so the separation would have bought nothing and cost a great deal to run.',
+  },
+  {
+    h: 'Denial by default, as a design rather than a policy',
+    p: 'The imam’s advice table has RLS enabled and <strong>no policies at all</strong>, with every grant revoked. No policy means no row passes; the only way in is through functions that check the role themselves. The check deliberately does not fall back to administrator, because somebody writing to the imam in confidence is not writing to the committee.',
+  },
+  {
+    h: 'Gates in the database, not in the page',
+    p: 'A support console reaches real tenants. The anonymous role holds no <code>EXECUTE</code>; the platform-admin check requires <code>is_aal2()</code>, a completed second factor; and entering a masjid you do not belong to writes a support-access row into <strong>that masjid’s own audit trail</strong>. Editing the JavaScript in a browser gets you nothing, because the rail hiding a row is not a lock.',
+  },
+  {
+    h: 'Schema drift caught by the schema',
+    p: 'A <code>health_check()</code> function asserts invariants the code cannot be trusted to hold — including that every table carries its tenant column. It caught a table built exactly as its design drawing showed, where the drawing had no <code>masjid_id</code> at all. 166 migrations are applied and tracked by hand, and a migration that rebuilds a function prints the function rather than pointing at history.',
+  },
+];
+
+const failures = [
+  {
+    h: 'Five green builds that had never run',
+    p: 'The iOS job built <code>-configuration Debug</code>, which does not embed the JavaScript bundle — it expects a Metro dev server no CI runner has. So the app launched, stayed alive, wrote no crash report, and executed none of the project’s code. Five runs went green. The screenshots were 72% black with a red error banner and nothing was looking at them. Building Release surfaced a real crash within one run.',
+    lesson:
+      'A check that cannot fail is worse than no check, because it buys confidence. The fix was the device gate above, plus making the job look at the screenshot it already took.',
+  },
+  {
+    h: 'A reconciler that threw every time it had work',
+    p: 'A scheduled job wrote an audit row with a null tenant id into a <code>not null</code> column, after its loop — so the first item it resolved raised <code>23502</code> and rolled back everything it had just written. It had been green every five minutes for weeks purely because nothing was ever queued for it.',
+    lesson:
+      'An idle scheduled job is not a passing one. Its check now runs the function against all three answers the upstream can give.',
+  },
+  {
+    h: 'Zero rows read as "not built"',
+    p: 'Features were tagged <em>in development</em> across a product site because their tables were empty. They were complete and enforcing; nobody had used them yet. Months of telling customers a shipped feature was coming.',
+    lesson:
+      'Ask whether the functions exist and enforce, not whether rows do. Emptiness is a usage fact, not a capability fact.',
+  },
+];
+---
+
+<BaseLayout
+  title="Engineering \u2014 pipelines, data and failure modes"
+  description="How I build and run things: CI/CD across seven workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
+>
+  <section class="head">
+    <p class="eyebrow m-0">Engineering</p>
+    <h1>Pipelines, data and the failures that taught me.</h1>
+    <p class="head-p">
+      Every claim on this page points at a file in a public repository \u2014 a
+      workflow, a migration, a config. Where something is built but not
+      switched on, it says so.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>Delivery</h2>
+    <p class="sec-p rv">
+      Seven workflows across one app repository, plus a deploy pipeline per
+      site. The interesting ones are not the builds \u2014 they are the gates.
+    </p>
+    <ol class="rows rv gates">
+      {pipelines.map((x, i) => (
+        <li class="row">
+          <p class="eyebrow m-0">{String(i + 1).padStart(2, '0')} \u00b7 {x.where}</p>
+          <div>
+            <h3>{x.name}</h3>
+            <p set:html={x.detail} />
+            <p class="aside" set:html={x.why} />
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="sec">
+    <h2>Data and access</h2>
+    <p class="sec-p rv">
+      Multi-tenant Postgres on Supabase, with the rules in the database rather
+      than in the interface.
+    </p>
+    <div class="pair rv">
+      {data.map((x) => (
+        <div class="panel pane">
+          <h3>{x.h}</h3>
+          <p set:html={x.p} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>What it runs on</h2>
+    <p class="sec-p rv">
+      Static-first by default, with compute only where something has to happen
+      server-side. Nothing here is on a box I have to patch.
+    </p>
+    <dl class="rows rv">
+      {[
+        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com. Astro and Next.js both to static output; no server at request time.'],
+        ['Edge', 'Cloudflare Workers behind Wrangler for the jobs a static site cannot do \u2014 notification fan-out, form intake. Secrets as Wrangler secrets, never in the repository.'],
+        ['Data', 'Supabase Postgres with RLS, SECURITY DEFINER functions, scheduled jobs and edge functions. 166 tracked migrations on the largest of them.'],
+        ['Payments', 'Stripe \u2014 Checkout, deposits with a held slot, webhooks, and Bacs Direct Debit for recurring billing. Webhook handlers read both of the shapes Stripe has used for invoice fields.'],
+        ['Messaging', 'OneSignal web push, fired automatically off a published timetable. Resend for transactional mail, behind a Worker rather than a form company.'],
+        ['Clients', 'PWAs with service workers and offline behaviour, a Trusted Web Activity on Google Play, and a React Native rebuild beside it.'],
+      ].map(([k, v]) => (
+        <div class="row">
+          <dt class="eyebrow m-0">{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="sec-p rv">
+      <strong>Not AWS, Azure or GCP.</strong> The work above is Cloudflare,
+      Supabase, GitHub Actions and Render. The concepts move \u2014 tenancy, least
+      privilege, build gating, webhook idempotency, deploy verification \u2014 but
+      I would rather say what I have run than imply a console I have not.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>Things that broke, and what changed</h2>
+    <p class="sec-p rv">
+      The ones worth reading are where the check itself was the problem.
+    </p>
+    <div class="faqs rv">
+      {failures.map((x) => (
+        <article class="faq">
+          <h3>{x.h}</h3>
+          <div>
+            <p set:html={x.p} />
+            <p class="lesson"><strong>{x.lesson}</strong></p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="ask">
+    <h2 class="rv">Want the detail?</h2>
+    <p class="rv ask-p">
+      Every repository above is public and the commit messages explain the
+      reasoning, not just the change. Happy to walk through any of it.
+    </p>
+    <div class="rv ask-do">
+      <a class="btn" href="/contact.html">Get in touch</a>
+      <a class="btn btn-ghost" href="/work.html">See the work</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(2.6rem, 8.4vw, 5.4rem); margin: 14px 0 0; max-width: 16ch; }
+  .head-p { margin: 26px 0 0; max-width: 56ch; color: var(--color-ink-2); font-size: 1.05rem; }
+
+  .sec { padding-block: clamp(54px, 9vh, 92px) 0; }
+  .sec h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .sec-p { margin: 20px 0 0; max-width: 58ch; color: var(--color-ink-2); }
+
+  .rows { margin: 30px 0 0; display: grid; gap: 2px; padding: 0; list-style: none; }
+  .row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 20px 22px; background: var(--color-line-2);
+    border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
+  .row dd, .row p { margin: 0; color: var(--color-ink-2); }
+  .gates h3 { margin: 0 0 8px; font-size: 1.1rem; letter-spacing: -0.015em; }
+  .gates .aside { margin-top: 10px; font-size: 14.5px; color: var(--color-ink-2); opacity: 0.85; }
+
+  .pair { margin: 30px 0 0; display: grid; gap: 18px; }
+  @media (min-width: 900px) { .pair { grid-template-columns: repeat(2, 1fr); } }
+  .pane { padding: 26px; }
+  .pane h3 { margin: 0; font-size: 1.15rem; letter-spacing: -0.015em; }
+  .pane p { margin: 12px 0 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.6; }
+
+  .faqs { margin: 30px 0 0; display: grid; gap: 2px; }
+  .faq {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 22px; background: var(--color-line-2); border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .faq { grid-template-columns: 1fr 1.25fr; gap: 34px; } }
+  .faq h3 { margin: 0; font-family: var(--font-disp); font-weight: 700; font-size: 17px; letter-spacing: -0.015em; line-height: 1.3; }
+  .faq p { margin: 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
+  .faq .lesson { margin-top: 12px; color: var(--color-ink); }
+
+  /* v3 has no monospace and the direction forbids adding one back, so inline
+     code is set in the body face and marked by a tint rather than a typeface. */
+  :global(code) {
+    font-family: inherit;
+    font-size: 0.94em;
+    padding: 1px 5px;
+    background: color-mix(in srgb, var(--color-blue) 9%, transparent);
+    border-radius: 3px;
+  }
+
+  .ask { padding-block: clamp(64px, 11vh, 118px); }
+  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
+  .ask-p { margin: 20px 0 0; max-width: 56ch; color: var(--color-ink-2); }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

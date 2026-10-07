@@ -21,12 +21,20 @@ all gone.
 
 ## Positioning
 
-> I help new and growing businesses look established online — the website, the
-> software behind it and the hosting it runs on, built and deployed end to
-> end, so you can point people at something you're proud of.
+> I build and operate small production systems single-handed — multi-tenant
+> Postgres, edge compute, and CI that refuses to ship what it has not seen
+> run.
+
+**Pivoted to a hiring audience on 7 October.** The line above replaces "I help
+new and growing businesses look established online…", which was a freelance
+services pitch. The site's job is now to get Yameen hired into a **platform /
+DevOps / infrastructure** role; freelance work continues, but it is no longer
+what the site leads with.
 
 Voice: **first person singular**. No "we", no "our clients", no claimed
-volume, no team language. One person is the offer, not a limitation.
+volume, no team language. One person is the offer, not a limitation — and for
+this audience it is also the point: working alone means there is nowhere to
+hand a problem on to.
 
 Resolved in Phase 2. The handover's line stopped at "brand, site and hosting",
 which the work contradicts — Taiyabah alone is serverless backends, a PWA,
@@ -35,9 +43,14 @@ distributed system argues with itself. "The software behind it" carries the
 breadth without turning the sentence into a stack list, which is what the old
 site did and what the audience does not read.
 
-Audience: someone who found YSB through a search or a referral and is deciding
-whether to hand money to a stranger. The site must work for a 20-second scan
-and for someone reading a case study end to end.
+**Audience, from 7 October: a hiring manager or technical recruiter** deciding
+whether to interview. The site must survive a 20-second scan *and* a reader
+who opens a workflow file to check a claim. The second one is new and it is
+the harder test: **every technical claim has to point at something public.**
+
+The previous audience — a prospect deciding whether to hand money to a
+stranger — is now served by `/services.html` alone, which is deliberately not
+in the nav.
 
 ## Stack
 
@@ -161,17 +174,29 @@ up as full cases — there is not enough captured material — which is what
 
 ## Contact
 
-There is **no email address on the site** and none is planned unless a mailbox
-is actually created. Routes are:
+Three routes, since the 7 October pivot:
 
 - WhatsApp — `07404901859`
 - Phone — `tel:+447404901859`
+- Email — `yameen_bee@hotmail.co.uk`
+
+**Email was added on 7 October and reverses the long-standing "no address"
+position.** That position was taken for a prospect, and prospects do message a
+mobile; the audience is now a hiring manager, and recruiters email. A `mailto:`
+collects nothing, needs no endpoint and adds no third party, so the privacy
+page stays true — it was updated in the same commit to say that an email sits
+in a mailbox with an email provider.
+
+**It is a hotmail.co.uk address on a site at ysbdesigns.uk.** Flagged to the
+user as a small credibility cost for this audience; the domain and one.com
+hosting are already there if a `yameen@ysbdesigns.uk` box is ever wanted.
+Until then this is the real address and a real address beats a smart one.
 
 **LinkedIn was removed at the user's request.** It was in the footer of every
 page and was the second row of contact.html's "Where and how" list; that
 section is now a single paragraph, because a definition list of one term reads
-as a list with something missing. There are **two routes on the site**, both
-the same number — do not reintroduce a social profile without being asked.
+as a list with something missing. The off-site profile link stays off — do not
+reintroduce a social profile without being asked.
 
 Resolved in Phase 2. `07404901859` is the correct number. `07729247248` was
 wrong and had been on every Call link; fixed in `804ae30`. **One number, used
@@ -190,21 +215,23 @@ against this rather than reopening it.
 
 ### Sitemap
 
-Four navigable pages, five case studies, three unlisted.
+Five navigable pages, five case studies, three unlisted. `/engineering.html`
+is new on 7 October and `/services.html` stopped being a redirect.
 
 | URL | Page | In nav |
 |---|---|---|
 | `/` | Home | — |
 | `/work.html` | Work index — the five, in two groups, as cases not cards | yes |
+| `/engineering.html` | **The technical read** — pipelines, data, failure modes | yes |
 | `/taiyabah.html` | Case study — community project | via work |
 | `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
 | `/diamond.html` | Case study — client, built and not live yet | via work |
 | `/masjidone.html` | Case study — own product, running at one masjid | via work |
-| `/about.html` | About, with services folded in | yes |
+| `/about.html` | About — the candidate page: what I build, how I work, what I want | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept; on the wheel and under "Also built" | via work |
-| `/services.html` | Redirects to `/about.html` | no |
+| `/services.html` | **Freelance work** — process, prices, estimator. Not in nav | footer |
 | `/privacy.html` | Privacy — what the site collects, which is nothing | footer |
 | `/terms.html` | Terms — prices, payment, ownership | footer |
 | `/404.html` | Custom 404. `noindex`; GitHub Pages serves it automatically | no |
@@ -214,10 +241,12 @@ Four navigable pages, five case studies, three unlisted.
 reason, and new pages inherit it. Directory URLs would mean a permanent second
 URL per page plus redirect stubs, to gain nothing a visitor notices.
 
-**`services.html` becomes a redirect**, not a deletion — it is live and
-indexed. Its pricing and process content folds into `/about.html`. Use Astro's
-`redirects` config, which emits a meta-refresh page on static output. Do not
-add the redirect until `/about.html` exists, or it points at a 404.
+**`services.html` was a redirect to `/about.html` from Phase 3 until
+7 October**, when the pivot gave it its content back. The `redirects` entry in
+`astro.config.mjs` is gone — it would shadow the real page. The commercial
+data (four steps, three price tiers, seven FAQs) lives in
+`src/data/services.js` so the two pages stop sharing a file, and the numbers
+are carried verbatim because they are real business terms.
 
 ### Homepage section order
 
@@ -229,9 +258,14 @@ Four sections. Revised in Phase 11, when main's content merged in.
    attention the wheel needs.
 2. **The wheel** — every project, one per card, with the read-out naming the
    active one and showing which of the three layers it needed.
-3. **Build your stack** — the estimator. Takes the abstract "three layers"
-   claim and makes it something a visitor can price.
-4. **Contact** — WhatsApp as the primary action.
+3. **Contact** — WhatsApp as the primary action.
+
+**The estimator left the homepage on 7 October** and lives on
+`/services.html`. A price calculator is the wrong first impression on a page a
+hiring manager lands on, and it sits better beside the prices. The corridor
+and the wheel stay: interface / software / infrastructure reads *better* for
+this audience than it did for the last one, and the per-project layer bars in
+the read-out are the evidence.
 
 Evidence before biography. Two sections have been cut from the homepage and
 neither should come back without a reason: the compressed About (the
@@ -250,8 +284,9 @@ mechanic for no gain. The distinction is carried on the cards instead, by
 All three sat in "Still open" for months. They are decisions now, not
 questions, and reopening one needs a reason rather than a mood.
 
-- **No contact form. WhatsApp and the phone number are the two routes**, and
-  that is the final answer rather than a holding position. It keeps the site
+- **No contact form** — that part still holds, and there is still no endpoint
+  and no third-party processor. **The no-email half was reversed on 7 October**
+  when the audience changed: see "## Contact". Three routes now, still no form. It keeps the site
   with no third-party processor, no form endpoint and nothing for the privacy
   page to disclose. The cost is real and accepted: somebody who will not
   message or ring a stranger has no way in.
@@ -719,6 +754,73 @@ wrong with it.
 Taiyabah website's database.** Migrations 140–144 landed over those same two
 days, with billing among them. Two days ago this was "revisit when it
 settles"; it has not settled, it has accelerated. Same answer.
+
+**Phase 16 — pivot to a hiring audience, 7 October.** Asked for a more
+technical portfolio to support a cloud career. Flagged first that this
+conflicts with the whole spec — the audience was a paying prospect and the
+positioning was a services pitch — and offered three shapes. **Pivot chosen,
+targeting platform / DevOps.**
+
+**`/engineering.html` is the new centre of gravity.** Four sections, and the
+rule governing all of them is that **every claim points at a public file**:
+
+- **Delivery.** Not a list of tools — the gates. `native-release.yml` asks
+  the GitHub API for a successful smoke run at this exact `head_sha` and
+  refuses to build a Play bundle without one. `android-build.yml` asks
+  Google's Digital Asset Links API whether the live site verifies, rather
+  than trusting the `assetlinks.json` in the repository. CI asserts the
+  native app and the website agree on copy, links and colour. The Worker
+  deploy re-requests itself and fails if it is not answering.
+- **Data and access.** One Postgres with `masjid_id not null` on every table;
+  RLS with *no policies at all* as denial-by-default; `is_aal2()` on platform
+  admin; `health_check()` catching a table built without its tenant column;
+  166 tracked migrations.
+- **What it runs on**, which ends by saying plainly that **none of this is
+  AWS, Azure or GCP.** Cloudflare, Supabase, GitHub Actions and Render.
+  Claiming hyperscaler experience would be the exact failure mode the copy
+  rules exist to prevent.
+- **Things that broke.** Five green iOS builds that had never executed any of
+  the project's code; a reconciler that threw every time it had work and was
+  green for weeks because nothing queued; zero rows read as "not built". Each
+  with what changed as a result.
+
+**The client material moved rather than going.** `about.html` is the candidate
+page now — what I build, how I work, what I am looking for. The process,
+prices, estimator and pre-booking FAQs went to `/services.html`, which stopped
+being a redirect, and the data behind them went to `src/data/services.js`.
+Freelance work is still reachable from About and the footer; it is just not
+what a recruiter is made to read.
+
+**One bug, caught by the sweep and entirely mine.** The fourth nav item pushed
+the header 46px past 375px — on *every* page, including ones never touched,
+which is what identified it as the shared layout rather than the new pages.
+The header row now wraps and the nav gap tightens below `sm`, rather than
+abbreviating a label.
+
+**Certifications are pending.** The user has some and is sending the list.
+There is deliberately **no placeholder slot** on About: the copy rules bar
+claiming anything unevidenced, and that includes training.
+
+**Phase 17 — certifications and an email address, 7 October.** The two things
+the pivot was waiting on.
+
+- **AZ-900 (Microsoft Azure Fundamentals) is held** and is on About.
+  **AZ-140 (Azure Virtual Desktop) is booked and not sat**, and is listed
+  under a separate "Booked" term, in italics, described as *a plan rather
+  than a qualification*. A booked exam is a real fact and shows direction;
+  it is not a credential, and the markup must never let it read as one.
+  **If it is passed, move it up. If it is postponed, take it off** — this is
+  the one claim on the site with an expiry date.
+- **The Azure certificate does not soften the experience caveat.** About now
+  says it outright: the certificate is Azure, the systems are not, and a
+  fundamentals exam is not production experience. That sentence is load
+  bearing — without it, an Azure badge next to a list of cloud work implies
+  Azure cloud work.
+- **Email is live as a third route**, in the footer and on Contact. The
+  privacy page was updated in the same commit, as the working rules require:
+  "there is no contact form" and "nothing on this site collects your name,
+  email address or anything else" both stay true of a `mailto:`, but the
+  "when you get in touch" and data-rights paragraphs now name email.
 
 ### Known, unfixed
 

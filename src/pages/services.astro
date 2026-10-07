@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Estimator from '../components/Estimator.astro';
+import { steps, plans, faqs } from '../data/services.js';
+
+/**
+ * The freelance page. This content was about.astro's until 7 October, when
+ * the site pivoted to a hiring audience and about became the candidate page.
+ * Markup is v3's unchanged — only the file it lives in moved.
+ *
+ * Deliberately not in the main nav: a hiring manager does not need a price
+ * list, and anyone arriving on the old indexed /services.html URL gets what
+ * they came for.
+ */
+
+const description =
+  'Websites and the software behind them for small businesses \u2014 the four-step process, what a build costs, and the questions that come up before booking.';
+---
+
+<BaseLayout title="Websites for small businesses — process and prices" description={description}>
+  <section class="head">
+    <p class="eyebrow m-0">Freelance work</p>
+    <h1>Websites, and the software behind them.</h1>
+    <p class="head-p">
+      I take on a small number of builds alongside my own work. Fixed quote
+      before you pay anything, one person doing all of it, and the site is
+      yours when it is finished.
+    </p>
+  </section>
+
+  <section class="sec">
+    <h2>How it works</h2>
+    <dl class="rows rv">
+      {steps.map(([name, detail], i) => (
+        <div class="row">
+          <dt class="eyebrow m-0">{String(i + 1).padStart(2, '0')} · {name}</dt>
+          <dd>{detail}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="sec">
+    <h2>What a website costs</h2>
+    <p class="sec-p rv">
+      A one-off build to get you online, then a small monthly care plan to keep
+      it running. Pick the size that fits — you can move up later.
+    </p>
+
+    <div class="plans">
+      {plans.map((p) => (
+        <div class="plan panel rv">
+          <h3>{p.name}</h3>
+          <p class="plan-fig">{p.build}</p>
+          <p class="eyebrow plan-care">+ {p.care} care plan</p>
+          <p class="plan-blurb">{p.blurb}</p>
+          <ul>
+            {p.includes.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="rows rv terms-rows">
+      <div class="row">
+        <p class="eyebrow m-0">How payment works</p>
+        <div>
+          <p>
+            Builds split 50% deposit to book your slot and 50% on launch. Care
+            plans start when the site goes live and are collected by monthly
+            Direct Debit — cancel any time with 30 days' notice.
+          </p>
+          <p>
+            Those prices cover websites. Booking systems, apps, backends and
+            anything with a database behind it are quoted per project — tell me
+            what you need and I'll price it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Questions I get asked</h2>
+    <dl class="faqs">
+      {faqs.map(([q, a]) => (
+        <div class="faq rv">
+          <dt>{q}</dt>
+          <dd>{a}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="sec">
+    <p class="eyebrow rv">Build your stack · rough figure, no email required</p>
+    <h2>What would yours cost?</h2>
+    <div class="rv" style="margin-top:30px"><Estimator /></div>
+  </section>
+
+  <section class="ask">
+    <h2 class="rv">Start something</h2>
+    <p class="rv ask-p">Tell me what you do and I'll tell you what it takes.</p>
+    <div class="rv ask-do">
+      <a class="btn" href="/contact.html">Get in touch</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
+  .head h1 { font-size: clamp(2.6rem, 8.4vw, 5.4rem); margin: 14px 0 0; max-width: 15ch; }
+  .head-p { margin: 26px 0 0; max-width: 56ch; color: var(--color-ink-2); font-size: 1.05rem; }
+
+  .sec { padding-block: clamp(54px, 9vh, 92px) 0; }
+  .sec h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .sec-p { margin: 20px 0 0; max-width: 54ch; color: var(--color-ink-2); }
+
+  .rows { margin: 30px 0 0; display: grid; gap: 2px; }
+  .row {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 20px 22px;
+    background: var(--color-line-2);
+    border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
+  .row dd, .row p { margin: 0; color: var(--color-ink-2); }
+  .row div p + p { margin-top: 14px; }
+  .terms-rows { margin-top: 34px; }
+
+  .plans { margin: 32px 0 0; display: grid; gap: 18px; }
+  @media (min-width: 900px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+  .plan { padding: 26px; display: flex; flex-direction: column; }
+  .plan h3 { margin: 0; font-size: 1.35rem; }
+  .plan-fig {
+    margin: 14px 0 0; font-family: var(--font-disp); font-weight: 800;
+    font-size: 2.3rem; line-height: 1; letter-spacing: -0.04em;
+  }
+  .plan-care { margin: 8px 0 0; }
+  .plan-blurb { margin: 16px 0 0; font-size: 15px; line-height: 1.5; }
+  .plan ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+  .plan li {
+    font-size: 14.5px; padding-left: 18px; position: relative;
+    color: color-mix(in srgb, var(--color-ink) 74%, transparent);
+  }
+  .plan li::before {
+    content: ''; position: absolute; left: 0; top: 9px;
+    width: 7px; height: 7px; background: var(--color-blue); border-radius: 50%;
+  }
+
+  .faqs { margin: 30px 0 0; display: grid; gap: 2px; }
+  .faq {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+    padding: 22px; background: var(--color-line-2); border-radius: var(--radius-sm);
+  }
+  @media (min-width: 820px) { .faq { grid-template-columns: 1fr 1.25fr; gap: 34px; } }
+  .faq dt { font-family: var(--font-disp); font-weight: 700; font-size: 17px; letter-spacing: -0.015em; line-height: 1.3; }
+  .faq dd { margin: 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
+
+  .ask { padding-block: clamp(64px, 11vh, 118px); }
+  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
+  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+</style>

@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wheel from '../components/Wheel.astro';
 import Corridor from '../components/Corridor.astro';
-import Estimator from '../components/Estimator.astro';
 import { all } from '../data/projects.js';
 
 /**
@@ -14,10 +13,10 @@ import { all } from '../data/projects.js';
  */
 
 const description =
-  "I build the whole thing for new and growing businesses — the website, the software behind it and the hosting it runs on, designed and deployed by one person in Greater Manchester.";
+  "I build and run production systems on my own — multi-tenant Postgres, edge compute, and CI that refuses to ship what it has not seen run. Greater Manchester.";
 ---
 
-<BaseLayout title="Websites and software, Greater Manchester" description={description} wide={true}>
+<BaseLayout title="Platform and DevOps engineer, Greater Manchester" description={description} wide={true}>
 
   {/* ---- the claim, over the corridor -------------------------------- */}
   <Corridor
@@ -36,21 +35,22 @@ const description =
     wash={0.82}
   >
   <section class="shell hero">
-    <p class="eyebrow rv">Greater Manchester · one person, end to end</p>
-    <h1 class="rv">I build the <em>whole</em> thing.</h1>
+    <p class="eyebrow rv">Greater Manchester · platform and DevOps</p>
+    <h1 class="rv">I build <em>and run</em> the whole thing.</h1>
     <p class="hero-sub rv">
-      The website you see, the software behind it, and the hosting it runs on.
-      Most people only sell you the first one.
+      The interface, the data model behind it, and the pipeline that ships it.
+      Multi-tenant Postgres, edge compute, and CI that refuses to ship what it
+      has not seen run.
     </p>
     <div class="hero-do rv">
-      <a class="btn" href="https://wa.me/447404901859" target="_blank" rel="noopener">Message me on WhatsApp</a>
-      <a class="btn btn-ghost" href="#price">Price up a build</a>
+      <a class="btn" href="/engineering.html">How it is built and run</a>
+      <a class="btn btn-ghost" href="/work.html">See the work</a>
     </div>
     <dl class="hero-layers rv">
       {[
         ['Interface', 'The site people actually see.'],
         ['Software', 'Bookings, accounts, payments — whatever it runs on.'],
-        ['Infrastructure', 'Hosting, domains, and the pipeline that ships changes.'],
+        ['Infrastructure', 'Hosting, deploys, and the pipeline that gates them.'],
       ].map(([name, what]) => (
         <div class="hero-layer">
           <dt class="eyebrow m-0">{name}</dt>
@@ -65,15 +65,6 @@ const description =
 
   {/* ---- the wheel --------------------------------------------------- */}
   <Wheel items={all} />
-
-  {/* ---- price it ---------------------------------------------------- */}
-  <section id="price" class="band">
-    <div class="shell">
-      <p class="eyebrow rv">Build your stack · rough figure, no email required</p>
-      <h2 class="band-h rv">What would yours cost?</h2>
-      <div class="rv"><Estimator /></div>
-    </div>
-  </section>
 
   {/* ---- the ask ----------------------------------------------------- */}
   <section class="shell ask">
