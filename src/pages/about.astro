@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { certs } from '../data/certs.js';
 
 /**
  * The candidate page. Carried the freelance process, prices and FAQs until
@@ -67,20 +68,27 @@ const description =
 
   <section class="sec">
     <h2>Certifications</h2>
-    <dl class="rows rv">
-      <div class="row">
-        <dt class="eyebrow m-0">Held</dt>
-        <dd><strong>AZ-900</strong> — Microsoft Azure Fundamentals.</dd>
-      </div>
-      <div class="row">
-        <dt class="eyebrow m-0">Booked</dt>
-        <dd>
-          <strong>AZ-104</strong> — Azure Administrator.{' '}
-          <em>Exam booked, not yet sat</em>, and listed here as a plan rather
-          than a qualification.
-        </dd>
-      </div>
-    </dl>
+    <ul class="certs rv">
+      {certs.map((c) => (
+        <li class="cert panel">
+          {c.badge && (
+            <img src={c.badge} alt={`${c.name} badge`} width="96" height="96"
+                 loading="lazy" decoding="async" class="cert-badge" />
+          )}
+          <div>
+            <p class="eyebrow m-0">{c.held ? 'Held' : 'Booked'}</p>
+            <p class="cert-code">{c.code}</p>
+            <p class="cert-name">{c.name}</p>
+            {c.note && <p class="cert-note"><em>{c.note}</em></p>}
+            {c.verify && (
+              <p class="cert-verify">
+                <a class="eyebrow ul-draw ul-draw-on" href={c.verify} target="_blank" rel="noopener">Verify ↗</a>
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
     <p class="sec-p rv">
       A fundamentals certificate is not production experience and this page
       does not pretend otherwise — what I have actually run is below.
@@ -165,6 +173,18 @@ const description =
     content: ''; position: absolute; left: 0; top: 9px;
     width: 7px; height: 7px; background: var(--color-blue); border-radius: 50%;
   }
+
+  .certs { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 18px; }
+  @media (min-width: 760px) { .certs { grid-template-columns: repeat(2, 1fr); } }
+  .cert { padding: 26px; display: flex; align-items: flex-start; gap: 20px; }
+  .cert-badge { width: 96px; height: 96px; flex: none; }
+  .cert-code {
+    margin: 10px 0 0; font-family: var(--font-disp); font-weight: 800;
+    font-size: 2rem; line-height: 1; letter-spacing: -0.035em;
+  }
+  .cert-name { margin: 10px 0 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.5; }
+  .cert-note { margin: 12px 0 0; color: var(--color-ink-2); font-size: 14.5px; line-height: 1.5; }
+  .cert-verify { margin: 12px 0 0; }
 
   .faqs { margin: 30px 0 0; display: grid; gap: 2px; }
   .faq {
