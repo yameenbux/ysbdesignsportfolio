@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { certs } from '../data/certs.js';
 
 /**
  * The candidate page. Until 7 October this carried the freelance process,
@@ -9,10 +10,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
  * No portrait: settled on 5 October, and the decision holds. The page argues
  * with evidence rather than a face.
  *
- * Certifications, added 7 October. AZ-900 is held. AZ-104 is booked and not
- * sat, and is marked as such in the markup and in the copy — a booked exam is
- * a plan, not a qualification, and the copy rules bar claiming anything
- * unevidenced. If it is passed, move it up; if it is postponed, take it off.
+ * Certifications come from src/data/certs.js and render as credential cards.
+ * The badge image is optional and renders only when `badge` is set, so the
+ * layout is correct before the real Credly file exists and nothing has to be
+ * drawn or approximated in the meantime. A card with `held: false` never
+ * shows a badge, because there is not one to show.
+ *
+ * If it is passed, flip `held` and add the badge. If it is postponed, take
+ * the entry out.
  */
 
 const build = [
@@ -92,19 +97,39 @@ const description =
   <section class="border-t border-line py-16 md:py-24">
     <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold tracking-[-0.02em]">Certifications</h2>
 
-    <dl class="rv mt-10 grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-12">
-      <dt class="label m-0 md:col-span-3">Held</dt>
-      <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
-        <strong class="text-ink">AZ-900</strong> — Microsoft Azure Fundamentals.
-      </dd>
-
-      <dt class="label m-0 md:col-span-3">Booked</dt>
-      <dd class="measure m-0 text-[17px] leading-[1.6] text-ink-2 md:col-span-9">
-        <strong class="text-ink">AZ-104</strong> — Azure Administrator.{' '}
-        <em>Exam booked, not yet sat</em>, and listed here as a plan rather
-        than a qualification.
-      </dd>
-    </dl>
+    <ul class="rv mt-10 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2">
+      {certs.map((c) => (
+        <li class="flex items-start gap-5 border border-line bg-plane p-6">
+          {c.badge && (
+            <img
+              src={c.badge}
+              alt={`${c.name} badge`}
+              width="96"
+              height="96"
+              loading="lazy"
+              decoding="async"
+              class="h-24 w-24 shrink-0"
+            />
+          )}
+          <div>
+            <p class="label m-0">{c.held ? 'Held' : 'Booked'}</p>
+            <p class="m-0 mt-2 text-[1.9rem] font-extrabold leading-none tracking-[-0.03em] [font-variation-settings:'wdth'_112]">
+              {c.code}
+            </p>
+            <p class="m-0 mt-2 text-[16px] leading-[1.5] text-ink-2">{c.name}</p>
+            {c.note && <p class="m-0 mt-3 text-[15px] leading-[1.5] text-ink-2"><em>{c.note}</em></p>}
+            {c.verify && (
+              <p class="m-0 mt-3">
+                <a href={c.verify} target="_blank" rel="noopener"
+                   class="label underline decoration-line underline-offset-4 transition-colors duration-150 hover:text-blue hover:decoration-blue">
+                  Verify ↗
+                </a>
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
 
     <p class="measure mt-8 text-[16px] leading-[1.6] text-ink-2">
       A fundamentals certificate is not production experience and this page
