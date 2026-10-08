@@ -387,5 +387,52 @@ export const cases = {
       }
     ],
     "description": "An editorial storefront with a scent finder and Etsy deep-links for a Bolton car-diffuser brand."
+  },
+  "tidemark": {
+    "slug": "tidemark",
+    "title": "Tidemark",
+    "seoTitle": "Tidemark — a weight tracker with no server and no account",
+    "kind": "Own product",
+    "role": "Expo SDK 57 · React Native 0.86 · React 19 · TypeScript 6 · react-native-svg · @noble scrypt and XChaCha20-Poly1305 · StoreKit 2 via expo-iap · GitHub Actions → Pages",
+    "problem": "A bathroom scale gives one number a day, and that number swings by a kilo or more on salt, water, sleep and a late meal. Someone doing everything right sees it go <em>up</em> on a Tuesday and concludes it is not working. That is the day most people stop.<br><br>Plenty of apps log weight. The ones that read the numbers properly tend to want an account, and weight, medication and body photos are <strong>health data &mdash; a special category under UK GDPR</strong>. So the interesting problem was not the maths. It was whether you can ship something useful without ever holding any of it.",
+    "approach": "You can, and the answer was to <strong>have no server and no account at all</strong>. Everything runs on the phone: the data lives in AsyncStorage and files, encrypted by iOS while the device is locked (<code>NSFileProtectionComplete</code>), and the App Store privacy label reads <em>Data Not Collected</em> because it is true rather than because it was argued for.<br><br>That decision is written down with its costs beside it, which is the part I would want to be judged on. <strong>No sync between devices. Lose the phone without a backup and the data is gone. No remote switch</strong> &mdash; a risky feature can only be turned off in a build, because there is nothing to turn it off from. The repository carries a standing rule that no SDK which sends anything off the phone may be added, analytics and crash reporting included: one of them breaks the privacy label, the policy and the paywall promise in a single commit.<br><br>The trend uses <strong>Holt&rsquo;s linear smoothing</strong> (<code>src/core/trend.ts</code>) rather than a moving average, so it follows the direction you are heading instead of trailing a week behind it. All of that maths sits in <code>src/core</code> as plain TypeScript with no React in it, close to fully unit-tested, which is why it can be trusted without a device in the loop. The charts are drawn by hand with react-native-svg &mdash; no chart library, so nothing to fight over dark mode or large text.<br><br>Two details carry more weight than they look. <strong>Reminders never contain a number</strong>, and the medication reminder does not name the medication: a lock screen is visible to anyone stood near it. And backups can be password-locked with audited primitives &mdash; <strong>scrypt and XChaCha20-Poly1305 from @noble</strong>, with the system&rsquo;s own randomness &mdash; rather than anything hand-rolled.",
+    "outcome": "One TypeScript codebase produces the iPhone app and a web build, developed <strong>without a Mac</strong>. CI runs typecheck, lint at zero warnings and the full test suite on every push, and <strong>fails if coverage drops below the floor</strong> recorded in <code>package.json</code> &mdash; a test suite that is allowed to quietly shrink is one that stops meaning anything. A second workflow publishes the web app on every push to <code>main</code>, and a third loads the live app, its privacy policy and the older tracker <strong>every six hours</strong> and fails if any of them is down, so a broken deploy arrives as an email rather than as a discovery.<br><br><strong>It is not on the App Store, and nothing here should be read as if it were.</strong> The web build is live and the iPhone app runs in Expo Go, but there has been no signed build: the Apple Developer enrolment for the company is in review. Three things are written and unit-tested but <em>not yet proven on a device</em> &mdash; buying and restoring Plus, iOS file encryption while the phone is locked, and the production hardening plugin. Apple Health, iCloud sync and widgets are <strong>not built</strong>, and the repository forbids describing them as features anywhere, including the store listing. That rule is the reason this page can be checked against the code.",
+    "links": [
+      {
+        "href": "https://yameenbux.github.io/Tracker/",
+        "text": "Open the web build"
+      },
+      {
+        "href": "https://github.com/yameenbux/Tracker",
+        "text": "Read the source"
+      }
+    ],
+    "shots": [
+      {
+        "src": "/assets/img/tidemark-today.jpg",
+        "alt": "The Today screen on invented demonstration data: a trend weight of 87.7 kg, progress against a plan, and the week’s pace",
+        "w": 340,
+        "h": 736,
+        "caption": "Today · invented demonstration data, not anyone’s weigh-ins",
+        "portrait": true
+      },
+      {
+        "src": "/assets/img/tidemark-trend.jpg",
+        "alt": "The Trend screen: scattered daily weigh-ins in grey, the smoothed trend line through them, and a dashed target line",
+        "w": 340,
+        "h": 736,
+        "caption": "The whole product in one chart · the scatter is the scale, the line is the answer",
+        "portrait": true
+      },
+      {
+        "src": "/assets/img/tidemark-habits.jpg",
+        "alt": "The Habits screen showing a week of water, steps and workout ticks, headed “consistency, not streaks”",
+        "w": 340,
+        "h": 736,
+        "caption": "Habits · consistency rather than streaks, so one missed day costs nothing",
+        "portrait": true
+      }
+    ],
+    "description": "A weight tracker that reads the trend rather than the scale — and holds no account, no server and nothing off the phone."
   }
 };

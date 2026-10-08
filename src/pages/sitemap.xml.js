@@ -3,36 +3,42 @@
  *
  * The integration would generate this and nothing else, and CLAUDE.md's
  * working rules say not to add a library when an existing tool covers it.
- * Eleven URLs do not need a dependency.
+ * Seventeen URLs do not need a dependency.
  *
- * Listed here: the ten real pages, including the three unlisted case studies
- * — they are live and indexed and staying that way. Not listed: /404.html.
- * /services.html stopped being a redirect stub on 7 October and is a real
- * page again, so it is listed.
+ * The navigable pages are listed by hand, because each carries a priority.
+ * The case studies are NOT: they come from `projects.js`, so adding a project
+ * adds its URL here too. That is a fix, not a flourish — Tidemark was added on
+ * 8 October and this file silently did not list it, which is exactly the drift
+ * a hand-kept copy of another list produces. The three unlisted case studies
+ * are still included: they are live and indexed and staying that way.
+ *
+ * Not listed: /404.html.
  */
+
+import { all } from '../data/projects.js';
 
 const SITE = 'https://www.ysbdesigns.uk';
 
 // priority is a hint, not a ranking factor — it only orders these pages
 // against each other for a crawler with a limited budget.
-const pages = [
-  ['/',                   '1.0'],
-  ['/work.html',          '0.9'],
-  ['/engineering.html',   '0.9'],
-  ['/about.html',         '0.9'],
-  ['/services.html',      '0.8'],
-  ['/contact.html',       '0.8'],
-  ['/taiyabah.html',      '0.7'],
-  ['/venetian.html',      '0.7'],
-  ['/hairbychrissy.html', '0.7'],
-  ['/diamond.html',       '0.7'],
-  ['/masjidone.html',     '0.7'],
-  ['/ellash.html',        '0.5'],
-  ['/buxtravel.html',     '0.5'],
-  ['/luxescent.html',     '0.5'],
-  ['/privacy.html',       '0.2'],
-  ['/terms.html',         '0.2'],
+
+// Navigable pages, by hand: each has a priority of its own.
+const fixed = [
+  ['/',                 '1.0'],
+  ['/work.html',        '0.9'],
+  ['/engineering.html', '0.9'],
+  ['/about.html',       '0.9'],
+  ['/services.html',    '0.8'],
+  ['/contact.html',     '0.8'],
+  ['/privacy.html',     '0.2'],
+  ['/terms.html',       '0.2'],
 ];
+
+// Case studies, from the one source the rest of the site reads. Written-up
+// projects rank above the ones that are only listed.
+const studies = all.map((p) => [p.href, p.problem ? '0.7' : '0.5']);
+
+const pages = [...fixed, ...studies];
 
 export function GET() {
   const lastmod = new Date().toISOString().slice(0, 10);

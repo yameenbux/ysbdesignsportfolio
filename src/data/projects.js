@@ -99,6 +99,19 @@ export const all = [
     layers: { interface: 90, software: 98, infra: 88 },
     img: '/assets/img/masjidone-web.jpg', alt: 'The MasjidOne marketing site',
   },
+  {
+    slug: 'tidemark', href: '/tidemark.html', name: 'Tidemark',
+    kind: 'Own product', where: 'iPhone and web',
+    product: true,
+    status: 'Not released',
+    line: 'A weight tracker that reads the trend rather than the scale — and deliberately has no server, no account and nothing leaving the phone.',
+    stack: 'Expo SDK 57 · React Native 0.86 · React 19 · TypeScript 6 · react-native-svg · @noble scrypt and XChaCha20-Poly1305 · StoreKit 2 · GitHub Actions → Pages',
+    outcome: 'One TypeScript codebase for the iPhone app and a web build, written without a Mac. CI typechecks, lints at zero warnings and fails if coverage drops below its floor; a separate job loads the live app every six hours and fails if it is down. Not on the App Store — the company’s Apple enrolment is in review.',
+    problem: 'A scale swings by a kilo a day on salt, water and sleep, so someone doing everything right sees a gain on a Tuesday and stops. The apps that read the numbers properly want an account — and weight, medication and body photos are health data.',
+    approach: 'No server and no account, so there is nothing held to lose: the data stays on the phone, encrypted by iOS while it is locked, and the privacy label reads Data Not Collected because it is true. The trend uses Holt’s linear smoothing rather than a moving average, in plain TypeScript with no React in it and close to fully unit-tested. The costs are written down beside the decision — no sync, no recovery without a backup, and no remote switch.',
+    layers: { interface: 92, software: 96, infra: 44 },
+    img: '/assets/img/tidemark-web.jpg', alt: 'Three Tidemark screens on demonstration data: Today, the trend chart, and habits',
+  },
 ];
 
 // The ones with enough captured material to carry a screenshot-led write-up.

@@ -113,16 +113,19 @@ material to carry a screenshot-led layout.
 | Hair by Chrissy | Paying client | 4 |
 | Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
+| Tidemark | **Own product**, an iPhone app — built, **not on either store** | 3 |
 
 Do not imply these were all commissions, and do not imply they are all live.
 Taiyabah is community work; say so. Diamond is finished and handed over but
-has no public address yet.
+has no public address yet. Tidemark is finished enough to use and is
+deliberately not released: its web build is live, the iPhone app has never had
+a signed build, and it is on neither the App Store nor Google Play.
 
 ### Two groups: work for others, and my own products
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (three paying clients plus Taiyabah) and **"Built for
-myself"** (MasjidOne). A product I own is a different claim from work someone
+myself"** (MasjidOne and Tidemark). A product I own is a different claim from work someone
 paid me for, and mixing them lets the products read as clients, which would
 be the site inventing a client count.
 
@@ -240,6 +243,7 @@ is new on 7 October and `/services.html` stopped being a redirect.
 | `/hairbychrissy.html` | Case study — client | via work |
 | `/diamond.html` | Case study — client, built and not live yet | via work |
 | `/masjidone.html` | Case study — own product, running at one masjid | via work |
+| `/tidemark.html` | Case study — own product, an iPhone app, not released | via work |
 | `/about.html` | About — the candidate page: what I build, how I work, what I want | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept; on the wheel and under "Also built" | via work |
@@ -873,6 +877,53 @@ columns — it must not sit inside `.foot-meta`, which is right-aligned.
 trading name of YSB Ventures Ltd" is what reconciles a site branded YSB
 Designs with an entity called something else — and it is the same sentence
 Apple needs to be true.
+
+**Phase 19 — Tidemark, 8 October.** A second own-product case, and the first
+iPhone app on the site. Asked for by name as "the iOS Tracker"; the repository
+is `yameenbux/Tracker` and the product is **Tidemark**, which is the name the
+site uses.
+
+**I had previously excluded this repository from the portfolio, and that was
+wrong.** The note said it held personal health data including an intimate
+habit column. Re-read from source: the habits are water, steps, sleep, veg, no
+alcohol and the like, and **no personal data is committed to the repository at
+all**. The exclusion is lifted and the reasoning corrected rather than quietly
+dropped.
+
+What is genuinely sensitive is what the app *can* hold on a user's own phone —
+body photos, measurements and a GLP-1 medication companion. So:
+
+- **Every screenshot is from invented demonstration data**, seeded into a local
+  web build (`npx expo export --platform web`) through `localStorage` under
+  `tracker_state_v1`. Thirteen weeks of weigh-ins generated from a seeded PRNG,
+  no real person's numbers.
+- **The Body tab is deliberately not captured**, and the medication companion
+  is not screenshotted either. Both are real features and the case study can
+  describe them; a frame of either next to the owner's own brand invites a
+  reader to infer whose regimen it is.
+
+The write-up's strongest claim is the one the repository makes loudest: **no
+server, no account**, because weight, medication and body photos are a special
+category under UK GDPR, with the costs written down beside the decision — no
+sync, no recovery without a backup, no remote switch. Also carried across:
+Holt's linear smoothing in `src/core/trend.ts`, CI that fails when coverage
+drops below its floor, and a job that loads the live web app every six hours.
+
+**Held back, because the repository holds them back:** Apple Health, iCloud
+sync and widgets are not built and its README forbids describing them as
+features anywhere. Three things are written and unit-tested but not proven on
+a device — Plus purchase and restore, iOS file encryption while locked, and
+the production hardening plugin. The page says all of it.
+
+**One real bug fell out of this.** `sitemap.xml.js` kept its own hand-written
+list of every URL, so adding `tidemark.astro` built an eighteenth page that the
+sitemap silently did not list. The case studies now derive from `projects.js`;
+only the navigable pages are listed by hand, because each carries its own
+priority.
+
+Noted for the Apple conversation: that repository records the **Apple Developer
+enrolment for YSB Ventures Ltd as in review**, which is the organisation
+enrolment route — the only one that can display a trading name.
 
 ### Known, unfixed
 
