@@ -503,9 +503,11 @@ The architecture SVG was rendered and rejected: it relies on a font that is
 not available here, so mermaid's text metrics overflow every box and the
 labels clip. Do not ship it without the font.
 
-`YSB Ventures Ltd` appears in that repository's README and is deliberately
-**not** carried across — the limited-company details were removed from this
-site at the user's request and stay off.
+`YSB Ventures Ltd` appears in that repository's README and was deliberately
+**not** carried across — the limited-company details had been removed from
+this site at the user's request. **Superseded by Phase 18**, which puts the
+registered details in the footer as a statutory disclosure. They still do not
+appear in body copy or on a case study.
 
 **Phase 12 — MasjidOne re-checked against its repository. DONE.** Seventy
 commits had landed there since the case study was written, and the write-up had
@@ -543,8 +545,8 @@ It could not be checked from here — the agent proxy refuses that host, as it
 does ysbdesigns.uk — so the screenshots were taken from a local build of that
 repository rather than from the live site.
 
-`YSB Ventures Ltd` is named in that repository and is still deliberately not
-carried across.
+`YSB Ventures Ltd` is named in that repository; it is not carried into the
+case study copy, though Phase 18 now discloses it in the footer.
 
 **Phase 13 — Taiyabah re-checked against its repositories. DONE.** Four repos
 back it; two had moved. The screens and the home display are untouched since
@@ -726,6 +728,44 @@ the pivot was waiting on.
   "there is no contact form" and "nothing on this site collects your name,
   email address or anything else" both stay true of a `mailto:`, but the
   "when you get in touch" and data-rights paragraphs now name email.
+
+**Phase 18 — the company disclosure line, 8 October.** Reverses the standing
+removal of the limited-company details, for two reasons that arrived together
+and both point the same way.
+
+First, **the rule**: if `YSB Ventures Ltd` is the trading entity, UK
+disclosure requirements put the registered name, place of registration,
+company number and registered office on its business website. The site is
+that website. The earlier removal was an editorial decision about tone, taken
+without this being weighed.
+
+Second, **Apple**. An organisation enrolment is the only route that can
+display a trade name — an individual account shows your legal name and Apple
+does not accept trading names at all — and Apple checks the organisation's
+website against the D&B record. A site with no mention of the entity gives
+the reviewer nothing to match.
+
+**It is a footer line on every page, and nothing more.** Not body copy, not a
+case study, not an About section. The hiring pages are untouched:
+
+> YSB Designs is a trading name of YSB Ventures Ltd, registered in England and
+> Wales, company number …. Registered office: ….
+
+**`src/data/company.js` gates it on `number` **and** `office` both being set**,
+and both ship empty. A disclosure missing either is worse than none, and a
+wrong company number is a false statement about a real entity — Companies
+House is refused by the agent proxy here, so the two facts have to come from
+the user rather than be guessed. `vat` is optional.
+
+Set in the **body face at 13px**, not `.label`: the mono label is uppercase
+with 0.14em tracking, which at sentence length is unreadable. The footer's
+two-column row is now wrapped so the line sits beneath it inside the same
+bordered block, rather than adding a second hairline.
+
+**The trading-name construction is the load-bearing part.** "YSB Designs is a
+trading name of YSB Ventures Ltd" is what reconciles a site branded YSB
+Designs with an entity called something else — and it is the same sentence
+Apple needs to be true.
 
 ### Known, unfixed
 

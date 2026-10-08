@@ -8,6 +8,8 @@ import '../styles/global.css';
  * shape is an edit to that array, not to this file's structure.
  */
 
+import { company, hasCompanyDetails } from '../data/company.js';
+
 const {
   title,
   description = "I help new and growing businesses look established online — the website, the software behind it and the hosting it runs on, built and deployed end to end.",
@@ -114,19 +116,34 @@ const EMAIL = 'yameen_bee@hotmail.co.uk';
       </main>
 
       <footer class="mx-auto max-w-[1180px] px-7">
-        <div class="mt-24 flex flex-col gap-4 border-t border-line py-9 sm:flex-row sm:items-baseline sm:justify-between">
-          <div>
-            <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
-            <ul class="m-0 mt-2 flex list-none flex-wrap gap-5 p-0">
-              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/privacy.html">Privacy</a></li>
-              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/terms.html">Terms</a></li>
+        <div class="mt-24 border-t border-line py-9">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+            <div>
+              <p class="label m-0">© {year} YSB Designs · Greater Manchester</p>
+              <ul class="m-0 mt-2 flex list-none flex-wrap gap-5 p-0">
+                <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/privacy.html">Privacy</a></li>
+                <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href="/terms.html">Terms</a></li>
+              </ul>
+            </div>
+            <ul class="m-0 flex list-none flex-wrap gap-6 p-0">
+              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a></li>
+              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`tel:${TEL}`}>Call</a></li>
+              <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`mailto:${EMAIL}`}>Email</a></li>
             </ul>
           </div>
-          <ul class="m-0 flex list-none flex-wrap gap-6 p-0">
-            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener">WhatsApp</a></li>
-            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`tel:${TEL}`}>Call</a></li>
-            <li><a class="label no-underline transition-colors duration-150 hover:text-blue" href={`mailto:${EMAIL}`}>Email</a></li>
-          </ul>
+
+          {/* Statutory disclosure. Set in the body face rather than `.label`
+              — the mono label is uppercase with 0.14em tracking, which is
+              unreadable at sentence length. Renders only when the company
+              number and registered office are both present. */}
+          {hasCompanyDetails && (
+            <p class="measure mt-8 text-[13px] leading-[1.55] text-ink-2">
+              YSB Designs is a trading name of {company.name}, registered in{' '}
+              {company.jurisdiction}, company number {company.number}.
+              Registered office: {company.office}.
+              {company.vat && <> VAT number {company.vat}.</>}
+            </p>
+          )}
         </div>
       </footer>
     </div>
