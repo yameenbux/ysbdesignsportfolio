@@ -327,8 +327,12 @@ const step = 360 / n;
     .card-name { font-size: 15px; }
     /* Two eyebrows and a rule will not sit on one line at this width, and
        wrapping them mid-phrase reads as a mistake. Stack them instead. */
-    .stage-head { padding-top: 18px; gap: 4px; }
-    .head-sep { display: none; }
+    /* The rule stays below 760px. Hiding it and tightening the gap to 4px
+       put two uppercase phrases with 0.14em tracking side by side, and they
+       read as one line — "SELECTED WORK SEE ALL 8". Shorten the rule rather
+       than drop it; there is width to spare at 375. */
+    .stage-head { padding-top: 18px; gap: 4px 14px; }
+    .head-sep { width: 16px; }
     .readout { min-height: 244px; padding-bottom: 14px; }
     .layers { gap: 6px 16px; }
     .layer-bar { width: 48px; }
@@ -355,7 +359,6 @@ const step = 360 / n;
     .readout { display: none; }
     .rail { display: none; }
     .stage-head { justify-content: flex-start; }
-    .head-sep { display: none; }
   }
 </style>
 
