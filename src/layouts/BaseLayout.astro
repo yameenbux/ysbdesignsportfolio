@@ -13,6 +13,8 @@ import '../styles/global.css';
  * and no social profile — see CLAUDE.md, "## Contact".
  */
 
+import { company, hasCompanyDetails } from '../data/company.js';
+
 const {
   title,
   description = "I build the whole thing for new and growing businesses — the website, the software behind it and the hosting it runs on, designed and deployed by one person.",
@@ -124,6 +126,20 @@ const EMAIL = 'yameen_bee@hotmail.co.uk';
             <a class="eyebrow ul-draw" href="/terms.html">Terms</a>
           </p>
         </div>
+
+        {/* Statutory disclosure — see CLAUDE.md, Phase 18. Full-width
+            flex item, so it takes its own row under both columns. Body
+            face, not `.eyebrow`: that is uppercase with wide tracking and
+            is unreadable at sentence length. Renders only when the company
+            number and registered office are both set. */}
+        {hasCompanyDetails && (
+          <p class="foot-company">
+            YSB Designs is a trading name of {company.name}, registered in{' '}
+            {company.jurisdiction}, company number {company.number}.
+            Registered office: {company.office}.
+            {company.vat && <> VAT number {company.vat}.</>}
+          </p>
+        )}
       </div>
     </footer>
 
@@ -189,6 +205,17 @@ const EMAIL = 'yameen_bee@hotmail.co.uk';
   .foot-routes { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 22px; font-size: 16px; }
   .foot-meta { text-align: right; }
   .foot-legal { margin: 8px 0 0; display: flex; gap: 18px; justify-content: flex-end; }
+  .foot-company {
+    flex: 1 0 100%;
+    text-align: left;
+    max-width: 68ch;
+    margin: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-line);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-ink-2);
+  }
 
   @media (max-width: 640px) {
     .shell { padding-inline: 20px; }
