@@ -7,12 +7,14 @@ end to end.
 
 Live at https://www.ysbdesigns.uk. Repo: `yameenbux/ysbdesignsportfolio`.
 
-**This branch is v3 and is NOT live.** `main` still carries
-v2, "drafting table", and that is what ysbdesigns.uk serves. Do not merge this
-branch without being asked — the whole point of it is to be looked at first.
+**v3 is live.** It went to `main` on 8 October after being shown and
+approved, and ysbdesigns.uk serves it. `main` and
+`claude/portfolio-site-spec-2iafjh` are the same commit and should be kept
+that way; there is no longer a v2 branch to merge from.
 
-This file is the spec for **this branch**. The v2 spec is on `main`; the v1
-"technical document" and the original forest-green direction are in history.
+This file is the spec, full stop. v2 "drafting table" is in history at
+`c30ceba:CLAUDE.md`, along with the v1 "technical document" and the original
+forest-green direction.
 
 v3 replaces the drafting table wholesale: the paper ground, the hairline
 rules, the blueprint annotation, the three-sheet hero rig, Archivo /
@@ -230,13 +232,14 @@ against this rather than reopening it.
 
 ### Sitemap
 
-Five navigable pages, five case studies, three unlisted. `/engineering.html`
-is new on 7 October and `/services.html` stopped being a redirect.
+Five navigable pages and nine case studies — six written up, three listed
+only. `/engineering.html` is new on 7 October, `/services.html` stopped being
+a redirect, and `/tidemark.html` was added on 8 October.
 
 | URL | Page | In nav |
 |---|---|---|
 | `/` | Home | — |
-| `/work.html` | Work index — the five, in two groups, as cases not cards | yes |
+| `/work.html` | Work index — the written-up six in two groups, then "Also built" | yes |
 | `/engineering.html` | **The technical read** — pipelines, data, failure modes | yes |
 | `/taiyabah.html` | Case study — community project | via work |
 | `/venetian.html` | Case study — client, live on own domain | via work |
