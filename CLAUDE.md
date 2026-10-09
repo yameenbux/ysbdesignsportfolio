@@ -115,7 +115,7 @@ material to carry a screenshot-led layout.
 | Hair by Chrissy | Paying client | 4 |
 | Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
-| Tidemark | **Own product**, an iPhone app — built, **not on either store** | 3 |
+| Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
 
 Do not imply these were all commissions, and do not imply they are all live.
 Taiyabah is community work; say so. Diamond is finished and handed over but
@@ -927,6 +927,44 @@ priority.
 Noted for the Apple conversation: that repository records the **Apple Developer
 enrolment for YSB Ventures Ltd as in review**, which is the organisation
 enrolment route — the only one that can display a trading name.
+
+**Phase 20 — Tidemark re-checked, 9 October.** Ten merges landed there in a
+day, and **two claims published yesterday had already gone wrong in opposite
+directions.**
+
+- **Overclaimed.** The page said the web build was live and linked to it as
+  "Open the web build". Its Pages workflow now labels that address
+  `/app/` — **the owner's private test build, not a product**, `noindex`.
+  Corrected, and the link now goes to the product site.
+- **Underclaimed.** The page said widgets were not built, taken from that
+  repository's README. **Widgets are built**: 237 lines across
+  `LockWidget.tsx`, `TrendWidget.tsx` and `sync.ts`, and its own site tags
+  them *In testing*. This is the Phase 12 error again and it is worth naming:
+  **a README is a claim, not evidence.**
+
+**That repository currently contradicts itself** — its README still says
+widgets are not built while its product site says they are built and in
+testing. Flagged to the user as their bug, not carried into this site's copy;
+where the two disagree, **the newer and more specific source wins**, which
+here is the site.
+
+**Tidemark has its own domain: `tidemark.ysbdesigns.uk`**, a subdomain of this
+one, with the old `yameenbux.github.io/Tracker` addresses redirecting to it.
+One workflow publishes the site, the privacy policy, the original single-file
+tracker and the test build.
+
+Its own site sorts features into three tiers and **this site now uses its
+words rather than paraphrasing**: nine *in the app*, widgets *in testing*,
+Apple Watch *coming soon*. The Watch is the one to watch — there are
+convincing Apple Watch images in that repository and **they are designs, not
+screenshots**, which its own caption says outright. Do not let them become
+evidence of a built feature.
+
+Also carried across, because it is the best platform-engineering detail in
+that repository: **the Pages build job is least-privilege.** The job that runs
+`npm ci`, and so every dependency's install scripts, holds `contents: read`
+and nothing else; only a separate deploy job holds `pages: write`. A
+compromised postinstall script cannot publish.
 
 ### Known, unfixed
 
