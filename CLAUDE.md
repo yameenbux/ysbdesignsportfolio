@@ -64,10 +64,16 @@ Migrating from hand-written static HTML to a build step.
   integration supports Astro 3–5 only and is deprecated, and this runs Astro 7.
   Tokens live in `@theme` in `src/styles/global.css`, not a `tailwind.config.js`.
 - **Fonts are self-hosted** from `public/fonts/`, latin subset, no italic —
-  the `@font-face` rules are at the top of `src/styles/global.css`. No request
+  the `@font-face` rules are at the top of `src/styles/global.css`. Fetched
+  from the `@fontsource-variable/*` npm packages and copied in; nothing in
+  `package.json` depends on them at build time.
+  **`BaseLayout.astro` preloads both files by name**, so swapping a face means
+  editing three places — the `@font-face`, the `@theme` token, and the
+  preload. Missing the third leaves a 404 on every page. No request
   to fonts.googleapis.com, which keeps the render unblocked, keeps every
   third party off the site, and makes local typography checks real. Two
-  families in v3 (Syne, Karla), not three: there is no monospace.
+  families (Space Grotesk, Inter), not three, and still no monospace — see
+  "Type".
 - **No React, no GSAP, no shadcn.** v3's wheel was ported from a React +
   GSAP ScrollTrigger component by hand — see "The wheel" below for what that
   bought. If a component seems to need a framework, it doesn't.
@@ -324,8 +330,8 @@ questions, and reopening one needs a reason rather than a mood.
 An earlier v3 put all of this in a saturated ultramarine room — deep blue
 ground, bone type, a warm sand accent. **The colour was rejected; the
 structure was not.** So the palette here is v2's, unchanged and already
-approved, and everything else is new: the wheel, the centre axis, Syne and
-Karla, and no monospace.
+approved, and everything else is new: the wheel, the centre axis, Space
+Grotesk and Inter, and no monospace.
 
 Do not reintroduce a saturated ground. If a future direction needs one, it is
 a new decision, not a return to something that was already turned down.
@@ -337,15 +343,30 @@ sits on a `plane` sheet with a hairline border, and the active card on the
 wheel takes the accent border and a lift.
 
 Still a departure from v2 on every axis except colour: centre-axis rather
-than left-aligned, the wheel rather than the three-sheet rig, Syne and Karla
-rather than Archivo / Instrument Sans / IBM Plex Mono, and no monospace.
+than left-aligned, the wheel rather than the three-sheet rig, Space Grotesk
+and Inter rather than Archivo / Instrument Sans / IBM Plex Mono, and no
+monospace.
 
 ### Type
 
-- Display: **Syne**, 400–800 variable. Wide, slightly odd, art-institution
-  rather than start-up. Carries every heading and every button.
-- Body: **Karla**, 200–800 variable, 17px, line-height 1.6.
-- Labels (`.eyebrow`): Karla 12px, 600, uppercase, letter-spacing `0.18em`.
+**Changed on 10 October.** Was Syne + Karla. Syne is a display face built for
+art institutions, chosen while this file described the identity as
+"art-institution rather than start-up" — which was before the hiring pivot.
+The typeface did not get worse; the audience changed underneath it. Three
+pairings were rendered on the real homepage and this one was picked.
+
+- Display: **Space Grotesk**, 300–700 variable. Geometric and faintly
+  technical, which is the register this audience reads in. Carries every
+  heading and every button.
+  **Its axis stops at 700.** Syne went to 800, so the seven
+  `font-weight: 800` declarations were lowered to 700 rather than left to be
+  clamped silently by the browser. Do not reintroduce an 800.
+  **It is not a monospace**, despite the name — it is a grotesque, and the
+  ban a few sections down still holds.
+- Body: **Inter**, 100–900 variable, 17px, line-height 1.6. The default body
+  face of most developer tooling, which is the point: the page should feel
+  native to the people reading it.
+- Labels (`.eyebrow`): Inter 12px, 600, uppercase, letter-spacing `0.18em`.
   This is the job the mono did in v2 — done in the body face, because **there
   is no monospace in this system**. Do not add one back.
 - Body measure capped at 62ch. h1 up to `clamp(2.9rem, 8.4vw, 6.2rem)`.
@@ -476,7 +497,7 @@ Rules that hold:
 - Parallax on text
 - A second accent colour, or blue used as a body colour
 - A saturated or dark ground — tried as "Ultramarine" and rejected
-- Monospace anywhere
+- Monospace anywhere (Space Grotesk is a grotesque, not mono — see "Type")
 - Motion that does not describe structure
 
 ## Sequence

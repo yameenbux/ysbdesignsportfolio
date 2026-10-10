@@ -6,8 +6,8 @@
    The drafting-table palette, on a new structure. An earlier v3 put all of
    this in a saturated ultramarine room; the colour was rejected and the
    structure was not, so the palette below is v2's, unchanged and already
-   approved, and everything else — the wheel, the centre axis, Syne and Karla,
-   no monospace — is new.
+   approved, and everything else — the wheel, the centre axis, Space Grotesk
+   and Inter, no monospace — is new.
 
    The problem the blue was solving is still real: every screenshot on this
    site is a light-UI capture, and dropped straight onto paper it sits flush
@@ -21,25 +21,25 @@
      paper  on ink     14.12:1  AAA      paper  on blue    6.04:1  AA
    ========================================================================= */
 
-/* Self-hosted, latin subset, no italic — same reasoning as v2: no
-   render-blocking third-party stylesheet, and no third party learning who
-   visits. Two families rather than three; dropping the mono is part of the
-   departure, not an omission. */
+/* Self-hosted, latin subset, no italic — no render-blocking third-party
+   stylesheet, and no third party learning who visits. Two families, and
+   still no monospace: Space Grotesk is a grotesque despite the name, and
+   is used here as the display face, not as code type. */
 @font-face {
-  font-family: "Syne";
+  font-family: "Space Grotesk";
   font-style: normal;
-  font-weight: 400 800;
+  font-weight: 300 700;
   font-display: swap;
-  src: url("/fonts/syne-latin.woff2") format("woff2-variations");
+  src: url("/fonts/space-grotesk-latin.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
 @font-face {
-  font-family: "Karla";
+  font-family: "Inter";
   font-style: normal;
-  font-weight: 200 800;
+  font-weight: 100 900;
   font-display: swap;
-  src: url("/fonts/karla-latin.woff2") format("woff2-variations");
+  src: url("/fonts/inter-latin.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
@@ -54,8 +54,8 @@
   --color-line:    rgba(22, 25, 28, 0.14);
   --color-line-2:  rgba(22, 25, 28, 0.05);
 
-  --font-disp: "Syne", system-ui, sans-serif;
-  --font-body: "Karla", system-ui, sans-serif;
+  --font-disp: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
 
   --radius-sm: 3px;
   --ease-turn: cubic-bezier(0.22, 0.68, 0.24, 1);
@@ -76,7 +76,7 @@
 
   h1, h2, h3 {
     font-family: var(--font-disp);
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 0.98;
   }
