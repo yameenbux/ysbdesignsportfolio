@@ -1,0 +1,368 @@
+---
+/**
+ * ShowcaseList — a hand-port of the 21st.dev `project-showcase` (React +
+ * lucide-react) into vanilla Astro, scoped CSS and plain JS.
+ *
+ * The original: a list of rows, and one preview image fixed to the page that
+ * chases the cursor on a 0.15 lerp, cross-fading to whichever row is hovered.
+ * That is reproduced exactly, including the +20/-100 cursor offset and the
+ * blur-and-scale on the inactive images.
+ *
+ * Four deliberate departures, all forced by CLAUDE.md:
+ *
+ * 1. No React and no lucide-react. The arrow is an inline SVG; the state is
+ *    three variables. Same reasoning as the wheel and the deck.
+ * 2. **No year.** The original badges a year per project. `projects.js` has
+ *    no such field and inventing one would be a fabricated claim, so the slot
+ *    carries `kind` — which is what this audience is reading for anyway — and
+ *    the `status` chip where a project is not simply live.
+ * 3. **The year badge is `font-mono` in the original.** There is no monospace
+ *    in this system; it is set in the body face.
+ * 4. **A cursor-chasing preview is invisible to a keyboard and to a phone.**
+ *    Focusing a row shows the preview pinned beside that row, and under
+ *    `(hover: none)` the floating preview is dropped entirely for a thumbnail
+ *    in each row. Without those two the mechanic simply does not exist for
+ *    most visitors.
+ *
+ * The preview also carries each project's three layer bars. The wheel's
+ * read-out is where the positioning line stopped being a claim and became
+ * evidence; losing that with the wheel would be a real loss, so it moves here.
+ */
+
+const { items = [], heading = 'Selected work' } = Astro.props;
+const LAYERS = ['Interface', 'Software', 'Infrastructure'];
+---
+
+<section class="show" data-show aria-labelledby="show-h">
+  <h2 class="eyebrow show-h" id="show-h">{heading}</h2>
+
+  {/* The chaser. aria-hidden: every row already names its own project, and
+      the image is decoration repeated from the row. */}
+  <div class="show-peek" data-peek aria-hidden="true">
+    <div class="show-peek-in">
+      {items.map((p, i) => (
+        <img
+          src={p.img}
+          alt=""
+          width="280"
+          height="180"
+          loading="lazy"
+          decoding="async"
+          data-peek-img={i}
+        />
+      ))}
+    </div>
+    <div class="show-peek-bars" data-peek-bars>
+      {LAYERS.map((name) => (
+        <span class="show-bar"><i data-bar={name}></i>{name}</span>
+      ))}
+    </div>
+  </div>
+
+  <ul class="show-list">
+    {items.map((p, i) => (
+      <li>
+        <a href={p.href} class="show-row" data-row={i}
+           style={`--i:${p.layers.interface};--s:${p.layers.software};--f:${p.layers.infra}`}>
+          <span class="show-wash" aria-hidden="true"></span>
+
+          {/* Touch fallback: no cursor means no chaser, so the shot is in the
+              row. Hidden wherever hover actually works. */}
+          <img class="show-thumb" src={p.img} alt="" width="104" height="65"
+               loading="lazy" decoding="async" />
+
+          <span class="show-main">
+            <span class="show-name">
+              <span class="show-word">{p.name}</span>
+              <svg class="show-arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
+                   fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17 17 7" /><path d="M7 7h10v10" />
+              </svg>
+            </span>
+            <span class="show-line">{p.line}</span>
+          </span>
+
+          <span class="show-meta">
+            <span class="show-kind">{p.kind}</span>
+            {p.status
+              ? <span class="show-chip">{p.status}</span>
+              : <span class="show-live"><i></i>Live</span>}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .show { padding-block: clamp(64px, 10vh, 120px); }
+  .show-h { margin: 0 0 10px; }
+
+  .show-list { list-style: none; margin: 0; padding: 0; }
+
+  .show-row {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px 0;
+    border-top: 1px solid var(--color-line);
+    text-decoration: none;
+    color: inherit;
+  }
+  .show-list li:last-child .show-row { border-bottom: 1px solid var(--color-line); }
+
+  .show-wash {
+    position: absolute;
+    inset: 0 -18px;
+    border-radius: 10px;
+    background: var(--color-paper-2);
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .show-row:hover .show-wash,
+  .show-row:focus-visible .show-wash { opacity: 1; transform: scale(1); }
+
+  .show-main { position: relative; flex: 1; min-width: 0; }
+
+  .show-name { display: inline-flex; align-items: center; gap: 8px; }
+
+  .show-word {
+    position: relative;
+    font-family: var(--font-disp);
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    letter-spacing: -0.02em;
+  }
+  .show-word::after {
+    content: '';
+    position: absolute; left: 0; bottom: -3px;
+    height: 1px; width: 0;
+    background: currentColor;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .show-row:hover .show-word::after,
+  .show-row:focus-visible .show-word::after { width: 100%; }
+
+  .show-arrow {
+    color: var(--color-ink-2);
+    opacity: 0;
+    transform: translate(-8px, 8px);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .show-row:hover .show-arrow,
+  .show-row:focus-visible .show-arrow { opacity: 1; transform: translate(0, 0); color: var(--color-blue); }
+
+  .show-line {
+    display: block;
+    position: relative;
+    margin-top: 6px;
+    max-width: 56ch;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--color-ink-2);
+    transition: color 0.3s ease;
+  }
+  .show-row:hover .show-line { color: var(--color-ink); }
+
+  .show-meta {
+    position: relative;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 7px;
+    flex: none; text-align: right;
+  }
+  .show-kind {
+    font-family: var(--font-body);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .show-chip {
+    font-family: var(--font-body);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-ink-2);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 3px 9px;
+    white-space: nowrap;
+  }
+  .show-live {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-body);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .show-live i {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--color-signal);
+  }
+
+  /* ---- the chaser -------------------------------------------------- */
+  .show-peek {
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(-9999px, -9999px, 0);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .show-peek[data-on] { opacity: 1; }
+
+  .show-peek-in {
+    position: relative;
+    width: 280px; height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--color-plane);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 18px 40px rgba(22, 25, 28, 0.18);
+  }
+  .show-peek-in img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: left top;
+    opacity: 0;
+    transform: scale(1.1);
+    filter: blur(10px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, filter 0.5s ease-out;
+  }
+  .show-peek-in img[data-on] { opacity: 1; transform: scale(1); filter: none; }
+
+  .show-peek-bars {
+    display: flex; gap: 12px;
+    margin-top: 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: var(--color-plane);
+    border: 1px solid var(--color-line);
+  }
+  .show-bar {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-body);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .show-bar i {
+    display: block; height: 3px; width: 0;
+    background: var(--color-blue);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Touch: no cursor, so the chaser can never fire. The shot goes in the row. */
+  .show-thumb {
+    position: relative;
+    display: none;
+    width: 104px; height: 65px;
+    object-fit: cover; object-position: left top;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: var(--color-plane);
+    flex: none;
+  }
+  @media (hover: none) {
+    .show-thumb { display: block; }
+    .show-peek { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .show-row { gap: 12px; flex-wrap: wrap; }
+    .show-line { font-size: 14px; }
+    /* The column folds, but the status must not go with it: a project that
+       is not simply live has to say so at every width. `kind` is the part
+       that can be dropped — it is repeated on the work index. */
+    .show-meta {
+      flex-direction: row; align-items: center; gap: 10px;
+      width: 100%; text-align: left; margin-top: 2px;
+    }
+    .show-kind { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .show-wash, .show-word::after, .show-arrow, .show-line,
+    .show-peek, .show-peek-in img, .show-bar i { transition: none; }
+  }
+</style>
+
+<script>
+  const show = document.querySelector<HTMLElement>('[data-show]');
+  const peek = document.querySelector<HTMLElement>('[data-peek]');
+
+  if (show && peek) {
+    const imgs = [...peek.querySelectorAll<HTMLImageElement>('[data-peek-img]')];
+    const bars = [...peek.querySelectorAll<HTMLElement>('[data-bar]')];
+    const rows = [...show.querySelectorAll<HTMLElement>('[data-row]')];
+    const calm = matchMedia('(prefers-reduced-motion: reduce)');
+    const canHover = matchMedia('(hover: hover)');
+
+    // Target and rendered position. The original lerps at 0.15 every frame.
+    let tx = 0, ty = 0, x = 0, y = 0;
+    let frame = 0, on = false;
+
+    const tick = () => {
+      const k = calm.matches ? 1 : 0.15;
+      x += (tx - x) * k;
+      y += (ty - y) * k;
+      peek.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      frame = on ? requestAnimationFrame(tick) : 0;
+    };
+
+    const start = () => { if (!frame) frame = requestAnimationFrame(tick); };
+
+    // The original offsets by +20/-100 and lets the card leave the viewport.
+    // At 280x180 plus the bar strip that is ~230px tall, so a row low on the
+    // screen hides most of the preview it just opened.
+    const PW = 280, PH = 232, PAD = 12;
+    const clampX = (v: number) => Math.min(Math.max(v, PAD), innerWidth - PW - PAD);
+    const clampY = (v: number) => Math.min(Math.max(v, PAD), innerHeight - PH - PAD);
+
+    const open = (i: number) => {
+      on = true;
+      peek.setAttribute('data-on', '');
+      imgs.forEach((im, n) => im.toggleAttribute('data-on', n === i));
+      const row = rows[i];
+      const w = [row.style.getPropertyValue('--i'), row.style.getPropertyValue('--s'), row.style.getPropertyValue('--f')];
+      bars.forEach((b, n) => { b.style.width = `${Math.round(Number(w[n]) * 0.34)}px`; });
+      start();
+    };
+
+    const close = () => {
+      on = false;
+      peek.removeAttribute('data-on');
+      imgs.forEach((im) => im.removeAttribute('data-on'));
+      bars.forEach((b) => { b.style.width = '0'; });
+    };
+
+    // Pointer: the chaser, offset the way the original offsets it.
+    show.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || !canHover.matches) return;
+      tx = clampX(e.clientX + 20);
+      ty = clampY(e.clientY - 100);
+      if (on) start();
+    });
+
+    rows.forEach((row, i) => {
+      row.addEventListener('pointerenter', (e) => {
+        if ((e as PointerEvent).pointerType !== 'mouse' || !canHover.matches) return;
+        open(i);
+      });
+      row.addEventListener('pointerleave', close);
+
+      // Keyboard: pin the preview beside the focused row instead of the
+      // cursor, and jump rather than glide — there is nothing to chase.
+      row.addEventListener('focus', () => {
+        const r = row.getBoundingClientRect();
+        tx = x = clampX(r.right - PW - 20);
+        ty = y = clampY(r.top);
+        open(i);
+      });
+      row.addEventListener('blur', close);
+    });
+
+    addEventListener('scroll', () => { if (on && document.activeElement?.hasAttribute('data-row')) close(); }, { passive: true });
+  }
+</script>

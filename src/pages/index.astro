@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wheel from '../components/Wheel.astro';
+import ShowcaseList from '../components/ShowcaseList.astro';
 import ScrollDeck from '../components/ScrollDeck.astro';
 import { all } from '../data/projects.js';
 
@@ -60,8 +60,13 @@ const description =
     <p class="hero-cue rv" aria-hidden="true">Scroll — every project below is measured against these three</p>
   </section>
 
-  {/* ---- the wheel --------------------------------------------------- */}
-  <Wheel items={all} />
+  {/* ---- selected work ----------------------------------------------- */}
+  {/* v4 trial: the 21st.dev project-showcase, hand-ported. Replaces the
+      wheel. The layer bars travel with it, inside the preview, because the
+      read-out is what turns the positioning line into evidence. */}
+  <section class="shell">
+    <ShowcaseList items={all} />
+  </section>
 
   {/* ---- the ask ----------------------------------------------------- */}
   <section class="shell ask">
