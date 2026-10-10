@@ -117,23 +117,33 @@ material to carry a screenshot-led layout.
 | Project | Type — label it accurately | Assets |
 |---|---|---|
 | Taiyabah Masjid | Community project | 7 captures |
-| The Venetian Company | Paying client, live on their own domain | 4 |
 | Hair by Chrissy | Paying client | 4 |
-| Diamond Heating & Plumbing | Paying client, **built and not live yet** | 3 |
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 | Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
 
+**Retired 10 October, at the user's request: The Venetian Company, Diamond
+Heating & Plumbing and LuxeScent UK.** They are off every listing, out of the
+sitemap and `noindex`ed — but their pages still build and their URLs still
+resolve, because this file has promised since Phase 4 that every live URL
+keeps working, and three indexed addresses do not stop being indexed because
+the owner stopped liking them. `retired: true` in `src/data/cases.js` is what
+sets the `noindex`. Deleting them outright is a separate decision and has not
+been taken.
+
 Do not imply these were all commissions, and do not imply they are all live.
-Taiyabah is community work; say so. Diamond is finished and handed over but
-has no public address yet. Tidemark is finished enough to use and is
+Taiyabah is community work; say so. Tidemark is finished enough to use and is
 deliberately not released: its web build is live, the iPhone app has never had
 a signed build, and it is on neither the App Store nor Google Play.
 
 ### Two groups: work for others, and my own products
 
 **The work index** splits its written-up projects in two — **"Built for
-other people"** (three paying clients plus Taiyabah) and **"Built for
-myself"** (MasjidOne and Tidemark). A product I own is a different claim from work someone
+other people"** (Hair by Chrissy, plus Taiyabah as community work) and
+**"Built for myself"** (MasjidOne and Tidemark). **That first group is now
+thinner than the second**, which is worth watching: retiring Venetian,
+Diamond and LuxeScent left one written-up paying client on the site, and a
+portfolio weighted towards a person's own products argues less well that
+other people hire them. A product I own is a different claim from work someone
 paid me for, and mixing them lets the products read as clients, which would
 be the site inventing a client count.
 
@@ -147,7 +157,7 @@ thing to branch on.
 **`status` in `projects.js`** says a project is not simply live. Omit it and
 the wheel's read-out shows the pulsing live dot; set it and that exact string
 prints in a bordered chip where the dot would be — currently "Not live yet"
-for Diamond and "In one masjid" for MasjidOne. The read-out printed the dot
+for Tidemark and "In one masjid" for MasjidOne. The read-out printed the dot
 unconditionally until Phase 11; a live indicator on something nobody can
 visit, or on a product with no paying customers, is exactly the claim the
 copy rules bar, so **anything that is not simply live needs a `status` here.**
@@ -161,8 +171,13 @@ number that appears as text on this site is YSB's own.
 
 ### Kept but unlisted
 
-`ellash.html`, `buxtravel.html`, `luxescent.html` are live and indexed, and
-must keep building and resolving at their existing URLs. Do not delete them.
+`ellash.html` and `buxtravel.html` are live, indexed and listed, and must
+keep building and resolving at their existing URLs. Do not delete them.
+
+`venetian.html`, `diamond.html` and `luxescent.html` are the **retired** three:
+same promise, but unlisted and `noindex`. LuxeScent was in this paragraph as a
+kept-but-unlisted page before 10 October; it is now retired for the same
+reason as the other two.
 
 **On this branch they are no longer unlisted.** The wheel is one ring over
 everything, so they appear on it, and the work index lists them under "Also
@@ -238,8 +253,8 @@ against this rather than reopening it.
 
 ### Sitemap
 
-Five navigable pages and nine case studies — six written up, three listed
-only. `/engineering.html` is new on 7 October, `/services.html` stopped being
+Five navigable pages and nine case studies — four written up, two listed
+only, and three retired (resolving but unlisted and `noindex`). `/engineering.html` is new on 7 October, `/services.html` stopped being
 a redirect, and `/tidemark.html` was added on 8 October.
 
 | URL | Page | In nav |
@@ -248,14 +263,13 @@ a redirect, and `/tidemark.html` was added on 8 October.
 | `/work.html` | Work index — the written-up six in two groups, then "Also built" | yes |
 | `/engineering.html` | **The technical read** — pipelines, data, failure modes | yes |
 | `/taiyabah.html` | Case study — community project | via work |
-| `/venetian.html` | Case study — client, live on own domain | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
-| `/diamond.html` | Case study — client, built and not live yet | via work |
 | `/masjidone.html` | Case study — own product, running at one masjid | via work |
 | `/tidemark.html` | Case study — own product, an iPhone app, not released | via work |
 | `/about.html` | About — the candidate page: what I build, how I work, what I want | yes |
 | `/contact.html` | Contact | yes |
-| `/ellash.html` `/buxtravel.html` `/luxescent.html` | Kept; on the wheel and under "Also built" | via work |
+| `/ellash.html` `/buxtravel.html` | Kept; listed under "Also built" | via work |
+| `/venetian.html` `/diamond.html` `/luxescent.html` | **Retired** — resolve, `noindex`, linked from nowhere | no |
 | `/services.html` | **Freelance work** — process, prices, estimator. Not in nav | footer |
 | `/privacy.html` | Privacy — what the site collects, which is nothing | footer |
 | `/terms.html` | Terms — prices, payment, ownership | footer |

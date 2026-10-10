@@ -133,7 +133,8 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "A single-page site, monogram and icon set for a nationwide Venetian plastering firm — pitched unasked, now live on their own domain."
+    "description": "A single-page site, monogram and icon set for a nationwide Venetian plastering firm — pitched unasked, now live on their own domain.",
+    "retired": true
   },
   "hairbychrissy": {
     "slug": "hairbychrissy",
@@ -222,7 +223,8 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "A one-page site for a Bolton heating engineer, built so a customer can get photos of the fault into WhatsApp in under a minute."
+    "description": "A one-page site for a Bolton heating engineer, built so a customer can get photos of the fault into WhatsApp in under a minute.",
+    "retired": true
   },
   "masjidone": {
     "slug": "masjidone",
@@ -386,7 +388,8 @@ export const cases = {
         "portrait": true
       }
     ],
-    "description": "An editorial storefront with a scent finder and Etsy deep-links for a Bolton car-diffuser brand."
+    "description": "An editorial storefront with a scent finder and Etsy deep-links for a Bolton car-diffuser brand.",
+    "retired": true
   },
   "tidemark": {
     "slug": "tidemark",
