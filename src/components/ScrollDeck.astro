@@ -1,0 +1,180 @@
+---
+/**
+ * ScrollDeck — a hand-port of Aceternity's `container-scroll-animation`
+ * (React + framer-motion) into vanilla Astro, scoped CSS and ~40 lines of JS.
+ *
+ * The original is three motion values driven by framer's `scrollYProgress`
+ * over the container, with its default offset of ["start start", "end end"]:
+ *
+ *   rotateX     20deg -> 0
+ *   scale       1.05  -> 1      (desktop)   0.7 -> 0.9 (<=768px)
+ *   translateY  0     -> -100px (the title, moving up behind the card)
+ *
+ * All three are reproduced exactly. What is not reproduced is React,
+ * framer-motion and next/image — see CLAUDE.md "Stack". The wheel was ported
+ * the same way and that note records what it bought; the arithmetic here is
+ * six lines, so a runtime to animate it is not a trade worth making.
+ *
+ * Reduced motion: the card sits flat at its resting transform and the script
+ * never starts. The deck still reads as a framed screenshot, which is the
+ * whole point of it.
+ */
+
+const {
+  src,
+  alt,
+  width = 1520,
+  height = 950,
+  class: cls = '',
+  /* How far the card rides up into the title. The original hard-codes -3rem,
+     which assumes the title is one line; a header with buttons under it needs
+     less, or the card lands on the primary call to action. */
+  pull = '-3rem',
+} = Astro.props;
+---
+
+<div class:list={['deck', cls]} data-deck style={`--deck-pull:${pull}`}>
+  <div class="deck-persp">
+    <div class="deck-head" data-deck-head>
+      <slot />
+    </div>
+
+    <div class="deck-card" data-deck-card>
+      <div class="deck-screen">
+        <img
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .deck {
+    height: 60rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 8px;
+  }
+
+  .deck-persp {
+    width: 100%;
+    position: relative;
+    padding-block: 40px;
+    /* The whole effect. Without it rotateX is an orthographic squash. */
+    perspective: 1000px;
+  }
+
+  .deck-head {
+    max-width: 64rem;
+    margin-inline: auto;
+    text-align: center;
+    will-change: transform;
+  }
+
+  .deck-card {
+    max-width: 64rem;
+    margin: var(--deck-pull, -3rem) auto 0;
+    height: 30rem;
+    width: 100%;
+    border: 4px solid #6c6c6c;
+    background: #222;
+    border-radius: 30px;
+    padding: 8px;
+    will-change: transform;
+    /* The bezel's own shadow stack, carried over from the original. */
+    box-shadow:
+      0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042,
+      0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003;
+    /* Resting state, so the card is correct before the script runs and
+       stays correct if it never does. */
+    transform: scale(0.7);
+  }
+
+  .deck-screen {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--color-plane);
+  }
+
+  .deck-screen img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: left top;
+    border-radius: 16px;
+  }
+
+  @media (min-width: 769px) {
+    .deck { height: 80rem; padding: 80px; }
+    .deck-persp { padding-block: 160px; }
+    .deck-card { height: 40rem; padding: 24px; transform: scale(1.05) rotateX(20deg); }
+    .deck-screen { padding: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deck { height: auto; padding-block: 48px; }
+    .deck-persp { padding-block: 0; perspective: none; }
+    .deck-card { transform: none; margin-top: 2.5rem; }
+    .deck-head { transform: none; }
+  }
+</style>
+
+<script>
+  // One instance per page in practice, but written for any number.
+  for (const deck of document.querySelectorAll<HTMLElement>('[data-deck]')) {
+    const head = deck.querySelector<HTMLElement>('[data-deck-head]');
+    const card = deck.querySelector<HTMLElement>('[data-deck-card]');
+    if (!head || !card) continue;
+
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) continue;
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    let frame = 0;
+    let visible = false;
+
+    const draw = () => {
+      frame = 0;
+
+      // framer's default offset for a target with no `offset`:
+      // ["start start", "end end"] — 0 when the container's top reaches the
+      // viewport top, 1 when its bottom reaches the viewport bottom.
+      const box = deck.getBoundingClientRect();
+      const span = box.height - innerHeight;
+      const t = span <= 0 ? 1 : Math.min(Math.max(-box.top / span, 0), 1);
+
+      const mobile = innerWidth <= 768;
+      const rotate = lerp(20, 0, t);
+      const scale = mobile ? lerp(0.7, 0.9, t) : lerp(1.05, 1, t);
+
+      card.style.transform = `scale(${scale.toFixed(4)}) rotateX(${rotate.toFixed(2)}deg)`;
+      head.style.transform = `translateY(${lerp(0, -100, t).toFixed(2)}px)`;
+    };
+
+    const request = () => {
+      if (!frame && visible) frame = requestAnimationFrame(draw);
+    };
+
+    // Stop asking for frames once the deck is off screen.
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) request();
+      else if (frame) { cancelAnimationFrame(frame); frame = 0; }
+    }).observe(deck);
+
+    addEventListener('scroll', request, { passive: true });
+    addEventListener('resize', request, { passive: true });
+    draw();
+  }
+</script>

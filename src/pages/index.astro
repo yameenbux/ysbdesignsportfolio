@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wheel from '../components/Wheel.astro';
-import Corridor from '../components/Corridor.astro';
+import ScrollDeck from '../components/ScrollDeck.astro';
 import { all } from '../data/projects.js';
 
 /**
@@ -18,23 +18,18 @@ const description =
 
 <BaseLayout title="Platform and DevOps engineer, Greater Manchester" description={description} wide={true}>
 
-  {/* ---- the claim, over the corridor -------------------------------- */}
-  <Corridor
-    images={[
-      { src: '/assets/img/taiyabah-web.jpg' },
-      { src: '/assets/img/venetian-web.jpg' },
-      { src: '/assets/img/diamond-web.jpg' },
-      { src: '/assets/img/hbc-web.jpg' },
-      { src: '/assets/img/masjidone-web.jpg' },
-      { src: '/assets/img/ellash-web.jpg' },
-      { src: '/assets/img/luxe-web.jpg' },
-      { src: '/assets/img/bux-web.jpg' },
-      { src: '/assets/img/taiyabah-home.jpg' },
-    ]}
-    class="hero-corr"
-    wash={0.82}
+  {/* ---- the claim, over the deck ----------------------------------- */}
+  {/* v4 trial: Aceternity's container-scroll, hand-ported. The hero content
+      is unchanged; the three layers move below the deck because a dl under a
+      centred title fights the card rising into it. */}
+  <ScrollDeck
+    src="/assets/img/taiyabah-web.jpg"
+    alt="The Taiyabah Masjid website: prayer times, notices and hall booking"
+    width="760"
+    height="475"
+    class="hero-deck"
+    pull="0rem"
   >
-  <section class="shell hero">
     <p class="eyebrow rv">Greater Manchester · platform and DevOps</p>
     <h1 class="rv">I build <em>and run</em> the whole thing.</h1>
     <p class="hero-sub rv">
@@ -46,6 +41,9 @@ const description =
       <a class="btn" href="/engineering.html">How it is built and run</a>
       <a class="btn btn-ghost" href="/work.html">See the work</a>
     </div>
+  </ScrollDeck>
+
+  <section class="shell hero-legend">
     <dl class="hero-layers rv">
       {[
         ['Interface', 'The site people actually see.'],
@@ -61,7 +59,6 @@ const description =
 
     <p class="hero-cue rv" aria-hidden="true">Scroll — every project below is measured against these three</p>
   </section>
-  </Corridor>
 
   {/* ---- the wheel --------------------------------------------------- */}
   <Wheel items={all} />
@@ -82,27 +79,27 @@ const description =
 </BaseLayout>
 
 <style>
-  .hero-corr { min-height: 92vh; display: flex; align-items: center; }
-  .hero { padding-block: clamp(52px, 9vh, 104px) clamp(36px, 7vh, 76px); width: 100%; }
+  .hero-legend { padding-block: 0 clamp(40px, 7vh, 84px); }
 
-  .hero h1 {
+  h1 {
     font-size: clamp(2.9rem, 8.4vw, 6.2rem);
     margin: 20px 0 0;
-    max-width: 15ch;
+    max-width: 18ch;
+    margin-inline: auto;
   }
   /* The one word the sentence turns on. Sand is used exactly here, on the
      wheel's active card, and on the primary button — three places, one job. */
-  .hero h1 em { font-style: normal; color: var(--color-blue); }
+  h1 em { font-style: normal; color: var(--color-blue); }
 
   .hero-sub {
-    margin: 30px 0 0;
+    margin: 30px auto 0;
     max-width: 46ch;
     font-size: clamp(1.05rem, 2vw, 1.32rem);
     line-height: 1.5;
     color: var(--color-ink-2);
   }
 
-  .hero-do { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .hero-do { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: clamp(28px, 5vh, 56px); }
 
   /* Names the vocabulary the wheel then measures every project against.
      Three items, no boxes — a legend, not a feature grid. */
