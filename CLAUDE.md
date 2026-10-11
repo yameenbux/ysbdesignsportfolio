@@ -214,8 +214,8 @@ up as full cases — there is not enough captured material — which is what
 
 Three routes, since the 7 October pivot:
 
-- WhatsApp — `07729247248`
-- Phone — `tel:+447729247248`
+- WhatsApp — `07466487591`
+- Phone — `tel:+447466487591`
 - Email — `yameen_bee@hotmail.co.uk`
 
 **Email was added on 7 October and reverses the long-standing "no address"
@@ -236,18 +236,25 @@ section is now a single paragraph, because a definition list of one term reads
 as a list with something missing. The off-site profile link stays off — do not
 reintroduce a social profile without being asked.
 
-**The number is `07729247248`, changed on 11 October — and this reverses
-`804ae30`.** In September the Call links carried `07729247248` and WhatsApp
-carried `07404901859`; they disagreed, `07404901859` was confirmed as correct
-at the time, and every `tel:` was changed to match. That confirmation was
-wrong, or has been overtaken. Asked before changing it, because restoring a
-number this file records as *wrong* is exactly the kind of instruction worth
-checking, and told to move everything.
+**The number is `07466487591`, set on 11 October.** It is the third in two
+days: `07404901859` until 11 October, then `07729247248` for a few hours,
+now this. The earlier history is in `804ae30` and in the commit log; it is
+not worth restating, because **the only number that matters is the one
+in the working tree.** Do not treat any older number in this file or in git
+as a fallback — if the links ever disagree, read them out of
+`BaseLayout.astro`, which is where `WHATSAPP` and `TEL` are defined.
 
 **One number, used everywhere** — if a second ever appears, one of them is a
 bug. That rule is what caught the September mismatch and it still holds:
-WhatsApp, `tel:` and the display text are all `07729247248`, in 54 links
+WhatsApp, `tel:` and the display text are all `07466487591`, in 54 links
 across all 18 pages.
+
+**Because the number has now moved three times, changing it is routine and
+does not need a question** — the standing answer is that WhatsApp, `tel:`
+and the display text all move together. What does still need doing, by the
+user and not from here, is sending a WhatsApp through the site's own link
+after each change: a number that is not registered on WhatsApp opens a dead
+chat with no error.
 
 **If calls or WhatsApp messages stop arriving, suspect this first.** A wrong
 number on a hiring site fails silently — nobody writes to say they could not
