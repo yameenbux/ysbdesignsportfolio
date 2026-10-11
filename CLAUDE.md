@@ -214,8 +214,8 @@ up as full cases — there is not enough captured material — which is what
 
 Three routes, since the 7 October pivot:
 
-- WhatsApp — `07404901859`
-- Phone — `tel:+447404901859`
+- WhatsApp — `07729247248`
+- Phone — `tel:+447729247248`
 - Email — `yameen_bee@hotmail.co.uk`
 
 **Email was added on 7 October and reverses the long-standing "no address"
@@ -236,9 +236,22 @@ section is now a single paragraph, because a definition list of one term reads
 as a list with something missing. The off-site profile link stays off — do not
 reintroduce a social profile without being asked.
 
-Resolved in Phase 2. `07404901859` is the correct number. `07729247248` was
-wrong and had been on every Call link; fixed in `804ae30`. **One number, used
-everywhere** — if a second ever appears, one of them is a bug.
+**The number is `07729247248`, changed on 11 October — and this reverses
+`804ae30`.** In September the Call links carried `07729247248` and WhatsApp
+carried `07404901859`; they disagreed, `07404901859` was confirmed as correct
+at the time, and every `tel:` was changed to match. That confirmation was
+wrong, or has been overtaken. Asked before changing it, because restoring a
+number this file records as *wrong* is exactly the kind of instruction worth
+checking, and told to move everything.
+
+**One number, used everywhere** — if a second ever appears, one of them is a
+bug. That rule is what caught the September mismatch and it still holds:
+WhatsApp, `tel:` and the display text are all `07729247248`, in 54 links
+across all 18 pages.
+
+**If calls or WhatsApp messages stop arriving, suspect this first.** A wrong
+number on a hiring site fails silently — nobody writes to say they could not
+reach you.
 
 A contact form would need a third-party endpoint (Formspree, Web3Forms) or
 `mailto:`, because static hosting has no server. **Decided on 5 October: there
