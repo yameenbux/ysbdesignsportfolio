@@ -36,7 +36,7 @@ const rest = all.filter((p) => !lead.some((l) => l.slug === p.slug));
 const numberOf = (p) => String(lead.findIndex((l) => l.slug === p.slug) + 1).padStart(2, '0');
 
 const description =
-  'Client and community work written up as problem, approach and outcome, and the products built alongside it — a masjid running on one system, a heating engineer, a booking platform and a plaster specialist.';
+  'Client and community work as problem, approach and outcome, plus my own products — a masjid on one system, a booking platform and a Bolton directory.';
 ---
 
 <BaseLayout title="Websites, booking systems and apps" description={description}>

@@ -43,6 +43,13 @@ const pipelines = [
     why: 'Green is not the same as live.',
   },
   {
+    name: 'Testing the database as a database',
+    where: 'boltonvouched \u2014 ci.yml',
+    detail:
+      'The job starts a real Supabase, applies every migration, and runs <strong>147 pgTAP assertions</strong> against an empty register before any application code is involved \u2014 then reloads fixtures and drives the same build in a browser with Playwright. The scoring suite asserts the no-score floor and the shrinkage arithmetic directly in SQL.',
+    why: 'The rules worth testing are the ones in the schema. Reaching them through a web page tests the web page.',
+  },
+  {
     name: 'A build that fails rather than silently breaking the domain',
     where: 'ysbdesignsportfolio — deploy.yml',
     detail:
@@ -67,6 +74,18 @@ const data = [
   {
     h: 'Schema drift caught by the schema',
     p: 'A <code>health_check()</code> function asserts invariants the code cannot be trusted to hold — including that every table carries its tenant column. It caught a table built exactly as its design drawing showed, where the drawing had no <code>masjid_id</code> at all. 166 migrations are applied and tracked by hand, and a migration that rebuilds a function prints the function rather than pointing at history.',
+  },
+  {
+    h: 'Consent as a constraint, not a checkbox',
+    p: 'A directory listing somebody who never agreed to be listed is the failure mode that matters, so it is made unreachable rather than discouraged. A provider row cannot reach <code>live</code> at all unless consent is recorded: it is a <code>CHECK</code> constraint, not a rule in the admin screen. Stored beside the timestamp is a <strong>SHA-256 of the exact wording that was on the page they accepted</strong> \u2014 so <em>what</em> was agreed to is provable later, not just <em>when</em>.',
+  },
+  {
+    h: 'Closed by default, including tables that do not exist yet',
+    p: 'The anonymous role is stripped of every grant, and <strong>default privileges are revoked too</strong>, so a table added next year starts closed instead of waiting for someone to remember. One view is the only door. Making that view readable anonymously turned on a detail worth knowing: Postgres checks function permissions against the <em>calling</em> role even inside a view, so its helpers live in a schema the public cannot reach \u2014 which works because EXECUTE is checked at run time while schema access is only checked when a name is looked up.',
+  },
+  {
+    h: 'A certificate that expires takes the listing down on its own',
+    p: 'Gas work and driving instruction are gated on both sides. A trigger refuses to file the category without an in-date Gas Safe or DVSA check, and the public view independently drops it the day that check lapses. Neither depends on a person running a report, which is the only version of a compliance check that survives being forgotten about.',
   },
 ];
 
@@ -94,7 +113,7 @@ const failures = [
 
 <BaseLayout
   title="Engineering \u2014 pipelines, data and failure modes"
-  description="How I build and run things: CI/CD across seven workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
+  description="How I build and run things: CI/CD across eight workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
 >
   <section class="head">
     <p class="eyebrow m-0">Engineering</p>
@@ -109,7 +128,7 @@ const failures = [
   <section class="sec">
     <h2>Delivery</h2>
     <p class="sec-p rv">
-      Seven workflows across one app repository, plus a deploy pipeline per
+      Eight workflows across one app repository, plus a deploy pipeline per
       site. The interesting ones are not the builds \u2014 they are the gates.
     </p>
     <ol class="rows rv gates">
@@ -150,12 +169,12 @@ const failures = [
     </p>
     <dl class="rows rv">
       {[
-        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com. Astro and Next.js both to static output; no server at request time.'],
+        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com — Astro and Next.js to static output wherever the page allows it. Where it does not, Railway runs the Next.js server: Bolton Vouched needs a request-time route so a phone number can be looked up without ever being sent to the browser.'],
         ['Edge', 'Cloudflare Workers behind Wrangler for the jobs a static site cannot do \u2014 notification fan-out, form intake. Secrets as Wrangler secrets, never in the repository.'],
         ['Data', 'Supabase Postgres with RLS, SECURITY DEFINER functions, scheduled jobs and edge functions. 166 tracked migrations on the largest of them.'],
         ['Payments', 'Stripe \u2014 Checkout, deposits with a held slot, webhooks, and Bacs Direct Debit for recurring billing. Webhook handlers read both of the shapes Stripe has used for invoice fields.'],
         ['Messaging', 'OneSignal web push, fired automatically off a published timetable. Resend for transactional mail, behind a Worker rather than a form company.'],
-        ['Clients', 'PWAs with service workers and offline behaviour, a Trusted Web Activity on Google Play, and a React Native rebuild beside it.'],
+        ['Clients', 'PWAs with service workers and offline behaviour, and a React Native app on Google Play — which replaced the Trusted Web Activity it started as, because a webview cannot keep audio playing with the phone locked.'],
       ].map(([k, v]) => (
         <div class="row">
           <dt class="eyebrow m-0">{k}</dt>
@@ -165,7 +184,7 @@ const failures = [
     </dl>
     <p class="sec-p rv">
       <strong>Not AWS, Azure or GCP.</strong> The work above is Cloudflare,
-      Supabase, GitHub Actions and Render. The concepts move \u2014 tenancy, least
+      Supabase, GitHub Actions, Railway and Render. The concepts move \u2014 tenancy, least
       privilege, build gating, webhook idempotency, deploy verification \u2014 but
       I would rather say what I have run than imply a console I have not.
     </p>

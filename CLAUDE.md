@@ -120,6 +120,7 @@ material to carry a screenshot-led layout.
 | Hair by Chrissy | Paying client | 4 |
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 | Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
+| Bolton Vouched | **Own product**, a Bolton directory — built and deploying, **not launched** | 4 |
 
 **Retired 10 October, at the user's request: The Venetian Company, Diamond
 Heating & Plumbing and LuxeScent UK.** They are off every listing, out of the
@@ -139,7 +140,7 @@ a signed build, and it is on neither the App Store nor Google Play.
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (Hair by Chrissy, plus Taiyabah as community work) and
-**"Built for myself"** (MasjidOne and Tidemark). **That first group is now
+**"Built for myself"** (MasjidOne, Tidemark and Bolton Vouched). **That first group is now
 thinner than the second**, which is worth watching: retiring Venetian,
 Diamond and LuxeScent left one written-up paying client on the site, and a
 portfolio weighted towards a person's own products argues less well that
@@ -273,7 +274,7 @@ against this rather than reopening it.
 
 ### Sitemap
 
-Five navigable pages and nine case studies — four written up, two listed
+Five navigable pages and ten case studies — five written up, two listed
 only, and three retired (resolving but unlisted and `noindex`). `/engineering.html` is new on 7 October, `/services.html` stopped being
 a redirect, and `/tidemark.html` was added on 8 October.
 
@@ -286,6 +287,7 @@ a redirect, and `/tidemark.html` was added on 8 October.
 | `/hairbychrissy.html` | Case study — client | via work |
 | `/masjidone.html` | Case study — own product, running at one masjid | via work |
 | `/tidemark.html` | Case study — own product, an iPhone app, not released | via work |
+| `/boltonvouched.html` | Case study — own product, a Bolton directory, pre-launch | via work |
 | `/about.html` | About — the candidate page: what I build, how I work, what I want | yes |
 | `/contact.html` | Contact | yes |
 | `/ellash.html` `/buxtravel.html` | Kept; listed under "Also built" | via work |
@@ -1020,6 +1022,102 @@ that repository: **the Pages build job is least-privilege.** The job that runs
 `npm ci`, and so every dependency's install scripts, holds `contents: read`
 and nothing else; only a separate deploy job holds `pages: write`. A
 compromised postinstall script cannot publish.
+
+**Phase 21 — Bolton Vouched, and every other project re-checked, 12 October.**
+Asked to update the whole portfolio with **one** new addition. Five repositories
+had moved since they were last verified; four of them had moved the copy with
+them, and **two of the four were wrong in the expensive direction** — the site
+withholding something that had actually shipped.
+
+**The new one: Bolton Vouched** (`yameenbux/Boltontradesmen`, public — the
+repository name is not the product name). A local recommendations directory for
+Bolton: Next.js 16 App Router, React 19, Tailwind 4, Supabase Postgres, deployed
+on **Railway**, which is a new platform for this site and the first thing here
+with a server at request time.
+
+**It is two days old and it has not launched**, so `status: 'Pre-launch'`. Its
+own README carries an unticked "Before launch" list — draft policy banners
+pending legal review, ICO registration, and a twelve-month purge job the privacy
+notice already promises but which is **not built**. All of that is on the page,
+because a product's own list of what is unfinished is the most checkable thing
+it has.
+
+The write-up leads on the parts that are hard to retrofit, all of them in the
+database rather than the interface:
+
+- **Consent is a `CHECK` constraint.** A provider row cannot reach `live` without
+  recorded consent, and stored beside the timestamp is a **SHA-256 of the exact
+  wording** they accepted — so *what* was agreed to is provable, not just *when*.
+- **A lapsed certificate takes the listing down by itself.** Gas Safe and DVSA
+  are gated twice: a trigger refuses the category on write, and the public view
+  drops it on read the day the check expires.
+- **The ranking cannot be bought** — a shrunk mean with a 24-month half-life and
+  no score at all below three reviews. The demonstration data was built so the
+  screenshot proves it: 100% from two jobs ranks *below* 75% from four.
+- **No trader's number is ever in the page.** The view exposes a boolean; a
+  server route logs the tap and 302s to `tel:`/`wa.me`.
+- **Closed by default including future tables**, via revoked default privileges,
+  with one view as the only door — and the view's helpers in a schema the public
+  cannot reach, because Postgres checks function EXECUTE against the *calling*
+  role even inside a view.
+
+**The numbers on that page were measured here, not read off a badge.** The repo
+ships a no-Docker local stack; it was started, migrated and seeded, and **147
+pgTAP assertions across five SQL suites and 81 unit tests all pass**. Screenshots
+come from a local build on **invented demonstration data** — every business and
+person is made up and every number is in Ofcom's reserved `07700 900xxx` drama
+range, because the real register will hold real traders' mobiles. The live hosts
+are refused by the agent proxy here, as `ysbdesigns.uk` and Tidemark's domain are.
+
+**What had gone stale elsewhere:**
+
+- **Taiyabah — the native rebuild shipped and the site said it had not.** The
+  Google Play app is now the React Native build (`2.0.1`, version code 8); the
+  Trusted Web Activity it replaced **ended at version code 1**. This site still
+  described the TWA as the store app *and* said the rebuild was "deliberately not
+  on the Play listing". Both wrong, and in the direction that costs most. Also:
+  the app is in **four** languages (English, Urdu, Gujarati, Arabic), not three.
+  Hall hire now runs on real availability with the deposit paid online, so the
+  "online booking is switched off" line went; what is still deliberately off is
+  the nikāḥ fee links and the madrasah application form. The Apple line was
+  walked back — Phase 15 said the D-U-N-S record had been corrected and was in
+  Apple's queue; that repository now says it still needs correcting, and the
+  newer, more specific source wins. The specific defect in the charity's D&B
+  record stays unpublished, as Phase 15 decided.
+- **MasjidOne — "four surfaces" was still in `projects.js`.** Phase 14 corrected
+  this to the canonical **five products** but only in `cases.js`; the showcase
+  copy kept the old count for a week. *Two files carry the same claim and only
+  one got fixed* — worth remembering next time a count changes. Everything else
+  re-read and unchanged: Direct Debit is still wired and still unexercised, so
+  still not claimed.
+- **Tidemark — underclaiming again, the Phase 12 and Phase 20 error a third
+  time.** The page said "Apple Health and iCloud sync are not built at all".
+  Apple Health sync and automatic backups **are** built and the whole native app
+  compiles in CI; what is true is that none of it has run on a phone. iCloud
+  sync and the Apple Watch app really are unbuilt. Its own site's three tiers are
+  unchanged, so the rest of that write-up stands.
+- **Bux Travel — no change.** Twenty pages, no build step, Node tooling, the
+  email route and the removed self-declared rating all still exactly as written.
+- **Hair by Chrissy, èllash and the two Taiyabah screen repos** had not moved.
+
+**The engineering page moved with it:** eight workflows rather than seven (a
+timetable watchdog landed), the Clients line no longer calls the Play app a
+Trusted Web Activity, Railway is named in hosting and in the "not AWS, Azure or
+GCP" list, and three new entries carry Bolton Vouched's constraint-level consent,
+its default-closed grants and its database-first CI.
+
+**The spec had drifted from the site and that is fixed here too.** This file
+still described the wheel as the homepage; the homepage has been `ShowcaseList`
+since the redraft earlier in the month. `src/components/Wheel.astro` is still in
+the repository and is **referenced by nothing** — left rather than deleted,
+because removing it is a separate decision from this one.
+
+**Flagged, not acted on: the two groups are now 2 against 3.** "Built for other
+people" holds Hair by Chrissy and Taiyabah; "Built for myself" holds MasjidOne,
+Tidemark and now Bolton Vouched. A portfolio weighted towards a person's own
+products argues less well that other people hire them — the same concern this
+file raised when the three were retired, now one project worse. The fix is
+another written-up paying client, not a thinner own-product section.
 
 ### Known, unfixed
 
