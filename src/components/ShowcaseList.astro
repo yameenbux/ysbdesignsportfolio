@@ -114,8 +114,11 @@ const usedMarks = [...new Set(items.flatMap((p) => p.tech || []))].filter((k) =>
             <span class="show-line">{p.line}</span>
           </span>
 
+          {/* Status only. `kind` left this row on 12 October: the column
+              said seven different things and the ask was for one of two.
+              The client / own-product distinction still lives on the work
+              index, which groups by it, and on each case study. */}
           <span class="show-meta">
-            <span class="show-kind">{p.kind}</span>
             {p.status
               ? <span class="show-chip">{p.status}</span>
               : <span class="show-live"><i></i>Live</span>}
@@ -264,12 +267,6 @@ const usedMarks = [...new Set(items.flatMap((p) => p.tech || []))].filter((k) =>
     display: flex; flex-direction: column; align-items: flex-end; gap: 7px;
     flex: none; text-align: right;
   }
-  .show-kind {
-    font-family: var(--font-body);
-    font-size: 12px; font-weight: 600;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--color-ink-2);
-  }
   .show-chip {
     font-family: var(--font-body);
     font-size: 11px; font-weight: 600;
@@ -371,7 +368,6 @@ const usedMarks = [...new Set(items.flatMap((p) => p.tech || []))].filter((k) =>
       flex-direction: row; align-items: center; gap: 10px;
       width: 100%; text-align: left; margin-top: 2px;
     }
-    .show-kind { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {

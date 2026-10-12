@@ -170,8 +170,10 @@ unconditionally until Phase 11; a live indicator on something nobody can
 visit, or on a product with no paying customers, is exactly the claim the
 copy rules bar, so **anything that is not simply live needs a `status` here.**
 
-**Keep a status to about two words.** It sits inline in a 12px label; a long
-one wraps the line it shares with `kind` and `where`.
+**Keep a status to about two words.** It sits in an 11px chip; a long one
+wraps. Since `kind` left the home list the chip has that column to itself,
+which makes a long value more forgiving — but the vocabulary is fixed at two
+values anyway.
 
 Client business facts — a trading number, a Gas Safe registration, an office
 line — belong in the client's own screenshots, never in YSB's copy. The only
@@ -387,9 +389,17 @@ sections beat five — the homepage was a thousand pixels longer than the
 approved treatment and read as less clean for it.
 
 **The homepage does not split work into groups; the work index does.** The
-wheel is one ring over everything, and cutting it in two would halve the
-mechanic for no gain. The distinction is carried on the cards instead, by
-`kind` and by the status chip.
+list is one run over everything, and cutting it in two would halve it for no
+gain.
+
+**The `kind` label left the homepage on 12 October**, asked for directly: the
+right-hand column now shows **only** Live or Pre-launch. `kind` is still in
+`projects.js` and still drives the work index's two groups and each case
+study's eyebrow — it is just not on the home list. The cost is real and worth
+knowing: a visitor scanning the homepage alone can no longer tell a commission
+from something I own, and this file's own rule says do not imply these were all
+commissions. The work index is where that distinction now lives, one click
+away.
 
 ### Settled, 5 October
 
