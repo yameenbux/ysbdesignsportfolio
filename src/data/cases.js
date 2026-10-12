@@ -332,7 +332,7 @@ export const cases = {
     "slug": "ellash",
     "title": "èllash",
     "seoTitle": "èllash — a beauty booking page",
-    "kind": "Client",
+    "kind": "Own product",
     "role": "One page, no build step, no dependencies · Travel-day calendar · Deposits",
     "problem": "Beauty businesses lose a slice of every booking to the big platforms, or pay a monthly fee for a diary they barely use. For a mobile lash technician working across three towns, that overhead buys very little — and none of it understands that Tuesday is a Coventry day.",
     "approach": "So èllash gets its own booking page instead. Four steps — treatment, date and time, details, confirm — with availability built around <strong>travel days rather than a salon diary</strong>: pick an area and only the days she is actually in that area come back. A deposit secures the slot, and the confirmation carries her aftercare guide.",

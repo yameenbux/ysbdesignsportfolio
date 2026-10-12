@@ -140,7 +140,13 @@ a signed build, and it is on neither the App Store nor Google Play.
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (Hair by Chrissy, plus Taiyabah as community work) and
-**"Built for myself"** (MasjidOne, Tidemark and Bolton Vouched). **That first group is now
+**"Built for myself"** (MasjidOne, Tidemark, Bolton Vouched and èllash).
+**èllash moved across on 12 October**, when the user said it is his own
+business now — it had been listed as a client, and calling your own business
+a client is the invented-client-count failure this file bars. Its case study
+still narrates a lash technician running the business in the third person;
+that copy was **not** rewritten, because what changed commercially is not
+recorded anywhere I can read. **That first group is now
 thinner than the second**, which is worth watching: retiring Venetian,
 Diamond and LuxeScent left one written-up paying client on the site, and a
 portfolio weighted towards a person's own products argues less well that
@@ -215,9 +221,23 @@ up as full cases — there is not enough captured material — which is what
   - **Stack marks are `simple-icons` paths, unmodified**, in `src/data/stack.js`.
     A mark that package does not carry stays unillustrated — OneSignal and
     Playwright do, and they are simply absent rather than approximated.
-  - **Everything renders monochrome in ink.** Brand colour is dropped on
-    purpose: seven palettes on the paper ground read as a sponsor wall, and
-    Taiyabah's gold measures far below AA on `#E8E6DE`.
+  - **Each mark carries its own brand colour** — reversed on 12 October, a few
+    hours after shipping monochrome, once it was seen live. Where a mark was
+    drawn for a dark ground, the substitute comes from **that brand's own
+    light-mode tokens** rather than being darkened by eye: Taiyabah's logo gold
+    `#D0B060` becomes its own `--gold-ink` `#8A6A18` and its cream becomes its
+    own plum `#5E1844`. Nothing is colour-picked off a screenshot.
+  - **Every mark renders at the same 30px height**, set in `projects.js` as
+    `logo.h` with `w` derived from the file's real pixels so nothing is
+    distorted and no image is unsized. Equal height is the standard for a logo
+    row, and the residual unevenness is inherent to it: a pure lowercase
+    wordmark fills its box while a monogram over two small lines does not, so
+    Tidemark reads larger than Bux Travel at identical heights.
+  - **Taiyabah is the horizontal lockup its own website header uses** — the
+    mark beside the name in Fraunces — not the stacked logo file. Stacked, it
+    was the one mark a shared height made illegible, because two lines of type
+    inside a 30px box is 7px of type. Its repositories ship no horizontal SVG;
+    its site composes one in markup, and this follows that composition.
   **Azure is still barred as a stack mark** and `src/data/stack.js` says so in
   its header. The certificate is Azure; the systems are not.
   No imagery outside the screenshots and these marks.
