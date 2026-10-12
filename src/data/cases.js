@@ -328,48 +328,48 @@ export const cases = {
     ],
     "description": "A product joining a masjid's madrasah to its congregation: one record of one family on Supabase, with a masjid_id on every table."
   },
-  "ellash": {
-    "slug": "ellash",
-    "title": "èllash",
-    "seoTitle": "èllash — a beauty booking page",
+  "peony": {
+    "slug": "peony",
+    "title": "Peony",
+    "seoTitle": "Peony \u2014 booking pages for solo beauty professionals",
+    "description": "A booking platform that takes no commission, where the database itself refuses a double booking rather than trusting the application to check first.",
     "kind": "Own product",
-    "role": "One page, no build step, no dependencies · Travel-day calendar · Deposits",
-    "problem": "Beauty businesses lose a slice of every booking to the big platforms, or pay a monthly fee for a diary they barely use. For a mobile lash technician working across three towns, that overhead buys very little — and none of it understands that Tuesday is a Coventry day.",
-    "approach": "So èllash gets its own booking page instead. Four steps — treatment, date and time, details, confirm — with availability built around <strong>travel days rather than a salon diary</strong>: pick an area and only the days she is actually in that area come back. A deposit secures the slot, and the confirmation carries her aftercare guide.",
-    "outcome": "One page, no build step, no dependencies, no per-booking commission and <strong>no monthly platform fee</strong>. It is the simple version of what Fresha and Treatwell sell, for a business that needs a calendar rather than a marketplace.",
+    "role": "Supabase Postgres with Row Level Security \u00b7 Stripe \u00b7 pg_cron \u00b7 Static front end, no build step \u00b7 Eight tracked migrations",
+    "problem": "A solo lash, brow or nail technician has two bad options. A marketplace takes a slice of every booking and keeps the client relationship, or a salon system charges monthly for a diary built for a shop with a front door and staff rotas. Neither fits someone working out of other people\u2019s front rooms.<br><br>This started as one page for <strong>\u00e8llash</strong>, a mobile technician covering three towns, where the awkward part was not the booking form but the travel: no salon diary understands that Tuesday is a Coventry day and Friday is Birmingham. Having built it once, the interesting question was whether the same thing could be handed to anyone else \u2014 which turns a page into a platform, and a platform has a problem a single page never had.",
+    "approach": "<strong>Two people on two phones can take the same 09:00.</strong> Checking \u201cis that slot free?\u201d in application code does not fix it; it only narrows the window between the check and the insert. So the database refuses the second write itself \u2014 an <code>EXCLUDE USING gist</code> constraint over the studio and the appointment\u2019s time range, so two overlapping confirmed bookings cannot both exist. The second transaction to commit raises <code>23P01</code> and rolls back. Cancelled rows sit outside the constraint, so cancelling frees the slot without any code deciding that it should.<br><br>That is the whole design in miniature: <strong>put the rule where it cannot be talked round.</strong> A studio\u2019s plan is written <em>only</em> by the Stripe webhook, through a <code>SECURITY DEFINER</code> function with no grant to the anonymous or authenticated roles \u2014 so nothing running in a browser can promote itself to Pro. Cancelling at period end leaves her on Pro until the paid time actually runs out rather than cutting her off mid-month. And the view the booking page reads tells the client <em>which</em> times are gone without telling them <em>who</em> took them.<br><br>Each studio gets its own address and its own page, and the free tier carries a small line in the footer that Pro removes. The commercial promise is the one thing the architecture has to keep true: <strong>no commission, ever, however many clients she takes.</strong> There is no per-booking figure anywhere in the schema to take a percentage of.",
+    "outcome": "<strong>Built, and deliberately not connected yet.</strong> Open the app today and it says so: it is still asking for a Supabase project URL and key. No studio has signed up, nothing has been charged, and the schema exists as eight tracked migrations rather than as a running database. Saying that plainly is the point \u2014 the booking demo works, but it works against a deterministic hash and <code>localStorage</code>, not a server.<br><br>What is written: the schema and its exclusion constraint, sign-up, cancellation, photo handling, transactional email, a sender that <code>pg_cron</code> runs every minute, the day-before reminder that is the first thing Pro actually buys, and Stripe billing. The cron file carries a warning in capitals that the repository is public and no key goes in it.<br><br>Pricing is published and deliberately simple \u2014 free to start, <strong>\u00a310 a month</strong> for Pro, or \u00a38 a month paid yearly. The reminder has to exist precisely because it is on the pricing card, which is the sort of thing worth writing down next to the code rather than trusting to memory.<br><br>Still ahead: pointing <code>peony.uk</code> at it, connecting a real Supabase project, and running one real payment through Stripe \u2014 which, as with every other billing path I have written, has never processed a live transaction.",
     "links": [
       {
-        "href": "https://ellashtech.ysbdesigns.uk/",
-        "text": "See it live"
+        "href": "https://github.com/yameenbux/Peony-Beauty-Platform",
+        "text": "Read the source"
       }
     ],
     "shots": [
       {
-        "src": "/assets/img/ellash-web.jpg",
-        "alt": "The èllash booking page, treatment step",
+        "src": "/assets/img/peony-web.jpg",
+        "alt": "The Peony marketing site: a laptop dashboard and a phone booking page side by side",
         "w": 760,
         "h": 475,
-        "caption": "Step one · pick a treatment",
+        "caption": "The product site \u00b7 the phone picks a time and the booking arrives on the dashboard",
         "portrait": false
       },
       {
-        "src": "/assets/img/ellash-flow.jpg",
-        "alt": "Choosing an area, date and start time",
+        "src": "/assets/img/peony-demo.jpg",
+        "alt": "A sample studio booking page, step one of four, listing lash treatments and prices",
         "w": 760,
         "h": 475,
-        "caption": "Availability · built on travel days",
+        "caption": "A studio\u2019s own page \u00b7 a sample, and labelled as one on the page itself",
         "portrait": false
       },
       {
-        "src": "/assets/img/ellash-phone.jpg",
-        "alt": "The booking page on a phone",
+        "src": "/assets/img/peony-phone.jpg",
+        "alt": "The same sample booking page on a phone, showing treatments and the running appointment summary",
         "w": 340,
-        "h": 735,
-        "caption": "Mobile · four steps, one page",
+        "h": 736,
+        "caption": "Where it is actually used \u00b7 booked from a phone, in a minute",
         "portrait": true
       }
-    ],
-    "description": "A booking page for a mobile lash technician — availability built around travel days, with no commission and no monthly platform fee."
+    ]
   },
   "buxtravel": {
     "slug": "buxtravel",

@@ -121,6 +121,7 @@ material to carry a screenshot-led layout.
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 | Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
 | Bolton Vouched | **Own product**, a Bolton directory — built and deploying, **not launched** | 4 |
+| Peony | **Own product**, a booking platform for solo beauty pros — **not connected to a database yet** | 3 |
 
 **Retired 10 October, at the user's request: The Venetian Company, Diamond
 Heating & Plumbing and LuxeScent UK.** They are off every listing, out of the
@@ -140,13 +141,10 @@ a signed build, and it is on neither the App Store nor Google Play.
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (Hair by Chrissy, plus Taiyabah as community work) and
-**"Built for myself"** (MasjidOne, Tidemark, Bolton Vouched and èllash).
-**èllash moved across on 12 October**, when the user said it is his own
-business now — it had been listed as a client, and calling your own business
-a client is the invented-client-count failure this file bars. Its case study
-still narrates a lash technician running the business in the third person;
-that copy was **not** rewritten, because what changed commercially is not
-recorded anywhere I can read. **That first group is now
+**"Built for myself"** (MasjidOne, Tidemark, Bolton Vouched and Peony).
+**èllash moved across on 12 October** and then **became Peony the same day** —
+it had been listed as a client, and calling your own business a client is the
+invented-client-count failure this file bars. **That first group is now
 thinner than the second**, which is worth watching: retiring Venetian,
 Diamond and LuxeScent left one written-up paying client on the site, and a
 portfolio weighted towards a person's own products argues less well that
@@ -162,9 +160,12 @@ matching on the `kind` string — `kind` is display copy and would be a fragile
 thing to branch on.
 
 **`status` in `projects.js`** says a project is not simply live. Omit it and
-the wheel's read-out shows the pulsing live dot; set it and that exact string
-prints in a bordered chip where the dot would be — currently "Not live yet"
-for Tidemark and "In one masjid" for MasjidOne. The read-out printed the dot
+the read-out shows the pulsing live dot; set it and that exact string prints in
+a bordered chip where the dot would be. **From 12 October the vocabulary is
+binary: either no `status` (Live) or exactly `'Pre-launch'`.** Asked for
+directly, and it replaced "In one masjid" and "Not released", which were
+accurate but made the column read as seven different states. Do not invent a
+third value. The read-out printed the dot
 unconditionally until Phase 11; a live indicator on something nobody can
 visit, or on a product with no paying customers, is exactly the claim the
 copy rules bar, so **anything that is not simply live needs a `status` here.**
@@ -216,8 +217,9 @@ up as full cases — there is not enough captured material — which is what
     wordmarks come from each project's own repository — Taiyabah's and
     Tidemark's SVGs, Bux Travel's and MasjidOne's lockups keyed off their
     plates — and the three that exist only as CSS are set in the face their
-    own site uses (èllash in Italiana, Hair by Chrissy in Cormorant Garamond,
-    Bolton Vouched in its own serif). Nothing is traced by eye.
+    own site uses (Hair by Chrissy in Cormorant Garamond, Bolton Vouched in
+    Gloock, Peony's petal mark beside its name in Bodoni Moda). Nothing is
+    traced by eye.
   - **Stack marks are `simple-icons` paths, unmodified**, in `src/data/stack.js`.
     A mark that package does not carry stays unillustrated — OneSignal and
     Playwright do, and they are simply absent rather than approximated.
@@ -329,7 +331,9 @@ a redirect, and `/tidemark.html` was added on 8 October.
 | `/boltonvouched.html` | Case study — own product, a Bolton directory, pre-launch | via work |
 | `/about.html` | About — the candidate page: what I build, how I work, what I want | yes |
 | `/contact.html` | Contact | yes |
-| `/ellash.html` `/buxtravel.html` | Kept; listed under "Also built" | via work |
+| `/peony.html` | Case study — own product, a booking platform, pre-launch | via work |
+| `/ellash.html` | **Redirect to `/peony.html`** — the old brand's indexed URL, kept alive | no |
+| `/buxtravel.html` | Kept; listed under "Also built" | via work |
 | `/venetian.html` `/diamond.html` `/luxescent.html` | **Retired** — resolve, `noindex`, linked from nowhere | no |
 | `/services.html` | **Freelance work** — process, prices, estimator. Not in nav | footer |
 | `/privacy.html` | Privacy — what the site collects, which is nothing | footer |
@@ -1188,6 +1192,65 @@ mattered, since this change hides seven headings from sight. A first cold run
 read 72 on performance; three consecutive runs read 99, so that was a
 cold-start artefact rather than a regression, and it is worth remembering that
 one Lighthouse run is not a measurement.
+
+
+**Phase 23 — èllash becomes Peony, and the status column goes binary,
+12 October.** Two instructions in the same stretch.
+
+**Peony** (`yameenbux/Peony-Beauty-Platform`, public) is not a rename of the
+èllash booking page — it is that page turned into a **multi-tenant booking
+platform for solo beauty professionals**, with èllash as the origin story. Its
+own `peony/brand.md` and `peony/logo.svg` are the brand artefacts, so the
+wordmark is the genuine petal mark beside the name in **Bodoni Moda**, in its
+own plum `#43192A`.
+
+**Its README is still the old èllash one**, describing a single mobile lash
+technician. The real product is in `peony/`, `platform/`, `app/`, `book/` and
+`demo/`. *A README is a claim, not evidence* — Phase 20's lesson, third
+occurrence, and the reason the copy came from the SQL and the marketing page
+rather than from the front of the repository.
+
+**The strongest detail is the one the schema leads with.** Two people on two
+phones can take the same 09:00, and checking in application code only narrows
+the window between the check and the insert, so `booking_no_overlap` is an
+`EXCLUDE USING gist` over the tenant and a `tstzrange` — the second transaction
+to commit raises `23P01` and rolls back. Cancelled rows sit outside the
+constraint, so cancelling frees the slot without code deciding it should.
+Plans are written **only** by the Stripe webhook through a `SECURITY DEFINER`
+function with no grant to anon or authenticated.
+
+**It is pre-launch and the app says so itself**: opening it renders "Not
+connected yet — put your Supabase project URL and anon key into
+`platform/config.js`". So the schema is eight tracked migrations rather than a
+running database, no studio has signed up and nothing has been charged. The
+app screenshot was **discarded for that reason** — a configuration error is
+not a product shot. The captures are the marketing page and the demonstration
+studio, which labels itself *Sample page* in frame.
+
+**`/ellash.html` is kept as a redirect, not deleted.** It has been live and
+indexed since Phase 1. The first attempt used `redirects` in
+`astro.config.mjs`; under `build.format: 'file'` that emitted **nothing** for a
+literal `.html` route, and the build still reported success — exactly the
+silent-drop failure this file guards against elsewhere. It is a real
+`ellash.astro` page now: meta refresh, canonical to `/peony.html`,
+`noindex,follow`. **Verify `dist/ellash.html` exists after any build that
+touches this.** Both sweep scripts skip it, because a meta refresh navigates
+away mid-check and the harness reads that as an error.
+
+**A real monospace violation fell out of this.** `<code>` had **no rule in
+`global.css`**, so all 22 inline identifiers — 16 on `engineering.html`, the
+rest in case copy — were rendering in the browser's default monospace stack,
+on a site whose direction bars monospace outright. Fixed at the root rather
+than by stripping the tags: `code` now inherits the body face and signals
+itself with weight and a `line-2` tint, which is the same reasoning `.eyebrow`
+uses. **Check a new `<code>` renders in Inter, not Menlo.**
+
+**The status column is now binary — Live, or `'Pre-launch'`.** See the
+`status` note above. Four projects now carry Pre-launch: Peony, MasjidOne,
+Tidemark and Bolton Vouched. The user said "the bottom three" while looking at
+a list where Peony was still èllash and still marked Live; Peony is the fourth
+because its own app reports it is not connected, and that was flagged rather
+than quietly resolved either way.
 
 
 ### Known, unfixed

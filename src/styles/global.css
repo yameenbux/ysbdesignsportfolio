@@ -95,6 +95,22 @@
 }
 
 @layer components {
+  /* Inline identifiers — a column name, a workflow file, a constraint.
+     The browser default for <code> is a monospace stack, and this system has
+     no monospace and is not allowed one; 22 of these were quietly rendering
+     in the browser's mono on engineering.html and the case studies before
+     this rule existed. The job the mono did is done by weight and a tint,
+     the same reasoning as `.eyebrow`. */
+  code {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.94em;
+    background: var(--color-line-2);
+    padding: 0.08em 0.32em;
+    border-radius: 3px;
+    overflow-wrap: anywhere;
+  }
+
   /* Replaces v2's monospaced .label. Same job — kicker, caption, figure —
      in the body face, because there is no mono in this system. */
   .eyebrow {
