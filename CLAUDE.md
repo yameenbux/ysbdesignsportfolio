@@ -200,8 +200,27 @@ up as full cases — there is not enough captured material — which is what
   are trademark-governed and issued through Credly under their own terms, so
   a lookalike is a forgery aimed at the one audience most likely to spot it.
   Never a badge on an exam that has not been sat: a `held: false` entry is
-  wired never to render one. Everything else stays type-only — no client
-  logos, no stack badges, no imagery outside the screenshots.
+  wired never to render one.
+- **Client wordmarks and stack marks are allowed on the work list, from
+  12 October.** This reverses "everything else stays type-only — no client
+  logos, no stack badges", which held until then. Asked for directly; the
+  conflict was put to the user before it was built. Three conditions make it
+  survivable rather than a sponsor wall:
+  - **Every mark is the genuine artefact, never a redrawn one.** The client
+    wordmarks come from each project's own repository — Taiyabah's and
+    Tidemark's SVGs, Bux Travel's and MasjidOne's lockups keyed off their
+    plates — and the three that exist only as CSS are set in the face their
+    own site uses (èllash in Italiana, Hair by Chrissy in Cormorant Garamond,
+    Bolton Vouched in its own serif). Nothing is traced by eye.
+  - **Stack marks are `simple-icons` paths, unmodified**, in `src/data/stack.js`.
+    A mark that package does not carry stays unillustrated — OneSignal and
+    Playwright do, and they are simply absent rather than approximated.
+  - **Everything renders monochrome in ink.** Brand colour is dropped on
+    purpose: seven palettes on the paper ground read as a sponsor wall, and
+    Taiyabah's gold measures far below AA on `#E8E6DE`.
+  **Azure is still barred as a stack mark** and `src/data/stack.js` says so in
+  its header. The certificate is Azure; the systems are not.
+  No imagery outside the screenshots and these marks.
 - Sentence case, plain verbs, active voice. A button says what happens when
   it is pressed.
 - Client-location facts stay as written — "a Bolton masjid", "a Bolton minibus
@@ -1118,6 +1137,38 @@ Tidemark and now Bolton Vouched. A portfolio weighted towards a person's own
 products argues less well that other people hire them — the same concern this
 file raised when the three were retired, now one project worse. The fix is
 another written-up paying client, not a thinner own-product section.
+
+**Phase 22 — wordmarks and stack marks on the work list, 12 October.** Asked
+for each project's logo beside its name, backgrounds removed, and a row of the
+software each was built with underneath. **Flagged first**, because it
+reversed two halves of a copy rule at once — see "Copy rules" above for the
+rule as it now stands and the three conditions attached to it.
+
+**Nothing here is drawn by hand.** Four wordmarks came out of the projects'
+own repositories; three exist only as CSS on their own sites and are set in
+the face those sites use. The two raster lockups were keyed off their plates
+rather than cropped: MasjidOne's needed keying against **two** backgrounds,
+because its lockup is a cream card inside a warm-grey margin and a single-key
+pass left the whole 1244x404 frame opaque and untrimmable.
+
+**The logo replaces the name rather than sitting beside it.** Built the way it
+was asked for first, and shown: every row then read "èllash èllash",
+"tidemark Tidemark". The user picked the replacement. The name stays in the
+markup, visually hidden — a row whose only name is an image has no name for a
+screen reader and nothing for a search engine to index. The drawn underline
+that said "this is a link" moved from the hidden text onto the mark.
+
+**Stack marks are one `<symbol>` sprite, referenced 36 times from 18
+definitions.** Inlining the paths per row would have repeated PostgreSQL's
+5KB path four times over. `src/data/stack.js` holds the table.
+
+Checked after: 19 pages x 375/768/1440 clean, Lighthouse **99/100/100/100**
+with CLS 0 on the homepage — and the accessibility 100 is the one that
+mattered, since this change hides seven headings from sight. A first cold run
+read 72 on performance; three consecutive runs read 99, so that was a
+cold-start artefact rather than a regression, and it is worth remembering that
+one Lighthouse run is not a measurement.
+
 
 ### Known, unfixed
 

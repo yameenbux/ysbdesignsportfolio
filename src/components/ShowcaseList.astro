@@ -29,12 +29,26 @@
  * evidence; losing that with the wheel would be a real loss, so it moves here.
  */
 
+import { marks } from '../data/stack.js';
+
 const { items = [], heading = 'Selected work' } = Astro.props;
 const LAYERS = ['Interface', 'Software', 'Infrastructure'];
+
+/* Each stack mark is defined once as a <symbol> and referenced with <use>.
+   Inlining the paths per row instead would repeat PostgreSQL's 5KB path four
+   times over. Only the marks this page actually uses are emitted. */
+const usedMarks = [...new Set(items.flatMap((p) => p.tech || []))].filter((k) => marks[k]);
 ---
 
 <section class="show" data-show aria-labelledby="show-h">
   <h2 class="eyebrow show-h" id="show-h">{heading}</h2>
+
+  {/* Mark definitions. Not rendered; referenced by <use> in each row. */}
+  <svg class="show-sprite" aria-hidden="true" focusable="false"><defs>
+    {usedMarks.map((k) => (
+      <symbol id={`si-${k}`} viewBox="0 0 24 24"><path d={marks[k].d} /></symbol>
+    ))}
+  </defs></svg>
 
   {/* The chaser. aria-hidden: every row already names its own project, and
       the image is decoration repeated from the row. */}
@@ -73,13 +87,30 @@ const LAYERS = ['Interface', 'Software', 'Infrastructure'];
 
           <span class="show-main">
             <span class="show-name">
-              <span class="show-word">{p.name}</span>
+              {p.logo && (
+                <img class="show-logo" src={p.logo.src} alt={p.logo.alt}
+                     width={p.logo.w} height={p.logo.h}
+                     style={`--lh:${p.logo.h}px`} loading="lazy" decoding="async" />
+              )}
+              <span class:list={['show-word', p.logo && 'is-sr']}>{p.name}</span>
               <svg class="show-arrow" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
                    fill="none" stroke="currentColor" stroke-width="2"
                    stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 17 17 7" /><path d="M7 7h10v10" />
               </svg>
             </span>
+
+            {p.tech?.length && (
+              <span class="show-tech">
+                {p.tech.filter((k) => marks[k]).map((k) => (
+                  <svg class="show-tech-i" viewBox="0 0 24 24" role="img">
+                    <title>{marks[k].title}</title>
+                    <use href={`#si-${k}`} />
+                  </svg>
+                ))}
+              </span>
+            )}
+
             <span class="show-line">{p.line}</span>
           </span>
 
@@ -127,7 +158,68 @@ const LAYERS = ['Interface', 'Software', 'Infrastructure'];
 
   .show-main { position: relative; flex: 1; min-width: 0; }
 
-  .show-name { display: inline-flex; align-items: center; gap: 8px; }
+  .show-name { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  /* The client's own wordmark, keyed to transparency and set in the ink
+     colour so seven different brands read as one row rather than a sponsor
+     wall. --lh is per-logo because a stacked lockup and a long wordmark do
+     not look the same size at the same pixel height. */
+  .show-logo {
+    height: var(--lh, 24px);
+    width: auto;
+    flex: none;
+    opacity: 0.88;
+    transition: opacity 0.3s ease;
+  }
+  .show-row:hover .show-logo,
+  .show-row:focus-visible .show-logo { opacity: 1; }
+
+  /* The wordmark is the name, so the text would be a second copy of it. It
+     stays in the markup — a logo an assistive reader cannot read is a row
+     with no name, and the heading is what a search engine indexes. */
+  .show-word.is-sr {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* .show-word carried the drawn underline that says "this is a link". With
+     it hidden, the mark takes that job. */
+  .show-name:has(.show-logo) { position: relative; }
+  .show-name:has(.show-logo)::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    height: 1px; width: 0;
+    background: currentColor;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .show-row:hover .show-name::after,
+  .show-row:focus-visible .show-name::after { width: 100%; }
+
+  /* The software each one is built with. 16px marks, quiet enough that the
+     project's own name still leads the row. */
+  .show-tech {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    color: var(--color-ink-2);
+  }
+  .show-tech-i {
+    width: 16px; height: 16px;
+    fill: currentColor;
+    opacity: 0.62;
+    transition: opacity 0.3s ease;
+  }
+  .show-row:hover .show-tech-i,
+  .show-row:focus-visible .show-tech-i { opacity: 0.9; }
+
+  /* Definitions only. */
+  .show-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
 
   .show-word {
     position: relative;
