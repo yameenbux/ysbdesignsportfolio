@@ -121,7 +121,7 @@ material to carry a screenshot-led layout.
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 | Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
 | Bolton Vouched | **Own product**, a Bolton directory — built and deploying, **not launched** | 4 |
-| Peony | **Own product**, a booking platform for solo beauty pros — **not connected to a database yet** | 3 |
+| Peony | **Own product**, a booking platform for solo beauty pros — **live** | 3 |
 
 **Retired 10 October, at the user's request: The Venetian Company, Diamond
 Heating & Plumbing and LuxeScent UK.** They are off every listing, out of the
@@ -217,9 +217,17 @@ up as full cases — there is not enough captured material — which is what
     wordmarks come from each project's own repository — Taiyabah's and
     Tidemark's SVGs, Bux Travel's and MasjidOne's lockups keyed off their
     plates — and the three that exist only as CSS are set in the face their
-    own site uses (Hair by Chrissy in Cormorant Garamond, Bolton Vouched in
-    Gloock, Peony's petal mark beside its name in Bodoni Moda). Nothing is
-    traced by eye.
+    own site uses (Hair by Chrissy in Cormorant Garamond, Peony's petal mark
+    beside its name in Bodoni Moda). Nothing is traced by eye.
+    **Where a brand ships a running app, capture its own rendering rather than
+    rebuilding the lockup from its CSS.** Bolton Vouched was rebuilt by hand
+    twice and was wrong twice — the second time because the brand had changed
+    under me from a "BV" monogram to a house-and-tick mark and a reconstruction
+    cannot notice that. It is now a screenshot of the real `.s-brand` element
+    from a local build, keyed to transparency by **flood-filling from the
+    border** so the near-white mark inside the brick tile is never reached. Only
+    the wordmark colour is substituted, to that product's own dark ink, because
+    its header is cream-on-dark and this ground is paper.
   - **Stack marks are `simple-icons` paths, unmodified**, in `src/data/stack.js`.
     A mark that package does not carry stays unillustrated — OneSignal and
     Playwright do, and they are simply absent rather than approximated.
@@ -1246,11 +1254,14 @@ itself with weight and a `line-2` tint, which is the same reasoning `.eyebrow`
 uses. **Check a new `<code>` renders in Inter, not Menlo.**
 
 **The status column is now binary — Live, or `'Pre-launch'`.** See the
-`status` note above. Four projects now carry Pre-launch: Peony, MasjidOne,
-Tidemark and Bolton Vouched. The user said "the bottom three" while looking at
-a list where Peony was still èllash and still marked Live; Peony is the fourth
-because its own app reports it is not connected, and that was flagged rather
-than quietly resolved either way.
+`status` note above. **Three** projects carry Pre-launch: MasjidOne, Tidemark
+and Bolton Vouched. Peony was briefly a fourth, on the evidence of its own app
+rendering "Not connected yet"; **the user confirmed it is live and it was
+changed back the same day**, along with the three places the case copy said the
+opposite — a Live chip over a page saying "nothing has been charged" is the
+contradiction this file exists to prevent. Nothing was substituted in about
+customers: the copy says it is live and claims no sign-ups, because a studio
+signing up is their business and not a number this site publishes.
 
 
 ### Known, unfixed
