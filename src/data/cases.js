@@ -372,6 +372,7 @@ export const cases = {
     ]
   },
   "buxtravel": {
+    "retired": true,
     "slug": "buxtravel",
     "title": "Bux Travel",
     "seoTitle": "Bux Travel — minibus hire site for Bolton",

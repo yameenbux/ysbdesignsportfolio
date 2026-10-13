@@ -123,8 +123,10 @@ material to carry a screenshot-led layout.
 | Bolton Vouched | **Own product**, a Bolton directory — built and deploying, **not launched** | 4 |
 | Peony | **Own product**, a booking platform for solo beauty pros — **live** | 3 |
 
-**Retired 10 October, at the user's request: The Venetian Company, Diamond
-Heating & Plumbing and LuxeScent UK.** They are off every listing, out of the
+**Retired at the user's request: The Venetian Company, Diamond Heating &
+Plumbing and LuxeScent UK on 10 October, and **Bux Travel on 13 October**
+— that one because it is the family business rather than client work, which
+is a reason to take it off a portfolio and not a reason to hide it.** They are off every listing, out of the
 sitemap and `noindex`ed — but their pages still build and their URLs still
 resolve, because this file has promised since Phase 4 that every live URL
 keeps working, and three indexed addresses do not stop being indexed because
@@ -181,8 +183,13 @@ number that appears as text on this site is YSB's own.
 
 ### Kept but unlisted
 
-`ellash.html` and `buxtravel.html` are live, indexed and listed, and must
-keep building and resolving at their existing URLs. Do not delete them.
+**This section is now empty of listed pages, and that is the point.**
+`ellash.html` became a redirect to `/peony.html` on 12 October and
+`buxtravel.html` was retired on 13 October — but **both still resolve**, and
+must keep doing so. Every URL this site has ever published stays reachable;
+retiring a project removes it from the listings and the sitemap and sets
+`noindex`, it does not 404 an address someone may have bookmarked or Google
+may still hold.
 
 `venetian.html`, `diamond.html` and `luxescent.html` are the **retired** three:
 same promise, but unlisted and `noindex`. LuxeScent was in this paragraph as a
@@ -332,7 +339,7 @@ a redirect, and `/tidemark.html` was added on 8 October.
 | URL | Page | In nav |
 |---|---|---|
 | `/` | Home | — |
-| `/work.html` | Work index — the written-up six in two groups, then "Also built" | yes |
+| `/work.html` | Work index — the written-up six, in two groups | yes |
 | `/engineering.html` | **The technical read** — pipelines, data, failure modes | yes |
 | `/taiyabah.html` | Case study — community project | via work |
 | `/hairbychrissy.html` | Case study — client | via work |
@@ -343,7 +350,7 @@ a redirect, and `/tidemark.html` was added on 8 October.
 | `/contact.html` | Contact | yes |
 | `/peony.html` | Case study — own product, a booking platform, pre-launch | via work |
 | `/ellash.html` | **Redirect to `/peony.html`** — the old brand's indexed URL, kept alive | no |
-| `/buxtravel.html` | Kept; listed under "Also built" | via work |
+| `/buxtravel.html` | **Retired** 13 October — resolves, `noindex`, linked from nowhere | no |
 | `/venetian.html` `/diamond.html` `/luxescent.html` | **Retired** — resolve, `noindex`, linked from nowhere | no |
 | `/services.html` | **Freelance work** — process, prices, estimator. Not in nav | footer |
 | `/privacy.html` | Privacy — what the site collects, which is nothing | footer |
@@ -1272,6 +1279,36 @@ opposite — a Live chip over a page saying "nothing has been charged" is the
 contradiction this file exists to prevent. Nothing was substituted in about
 customers: the copy says it is live and claims no sign-ups, because a studio
 signing up is their business and not a number this site publishes.
+
+
+**Phase 24 — Bux Travel retired, 13 October.** Taken off at the user's
+request: it is the **family business**, not client work. It had been carrying
+`kind: 'In-house'`, which was accurate and is exactly why it does not belong
+on a portfolio arguing that other people hire him.
+
+Same treatment as the other four retirements: out of `projects.js`, so it
+leaves every listing and the sitemap; `retired: true` in `cases.js`, so the
+page is `noindex`; `buxtravel.astro` left in place, so **`/buxtravel.html`
+still resolves** — live and indexed since Phase 1, and this file's promise
+about URLs does not bend for a change of mind.
+
+**One real bug fell out of it.** Bux Travel was the only entry under **"Also
+built"**, and that section rendered unconditionally — removing it left a
+heading and the line *"Smaller pieces, written up the same way"* above an
+empty list. The section is now guarded on `rest.length`. Worth remembering as
+a shape: a group driven by a filter needs a guard the day the filter can
+return nothing, and the build will not tell you.
+
+**All six remaining projects are written up**, so `lead` and `all` are now the
+same length and `rest` is empty. "Also built" will stay invisible until
+something is listed without a `problem` field.
+
+**The two groups are 2 against 4** — Hair by Chrissy and Taiyabah for other
+people; MasjidOne, Tidemark, Bolton Vouched and Peony for himself. Worse than
+the 2-against-3 flagged in Phase 21, and the same answer: the fix is another
+written-up paying client, not a thinner own-product section. Three of the four
+retirements so far have been client or in-house work, which is the whole of
+the drift.
 
 
 ### Known, unfixed

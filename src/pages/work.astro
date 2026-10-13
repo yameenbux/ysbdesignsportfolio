@@ -82,23 +82,27 @@ const description =
     </>
   ))}
 
-  <section class="more">
-    <h2 class="rv">Also built</h2>
-    <p class="rv more-p">
-      Smaller pieces, written up the same way.
-    </p>
-    <ul class="more-list rv">
-      {rest.map((p) => (
-        <li>
-          <a href={p.href}>
-            <span class="more-name">{p.name}</span>
-            <span class="eyebrow">{p.kind} · {p.where}</span>
-            <span class="more-line">{p.line}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
+  {/* Only when there is something in it. Retiring the last entry used to
+      leave a heading and an empty list on the page. */}
+  {rest.length > 0 && (
+    <section class="more">
+      <h2 class="rv">Also built</h2>
+      <p class="rv more-p">
+        Smaller pieces, written up the same way.
+      </p>
+      <ul class="more-list rv">
+        {rest.map((p) => (
+          <li>
+            <a href={p.href}>
+              <span class="more-name">{p.name}</span>
+              <span class="eyebrow">{p.kind} · {p.where}</span>
+              <span class="more-line">{p.line}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   <section class="ask">
     <h2 class="rv">Sound like your problem?</h2>

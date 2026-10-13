@@ -48,15 +48,6 @@ export const all = [
     img: '/assets/img/peony-web.jpg', alt: 'The Peony marketing site',
   },
   {
-    slug: 'buxtravel', href: '/buxtravel.html', name: 'Bux Travel',
-    kind: 'In-house', where: 'Bolton',
-    line: 'A minibus operator whose customers rang to ask the same questions. The site answers them before the phone goes.',
-    logo: { src: '/assets/brand/buxtravel.png', alt: 'Bux Travel wordmark', w: 78, h: 30 },
-    tech: ['html5', 'css', 'javascript', 'nodedotjs', 'github'],
-    layers: { interface: 88, software: 24, infra: 56 },
-    img: '/assets/img/bux-web.jpg', alt: 'The Bux Travel website',
-  },
-  {
     slug: 'hairbychrissy', href: '/hairbychrissy.html', name: 'Hair by Chrissy',
     kind: 'Client', where: 'London',
     line: 'Bookings arrived as Instagram DMs, with no calendar. The site is the booking system: live availability, deposits and a real calendar behind it.',
