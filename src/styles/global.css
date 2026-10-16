@@ -54,6 +54,24 @@
   --color-line:    rgba(22, 25, 28, 0.14);
   --color-line-2:  rgba(22, 25, 28, 0.05);
 
+  /* ── The engineering-page accents, added Phase 27 ──────────────────────
+     These two are a deliberate, recorded exception to "a second accent
+     colour" in CLAUDE.md's forbidden list, asked for directly and scoped to
+     engineering.html. They were CHOSEN BY MEASUREMENT, not by eye: the
+     data-viz validator was run over the four-hue set against the paper
+     surface, and every alternative tried first failed it — violet collapses
+     into blue under protanopia at every lightness, teal into green, and a
+     gold or a pink sits on top of the rust. Each clears AA as body text on
+     paper (blue 6.04, rust 4.90, green 5.21, magenta 5.71).
+
+     The set carries ONE warning: green against rust is ΔE 6.6 under
+     protanopia, inside the 6–8 floor band, which is legal only where a
+     second encoding carries the same meaning. Every state on that page is
+     labelled in words, so it is satisfied — do not introduce a green/rust
+     pair that is distinguished by colour alone. */
+  --color-accent-green: #196B42;  /* 5.21:1 on paper — AA */
+  --color-accent-mag:   #A3157A;  /* 5.71:1 on paper — AA */
+
   --font-disp: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
 

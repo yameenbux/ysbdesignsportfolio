@@ -512,6 +512,42 @@ burst gets this wrong by default — its selected option can be *the bug*, so a
 blue "pressed" button would sit above a `signal` failure bar. Selected is
 neutral ink there, and the bar colour carries the verdict.
 
+### Two more accents, on engineering.html only — Phase 27
+
+```
+accent-green  #196B42   5.21:1 on paper — it got through
+accent-mag    #A3157A   5.71:1 on paper — structural, section 04
+```
+
+**This is a scoped reversal of "a second accent colour", asked for directly.**
+It applies to `engineering.html` and nowhere else; every other page is the
+seven-value palette above, unchanged.
+
+**They were chosen by measurement, not by eye.** The data-viz validator was
+run over the four-hue set against the paper surface, and the things tried
+first all failed it, which is the part worth keeping: **violet collapses into
+blue under protanopia at every lightness that clears contrast**, teal collapses
+into green, and a gold or a pink sits on top of the rust. Five hues do not fit
+on this ground at all. The first green picked was `#1E7A4C` and it was
+darkened to `#196B42` because 4.26:1 missed AA for body text.
+
+**One warning stands and it is binding**: green against rust is ΔE 6.6 under
+protanopia, inside the 6–8 floor band, which is legal **only where a second
+encoding carries the same meaning**. Every state on that page is labelled in
+words. Do not introduce a green/rust pair distinguished by colour alone — and
+note the crowd diagram deliberately uses blue-against-rust (ΔE 28.7) precisely
+because its cells are dense and individually unlabelled.
+
+**One meaning per colour across all six diagrams**: green got through, rust
+refused, blue is what is selected or active. Before this, blue meant both
+"selected" and "succeeded", which read as a clash the moment a green-accented
+section printed a blue success line.
+
+**Rust is 4.46:1 on `paper-2`** — under AA. The accents therefore carry the
+6px rule, the numeral and the borders, which are graphics at 3:1; small text
+on a principle section takes ink or ink-2. **Do not put a tone on small text
+over a `paper-2` band.**
+
 ### Layout
 
 - **Colour bands separate sections, not rules.** A section that needs
@@ -614,7 +650,8 @@ Rules that hold:
 - Terminal motifs, typewriter effects, blinking cursors
 - Emoji as section iconography
 - Parallax on text
-- A second accent colour, or blue used as a body colour
+- A second accent colour, **except the two measured accents scoped to
+  `engineering.html`** — see "Colour" above. Blue as a body colour is still out.
 - A saturated or dark ground — tried as "Ultramarine" and rejected
 - Monospace anywhere (Space Grotesk is a grotesque, not mono — see "Type")
 - Motion that does not describe structure
@@ -1512,6 +1549,72 @@ Checked: 19 pages x 375/768/1440 clean; `engineering.html`
 no transition, all nine controls are keyboard-operable and named, each stage
 carries an `aria-live` status line saying in words what the animation shows,
 and no state is signalled by colour alone.
+
+**Phase 27 — engineering.html cut back and designed, 16 October.** The brief
+was "way too much text, does all of it even need to be there" plus colour and
+better animation. Two forks were put to the user rather than guessed, because
+either answer produced materially different work, and both answers are
+recorded here: **extend the palette, this page only**, and **principles up
+front with the proof on demand**.
+
+**It is six principles now, not four sections of prose.** Each is a position
+with a real cost, one thing you can press, and the evidence folded into a
+`<details>`. Visible text went from **3,142 words to 1,249** and the page from
+10,398px to 7,442px — but **nothing was deleted**. Every workflow filename,
+migration count and failure write-up is compressed into `proof` and still one
+tap away, which is what keeps the audience note in "## Positioning" true: a
+hiring manager can still check any claim against a public file.
+
+The six, and what each one is anchored by, because a principle with no file
+behind it is the capability word this document bars:
+
+1. **Put the rule where it cannot be argued with** — the exclusion
+   constraint, the patch-test gate, consent as a `CHECK`, `masjid_id` on every
+   table.
+2. **A check that cannot fail is worse than no check** — `native-release.yml`
+   refusing a commit nothing has run, and the five green builds that executed
+   no code.
+3. **Trust the source, not your copy of it** — the Digital Asset Links API
+   against the `assetlinks.json` beside it; deploy then re-request.
+4. **Closed by default, including things that do not exist yet** — RLS with no
+   policies, revoked default privileges, the least-privilege Pages job, the
+   build that decodes JWTs.
+5. **The screen will tell you it worked** — "36 reminders are scheduled" over
+   an empty queue; zero rows read as not built; a reconciler green because
+   nothing queued.
+6. **Build for the real crowd, not the demo** — the per-IP cap that counted a
+   congregation as one caller.
+
+**Two new diagrams** join the four from Phase 26: `truth` (set the file and
+the service to disagree, watch which one CI believes) and `crowd` (announce
+the app to 400 people, then to 4,000, and watch where the cap lands). All six
+live in `Mechanism.astro` behind a `kind` prop.
+
+**The page is `wide` now**, so each section carries its own `.shell` and the
+colour rules can go full-bleed. `index.astro` already did this; it is the
+mechanism for a banded page.
+
+**Three real bugs, all found by looking rather than by building.**
+
+- **The crowd grid rendered completely empty.** Its cells are created in
+  JavaScript, so they never receive Astro's scoping attribute and a scoped
+  selector cannot match them. `:global()` on the generated children. **Any
+  element a script creates needs `:global()` in a scoped `<style>`.**
+- **The grid then left a dead hole under itself**, because cells that are off
+  still occupy grid space. It is sized to the larger case — 400 cells at ten
+  people each, so the congregation fills it exactly.
+- **Accessibility fell to 96 on the opacity trap Phase 25 already named**,
+  this time in code written the same day: `.steps` at `opacity: 0.32`
+  composites ink-2 to `#c7c9c9`, **1.59:1**. Every opacity on text is gone —
+  state is weight, colour and a word. **Fading a token is still the easiest
+  way to invent a colour nobody measured, and knowing that did not stop me
+  doing it.**
+
+Checked: 19 pages x 375/768/1440 clean, no overflow at 375;
+`engineering.html` **99/100/100/100**, CLS 0, over three runs. Reduced motion
+lands every diagram's end state with no transition, all thirteen controls are
+keyboard-operable and named, six `aria-live` status lines say in words what
+each animation shows.
 
 ### Known, unfixed
 

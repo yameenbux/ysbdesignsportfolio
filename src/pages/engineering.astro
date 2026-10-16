@@ -4,290 +4,193 @@ import Mechanism from '../components/Mechanism.astro';
 import { marks } from '../data/stack.js';
 
 /**
- * The technical read, for a platform or DevOps reader rather than a client.
+ * How I engineer — six principles, each with one thing you can press and one
+ * piece of evidence you can open.
  *
- * Everything on this page is checkable: each claim points at a workflow file,
- * a migration or a config in a public repository. Nothing here is a
- * capability word — "I know CI/CD" is not evidence, a release gate that
- * refuses to build is.
+ * REWRITTEN IN PHASE 27, and the brief was "way too much text". The previous
+ * version carried seven pipeline write-ups, seven data write-ups, a hosting
+ * list and five failure essays — perhaps 3,500 words, every one of them true
+ * and almost none of them read. That content is not deleted: it is compressed
+ * into `proof`, which sits inside a <details> under each principle. The page
+ * reads in about ninety seconds; a sceptic can still open every claim and
+ * find the file it points at, which is the thing CLAUDE.md's audience note
+ * actually requires.
  *
- * Where a thing is not built, or not switched on, it says so. The copy rules
- * in CLAUDE.md apply to this page exactly as they apply to the case studies.
+ * Each principle is a real position with a real cost, taken from work in
+ * public repositories — not a capability word. "I know CI/CD" is not
+ * evidence; a release gate that refuses to build is.
+ *
+ * Colour: `tone` picks one of the four measured accents. It carries the
+ * section's rule, number and mark. See the note in global.css for why these
+ * four and no others, and for the one pair that must never be distinguished
+ * by colour alone.
  */
 
-const pipelines = [
+const principles = [
   {
-    name: 'Release gated on a real device',
-    where: 'native-release.yml',
-    detail:
-      'The Play bundle workflow refuses to run unless that exact commit already has a successful smoke run against it. It asks the GitHub API for runs of <em>native-smoke.yml</em> at <code>head_sha</code> and exits non-zero if the count is zero. The failure message says why the gate exists: a bundle that packages correctly and crashes on launch passes every other check in the workflow.',
-    why: 'It exists because that is precisely what happened — five green builds that were a red error screen, which is the entry below.',
+    n: '01',
+    tone: 'blue',
+    title: 'Put the rule where it cannot be argued with',
+    line: 'A rule in the app can be got round — by a bug, by another screen, by somebody editing the page in their browser. A rule in the database cannot, because every way in goes through it.',
+    cost: 'It is slower to write and harder to change later. That is the trade, and it is worth it for the rules that would be expensive to get wrong.',
+    mech: 'race',
+    proof: [
+      ['Booked In', 'Two phones can take the same 09:00. <code>booking_no_overlap</code> is an <code>EXCLUDE USING gist</code> over the studio and a <code>tstzrange</code>, so the second write raises <code>23P01</code> and rolls back. Cancelled rows sit outside the constraint, so cancelling frees the slot without any code deciding it should.'],
+      ['Booked In', 'A treatment needing a patch test cannot be booked by somebody whose test has lapsed — and booking the test <em>is</em> the record, so nothing has to be remembered afterwards.'],
+      ['Bolton Vouched', 'A provider row cannot reach <code>live</code> without recorded consent: a <code>CHECK</code> constraint, not a rule in the admin screen. Stored beside the timestamp is a SHA-256 of the exact wording accepted, so <em>what</em> was agreed is provable, not just when.'],
+      ['MasjidOne', 'Every table carries a <code>masjid_id</code> that is <code>not null</code> with no default, filled by <code>current_masjid()</code>. A <code>health_check()</code> function asserts it — and caught a table built exactly as its design drawing showed, where the drawing had no tenant column at all.'],
+    ],
   },
   {
-    name: 'Verifying against the source of truth, not the artefact',
-    where: 'android-build.yml',
-    detail:
-      'Before building, the job asks <strong>Google’s Digital Asset Links API</strong> whether the live site actually verifies the app, rather than trusting the <code>assetlinks.json</code> sitting in the repository. The two can disagree, and only one of them decides whether a store install opens without a browser bar.',
-    why: 'A file in git is a statement of intent. The API is the fact.',
+    n: '02',
+    tone: 'rust',
+    title: 'A check that cannot fail is worse than no check',
+    line: 'A green tick you have not earned buys confidence you should not have. The gates worth building are the ones allowed to say no.',
+    cost: 'Gates block you on your own bad days too. Nobody has ever regretted one at 2am.',
+    mech: 'gate',
+    proof: [
+      ['Taiyabah — native-release.yml', 'The Play bundle workflow refuses to run unless that exact commit already has a successful smoke run. It asks the GitHub API for runs at <code>head_sha</code> and exits non-zero when the count is zero.'],
+      ['Why it exists', 'Five iOS builds went green having executed none of the project’s code — the job built <code>-configuration Debug</code>, which expects a Metro dev server no runner has. The app launched, stayed alive and wrote no crash report. The screenshots were 72% black and nothing was looking at them.'],
+      ['ysbdesignsportfolio — deploy.yml', 'This site’s own build fails if <code>CNAME</code> is missing from the output, because a build that drops it takes the custom domain down while still reporting success.'],
+    ],
   },
   {
-    name: 'Contract tests across two codebases',
-    where: 'native-build.yml, native-smoke.yml',
-    detail:
-      'The native app and the website are separate repositories that must not drift. CI asserts that the app says what the website says — in English too — that every link points where the website points, and that every colour it draws matches. A screen-reader naming check runs in the same job.',
-    why: 'Two surfaces describing the same masjid differently is a content bug nobody would catch by hand.',
+    n: '03',
+    tone: 'green',
+    title: 'Trust the source, not your copy of it',
+    line: 'A file in your repository says what you intended. The service says what is true. When they disagree, only one of them decides whether the thing works.',
+    cost: 'It means one more network call in CI, and a job that can fail for reasons outside your diff.',
+    mech: 'truth',
+    proof: [
+      ['Taiyabah — android-build.yml', 'Before building, the job asks <strong>Google’s Digital Asset Links API</strong> whether the live site actually verifies the app, rather than trusting the <code>assetlinks.json</code> sitting in the repository. Only one of the two decides whether a store install opens without a browser bar.'],
+      ['Taiyabah — deploy-worker.yml', 'The notification Worker deploys, and then the job re-requests it and fails if it is not answering. A deploy step exiting zero means the upload worked, not that the thing is up.'],
+      ['Across two repositories', 'CI asserts the native app and the website agree — on copy, on where every link points, and on colour. Two surfaces describing the same masjid differently is a bug nobody catches by hand.'],
+    ],
   },
   {
-    name: 'Deploy, then confirm',
-    where: 'deploy-worker.yml',
-    detail:
-      'The notification Worker deploys with Wrangler and the job then re-requests it and fails if it is not answering. A deploy step that exits zero means the upload worked, not that the thing is up.',
-    why: 'Green is not the same as live.',
+    n: '04',
+    tone: 'mag',
+    title: 'Closed by default, including things that do not exist yet',
+    line: 'Permissions granted by remembering get forgotten. Start shut, open one door deliberately, and a table added next year starts shut too.',
+    cost: 'You will lock yourself out at least once while building it.',
+    mech: 'tenancy',
+    proof: [
+      ['Taiyabah', 'The imam’s advice table has Row Level Security on and <strong>no policies at all</strong>, with every grant revoked. No policy means no row passes; the only way in is a function that checks the role itself — and it deliberately does not fall back to administrator, because somebody writing to the imam in confidence is not writing to the committee.'],
+      ['Bolton Vouched', 'The anonymous role is stripped of every grant and <strong>default privileges are revoked too</strong>, so a table added next year starts closed. One view is the only door — and its helpers live in a schema the public cannot reach, because Postgres checks function permissions against the <em>calling</em> role even inside a view.'],
+      ['Tidemark — Pages build', 'The job that runs <code>npm ci</code>, and so every dependency’s install scripts, holds <code>contents: read</code> and nothing else. Only a separate job holds <code>pages: write</code>, so a compromised postinstall script cannot publish.'],
+      ['Booked In — build.sh', 'The publish step will not emit a <code>dist/</code> holding a service-role key. It decodes every JWT it finds and reads the role claim rather than grepping for a phrase, because the two keys look alike and a comment mentioning one is not a leak.'],
+    ],
   },
   {
-    name: 'Testing the database as a database',
-    where: 'boltonvouched \u2014 ci.yml',
-    detail:
-      'The job starts a real Supabase, applies every migration, and runs <strong>564 pgTAP assertions across eighteen suites</strong> against an empty register before any application code is involved \u2014 then reloads fixtures and drives the same build in a browser with Playwright. The scoring suite asserts the no-score floor and the shrinkage arithmetic directly in SQL.',
-    why: 'The rules worth testing are the ones in the schema. Reaching them through a web page tests the web page.',
+    n: '05',
+    tone: 'rust',
+    title: 'The screen will tell you it worked',
+    line: 'Interfaces report what they were asked to do, not what happened. The worst bugs I have shipped were all reported as successes.',
+    cost: 'Distrusting your own tooling is tiring. It is still cheaper than the alternative.',
+    mech: 'burst',
+    proof: [
+      ['Taiyabah — prayer reminders', 'The settings screen said “36 reminders are scheduled on this phone” over an empty queue. The library matches a trigger on its <code>type</code> field and drops anything unrecognised to a <code>null</code> default — and a null trigger does not mean never, it means deliver it now. Every reminder was spent the instant it was set.'],
+      ['MasjidOne', 'Features were tagged <em>in development</em> across a product site because their tables were empty. They were complete and enforcing; nobody had used them yet. Months of telling customers that a shipped feature was coming. Zero rows is a usage fact, not a capability fact.'],
+      ['A scheduled reconciler', 'Green every five minutes for weeks, purely because nothing was ever queued for it. The first item it resolved raised <code>23502</code> and rolled back everything it had just written. An idle scheduled job is not a passing one.'],
+    ],
   },
   {
-    name: 'A build that refuses to ship a secret',
-    where: 'Booked In — build.sh',
-    detail:
-      'The publish step will not produce a <code>dist/</code> containing a service-role key — the key that bypasses every row level security policy in the database. It does not grep for a phrase: it <strong>decodes every JWT it finds and checks the role claim</strong>, because the anon key and the service key look alike and a comment that merely mentions one is not a leak.',
-    why: 'The repository is public. A check that matches on text either misses the real thing or blocks a comment; a check that reads the token knows which it is holding.',
-  },
-  {
-    name: 'A build that fails rather than silently breaking the domain',
-    where: 'ysbdesignsportfolio — deploy.yml',
-    detail:
-      'This site publishes to GitHub Pages from Actions. The workflow fails the build if <code>CNAME</code> is missing from the output, because a build that drops it takes the custom domain down while still reporting success.',
-    why: 'The failure mode worth guarding is the one that reports success.',
-  },
-];
-
-const data = [
-  {
-    h: 'One database, not one per customer',
-    p: 'MasjidOne runs every masjid on a single Postgres. <strong>Every table carries a <code>masjid_id</code> that is <code>not null</code> with no default</strong>, and every write function fills it from <code>current_masjid()</code>. Row Level Security and <code>SECURITY DEFINER</code> functions scope every read and write. A database per customer would have meant a separate migration, key set and auth setup each time, and the thing the product does happens <em>inside</em> one masjid rather than between them — so the separation would have bought nothing and cost a great deal to run.',
-  },
-  {
-    h: 'Denial by default, as a design rather than a policy',
-    p: 'The imam’s advice table has RLS enabled and <strong>no policies at all</strong>, with every grant revoked. No policy means no row passes; the only way in is through functions that check the role themselves. The check deliberately does not fall back to administrator, because somebody writing to the imam in confidence is not writing to the committee.',
-  },
-  {
-    h: 'Gates in the database, not in the page',
-    p: 'A support console reaches real tenants. The anonymous role holds no <code>EXECUTE</code>; the platform-admin check requires <code>is_aal2()</code>, a completed second factor; and entering a masjid you do not belong to writes a support-access row into <strong>that masjid’s own audit trail</strong>. Editing the JavaScript in a browser gets you nothing, because the rail hiding a row is not a lock.',
-  },
-  {
-    h: 'Schema drift caught by the schema',
-    p: 'A <code>health_check()</code> function asserts invariants the code cannot be trusted to hold — including that every table carries its tenant column. It caught a table built exactly as its design drawing showed, where the drawing had no <code>masjid_id</code> at all. 140 migrations are applied and tracked by hand, and a migration that rebuilds a function prints the function rather than pointing at history.',
-  },
-  {
-    h: 'Consent as a constraint, not a checkbox',
-    p: 'A directory listing somebody who never agreed to be listed is the failure mode that matters, so it is made unreachable rather than discouraged. A provider row cannot reach <code>live</code> at all unless consent is recorded: it is a <code>CHECK</code> constraint, not a rule in the admin screen. Stored beside the timestamp is a <strong>SHA-256 of the exact wording that was on the page they accepted</strong> \u2014 so <em>what</em> was agreed to is provable later, not just <em>when</em>.',
-  },
-  {
-    h: 'Closed by default, including tables that do not exist yet',
-    p: 'The anonymous role is stripped of every grant, and <strong>default privileges are revoked too</strong>, so a table added next year starts closed instead of waiting for someone to remember. One view is the only door. Making that view readable anonymously turned on a detail worth knowing: Postgres checks function permissions against the <em>calling</em> role even inside a view, so its helpers live in a schema the public cannot reach \u2014 which works because EXECUTE is checked at run time while schema access is only checked when a name is looked up.',
-  },
-  {
-    h: 'Compliance the booking cannot route around',
-    p: 'Tinting and lash extensions need a patch test 24 to 48 hours beforehand, and if a client reacts and the studio cannot produce a dated record, the insurance that was meant to cover it may not. Every other platform in that trade sells the appointment and leaves the compliance beside it in a notebook — so the one thing a stranger can do unaided is also the thing that can quietly void the cover. Here <strong>the database refuses</strong>: a treatment needing a test cannot be booked by somebody whose test has lapsed, and <strong>booking the patch test is itself the record</strong>, so nothing has to be remembered afterwards. The window and the lifetime are the studio’s own, because guessing at the wording of someone else’s insurance policy is not a thing to do on their behalf.',
-  },
-  {
-    h: 'A certificate that expires takes the listing down on its own',
-    p: 'Gas work and driving instruction are gated on both sides. A trigger refuses to file the category without an in-date Gas Safe or DVSA check, and the public view independently drops it the day that check lapses. Neither depends on a person running a report, which is the only version of a compliance check that survives being forgotten about.',
+    n: '06',
+    tone: 'blue',
+    title: 'Build for the real crowd, not the demo',
+    line: 'Limits sized against a room full of people meet a congregation. The failure is silent, and it lands on the one day it matters.',
+    cost: 'It means guessing at a population you have not got yet, and sometimes guessing high.',
+    mech: 'crowd',
+    proof: [
+      ['Taiyabah', 'Everyone on the masjid wifi leaves through one public IP, so a per-IP cap counts the whole building as a single caller. The tag-write cap was 600 an hour, set when the note beside it said “high enough that a room full of people never reaches it”.'],
+      ['What it would have cost', 'The hour after the app is announced at Jumuʿah is the one hour when every phone writes its tags at once. The 601st person would be refused and left untagged — silently unreachable by every announcement afterwards, holding an app that otherwise works perfectly, with nothing pointing at the cause.'],
+      ['The fix', 'An address cap cannot tell a congregation from an attacker; a per-device cap can. The shared-address limits now fit the real population and the per-device cap is the one left with teeth.'],
+    ],
   },
 ];
 
 /**
- * Counted, not claimed. Every one of these was measured from the source on
- * 16 October — the two test figures by running the suites, not by reading a
- * badge or summing the plan() lines. `how` is what a reader would run to get
- * the same number, because a figure nobody can reproduce is a boast.
+ * Counted on 16 October, here. The two test figures by running the suites —
+ * local stack up, every migration applied, then db-test.sh and vitest — not
+ * by summing plan() lines. `how` is what reproduces each one.
  */
 const counts = [
-  { n: '564', label: 'database tests', sub: 'Bolton Vouched, across 18 SQL suites', how: 'npm run test:db' },
-  { n: '329', label: 'unit tests beside them', sub: 'all passing, 39 files', how: 'npx vitest run' },
-  { n: '140', label: 'tracked migrations', sub: 'on the largest database', how: 'ls db/[0-9]*.sql' },
-  { n: '11',  label: 'automated workflows', sub: 'on one app repository', how: 'ls .github/workflows' },
+  { n: '564', label: 'database tests', how: 'npm run test:db' },
+  { n: '329', label: 'unit tests', how: 'npx vitest run' },
+  { n: '140', label: 'tracked migrations', how: 'ls db/[0-9]*.sql' },
+  { n: '11', label: 'CI workflows', how: 'ls .github/workflows' },
 ];
 
-/**
- * Where each piece of software actually sits. The marks are the unmodified
- * simple-icons paths already used on the home list — the genuine artefact,
- * never a redrawn one — and Azure is absent here for the same reason it is
- * absent from `stack.js`: the certificate is Azure, the systems are not.
- */
 const layers = [
-  {
-    h: 'On the phone or in the browser',
-    p: 'What a person actually touches. Built as static files wherever it can be, because a page that is just a file cannot fall over.',
-    marks: ['react', 'nextdotjs', 'typescript', 'tailwindcss', 'expo', 'javascript'],
-  },
-  {
-    h: 'In between — the part that builds and ships',
-    p: 'Nobody uploads anything by hand. Pushing the code runs the checks, and the checks decide whether it reaches anyone.',
-    marks: ['github', 'githubactions', 'cloudflareworkers', 'railway', 'render'],
-  },
-  {
-    h: 'The database, where the rules live',
-    p: 'The important rules are kept here rather than in the app, because this is the one place every route has to go through.',
-    marks: ['postgresql', 'supabase', 'stripe'],
-  },
-];
-
-const failures = [
-  {
-    h: 'Five green builds that had never run',
-    p: 'The iOS job built <code>-configuration Debug</code>, which does not embed the JavaScript bundle — it expects a Metro dev server no CI runner has. So the app launched, stayed alive, wrote no crash report, and executed none of the project’s code. Five runs went green. The screenshots were 72% black with a red error banner and nothing was looking at them. Building Release surfaced a real crash within one run.',
-    lesson:
-      'A check that cannot fail is worse than no check, because it buys confidence. The fix was the device gate above, plus making the job look at the screenshot it already took.',
-  },
-  {
-    h: 'A reconciler that threw every time it had work',
-    p: 'A scheduled job wrote an audit row with a null tenant id into a <code>not null</code> column, after its loop — so the first item it resolved raised <code>23502</code> and rolled back everything it had just written. It had been green every five minutes for weeks purely because nothing was ever queued for it.',
-    lesson:
-      'An idle scheduled job is not a passing one. Its check now runs the function against all three answers the upstream can give.',
-  },
-  {
-    h: 'A null trigger does not mean never',
-    p: 'Prayer reminders were arriving the instant they were scheduled instead of at their time. <code>expo-notifications</code> matches a trigger on its <code>type</code> field and drops anything it does not recognise through to a default of <code>null</code> — and a null trigger means <em>deliver it now</em>, not never. The app passed <code>{ date: when }</code>, the pre-SDK-50 shape every old example still shows, so it was not rejected, not warned about and not ignored. Arming a week is up to thirty-six notifications, all delivered at once, every time a switch was flicked — and because each was spent on the spot, <strong>not one real reminder was ever scheduled</strong>. The screen cheerfully reported "36 reminders are scheduled on this phone" over an empty queue.',
-    lesson:
-      'A silent fallback is worse than a throw. The triggers are now built in a file with no imports so a plain Node test can read what comes out, and one test asserts that the library still falls through to deliver-now — so if that behaviour ever changes, the comment explaining it fails instead of rotting.',
-  },
-  {
-    h: 'A rate limit that counted a congregation as one person',
-    p: 'Everyone on the masjid’s wifi leaves through one public IP, so a per-IP cap counts the whole building as a single caller. The tag-write cap was 600 an hour, set when the note beside it said "high enough that a room full of people never reaches it". The masjid has thousands, and the hour after the app is announced at Jumuʿah is the one hour when every phone writes its tags at once over that one address. The six-hundred-and-first person would be refused and left untagged — silently unreachable by every announcement from then on, holding an app that otherwise works perfectly.',
-    lesson:
-      'An address cap cannot tell a congregation from an attacker; a per-device cap can. The shared-address limits were raised to fit the real population and the per-device cap is the one left with teeth. Worth noticing that this would have failed on the single day it mattered most, and nothing would have pointed at the cause.',
-  },
-  {
-    h: 'Zero rows read as "not built"',
-    p: 'Features were tagged <em>in development</em> across a product site because their tables were empty. They were complete and enforcing; nobody had used them yet. Months of telling customers a shipped feature was coming.',
-    lesson:
-      'Ask whether the functions exist and enforce, not whether rows do. Emptiness is a usage fact, not a capability fact.',
-  },
+  { h: 'What you touch', marks: ['react', 'nextdotjs', 'typescript', 'tailwindcss', 'expo'] },
+  { h: 'What builds and ships it', marks: ['github', 'githubactions', 'cloudflareworkers', 'railway', 'render'] },
+  { h: 'Where the rules live', marks: ['postgresql', 'supabase', 'stripe'] },
 ];
 ---
 
 <BaseLayout
-  title="Engineering \u2014 pipelines, data and failure modes"
-  description="How I build and run things: CI/CD across eleven workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
+  title="Engineering — how I build and run things"
+  description="Six principles I build to, each with something you can press and the public file it points at: rules in the database, gates that refuse, closed by default, and the failures that taught me."
+  wide
 >
-  <section class="head">
-    <p class="eyebrow m-0">Engineering</p>
-    <h1>Pipelines, data and the failures that taught me.</h1>
-    <p class="head-p">
-      Every claim on this page points at a file in a public repository \u2014 a
-      workflow, a migration, a config. Where something is built but not
-      switched on, it says so.
-    </p>
-  </section>
-
   <svg class="sprite" aria-hidden="true" focusable="false"><defs>
     {Object.entries(marks).map(([k, m]) => (
       <symbol id={`m-${k}`} viewBox="0 0 24 24"><title>{m.title}</title><path d={m.d} /></symbol>
     ))}
   </defs></svg>
 
-  <section class="sec counts-sec">
-    <p class="eyebrow m-0 rv">Counted, not claimed</p>
+  <section class="hero shell">
+    <p class="eyebrow m-0 rv">Engineering</p>
+    <h1 class="rv">Six things I believe, <span class="h-a">and the files</span> that prove it.</h1>
+    <p class="hero-p rv">
+      Press anything on this page. Every principle has one thing you can run
+      and one piece of evidence you can open, pointing at a public repository.
+    </p>
     <ul class="counts rv">
       {counts.map((c) => (
-        <li>
-          <span class="count-n">{c.n}</span>
-          <span class="count-l">{c.label}</span>
-          <span class="count-s">{c.sub}</span>
-          <span class="count-h">{c.how}</span>
-        </li>
+        <li><span class="count-n">{c.n}</span><span class="count-l">{c.label}</span><span class="count-h">{c.how}</span></li>
       ))}
     </ul>
-    <p class="counts-note rv">
-      Measured on 16 October, here, not read off a badge \u2014 the two test
-      figures by actually running the suites, the other two by counting the
-      files. None is an estimate, and the command that gets you the same
-      number is printed under each one.
-    </p>
+    <p class="counts-note rv">Counted on the day, not read off a badge — the command that reproduces each one is underneath it.</p>
   </section>
 
-  <section class="sec">
-    <h2>Delivery</h2>
-    <p class="sec-p rv">
-      Eleven workflows across one app repository, plus a deploy pipeline per
-      site. The interesting ones are not the builds \u2014 they are the gates.
-    </p>
-    <p class="plain rv">
-      <strong>In plain terms:</strong> a gate is a check that is allowed to say
-      no. Plenty of projects run tests; the useful part is wiring the tests to
-      something that refuses to ship when they have not run.
-    </p>
-    <div class="rv"><Mechanism kind="gate" /></div>
-    <ol class="rows rv gates">
-      {pipelines.map((x, i) => (
-        <li class="row">
-          <p class="eyebrow m-0">{String(i + 1).padStart(2, '0')} \u00b7 {x.where}</p>
+  {principles.map((p) => (
+    <section class={`pr pr-${p.tone}`} data-pr>
+      <div class="pr-in shell">
+        <header class="pr-head">
+          <span class="pr-n" aria-hidden="true">{p.n}</span>
           <div>
-            <h3>{x.name}</h3>
-            <p set:html={x.detail} />
-            <p class="aside" set:html={x.why} />
+            <h2>{p.title}</h2>
+            <p class="pr-line">{p.line}</p>
+            <p class="pr-cost"><span class="pr-cost-l">The cost</span> {p.cost}</p>
           </div>
-        </li>
-      ))}
-    </ol>
-  </section>
+        </header>
 
-  <section class="sec">
-    <h2>Data and access</h2>
-    <p class="sec-p rv">
-      Multi-tenant Postgres on Supabase, with the rules in the database rather
-      than in the interface.
-    </p>
-    <p class="plain rv">
-      <strong>In plain terms:</strong> a rule written into the app can be got
-      round \u2014 by a bug, by a different screen, by somebody editing the page in
-      their own browser. A rule written into the database cannot, because every
-      route in has to pass through it. Both diagrams below are that idea.
-    </p>
-    <div class="rv"><Mechanism kind="tenancy" /></div>
-    <div class="rv"><Mechanism kind="race" /></div>
-    <div class="pair rv">
-      {data.map((x) => (
-        <div class="panel pane">
-          <h3>{x.h}</h3>
-          <p set:html={x.p} />
-        </div>
-      ))}
-    </div>
-  </section>
+        <Mechanism kind={p.mech} />
 
-  <section class="sec">
-    <h2>What it runs on</h2>
-    <p class="sec-p rv">
-      Static-first by default, with compute only where something has to happen
-      server-side. Nothing here is on a box I have to patch.
-    </p>
-    <p class="plain rv">
-      <strong>In plain terms:</strong> three layers. What you touch, the part
-      that builds and ships it, and the database underneath where the rules
-      live. These are the actual tools, at the layer each one works on.
-    </p>
+        <details class="proof">
+          <summary><span class="proof-t">Show the evidence</span><span class="proof-c">{p.proof.length} things you can go and read</span></summary>
+          <ul class="proof-l">
+            {p.proof.map(([where, what]) => (
+              <li><span class="proof-w">{where}</span><p set:html={what} /></li>
+            ))}
+          </ul>
+        </details>
+      </div>
+    </section>
+  ))}
+
+  <section class="runs shell">
+    <h2 class="rv">What it all runs on</h2>
     <ol class="layers rv">
       {layers.map((L, i) => (
         <li class="layer">
-          <div class="layer-t">
-            <span class="eyebrow m-0">Layer {i + 1}</span>
-            <h3>{L.h}</h3>
-            <p>{L.p}</p>
-          </div>
+          <span class="layer-n" aria-hidden="true">{i + 1}</span>
+          <h3>{L.h}</h3>
           <ul class="layer-m">
             {L.marks.map((k) => (
               <li>
-                <svg viewBox="0 0 24 24" width="22" height="22" role="img" aria-label={marks[k].title}>
-                  <use href={`#m-${k}`} />
-                </svg>
+                <svg viewBox="0 0 24 24" width="21" height="21" role="img" aria-label={marks[k].title}><use href={`#m-${k}`} /></svg>
                 <span>{marks[k].title}</span>
               </li>
             ))}
@@ -295,176 +198,139 @@ const failures = [
         </li>
       ))}
     </ol>
-    <dl class="rows rv">
-      {[
-        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com — Astro and Next.js to static output wherever the page allows it. Where it does not, Railway runs the Next.js server: Bolton Vouched needs a request-time route so a phone number can be looked up without ever being sent to the browser. Render serves the ones in between — a static front end beside a small API, which is what Booked In and Hair by Chrissy both are.'],
-        ['Edge', 'Cloudflare Workers behind Wrangler for the jobs a static site cannot do \u2014 notification fan-out, form intake. Secrets as Wrangler secrets, never in the repository.'],
-        ['Data', 'Supabase Postgres with RLS, SECURITY DEFINER functions, scheduled jobs and edge functions. 140 tracked migrations on the largest of them.'],
-        ['Payments', 'Stripe \u2014 Checkout, deposits with a held slot, webhooks, and Bacs Direct Debit for recurring billing. Webhook handlers read both of the shapes Stripe has used for invoice fields.'],
-        ['Messaging', 'OneSignal web push, fired automatically off a published timetable. Resend for transactional mail, behind a Worker rather than a form company.'],
-        ['Clients', 'PWAs with service workers and offline behaviour, and a React Native app on Google Play — which replaced the Trusted Web Activity it started as, because a webview cannot keep audio playing with the phone locked. The same codebase now has a signed iPhone build on TestFlight, with a home-screen widget beside it; it is not on the App Store yet, and the case study says so rather than letting a TestFlight build imply a release.'],
-      ].map(([k, v]) => (
-        <div class="row">
-          <dt class="eyebrow m-0">{k}</dt>
-          <dd>{v}</dd>
-        </div>
-      ))}
-    </dl>
-    <p class="sec-p rv">
-      <strong>Not AWS, Azure or GCP.</strong> The work above is Cloudflare,
-      Supabase, GitHub Actions, Railway and Render. The concepts move \u2014 tenancy, least
-      privilege, build gating, webhook idempotency, deploy verification \u2014 but
-      I would rather say what I have run than imply a console I have not.
+    <p class="runs-note rv">
+      <strong>None of this is AWS, Azure or GCP.</strong> The concepts move —
+      tenancy, least privilege, build gating, webhook idempotency, deploy
+      verification — but I would rather say what I have run than imply a
+      console I have not.
     </p>
   </section>
 
-  <section class="sec">
-    <h2>Things that broke, and what changed</h2>
-    <p class="sec-p rv">
-      The ones worth reading are where the check itself was the problem.
-    </p>
-    <p class="plain rv">
-      <strong>In plain terms:</strong> the expensive failures are rarely the
-      loud ones. They are the checks that passed while looking at nothing, and
-      the screens that reported success over an empty queue. Here is one of
-      them, running.
-    </p>
-    <div class="rv"><Mechanism kind="burst" /></div>
-    <div class="faqs rv">
-      {failures.map((x) => (
-        <article class="faq">
-          <h3>{x.h}</h3>
-          <div>
-            <p set:html={x.p} />
-            <p class="lesson"><strong>{x.lesson}</strong></p>
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section class="ask">
-    <h2 class="rv">Want the detail?</h2>
+  <section class="ask shell">
+    <h2 class="rv">Want to go deeper?</h2>
     <p class="rv ask-p">
-      Every repository above is public and the commit messages explain the
-      reasoning, not just the change. Happy to walk through any of it.
+      Every repository behind this page is public, and the commit messages
+      explain the reasoning rather than the change. Happy to walk through any
+      of it.
     </p>
     <div class="rv ask-do">
-      <a class="btn" href="/contact.html">Get in touch</a>
-      <a class="btn btn-ghost" href="/work.html">See the work</a>
+      <a class="btn" href="/work.html">See the work</a>
+      <a class="btn btn-ghost" href="/contact.html">Get in touch</a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
-  .head h1 { font-size: clamp(2.6rem, 8.4vw, 5.4rem); margin: 14px 0 0; max-width: 16ch; }
-  .head-p { margin: 26px 0 0; max-width: 56ch; color: var(--color-ink-2); font-size: 1.05rem; }
-
-  .sec { padding-block: clamp(54px, 9vh, 92px) 0; }
-  .sec h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
-  .sec-p { margin: 20px 0 0; max-width: 58ch; color: var(--color-ink-2); }
-
-  .rows { margin: 30px 0 0; display: grid; gap: 2px; padding: 0; list-style: none; }
-  .row {
-    display: grid; grid-template-columns: 1fr; gap: 8px;
-    padding: 20px 22px; background: var(--color-line-2);
-    border-radius: var(--radius-sm);
-  }
-  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
-  .row dd, .row p { margin: 0; color: var(--color-ink-2); }
-  .gates h3 { margin: 0 0 8px; font-size: 1.1rem; letter-spacing: -0.015em; }
-  /* No opacity here. `opacity: 0.85` on ink-2 rendered #6e7378, which is
-     3.48:1 on the recessed band — an AA failure, and the reason this page
-     scored 95 on accessibility while every other page scored 100. The
-     palette is measured; fading a token with opacity silently throws the
-     measurement away. Full ink-2 is 4.61:1 on the band. */
-  .gates .aside { margin-top: 10px; font-size: 14.5px; color: var(--color-ink-2); }
-
-  .pair { margin: 30px 0 0; display: grid; gap: 18px; }
-  @media (min-width: 900px) { .pair { grid-template-columns: repeat(2, 1fr); } }
-  .pane { padding: 26px; }
-  .pane h3 { margin: 0; font-size: 1.15rem; letter-spacing: -0.015em; }
-  .pane p { margin: 12px 0 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.6; }
-
-  .faqs { margin: 30px 0 0; display: grid; gap: 2px; }
-  .faq {
-    display: grid; grid-template-columns: 1fr; gap: 8px;
-    padding: 22px; background: var(--color-line-2); border-radius: var(--radius-sm);
-  }
-  @media (min-width: 820px) { .faq { grid-template-columns: 1fr 1.25fr; gap: 34px; } }
-  .faq h3 { margin: 0; font-family: var(--font-disp); font-weight: 700; font-size: 17px; letter-spacing: -0.015em; line-height: 1.3; }
-  .faq p { margin: 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
-  .faq .lesson { margin-top: 12px; color: var(--color-ink); }
-
-  /* v3 has no monospace and the direction forbids adding one back, so inline
-     code is set in the body face and marked by a tint rather than a typeface. */
-  :global(code) {
-    font-family: inherit;
-    font-size: 0.94em;
-    padding: 1px 5px;
-    background: color-mix(in srgb, var(--color-blue) 9%, transparent);
-    border-radius: 3px;
-  }
-
-  .ask { padding-block: clamp(64px, 11vh, 118px); }
-  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
-  .ask-p { margin: 20px 0 0; max-width: 56ch; color: var(--color-ink-2); }
-  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
-
-  /* ---- the sprite is defs only; it must take no space ---------------- */
   .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-  /* ---- counted, not claimed ------------------------------------------ */
-  .counts-sec { padding-top: 0; }
+  /* ── hero ─────────────────────────────────────────────────────────── */
+  .hero { padding: 64px 0 52px; }
+  .hero h1 {
+    margin: 14px 0 0; max-width: 17ch;
+    font-size: clamp(2.6rem, 7.4vw, 5.2rem); line-height: 0.98; letter-spacing: -0.035em;
+  }
+  .h-a { color: var(--color-blue); }
+  .hero-p { margin: 24px 0 0; max-width: 46ch; font-size: 19px; color: var(--color-ink-2); }
+
   .counts {
-    margin: 18px 0 0; padding: 0; list-style: none;
-    display: grid; gap: 2px; grid-template-columns: 1fr;
+    margin: 40px 0 0; padding: 0; list-style: none;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
     background: var(--color-line); border: 1px solid var(--color-line);
     border-radius: var(--radius-sm); overflow: hidden;
   }
-  @media (min-width: 560px) { .counts { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 900px) { .counts { grid-template-columns: repeat(4, 1fr); } }
-  .counts li { display: flex; flex-direction: column; gap: 4px; padding: 20px 18px; background: var(--color-plane); }
+  @media (min-width: 720px) { .counts { grid-template-columns: repeat(4, 1fr); } }
+  .counts li { display: flex; flex-direction: column; gap: 3px; padding: 18px 16px; background: var(--color-plane); }
   .count-n {
-    font-family: var(--font-disp); font-size: clamp(2.2rem, 5vw, 3rem);
-    font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--color-ink);
+    font-family: var(--font-disp); font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-weight: 700; line-height: 1; letter-spacing: -0.03em;
   }
-  .count-l { font-size: 15px; font-weight: 600; color: var(--color-ink); }
-  .count-s { font-size: 13px; color: var(--color-ink-2); }
-  .count-h {
-    margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--color-ink-2);
-    padding: 3px 6px; background: var(--color-line-2); border-radius: 3px; align-self: flex-start;
-  }
-  .counts-note { margin: 14px 0 0; font-size: 14px; color: var(--color-ink-2); max-width: 62ch; }
+  .count-l { font-size: 14px; font-weight: 600; }
+  .count-h { margin-top: 5px; font-size: 11.5px; font-weight: 600; color: var(--color-ink-2); }
+  .counts-note { margin: 12px 0 0; font-size: 13.5px; color: var(--color-ink-2); }
 
-  /* ---- the plain-English line before each technical block ------------- */
-  .plain {
-    margin: 16px 0 0; padding: 14px 16px; max-width: 64ch;
-    font-size: 15.5px; line-height: 1.6; color: var(--color-ink-2);
-    background: var(--color-line-2);
-    border-left: 2px solid var(--color-ink); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  }
-  .plain strong { color: var(--color-ink); }
+  /* ── a principle ──────────────────────────────────────────────────────
+     Full-bleed colour band, so the page reads as six blocks rather than one
+     long column. The rule is 6px of the section's own accent.             */
+  .pr { padding: 0; border-top: 6px solid var(--tone); background: var(--color-paper); }
+  .pr:nth-child(even) { background: var(--color-paper-2); }
+  .pr-in { padding: 54px 0 58px; }
+  .pr-blue { --tone: var(--color-blue); }
+  .pr-rust { --tone: var(--color-signal); }
+  .pr-green { --tone: var(--color-accent-green); }
+  .pr-mag { --tone: var(--color-accent-mag); }
 
-  /* ---- the three layers ---------------------------------------------- */
-  .layers { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 2px;
-            background: var(--color-line); border: 1px solid var(--color-line);
-            border-radius: var(--radius-sm); overflow: hidden; }
-  .layer { display: grid; gap: 16px; padding: 22px 20px; background: var(--color-plane); }
-  /* The marks column took `auto` and grew, squeezing the prose to four
-     words a line. Give the text a real share and let the marks wrap. */
-  @media (min-width: 820px) {
-    .layer { grid-template-columns: minmax(300px, 40%) 1fr; align-items: center; gap: 34px; }
-    .layer-m { justify-content: flex-end; }
+  .pr-head { display: grid; gap: 14px; }
+  @media (min-width: 760px) { .pr-head { grid-template-columns: auto 1fr; gap: 28px; } }
+  .pr-n {
+    font-family: var(--font-disp); font-weight: 700; line-height: 0.8;
+    font-size: clamp(3.2rem, 9vw, 5.4rem); letter-spacing: -0.04em; color: var(--tone);
   }
-  .layer-t h3 { margin: 6px 0 0; font-size: 1.12rem; letter-spacing: -0.015em; }
-  .layer-t p { margin: 7px 0 0; font-size: 14.5px; line-height: 1.6; color: var(--color-ink-2); max-width: 54ch; }
-  .layer-m { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pr h2 { margin: 0; font-size: clamp(1.7rem, 4.1vw, 2.5rem); letter-spacing: -0.025em; max-width: 20ch; }
+  .pr-line { margin: 14px 0 0; max-width: 58ch; font-size: 17.5px; color: var(--color-ink-2); }
+  .pr-cost { margin: 16px 0 0; max-width: 58ch; font-size: 15px; color: var(--color-ink-2); }
+  .pr-cost-l {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-ink-2); margin-right: 8px;
+  }
+
+  /* ── the evidence, folded away ───────────────────────────────────────── */
+  .proof { margin: 20px 0 0; border-top: 1px solid var(--color-line); }
+  .proof summary {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+    padding: 16px 0 0; cursor: pointer; list-style: none;
+  }
+  .proof summary::-webkit-details-marker { display: none; }
+  .proof-t {
+    font-family: var(--font-disp); font-size: 15px; font-weight: 600; color: var(--color-ink);
+  }
+  .proof-t::after {
+    content: ' →'; display: inline-block; color: var(--tone);
+    transition: transform 200ms var(--ease-turn);
+  }
+  .proof[open] .proof-t::after { transform: rotate(90deg); }
+  .proof-c { font-size: 13px; color: var(--color-ink-2); }
+  .proof summary:hover .proof-t { text-decoration: underline; }
+  .proof summary:focus-visible { outline: 2px solid var(--tone); outline-offset: 3px; }
+  .proof-l { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 16px; }
+  .proof-l li {
+    display: grid; gap: 6px; padding: 16px 18px;
+    background: var(--color-plane); border: 1px solid var(--color-line);
+    border-left: 3px solid var(--tone); border-radius: var(--radius-sm);
+  }
+  .proof-w {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .proof-l p { margin: 0; font-size: 15px; line-height: 1.62; color: var(--color-ink-2); }
+  .proof-l strong, .proof-l em { color: var(--color-ink); }
+
+  /* ── what it runs on ──────────────────────────────────────────────────── */
+  .runs { padding: 64px 0 20px; }
+  .runs h2 { margin: 0 0 26px; font-size: clamp(1.7rem, 4.1vw, 2.5rem); letter-spacing: -0.025em; }
+  .layers { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  @media (min-width: 880px) { .layers { grid-template-columns: repeat(3, 1fr); } }
+  .layer {
+    padding: 22px 20px; background: var(--color-plane);
+    border: 1px solid var(--color-line); border-radius: var(--radius-sm);
+  }
+  .layer-n {
+    display: block; font-family: var(--font-disp); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.1em; color: var(--color-ink-2);
+  }
+  .layer h3 { margin: 6px 0 16px; font-size: 1.05rem; letter-spacing: -0.015em; }
+  .layer-m { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 7px; }
   .layer-m li {
-    display: flex; align-items: center; gap: 7px; padding: 7px 10px;
+    display: flex; align-items: center; gap: 6px; padding: 6px 9px;
     background: var(--color-paper); border: 1px solid var(--color-line);
-    border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; color: var(--color-ink-2);
+    border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; color: var(--color-ink-2);
   }
   .layer-m svg { flex: none; fill: var(--color-ink-2); }
+  .runs-note { margin: 26px 0 0; max-width: 60ch; font-size: 15px; color: var(--color-ink-2); }
+  .runs-note strong { color: var(--color-ink); }
+
+  /* ── ask ──────────────────────────────────────────────────────────────── */
+  .ask { padding: 64px 0 90px; }
+  .ask h2 { margin: 0; font-size: clamp(2rem, 5.4vw, 3.4rem); letter-spacing: -0.03em; }
+  .ask-p { margin: 20px 0 0; max-width: 56ch; color: var(--color-ink-2); }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
 </style>

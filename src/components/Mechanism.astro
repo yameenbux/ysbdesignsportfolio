@@ -11,12 +11,18 @@
  *
  * Colour discipline, because this is where it would be easiest to drift:
  *   ink / ink-2  structure and type
- *   blue         the thing currently selected or the path that succeeded
+ *   green        it got through / it worked
  *   signal       refused, failed, or the bug
- * No third colour, no fill that is not one of the palette's own values.
- * Blue and signal are used here as *status*, which is the job the palette
- * already gives them — signal is "live indicators, the one warm note" and
- * blue is the active state on the wheel.
+ *   blue         which option is selected, or who is currently active
+ *
+ * One meaning per colour, across all six diagrams — before Phase 27 blue
+ * meant both "selected" and "succeeded", which read as a clash the moment a
+ * green-accented section showed a blue success line.
+ *
+ * Green against rust is the one pair the validator warned about (ΔE 6.6
+ * under protanopia), so every state using them is ALSO labelled in words.
+ * The crowd grid is the exception that proves the rule: its cells are dense
+ * and carry no individual label, so it stays blue-against-rust at ΔE 28.7.
  *
  * Accessibility: every control is a real <button>, every stage has an
  * aria-live status line that says in words what the animation shows, and
@@ -158,6 +164,62 @@ const { kind } = Astro.props;
   </figure>
 )}
 
+{kind === 'truth' && (
+  <figure class="mech" data-mech="truth">
+    <figcaption class="mech-cap">
+      <span class="eyebrow m-0">Try it</span>
+      <p>
+        The file in the repository says the app is verified. The service is
+        what actually decides. Change one and see which one CI believes.
+      </p>
+    </figcaption>
+
+    <div class="stage truth-stage">
+      <div class="src" data-src="file">
+        <span class="eyebrow m-0">Your repository</span>
+        <p class="src-h">assetlinks.json</p>
+        <p class="src-v" data-fv>says: verified</p>
+      </div>
+      <div class="src" data-src="api">
+        <span class="eyebrow m-0">Google's API</span>
+        <p class="src-h">Digital Asset Links</p>
+        <p class="src-v" data-av>says: verified</p>
+      </div>
+    </div>
+
+    <div class="mech-do">
+      <button type="button" class="btn-sm" data-run="agree">Both agree</button>
+      <button type="button" class="btn-sm" data-run="differ">Make them disagree</button>
+    </div>
+    <p class="mech-out" data-out role="status" aria-live="polite">Both sources agree, so the build goes ahead.</p>
+    <p class="mech-src">The job asks the API rather than reading the file beside it. Only one of the two decides whether a store install opens without a browser bar — and it is not the one in your repository.</p>
+  </figure>
+)}
+
+{kind === 'crowd' && (
+  <figure class="mech" data-mech="crowd">
+    <figcaption class="mech-cap">
+      <span class="eyebrow m-0">Try it</span>
+      <p>
+        Everyone on the masjid wifi shares one address, so a per-address limit
+        counts the whole building as one person. Watch where the cap lands.
+      </p>
+    </figcaption>
+
+    <div class="stage crowd-stage">
+      <div class="crowd-grid" data-grid aria-hidden="true"></div>
+      <p class="crowd-meter"><span data-served>0</span> reached <span class="crowd-sep">·</span> <span data-refused>0</span> silently refused</p>
+    </div>
+
+    <div class="mech-do">
+      <button type="button" class="btn-sm" data-run="room">A room full of people</button>
+      <button type="button" class="btn-sm" data-run="jumuah">A congregation at Jumuʻah</button>
+    </div>
+    <p class="mech-out" data-out role="status" aria-live="polite">Press a button to announce the app and let every phone register at once.</p>
+    <p class="mech-src">The cap was 600 an hour, set when the note beside it said “high enough that a room full of people never reaches it”. An address cap cannot tell a congregation from an attacker; a per-device cap can, and that is the one left with teeth.</p>
+  </figure>
+)}
+
 <style>
   /* ---- shared shell ------------------------------------------------- */
   .mech {
@@ -203,7 +265,7 @@ const { kind } = Astro.props;
     margin: 14px 0 0; font-size: 15px; font-weight: 600; color: var(--color-ink);
     min-height: 1.6em;
   }
-  .mech-out[data-tone='ok'] { color: var(--color-blue); }
+  .mech-out[data-tone='ok'] { color: var(--color-accent-green); }
   .mech-out[data-tone='no'] { color: var(--color-signal); }
 
   .mech-src {
@@ -232,7 +294,7 @@ const { kind } = Astro.props;
   .token[data-at='start'] { left: 12.5%; transform: translate(-50%, -50%) scale(1); }
   .token[data-at='build'] { left: 37.5%; transform: translate(-50%, -50%) scale(1); }
   .token[data-at='gate']  { left: 62.5%; transform: translate(-50%, -50%) scale(1); }
-  .token[data-at='store'] { left: 87.5%; transform: translate(-50%, -50%) scale(1); background: var(--color-blue); }
+  .token[data-at='store'] { left: 87.5%; transform: translate(-50%, -50%) scale(1); background: var(--color-accent-green); }
   .token[data-at='stuck'] { left: 62.5%; transform: translate(-50%, -50%) scale(1); background: var(--color-signal); }
 
   /* ---- tenancy ------------------------------------------------------- */
@@ -249,7 +311,8 @@ const { kind } = Astro.props;
   }
   .rows-db li[data-vis='yes'] { border-color: var(--color-blue); }
   .rows-db li[data-vis='yes'] .tag { color: var(--color-blue); }
-  .rows-db li[data-vis='no'] { opacity: 0.38; }
+  .rows-db li[data-vis='no'] { background: var(--color-line-2); border-style: dashed; }
+  .rows-db li[data-vis='no'] .rw { color: var(--color-ink-2); }
   .rows-db li[data-vis='no'] .rw { text-decoration: line-through; }
   .rows-db li[data-vis='no']::after {
     content: 'hidden by the database'; margin-left: auto;
@@ -265,10 +328,11 @@ const { kind } = Astro.props;
   @media (min-width: 620px) { .race-stage { grid-template-columns: 1fr 1fr; } }
   .lane { padding: 14px; background: var(--color-plane); border: 1px solid var(--color-line); border-radius: var(--radius-sm); }
   .steps { margin: 10px 0 0; padding: 0 0 0 18px; display: grid; gap: 7px; font-size: 14px; color: var(--color-ink-2); }
-  .steps li { opacity: 0.32; transition: opacity 220ms var(--ease-turn), color 220ms var(--ease-turn); }
-  .steps li[data-on='1'] { opacity: 1; color: var(--color-ink); }
+  .steps li { color: var(--color-ink-2); font-weight: 400;
+               transition: color 220ms var(--ease-turn), font-weight 220ms var(--ease-turn); }
+  .steps li[data-on='1'] { color: var(--color-ink); font-weight: 650; }
   .verdict { margin: 12px 0 0; min-height: 1.5em; font-size: 14px; font-weight: 700; }
-  .verdict[data-v='won'] { color: var(--color-blue); }
+  .verdict[data-v='won'] { color: var(--color-accent-green); }
   .verdict[data-v='lost'] { color: var(--color-signal); }
 
   /* ---- the notification burst ---------------------------------------- */
@@ -280,10 +344,57 @@ const { kind } = Astro.props;
     transition: height 420ms var(--ease-turn), background 220ms linear;
   }
   .days li:first-child .pile[data-tone='no'] { background: var(--color-signal); }
-  .pile[data-tone='ok'] { background: var(--color-blue); }
+  .pile[data-tone='ok'] { background: var(--color-accent-green); }
   .day-l { font-size: 11px; font-weight: 600; color: var(--color-ink-2); text-align: center; }
   .burst-stage { min-height: 150px; display: flex; align-items: flex-end; }
   .burst-stage .days { width: 100%; }
+
+  /* ---- trust the source --------------------------------------------- */
+  .truth-stage { display: grid; gap: 12px; }
+  @media (min-width: 560px) { .truth-stage { grid-template-columns: 1fr 1fr; } }
+  .src {
+    padding: 16px; background: var(--color-plane);
+    border: 1px solid var(--color-line); border-left: 3px solid var(--color-ink-2);
+    border-radius: var(--radius-sm);
+    transition: border-left-color 240ms var(--ease-turn);
+  }
+  .src-h { margin: 8px 0 0; font-weight: 600; font-size: 15px; }
+  .src-v { margin: 6px 0 0; font-size: 14px; font-weight: 700; color: var(--color-ink-2); }
+  .src[data-state='ok'] { border-left-color: var(--color-accent-green); }
+  .src[data-state='ok'] .src-v { color: var(--color-accent-green); }
+  .src[data-state='stale'] { border-left-color: var(--color-signal); }
+  .src[data-state='stale'] .src-v { color: var(--color-signal); }
+
+  /* ---- built for the crowd -------------------------------------------- */
+  .crowd-stage { display: grid; gap: 12px; }
+  /* 50 x 8 = 400 cells, which is exactly the congregation at 10 people a
+     cell. Sizing it to the LARGER case matters: cells that are off still
+     occupy grid space, so a grid built for more than it ever shows leaves a
+     dead hole under the diagram. */
+  .crowd-grid {
+    display: grid; grid-template-columns: repeat(50, 1fr); gap: 2px;
+    align-content: start;
+  }
+  /* :global because these cells are created in JS, so they never receive
+     Astro's scoping attribute and a scoped selector cannot match them.
+     This rendered a completely empty grid the first time. */
+  .crowd-grid :global(span) {
+    aspect-ratio: 1; border-radius: 1px; background: var(--color-line);
+    transform: scale(0.2); opacity: 0;
+    transition: transform 240ms var(--ease-turn), opacity 240ms linear, background 240ms linear;
+  }
+  .crowd-grid :global(span[data-on]) { transform: scale(1); opacity: 1; }
+  .crowd-grid :global(span[data-on='served']) { background: var(--color-blue); }
+  .crowd-grid :global(span[data-on='refused']) { background: var(--color-signal); }
+  .crowd-meter { margin: 0; font-size: 14px; font-weight: 600; color: var(--color-ink-2); }
+  .crowd-meter [data-served] { color: var(--color-blue); }
+  .crowd-meter [data-refused] { color: var(--color-signal); }
+  .crowd-sep { color: var(--color-line); margin: 0 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .src { transition: none !important; }
+    .crowd-grid :global(span) { transition: none !important; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .token, .rows-db li, .steps li, .pile { transition: none !important; }
@@ -387,6 +498,64 @@ const { kind } = Astro.props;
         piles.forEach((p, i) => { p.style.height = Math.round(MAX / 7) + 'px'; p.dataset.tone = 'ok'; void i; });
         say(el, 'Five or six a day across seven days, each one arriving when it is wanted. The triggers are built in a file a plain test can read, and one test asserts the library still behaves the way the comment says.', 'ok');
       }
+      running = false;
+    }));
+  });
+
+  // ---- trust the source, not your copy ---------------------------------
+  document.querySelectorAll('[data-mech="truth"]').forEach((el) => {
+    const file = el.querySelector('[data-src="file"]');
+    const api = el.querySelector('[data-src="api"]');
+    const fv = el.querySelector('[data-fv]');
+    const av = el.querySelector('[data-av]');
+    const set = (agree) => {
+      file.dataset.state = 'ok';
+      fv.textContent = 'says: verified';
+      api.dataset.state = agree ? 'ok' : 'stale';
+      av.textContent = agree ? 'says: verified' : 'says: NOT verified';
+      say(el,
+        agree
+          ? 'Both agree, so the build goes ahead \u2014 and this time the file happened to be right.'
+          : 'The file still says verified; the service says it is not. CI asks the service, fails, and the store install never gets shipped with a browser bar across the top.',
+        agree ? 'ok' : 'no');
+    };
+    el.querySelectorAll('[data-run]').forEach((b) =>
+      b.addEventListener('click', () => set(b.dataset.run === 'agree')));
+    set(true);
+  });
+
+  // ---- built for the real crowd ----------------------------------------
+  document.querySelectorAll('[data-mech="crowd"]').forEach((el) => {
+    const grid = el.querySelector('[data-grid]');
+    const nServed = el.querySelector('[data-served]');
+    const nRefused = el.querySelector('[data-refused]');
+    // 400 cells at 1:10 — the congregation fills the grid exactly, and the
+    // 600/hour cap falls at cell 60, so the overflow is shown not asserted.
+    const CELLS = 400, SCALE = 10, CAP = 600;
+    if (!grid.children.length)
+      for (let i = 0; i < CELLS; i++) grid.appendChild(document.createElement('span'));
+    const cells = [...grid.children];
+    let running = false;
+    el.querySelectorAll('[data-run]').forEach((b) => b.addEventListener('click', async () => {
+      if (running) return;
+      running = true;
+      el.querySelectorAll('[data-run]').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      const people = b.dataset.run === 'room' ? 400 : 4000;
+      cells.forEach((c) => c.removeAttribute('data-on'));
+      const used = Math.ceil(people / SCALE);
+      const served = Math.min(people, CAP), refused = people - served;
+      const step = RM.matches ? 0 : 14;
+      for (let i = 0; i < used; i++) {
+        cells[i].dataset.on = (i + 1) * SCALE <= CAP ? 'served' : 'refused';
+        if (step && i % 8 === 0) await wait(step);
+      }
+      nServed.textContent = String(served);
+      nRefused.textContent = String(refused);
+      say(el,
+        refused
+          ? `${people.toLocaleString()} phones registered at once and ${refused.toLocaleString()} were refused \u2014 silently. Each of those people keeps an app that works perfectly and never hears another announcement, and nothing anywhere points at why.`
+          : `${people} phones registered and every one got through. This is the size the cap was written for, which is why nobody noticed it was wrong.`,
+        refused ? 'no' : 'ok');
       running = false;
     }));
   });
