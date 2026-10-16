@@ -1,17 +1,26 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { all, lead } from '../data/projects.js';
+import { marks } from '../data/stack.js';
 
 /**
- * One template behind all six case studies. Content comes from
+ * One template behind all ten case studies. Content comes from
  * src/data/cases.js; nothing here is per-project.
  *
- * Problem → approach → outcome, then the screens. Screenshots are the hero
- * content, so the copy above them exists to explain what the visitor is
- * looking at — nobody recognises these brands the way they would a
- * well-known product.
+ * Rebuilt in Phase 31 as the reading end of the work.html catalogue. The
+ * index there is a scannable spec sheet that stops at the hook; this is where
+ * the argument is actually made, so the job here is the opposite one — carry
+ * eleven hundred words without reading as a wall.
  *
- * The screens sit on bone rather than on the blue: a light-UI capture on a
- * saturated ground needs a sheet under it or it reads as a hole in the page.
+ * NO ACCENT COLOURS, and that is the design rather than an omission. Every
+ * case study carries a client wordmark in its own brand colour and up to
+ * seven full-colour screenshots, so the page already holds colour that is not
+ * mine to compete with. The two measured accents stay scoped to
+ * engineering.html and about.html — same reasoning work.html was built on.
+ *
+ * Screenshots are still the hero content and still sit on a `plane` mat with
+ * a hairline border: a light-UI capture dropped straight on the paper sits
+ * flush and disappears.
  */
 const { data } = Astro.props;
 
@@ -28,53 +37,241 @@ const { title, seoTitle, kind, role, problem, approach, outcome, links, shots, d
 // and the search result say, because "Taiyabah Masjid" alone matches nothing
 // anybody searches for.
 
-const sections = [['Problem', problem], ['Approach', approach], ['Outcome', outcome]];
+/**
+ * The matching row in projects.js, when there is one. The four retired
+ * projects left that file when they left the listings, so EVERYTHING keyed
+ * off `proj` has to degrade to nothing — the spec block, the layer bars and
+ * the pager all guard on it, and the hero subtitle falls back to the `role`
+ * line a retired page has always had.
+ */
+const proj = all.find((x) => x.slug === data.slug) ?? null;
+
+/**
+ * Previous and next walk the FLATTENED GROUP ORDER work.html renders in, not
+ * `lead` order — the two differ once the two groups reorder things, and a
+ * pager that disagrees with the index it came from is worse than no pager.
+ * Phase 29 hit this same mismatch with the numbering.
+ */
+const ordered = [lead.filter((x) => !x.product), lead.filter((x) => x.product)].flat();
+const at = ordered.findIndex((x) => x.slug === data.slug);
+const prev = at > 0 ? ordered[at - 1] : null;
+const next = at >= 0 && at < ordered.length - 1 ? ordered[at + 1] : null;
+
+/* The catalogue number from work.html is deliberately NOT printed here. It
+   was, and on Taiyabah it rendered "01 Community project" directly above
+   "01 Problem" — two different 01s a few lines apart, each meaning something
+   else. The section numbers are the house vocabulary (engineering.html and
+   about.html both number their sections), so the index number is the one
+   that gives way. */
+
+/**
+ * The stored copy is one HTML string per section with `<br><br>` between its
+ * paragraphs, and the long ones open a paragraph with a `<strong>` that is
+ * doing a sub-heading's job. Splitting on the break gives real paragraphs to
+ * space, and promoting that opening strong to a run-in heading makes an
+ * eleven-hundred-word argument scannable.
+ *
+ * NOT ONE WORD CHANGES — this is the existing copy re-marked-up, which is the
+ * only reason it is safe to do from a layout file.
+ *
+ * It has to degrade: six of the ten cases have no `<strong>` lead-ins at all
+ * and LuxeScent is ninety-one words in three single paragraphs. A design that
+ * depended on the lead-ins would fall apart on the short ones.
+ */
+function toParas(html) {
+  return (html ?? '')
+    .split(/<br\s*\/?>\s*<br\s*\/?>/i)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => {
+      const m = s.match(/^<strong>([\s\S]*?)<\/strong>\s*([\s\S]+)$/i);
+      return m ? { lead: m[1], body: m[2] } : { lead: null, body: s };
+    });
+}
+
+const sections = [
+  { n: '01', label: 'Problem', paras: toParas(problem) },
+  { n: '02', label: 'Approach', paras: toParas(approach) },
+  { n: '03', label: 'Outcome', paras: toParas(outcome) },
+].filter((s) => s.paras.length);
+
+// Portrait captures are grouped so three phones sit in a row rather than
+// stacking into three screens of scrolling. Taiyabah has seven shots and
+// Tidemark three portraits; stacked, both ran longer than the copy above them.
+const portraits = shots.filter((s) => s.portrait);
+const landscapes = shots.filter((s) => !s.portrait);
+
+const LAYERS = [
+  ['Interface', 'interface'],
+  ['Software', 'software'],
+  ['Infrastructure', 'infra'],
+];
+
+const used = proj?.tech ?? [];
 ---
 
-<BaseLayout title={seoTitle ?? title} description={description} noindex={data.retired ?? false}>
-  <p class="back"><a href="/work.html" class="eyebrow ul-draw">← All work</a></p>
+<BaseLayout title={seoTitle ?? title} description={description} noindex={data.retired ?? false} wide>
+  {used.length > 0 && (
+    <svg class="sprite" aria-hidden="true" focusable="false"><defs>
+      {used.map((k) => (
+        <symbol id={`m-${k}`} viewBox="0 0 24 24"><title>{marks[k].title}</title><path d={marks[k].d} /></symbol>
+      ))}
+    </defs></svg>
+  )}
 
-  <section class="case-head">
-    <p class="eyebrow eyebrow-accent m-0">{kind}</p>
-    <h1>{title}</h1>
-    <p class="case-role">{role}</p>
+  {/* ── masthead ─────────────────────────────────────────────────────── */}
+  <header class="head shell">
+    <p class="back m-0"><a href="/work.html" class="eyebrow ul-draw">← All work</a></p>
 
-    {links.length > 0 && (
-      <ul class="case-links">
-        {links.map((l) => (
-          <li><a href={l.href} target="_blank" rel="noopener" class="ul-draw">{l.text} ↗</a></li>
-        ))}
-      </ul>
-    )}
-  </section>
+    <div class="head-top">
+      <p class="head-kind eyebrow m-0">{kind}</p>
 
-  <div class="case-body">
-    {sections.map(([label, copy]) => (
-      <div class="case-row rv">
-        <p class="eyebrow m-0">{label}</p>
-        <div class="case-copy" set:html={copy} />
+      {/* NO WORDMARK HERE, deliberately. It was built with one and taken out:
+          the mark says the same words the h1 says, which is the doubling that
+          was rejected on the work index, and four of the ten case studies are
+          retired and have no mark at all — an element present on six pages and
+          missing from four makes the other four look broken. The name set in
+          type is the stronger hero anyway at this size, and the marks keep
+          doing their identifying job on the index and the homepage. */}
+      <h1>{title}</h1>
+
+      {/* The hook, not the stack. `role` IS the stack string, and a stack list
+          as the first sentence under the title is the thing this site's own
+          rules call out as what the audience does not read — so it moves into
+          the spec block below, where work.html already puts it, and the
+          one-line hook takes its place. The four retired cases are not in
+          projects.js and have no hook, so they keep `role` here. */}
+      <p class="head-role">{proj?.line ?? role}</p>
+
+      {links.length > 0 && (
+        <ul class="head-links">
+          {links.map((l) => (
+            <li><a href={l.href} target="_blank" rel="noopener" class="ul-draw">{l.text} ↗</a></li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    {proj && (
+      <div class="spec rv">
+        <dl class="spec-l">
+          <div><dt>Type</dt><dd>{kind}{proj.where && <> · {proj.where}</>}</dd></div>
+          <div><dt>Role</dt><dd>{role}</dd></div>
+          <div>
+            <dt>Status</dt>
+            <dd>{proj.status
+              ? <span class="chip">{proj.status}</span>
+              : <span class="st-live"><span class="live" aria-hidden="true"></span>Live</span>}</dd>
+          </div>
+          {used.length > 0 && (
+            <div>
+              <dt>Built with</dt>
+              <dd>
+                <ul class="spec-m">
+                  {used.map((k) => (
+                    <li>
+                      <svg viewBox="0 0 24 24" width="19" height="19" role="img" aria-label={marks[k].title}><use href={`#m-${k}`} /></svg>
+                      <span class="sr">{marks[k].title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+        </dl>
+
+        {/* The three layers this one actually needed. The same figures the
+            homepage list shows on hover — repeated here because this is the
+            page where the positioning sentence has to stop being a claim. */}
+        {proj.layers && (
+          <div class="lay" style={`--i:${proj.layers.interface};--s:${proj.layers.software};--f:${proj.layers.infra}`}>
+            <p class="eyebrow m-0 lay-h">What it needed</p>
+            <ul>
+              {LAYERS.map(([name, key]) => (
+                <li>
+                  <span class="lay-n">{name}</span>
+                  <span class="lay-t" data-k={key}><i></i></span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
+    )}
+  </header>
+
+  {/* ── the argument ─────────────────────────────────────────────────── */}
+  <div class="body shell">
+    {sections.map((s) => (
+      <section class="sec">
+        <div class="sec-l">
+          <p class="sec-n m-0">{s.n}</p>
+          <h2 class="sec-h">{s.label}</h2>
+        </div>
+        <div class="sec-c rv">
+          {s.paras.map((para) => (
+            <div class="para">
+              {para.lead && <p class="para-l m-0">{para.lead}</p>}
+              <p class="para-b m-0" set:html={para.body} />
+            </div>
+          ))}
+        </div>
+      </section>
     ))}
   </div>
 
-  <section class="screens">
-    <h2 class="eyebrow m-0">The screens</h2>
-    <div class="shot-list">
-      {shots.map((s) => (
-        <figure class="rv shot" class:list={[s.portrait && 'is-portrait']}>
-          <div class="shot-frame">
-            <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async" />
-          </div>
-          <figcaption class="eyebrow">{s.caption}</figcaption>
-        </figure>
-      ))}
+  {/* ── the screens ──────────────────────────────────────────────────── */}
+  <section class="screens shell">
+    <div class="screens-h">
+      <h2 class="eyebrow m-0">The screens</h2>
+      <p class="eyebrow m-0 screens-c">{shots.length} {shots.length === 1 ? 'capture' : 'captures'}</p>
     </div>
+
+    {landscapes.map((s) => (
+      <figure class="rv shot">
+        <div class="shot-frame">
+          <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async" />
+        </div>
+        <figcaption class="eyebrow">{s.caption}</figcaption>
+      </figure>
+    ))}
+
+    {portraits.length > 0 && (
+      <div class="shot-row">
+        {portraits.map((s) => (
+          <figure class="rv shot is-portrait">
+            <div class="shot-frame">
+              <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async" />
+            </div>
+            <figcaption class="eyebrow">{s.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
   </section>
 
-  <section class="case-ask">
+  {/* ── pager ────────────────────────────────────────────────────────── */}
+  {(prev || next) && (
+    <nav class="pager shell" aria-label="Other case studies">
+      {prev
+        ? <a class="pg" href={prev.href}>
+            <span class="eyebrow pg-d">← Previous</span>
+            <span class="pg-n">{prev.name}</span>
+          </a>
+        : <span></span>}
+      {next && (
+        <a class="pg is-next" href={next.href}>
+          <span class="eyebrow pg-d">Next →</span>
+          <span class="pg-n">{next.name}</span>
+        </a>
+      )}
+    </nav>
+  )}
+
+  <section class="ask shell">
     <h2 class="rv">If this looks like your problem</h2>
-    <p class="rv case-ask-p">Tell me about it and I'll tell you what it takes.</p>
-    <div class="rv case-ask-do">
+    <p class="rv ask-p">Tell me about it and I'll tell you what it takes.</p>
+    <div class="rv ask-do">
       <a class="btn" href="https://wa.me/447466487591" target="_blank" rel="noopener">Message me on WhatsApp</a>
       <a class="btn btn-ghost" href="/work.html">See the other projects</a>
     </div>
@@ -82,37 +279,130 @@ const sections = [['Problem', problem], ['Approach', approach], ['Outcome', outc
 </BaseLayout>
 
 <style>
-  .back { padding-top: 34px; margin: 0; }
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
 
-  .case-head { padding-top: 30px; padding-bottom: 8px; }
-  .case-head h1 {
+  /* `padding-block`, never a `padding` shorthand: .shell supplies
+     padding-inline and the shorthand resets it to zero, which is how the
+     banded pages shipped with no side gutter at all in Phase 27. */
+  .head { padding-block: 34px 0; }
+  .back { margin-bottom: 30px; }
+
+  .head h1 {
     font-size: clamp(2.5rem, 7.4vw, 5.2rem);
     margin: 16px 0 0;
     max-width: 16ch;
   }
-  .case-role { margin: 20px 0 0; color: var(--color-ink-2); max-width: 54ch; }
+  .head-role { margin: 20px 0 0; color: var(--color-ink-2); max-width: 54ch; }
 
-  .case-links { margin: 22px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 22px; }
-  .case-links a { font-weight: 600; }
+  .head-links { margin: 22px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 22px; }
+  .head-links a { font-weight: 600; }
 
-  .case-body { padding-block: clamp(44px, 7vh, 76px) 0; }
-  .case-row {
-    display: grid; grid-template-columns: 1fr; gap: 8px;
-    padding-block: 22px;
+  /* ── spec block ───────────────────────────────────────────────────── */
+  .spec {
+    margin-top: 44px;
+    padding-block: 26px 0;
+    border-top: 1px solid var(--color-ink);
+    display: grid; gap: 26px;
   }
-  @media (min-width: 860px) {
-    .case-row { grid-template-columns: 170px 1fr; gap: 34px; }
+  @media (min-width: 900px) {
+    .spec { grid-template-columns: 1fr 300px; gap: 48px; align-items: start; }
   }
-  .case-copy { max-width: 62ch; color: var(--color-ink-2); margin: 0; }
-  .case-copy :global(strong) { color: var(--color-ink); font-weight: 600; }
 
-  .screens { padding-block: clamp(52px, 9vh, 92px); }
-  .shot-list {
-    margin-top: 32px;
-    display: flex; flex-direction: column; gap: 56px;
+  .spec-l { margin: 0; display: grid; gap: 0; }
+  .spec-l > div {
+    display: grid; grid-template-columns: 1fr; gap: 2px;
+    padding-block: 11px;
+    border-bottom: 1px solid var(--color-line);
   }
-  .shot { margin: 0; }
-  .shot.is-portrait .shot-frame { max-width: 300px; }
+  @media (min-width: 560px) {
+    .spec-l > div { grid-template-columns: 116px 1fr; gap: 18px; align-items: baseline; }
+  }
+  .spec-l dt {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--color-ink-2);
+  }
+  .spec-l dd { margin: 0; font-size: 15px; }
+
+  .spec-m { display: flex; flex-wrap: wrap; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .spec-m svg { display: block; fill: var(--color-ink-2); }
+
+  .chip {
+    display: inline-block;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+  }
+  .st-live { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+
+  /* ── layer bars ───────────────────────────────────────────────────── */
+  .lay-h { margin-bottom: 12px; }
+  .lay ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .lay li { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 12px; }
+  .lay-n { font-size: 12px; color: var(--color-ink-2); }
+  .lay-t { display: block; height: 3px; background: var(--color-line); }
+  .lay-t i {
+    display: block; height: 100%;
+    background: var(--color-ink);
+    transition: width 900ms var(--ease-turn);
+  }
+  /* Drawn is the DEFAULT, and the collapse is what JS opts into — the same
+     guard `.rv` uses. Written the other way round (start at zero, grow on
+     `.in`) a script error leaves every bar reading zero, which is not a
+     missing animation but a wrong measurement on the page. */
+  .lay-t[data-k='interface'] i { width: calc(var(--i) * 1%); }
+  .lay-t[data-k='software'] i { width: calc(var(--s) * 1%); }
+  .lay-t[data-k='infra'] i { width: calc(var(--f) * 1%); }
+  :global(html.js) .spec:not(.in) .lay-t i { width: 0; }
+
+  /* ── the argument ─────────────────────────────────────────────────── */
+  .body { padding-block: clamp(48px, 8vh, 86px) 0; }
+
+  .sec { padding-block: 0 clamp(40px, 6vh, 64px); display: grid; gap: 16px; }
+  @media (min-width: 900px) {
+    .sec { grid-template-columns: 190px 1fr; gap: 48px; align-items: start; }
+    /* Sticky so the section you are reading stays named through a thousand
+       words of it. `top` clears the masthead. */
+    .sec-l { position: sticky; top: 92px; }
+  }
+
+  .sec-n {
+    font-family: var(--font-disp); font-weight: 700;
+    font-size: 13px; letter-spacing: 0.1em;
+    color: var(--color-ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .sec-h {
+    font-size: clamp(1.5rem, 3.4vw, 2rem);
+    margin: 4px 0 0;
+  }
+
+  .sec-c { max-width: 66ch; display: grid; gap: 26px; }
+  .para-l {
+    font-family: var(--font-disp); font-weight: 700;
+    font-size: 1.06rem; letter-spacing: -0.01em; line-height: 1.3;
+    color: var(--color-ink);
+    margin-bottom: 7px;
+  }
+  .para-b { color: var(--color-ink-2); }
+  .para-b :global(strong) { color: var(--color-ink); font-weight: 600; }
+  .para-b :global(em) { font-style: italic; }
+
+  /* ── the screens ──────────────────────────────────────────────────── */
+  .screens { padding-block: clamp(44px, 7vh, 76px); }
+  .screens-h {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--color-ink);
+    margin-bottom: 36px;
+  }
+
+  .shot { margin: 0 0 44px; }
+  .shot:last-child { margin-bottom: 0; }
   .shot-frame {
     background: var(--color-plane);
     border: 1px solid var(--color-line);
@@ -123,8 +413,43 @@ const sections = [['Problem', problem], ['Approach', approach], ['Outcome', outc
   .shot-frame img { display: block; width: 100%; height: auto; border-radius: 1px; }
   .shot figcaption { margin-top: 12px; }
 
-  .case-ask { padding-block: clamp(56px, 10vh, 104px); }
-  .case-ask h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
-  .case-ask-p { margin: 20px 0 0; color: var(--color-ink-2); max-width: 46ch; }
-  .case-ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+  /* Portraits across rather than down: three stacked phone captures ran
+     longer than the thousand words above them.
+     The 320px CEILING is not styling — the captures are 340px wide, and a
+     `1fr` track let a lone portrait stretch to 1,150px of upscaled, visibly
+     blurred phone screenshot on LuxeScent, which has only one. `auto-fit`
+     with a floor and a ceiling fits three, two or one without a breakpoint
+     per count and never exceeds the source. */
+  .shot-row {
+    display: grid; gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 320px));
+    justify-content: start;
+    align-items: start;
+  }
+  .shot-row .shot { margin: 0; }
+
+  /* ── pager ────────────────────────────────────────────────────────── */
+  .pager {
+    padding-block: 28px;
+    border-top: 1px solid var(--color-line);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .pg { text-decoration: none; display: grid; gap: 5px; }
+  .pg.is-next { text-align: right; justify-items: end; }
+  .pg-n {
+    font-family: var(--font-disp); font-weight: 700;
+    font-size: clamp(1.05rem, 2.6vw, 1.5rem); letter-spacing: -0.02em;
+    transition: color 0.25s;
+  }
+  .pg:hover .pg-n, .pg:focus-visible .pg-n { color: var(--color-blue); }
+
+  .ask { padding-block: clamp(56px, 10vh, 104px); }
+  .ask h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
+  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); max-width: 46ch; }
+  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lay-t i { transition: none; }
+    .sec-l { position: static; }
+  }
 </style>

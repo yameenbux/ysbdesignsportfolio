@@ -1801,6 +1801,100 @@ decorative.
 Checked: 19 pages x 375/768/1440 clean; `work.html` **100/100/100/100**, CLS
 0, TBT 0ms over three runs — a point up on the 99 recorded in Phase 29.
 
+**Phase 31 — the case studies rebuilt, 16 October.** The reading end of the
+work.html catalogue, asked for straight after it. The index there is a
+scannable spec sheet that stops at the hook; this is where the argument is
+actually made, so the job was the opposite one — **carry eleven hundred words
+without reading as a wall**, and carry ninety-one without looking empty.
+
+**No accent colours, and that is the design rather than a dodge** — the same
+call work.html made and for the same reason. Every case study already carries
+a client wordmark in its own brand colour and up to seven full-colour
+screenshots. **The two measured accents stay scoped to `engineering.html` and
+`about.html`.**
+
+**Nothing in `cases.js` was reworded.** The structure comes entirely from
+re-marking-up what is already stored: the copy is one HTML string per section
+with `<br><br>` between its paragraphs, so the template splits on that break
+and **promotes a paragraph's opening `<strong>` to a run-in heading**, which
+is the job it was already doing. That is the whole reason it is safe to do
+from a layout file.
+
+**It had to degrade, and that constraint shaped it.** Six of the ten cases
+have no `<strong>` lead-ins at all and LuxeScent is ninety-one words in three
+single paragraphs; the four retired ones are not in `projects.js`, so they
+have no wordmark, no hook, no stack marks and no pager. **A design that
+depended on any of that would have left four pages looking broken.**
+
+What is new:
+
+- **A specification block**, mirroring work.html's — Type, Role, Status, Built
+  with — so the index and the case read as one system.
+- **`role` moved out of the hero.** `role` IS the stack string, and a stack
+  list as the first sentence under the title is exactly what this file says
+  the audience does not read. It is a spec row now, and `projects.js`'s
+  one-line `line` is the hero subtitle. Retired cases have no `line`, so they
+  keep `role` there.
+- **The three layer bars**, the same figures the homepage list shows. This is
+  the page where the positioning sentence has to stop being a claim.
+- **A pager**, walking the **flattened group order work.html renders in**, not
+  `lead` order — Phase 29 hit that same mismatch with the numbering.
+- **Sticky section labels** at desktop, so the section stays named through a
+  thousand words of it.
+
+**Three things were built and then taken out again, all for the same kind of
+reason.**
+
+- **The wordmark in the masthead.** It says the same words the h1 says, which
+  is the doubling rejected on the work index — and four of the ten cases have
+  no mark, so an element present on six pages and missing from four makes
+  those four look broken.
+- **The catalogue number in the eyebrow.** On Taiyabah it rendered
+  "01 Community project" directly above "01 Problem": **two different 01s a
+  few lines apart meaning different things.** The section numbers are the
+  house vocabulary, so the index number gave way.
+- **A `1fr` track on the portrait grid.** Three stacked phone captures ran
+  longer than the copy above them, so portraits went into an `auto-fit` row —
+  and on LuxeScent, which has **one**, that lone portrait stretched to
+  1,150px of visibly blurred upscale from a 340px source. The track has a
+  **320px ceiling** now. *A grid sized for the many-item case is a bug on the
+  one-item case*, and only looking at the shortest page caught it.
+
+**The layer bars are drawn by DEFAULT and the collapse is what JS opts into**
+(`html.js .spec:not(.in)`). Written the other way round — start at zero, grow
+on `.in` — a script error leaves every bar reading zero, which is not a
+missing animation but **a wrong measurement printed on the page**.
+
+**A stale number, found on the way and fixed: the Bolton Vouched case still
+said "147 pgTAP assertions across five SQL suites, and 81 unit tests".**
+Phase 26 corrected those to 564 across eighteen, and 329, on the engineering
+page — **and only there.** This is the fourth occurrence of the shape Phase 21,
+26 and 28 each named, and the second time it has been `cases.js` left behind.
+The procedure written down in Phase 28 would have caught it and was not run.
+A whole-tree numeral sweep was run this time and found nothing else.
+
+**The page is not uniformly shorter, and the split is the interesting part.**
+The long portrait-heavy cases came down — Tidemark 5,544px to 4,504 and Bolton
+Vouched 6,884 to 5,853 — while the ones with a single portrait went up by
+roughly the spec block's height: Booked In 5,741 to 6,160, Hair by Chrissy
+4,932 to 5,327. Visible words rose a little on every page, and **none of it is
+copy** — it is the spec labels, the layer labels and the pager names.
+
+**Flagged, not acted on: the closing call to action is still a freelance
+pitch.** "If this looks like your problem / Tell me about it and I'll tell you
+what it takes", over a WhatsApp button, was written for a prospect deciding
+whether to hand money to a stranger. The audience has been a hiring manager
+since 7 October, and `/services.html` is where that pitch now lives. **This is
+the last one left on the main reading path**, and it sits at the bottom of all
+ten case studies. Changing published copy was not what was asked for, so it
+stays until the user says otherwise.
+
+Checked: 19 pages x 375/768/1440 clean, and clean at 320 and 360 too;
+`boltonvouched.html` **100/100/100/100**, CLS 0, TBT 0ms over three runs. With
+JavaScript disabled and under `prefers-reduced-motion` the layer bars render
+drawn at their real widths and no reveal is left hidden; every link on the
+page has an accessible name.
+
 ### Known, unfixed
 
 - **The corridor hero costs the homepage 7 Lighthouse points.** 90/100/100/100
