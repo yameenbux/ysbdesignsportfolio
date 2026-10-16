@@ -143,7 +143,14 @@ a signed build, and it is on neither the App Store nor Google Play.
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (Hair by Chrissy, plus Taiyabah as community work) and
-**"Built for myself"** (MasjidOne, Tidemark, Bolton Vouched and Booked In).
+**"YSB Designs products"** (MasjidOne, Tidemark, Bolton Vouched and Booked In).
+**That second heading was "Built for myself" until 16 October**, renamed at
+the user's request. The rename moves the claim from the person to the brand,
+which reads better beside a row of wordmarks — but it also costs the heading
+its own explanation, because "YSB Designs products" could be read as a client's
+product line. **The blurb under it is therefore load bearing**: "Products I own
+rather than work I was asked to do." is now the only thing on the page saying
+these were not commissioned, and it must not be cut or softened.
 **èllash moved across on 12 October** and then **became Peony the same day** —
 it had been listed as a client, and calling your own business a client is the
 invented-client-count failure this file bars. **That first group is now
@@ -1748,6 +1755,51 @@ no reveal hidden and disables the row and image transitions.
 a page I had not touched: `npm run build` wipes `dist/` and the sweep was
 reading it mid-rebuild. **Do not rebuild while a sweep is running** — it
 reports a real-looking console error on an arbitrary page.
+
+**Phase 30 — two wordmarks re-keyed, and the own-products group renamed,
+16 October.** Both asked for directly, in one stretch.
+
+**The white bits were the counters.** Booked In and Bolton Vouched both showed
+their enclosed letter shapes — the bowls of *B*, *O*, *o*, *e*, *d* — filled
+with their own plate colour rather than reading as paper. The cause is the
+keying method this file already records: **an edge flood-fill cannot reach an
+enclosed shape**, by definition. Phase 22 chose that method deliberately, and
+for Bolton Vouched's brick tile it is still the right one, because the
+near-white house-and-tick mark inside the tile IS the artefact and a global
+key would erase it.
+
+So the two marks needed different answers, and that is the lesson worth
+keeping: **the right keying method is a property of the mark, not of the
+pipeline.**
+
+- **Booked In** has no enclosed near-white that is meant to survive, so it was
+  re-keyed **globally** by colour distance from its plate — re-run on the
+  preserved raw capture, not on the already-keyed file, because keying a keyed
+  image compounds its edge errors. 1,073 opaque near-white pixels to 0.
+- **Bolton Vouched** was keyed **by region**. The tile occupies x 0–151 and
+  columns 152–195 are entirely empty, so the wordmark is x ≥ 196 with a 44px
+  margin of certainty either side. **The split was measured off the pixels, not
+  guessed at a percentage** — an earlier pass put it at 22% of the width, which
+  would have cut through the tile, and the only reason it did not matter is
+  that it happened to land outside it. 3,634 wordmark near-white pixels to
+  354, and those 354 are antialiasing at luminance 208–219, **darker than
+  paper's 230**, so they read as faint ink and are correct.
+
+Both use graded alpha through the antialiased band and **un-premultiply the
+plate back out**, so the ink keeps no white halo at 30px.
+
+**`peony.png` was found to be referenced by nothing** and was left alone —
+the same treatment `Wheel.astro` got in Phase 21, and for the same reason:
+deleting it is a separate decision from this one.
+
+**"Built for myself" became "YSB Designs products".** The rename moves the
+claim from the person to the brand, which sits better over a row of
+wordmarks. It also **costs the heading its own explanation** — see "Two
+groups" above for why the blurb underneath is now load bearing rather than
+decorative.
+
+Checked: 19 pages x 375/768/1440 clean; `work.html` **100/100/100/100**, CLS
+0, TBT 0ms over three runs — a point up on the 99 recorded in Phase 29.
 
 ### Known, unfixed
 

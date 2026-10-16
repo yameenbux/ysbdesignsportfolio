@@ -29,6 +29,12 @@ import { marks } from '../data/stack.js';
  * product I own is a different claim from work someone paid me for, and
  * mixing them lets the products read as clients — which would be the site
  * inventing a client count.
+ *
+ * The second group is named for the brand rather than the person — "YSB
+ * Designs products", asked for directly, replacing "Built for myself". The
+ * blurb is what keeps the rule above true: the heading alone could be read as
+ * a client's product line, so the sentence under it still has to say these
+ * are owned rather than commissioned.
  */
 
 const groups = [
@@ -38,7 +44,7 @@ const groups = [
     items: lead.filter((p) => !p.product),
   },
   {
-    title: 'Built for myself',
+    title: 'YSB Designs products',
     blurb: 'Products I own rather than work I was asked to do.',
     items: lead.filter((p) => p.product),
   },
