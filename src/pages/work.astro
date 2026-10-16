@@ -1,16 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { lead, all } from '../data/projects.js';
+import { marks } from '../data/stack.js';
 
 /**
- * The work index. The ones with enough captured material lead, written up as
- * problem → approach → outcome; the rest are listed underneath so nothing on
- * the site is unreachable from the nav.
+ * The work index, rebuilt in Phase 29 as a catalogue rather than a document.
  *
- * Deliberately not the wheel: the homepage already does that, and someone who
- * clicked "Work" wants to read rather than scroll a mechanism.
+ * The brief was to look at how large technology companies show work, with an
+ * eye on East Asian product design. The things worth taking from that
+ * tradition are specific rather than stylistic: a real numbered INDEX you can
+ * scan before committing to anything, a strict modular grid with asymmetric
+ * placement, SPECIFICATION blocks set in hairline-ruled rows, and restraint
+ * in colour so the product imagery carries it. MUJI and Kenya Hara are
+ * near-monochrome on purpose; so is this page.
  *
- * The written-up ones are split by `product`, not by the `kind` string. A
+ * NO ACCENT COLOURS HERE, deliberately. The two measured accents are scoped
+ * to the two candidate pages, and this page already carries colour that is
+ * not mine to compete with — six brand wordmarks in their own colours and six
+ * full-colour screenshots. Adding hues would fight the work and would dilute
+ * what the accents signal elsewhere.
+ *
+ * What left: `approach` and `outcome`. They were printed in full here AND at
+ * greater length on each case study, so the index was carrying 1,536 words of
+ * prose nobody reaches an index to read. `problem` stays as the hook, because
+ * what was wrong is what makes someone click.
+ *
+ * The two groups are still split by `product`, not by the `kind` string. A
  * product I own is a different claim from work someone paid me for, and
  * mixing them lets the products read as clients — which would be the site
  * inventing a client count.
@@ -31,65 +46,134 @@ const groups = [
 
 const rest = all.filter((p) => !lead.some((l) => l.slug === p.slug));
 
-// Numbering runs across the whole written-up list rather than restarting per
-// group, so two entries never share a number.
-const numberOf = (p) => String(lead.findIndex((l) => l.slug === p.slug) + 1).padStart(2, '0');
+// Numbering follows the order the page actually renders in — group one, then
+// group two — not `lead` order. Numbering by `lead` made the first group read
+// "01, 03" while the index above it ran 01 to 06, because the groups reorder
+// what `lead` holds. Two entries still never share a number.
+const ordered = groups.flatMap((g) => g.items);
+const numberOf = (p) => String(ordered.findIndex((o) => o.slug === p.slug) + 1).padStart(2, '0');
 
 const description =
   'Client and community work as problem, approach and outcome, plus my own products — a masjid on one system, a booking platform and a Bolton directory.';
+
+const used = [...new Set(lead.flatMap((p) => p.tech || []))];
 ---
 
-<BaseLayout title="Websites, booking systems and apps" description={description}>
-  <section class="head">
-    <p class="eyebrow m-0">{all.length} projects, {lead.length} written up</p>
-    <h1>Work</h1>
-    <p class="head-p">
-      What the problem was, what I built, and what changed. Each one links to
+<BaseLayout title="Websites, booking systems and apps" description={description} wide>
+  <svg class="sprite" aria-hidden="true" focusable="false"><defs>
+    {used.map((k) => (
+      <symbol id={`m-${k}`} viewBox="0 0 24 24"><title>{marks[k].title}</title><path d={marks[k].d} /></symbol>
+    ))}
+  </defs></svg>
+
+  <section class="hero shell">
+    <p class="eyebrow m-0 rv">{all.length} projects, {lead.length} written up</p>
+    <h1 class="rv">Work</h1>
+    <p class="hero-p rv">
+      What the problem was, what I built, and what changed. Every one links to
       the full case study with the screens.
     </p>
   </section>
 
+  {/* The index. A catalogue page before the catalogue — somebody who knows
+      what they are looking for should never have to scroll to find it. */}
+  <section class="idx-wrap shell">
+    <p class="eyebrow m-0 rv idx-l">Index</p>
+    <ol class="idx rv">
+      {ordered.map((p) => (
+        <li>
+          <a href={p.href}>
+            <span class="idx-n">{numberOf(p)}</span>
+            <span class="idx-name">{p.name}</span>
+            {/* One wrapper so the three flow together on a phone; on desktop
+                it becomes `display: contents` and they drop into their own
+                grid columns. */}
+            <span class="idx-meta">
+              <span class="idx-kind">{p.kind}</span>
+              <span class="idx-where">{p.where}</span>
+              <span class="idx-state">
+                {p.status
+                  ? <span class="chip">{p.status}</span>
+                  : <span class="st-live"><span class="live" aria-hidden="true"></span>Live</span>}
+              </span>
+            </span>
+            <span class="idx-go" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
   {groups.map((g) => (
-    <>
-      <section class="group">
-        <h2 class="rv">{g.title}</h2>
-        <p class="rv group-p">{g.blurb}</p>
-      </section>
+    <section class="grp shell">
+      <header class="grp-h rv">
+        <h2>{g.title}</h2>
+        <p>{g.blurb}</p>
+        <span class="grp-c">{g.items.length} projects</span>
+      </header>
 
       {g.items.map((p) => (
-        <section class="entry">
-          <p class="eyebrow eyebrow-accent rv m-0">{numberOf(p)} · {p.kind} · {p.where}</p>
-
-          <h3 class="rv"><a href={p.href} class="ul-draw">{p.name}</a></h3>
-          <p class="entry-role rv">{p.stack}</p>
-
-          <a href={p.href} class="shot rv">
+        <article class="ent">
+          {/* Keeps its real alt: on this page the screenshot IS the content,
+              so making it decorative would cost a screen-reader user the
+              description entirely. Two links to the same case study, named
+              differently — the picture and the wordmark. */}
+          <a href={p.href} class="ent-shot rv">
             <img src={p.img} alt={p.alt} width="760" height="475" loading="lazy" decoding="async" />
           </a>
 
-          <dl class="entry-facts rv">
-            {[['Problem', p.problem], ['Approach', p.approach], ['Outcome', p.outcome]].map(([k, v]) => (
-              <div>
-                <dt class="eyebrow m-0">{k}</dt>
-                <dd>{v}</dd>
-              </div>
-            ))}
-          </dl>
+          <div class="ent-b">
+            <p class="ent-n rv">{numberOf(p)}</p>
+            <h3 class="ent-t rv">
+              <a href={p.href}>
+                {p.logo
+                  ? <>
+                      <img class="ent-logo" src={p.logo.src} alt="" width={p.logo.w} height={p.logo.h}
+                           loading="lazy" decoding="async" />
+                      <span class="sr">{p.name}</span>
+                    </>
+                  : p.name}
+              </a>
+            </h3>
+            <p class="ent-p rv">{p.problem}</p>
 
-          <p class="rv entry-go"><a href={p.href} class="ul-draw ul-draw-on">Read the {p.name} case study →</a></p>
-        </section>
+            <dl class="spec rv">
+              <div><dt>Type</dt><dd>{p.kind} · {p.where}</dd></div>
+              <div><dt>Status</dt><dd>{p.status ?? 'Live'}</dd></div>
+              <div><dt>Role</dt><dd>{p.stack}</dd></div>
+              {p.tech?.length > 0 && (
+                <div>
+                  <dt>Built with</dt>
+                  <dd>
+                    <ul class="spec-m">
+                      {p.tech.map((k) => (
+                        <li>
+                          <svg viewBox="0 0 24 24" width="19" height="19" role="img" aria-label={marks[k].title}><use href={`#m-${k}`} /></svg>
+                          <span class="sr">{marks[k].title}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              )}
+            </dl>
+
+            <p class="ent-go rv"><a href={p.href} class="ul-draw ul-draw-on">Read the case study →</a></p>
+          </div>
+        </article>
       ))}
-    </>
+    </section>
   ))}
 
   {/* Only when there is something in it. Retiring the last entry used to
       leave a heading and an empty list on the page. */}
   {rest.length > 0 && (
-    <section class="more">
-      <h2 class="rv">Also built</h2>
-      <p class="rv more-p">
-        Smaller pieces, written up the same way.
-      </p>
+    <section class="grp shell">
+      <header class="grp-h rv">
+        <h2>Also built</h2>
+        <p>Smaller pieces, written up the same way.</p>
+        <span class="grp-c">{rest.length} listed</span>
+      </header>
       <ul class="more-list rv">
         {rest.map((p) => (
           <li>
@@ -104,7 +188,7 @@ const description =
     </section>
   )}
 
-  <section class="ask">
+  <section class="ask shell">
     <h2 class="rv">Sound like your problem?</h2>
     <p class="rv ask-p">Tell me about it and I'll tell you what it takes.</p>
     <div class="rv ask-do">
@@ -115,61 +199,152 @@ const description =
 </BaseLayout>
 
 <style>
-  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
-  .head h1 { font-size: clamp(3rem, 11vw, 7rem); margin: 14px 0 0; }
-  .head-p { margin: 24px 0 0; max-width: 50ch; color: var(--color-ink-2); font-size: 1.05rem; }
-
-  /* A group label sits above the entries it names, so it needs more air over
-     it than under it or it reads as belonging to the entry before. */
-  .group { padding-block: clamp(56px, 9vh, 96px) 0; }
-  .group h2 { font-size: clamp(1.8rem, 4.4vw, 2.6rem); margin: 0; }
-  .group-p { margin: 14px 0 0; color: var(--color-ink-2); }
-
-  .entry { padding-block: clamp(40px, 6vh, 64px) 0; }
-  .entry h3 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 14px 0 0; }
-  .entry h3 a { text-decoration: none; }
-  .entry-role { margin: 14px 0 0; color: var(--color-ink-2); font-size: 15px; }
-
-  .shot {
-    display: block; margin-top: 30px;
-    background: var(--color-plane);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-sm);
-    padding: 10px; overflow: hidden;
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
   }
-  .shot img {
-    display: block; width: 100%; height: auto; border-radius: 1px;
-    transition: transform 0.7s var(--ease-turn);
+
+  /* ── hero ─────────────────────────────────────────────────────────── */
+  .hero { padding-block: 64px 44px; }
+  .hero h1 {
+    margin: 14px 0 0; font-size: clamp(3.2rem, 11vw, 7rem);
+    line-height: 0.9; letter-spacing: -0.045em;
   }
-  .shot:hover img { transform: scale(1.02); }
+  .hero-p { margin: 22px 0 0; max-width: 44ch; font-size: 18px; color: var(--color-ink-2); }
 
-  .entry-facts { margin: 34px 0 0; display: grid; gap: 22px; }
-  @media (min-width: 900px) { .entry-facts { grid-template-columns: repeat(3, 1fr); gap: 34px; } }
-  .entry-facts dd { margin: 8px 0 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
+  /* ── the index ────────────────────────────────────────────────────────
+     A contents page. Hairline rows, a fixed column rhythm, and the whole
+     row is the hit target rather than the name alone.                    */
+  .idx-wrap { padding-block: 0 56px; }
+  .idx-l { margin-bottom: 12px; }
+  .idx { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-line); }
+  .idx li { border-bottom: 1px solid var(--color-line); }
+  .idx a {
+    display: grid; align-items: center; gap: 6px 14px; padding: 15px 2px;
+    grid-template-columns: auto 1fr auto; grid-template-areas: 'n name go' '. meta go';
+    text-decoration: none; color: inherit;
+    transition: background 180ms var(--ease-turn), padding-inline 180ms var(--ease-turn);
+  }
+  .idx-meta { grid-area: meta; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  @media (min-width: 860px) {
+    .idx a {
+      grid-template-columns: 46px minmax(0, 1.3fr) minmax(0, 1fr) 110px 118px 28px;
+      grid-template-areas: 'n name kind where state go';
+    }
+    .idx-meta { display: contents; }
+  }
+  .idx a:hover, .idx a:focus-visible { background: var(--color-line-2); padding-inline: 10px; outline: none; }
+  .idx a:focus-visible { box-shadow: inset 0 0 0 2px var(--color-blue); }
+  .idx-n {
+    grid-area: n; font-family: var(--font-disp); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em; color: var(--color-ink-2);
+  }
+  .idx-name {
+    grid-area: name; font-family: var(--font-disp); font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    font-weight: 600; letter-spacing: -0.015em;
+  }
+  .idx a:hover .idx-name { color: var(--color-blue); }
+  .idx-kind, .idx-where {
+    font-size: 13px; color: var(--color-ink-2);
+  }
+  .idx-kind { grid-area: kind; }
+  .idx-where { grid-area: where; }
+  @media (max-width: 859px) { .idx-where { display: none; } }
+  @media (min-width: 860px) { .idx-state { grid-area: state; } }
+  .idx-go {
+    grid-area: go; justify-self: end; font-size: 17px; color: var(--color-ink-2);
+    transition: transform 200ms var(--ease-turn);
+  }
+  .idx a:hover .idx-go { transform: translateX(4px); color: var(--color-blue); }
 
-  .entry-go { margin: 26px 0 0; font-weight: 600; }
+  .chip {
+    display: inline-block; padding: 3px 8px; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em; color: var(--color-ink-2);
+    border: 1px solid var(--color-line); border-radius: 999px; white-space: nowrap;
+  }
+  /* Wraps the global `.live` dot component — do not call this `.live`. */
+  .st-live { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
 
-  .more { padding-block: clamp(64px, 10vh, 110px) 0; }
-  .more h2 { font-size: clamp(1.8rem, 4.4vw, 2.6rem); margin: 0; }
-  .more-p { margin: 16px 0 0; color: var(--color-ink-2); }
-  .more-list { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+  /* ── a group ──────────────────────────────────────────────────────── */
+  .grp { padding-block: 0 10px; }
+  .grp-h {
+    display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 8px 18px;
+    padding-bottom: 14px; margin-bottom: 44px; border-bottom: 2px solid var(--color-ink);
+  }
+  /* Explicit placement: auto-placing dropped the count onto a third row. */
+  .grp-h h2 { grid-area: 1 / 1; margin: 0; font-size: clamp(1.5rem, 3.6vw, 2.1rem); letter-spacing: -0.025em; }
+  .grp-c { grid-area: 1 / 2; justify-self: end; font-family: var(--font-disp); font-size: 14px;
+           font-weight: 700; letter-spacing: 0.1em; color: var(--color-ink-2); }
+  .grp-h p { grid-area: 2 / 1 / 3 / 3; margin: 0; font-size: 15px; color: var(--color-ink-2); }
+
+  /* ── an entry: the modular grid, alternating sides ───────────────────
+     Screenshot on a `plane` mat with a hairline border — the one rule the
+     direction calls the most important, because a light-UI capture dropped
+     straight on the paper sits flush and disappears.                      */
+  .ent { display: grid; gap: 22px; margin-bottom: 72px; }
+  @media (min-width: 900px) {
+    .ent { grid-template-columns: repeat(12, 1fr); gap: 40px; align-items: center; margin-bottom: 110px; }
+    .ent-shot { grid-column: 1 / span 7; }
+    .ent-b { grid-column: 8 / span 5; }
+    .ent:nth-of-type(even) .ent-shot { grid-column: 6 / span 7; grid-row: 1; }
+    .ent:nth-of-type(even) .ent-b { grid-column: 1 / span 5; grid-row: 1; }
+  }
+
+  .ent-shot {
+    display: block; padding: 10px; background: var(--color-plane);
+    border: 1px solid var(--color-line); border-radius: var(--radius-sm); overflow: hidden;
+  }
+  .ent-shot img {
+    display: block; width: 100%; height: auto; border-radius: 2px;
+    transition: transform 700ms var(--ease-turn);
+  }
+  .ent-shot:hover img { transform: scale(1.02); }
+
+  .ent-n {
+    margin: 0; font-family: var(--font-disp); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.08em; color: var(--color-ink-2);
+  }
+  .ent-t { margin: 10px 0 0; }
+  .ent-t a { display: inline-block; text-decoration: none; color: inherit; }
+  .ent-logo { display: block; width: auto; height: 30px; }
+  .ent-t a:hover .ent-logo { opacity: 0.72; }
+  .ent-p { margin: 16px 0 0; font-size: 16px; line-height: 1.6; color: var(--color-ink-2); }
+
+  /* ── the specification block ──────────────────────────────────────── */
+  .spec { margin: 22px 0 0; border-top: 1px solid var(--color-line); }
+  .spec > div {
+    display: grid; grid-template-columns: 86px 1fr; gap: 14px;
+    padding: 10px 0; border-bottom: 1px solid var(--color-line-2);
+  }
+  .spec dt {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-ink-2); padding-top: 2px;
+  }
+  .spec dd { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--color-ink); }
+  .spec-m { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
+  .spec-m svg { display: block; fill: var(--color-ink-2); }
+
+  .ent-go { margin: 20px 0 0; font-size: 15px; }
+
+  /* ── also built ───────────────────────────────────────────────────── */
+  .more-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-line); }
+  .more-list li { border-bottom: 1px solid var(--color-line); }
   .more-list a {
-    display: grid; gap: 6px; padding: 22px;
-    text-decoration: none;
-    background: var(--color-line-2);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease-turn);
+    display: grid; gap: 4px; padding: 18px 2px; text-decoration: none; color: inherit;
+    transition: background 180ms var(--ease-turn), padding-inline 180ms var(--ease-turn);
   }
-  .more-list a:hover { background: var(--color-plane); border-color: var(--color-line); transform: translateX(5px); }
-  @media (min-width: 820px) {
-    .more-list a { grid-template-columns: 220px 190px 1fr; align-items: baseline; gap: 26px; }
-  }
-  .more-name { font-family: var(--font-disp); font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
-  .more-line { color: var(--color-ink-2); font-size: 15px; }
+  .more-list a:hover { background: var(--color-line-2); padding-inline: 10px; }
+  .more-name { font-family: var(--font-disp); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.015em; }
+  .more-line { font-size: 14.5px; color: var(--color-ink-2); max-width: 70ch; }
 
-  .ask { padding-block: clamp(64px, 11vh, 118px); }
-  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
-  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); }
-  .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+  /* ── ask ──────────────────────────────────────────────────────────── */
+  .ask { padding-block: 54px 90px; }
+  .ask h2 { margin: 0; font-size: clamp(2rem, 5.4vw, 3.4rem); letter-spacing: -0.03em; }
+  .ask-p { margin: 18px 0 0; max-width: 56ch; color: var(--color-ink-2); }
+  .ask-do { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .idx a, .idx-go, .ent-shot img, .more-list a { transition: none !important; }
+  }
 </style>

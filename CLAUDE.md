@@ -1689,6 +1689,66 @@ Checked: 19 pages x 375/768/1440 clean, no overflow at 375; `about.html`
 the spine renders drawn rather than stuck at zero, and no reveal is left
 hidden.
 
+**Phase 29 — work.html rebuilt as a catalogue, 16 October.** Asked to
+redesign it with an eye on how large technology companies show work, and on
+East Asian product design.
+
+**What was actually taken from that reference is structural, not stylistic.**
+The useful things in that tradition — MUJI and Kenya Hara, Japanese product
+catalogues, the spec-sheet confidence of Sony and Xiaomi pages — are a real
+numbered **index** you can scan before committing to anything, a strict
+modular grid with asymmetric placement, **specification blocks** in
+hairline-ruled rows, and restraint in colour so the product imagery carries
+it. All four are here.
+
+**No accent colours on this page, and that is the design rather than a
+dodge.** This page already carries colour that is not mine to compete with:
+six client wordmarks in their own brand colours and six full-colour
+screenshots. Adding the two measured accents would fight the work and would
+dilute what they signal on the two candidate pages. **The accents stay scoped
+to `engineering.html` and `about.html`.**
+
+**The index is the new idea.** Six hairline rows — number, name, type, place,
+status, arrow — each the full hit target, linking straight to the case study.
+Somebody who knows what they want never has to scroll. On a phone the three
+metadata fields collapse into one flow via a wrapper that is
+`display: contents` at desktop, so they drop back into their own grid columns
+without duplicating markup.
+
+**Each entry is an editorial spread**: screenshot on a `plane` mat with its
+hairline border, on a 12-column grid, **alternating sides** down the page.
+Wordmark rather than name, the `problem` as the hook, then a specification
+block — Type, Status, Role, Built with — and the case-study link.
+
+**`approach` and `outcome` left this page.** They were printed here in full
+*and* at three to five times the length on each case study, so the index was
+carrying prose nobody reaches an index to read. **1,536 visible words to 651,
+and 9,390px to 5,177px.** `problem` stays, because what was wrong is what
+makes someone click. Nothing is lost: `projects.js` holds the short versions
+and `cases.js` the long ones, which is a deliberate two-tier split rather
+than drift — checked, and every pair differs by design.
+
+**Numbering follows the page, not the data.** `lead` order and render order
+are not the same once the two groups reorder things, so numbering by `lead`
+gave a first group reading "01, 03" beneath an index running 01 to 06. It is
+numbered by the flattened group order now, and the index runs in that same
+order — verified by comparing the two sequences in the built HTML.
+
+**One collision worth remembering: `.live` in `global.css` IS the pulsing
+dot**, a 7px inline-block circle, not a wrapper. Reusing the class name for a
+label wrapper inherited `width: 7px` and jammed the dot into the word. A
+scoped rule does not save you from a global component's own properties —
+**check `global.css` before reusing a class name.**
+
+Checked: 19 pages x 375/768/1440 clean, no overflow at 320 either;
+`work.html` **99/100/100/100**, CLS 0, over three runs. Reduced motion leaves
+no reveal hidden and disables the row and image transitions.
+
+**Two sweep failures in this phase were mine, not the site's**, both a 404 on
+a page I had not touched: `npm run build` wipes `dist/` and the sweep was
+reading it mid-rebuild. **Do not rebuild while a sweep is running** — it
+reports a real-looking console error on an arbitrary page.
+
 ### Known, unfixed
 
 - **The corridor hero costs the homepage 7 Lighthouse points.** 90/100/100/100
