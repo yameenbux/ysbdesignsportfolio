@@ -500,9 +500,17 @@ line-2   rgba(22,25,28,.05)
 Every pair measured, not eyeballed. These are the same values as `main`; do
 not re-derive or "refresh" them.
 
-**Blue appears in exactly three places** — the one word the headline turns on,
-the active card on the wheel, and the hover state of the primary button. It is
-the accent, not a second body colour.
+**Blue appears in exactly four places** — the one word the headline turns on,
+the active card on the wheel, the hover state of the primary button, and, from
+Phase 26, **the succeeded/selected state inside the engineering page's
+diagrams**. It is the accent, not a second body colour, and the fourth use is
+status rather than decoration: blue is the path that worked, `signal` is the
+path that was refused. Those two are the only colours those diagrams carry.
+
+**A diagram must not let blue mean two things at once.** The notification
+burst gets this wrong by default — its selected option can be *the bug*, so a
+blue "pressed" button would sit above a `signal` failure bar. Selected is
+neutral ink there, and the bar colour carries the verdict.
 
 ### Layout
 
@@ -1434,6 +1442,76 @@ covered a fixed list of routes rather than all of them.
 
 **The groups are still 2 against 4** and the answer has not changed: the fix
 is another written-up paying client.
+
+**Phase 26 — engineering.html made demonstrable, 16 October.** Asked to
+rebuild the page with animations, features, graphs and logos, and to make it
+easy for a non-technical reader. **Three conflicts with this file were put up
+before anything was built**, and all three were resolved rather than worked
+around:
+
+- **"Techy" is mostly on the forbidden list.** Terminal motifs, glow,
+  glassmorphism, gradient text, a dark ground and monospace are all barred,
+  and they are exactly the vocabulary that word usually buys. The page gets
+  its register from **mechanism instead of styling**: four diagrams where you
+  press a button and the thing the copy describes actually happens. That also
+  satisfies "motion that does not describe structure", which would otherwise
+  have barred the animation outright — here the motion *is* the explanation.
+- **"Non-technical" against a hiring audience.** This page exists for someone
+  who may open a workflow file to check a claim, so it is layered rather than
+  simplified: a plain-English `.plain` line opens each section, the diagram
+  demonstrates it, and the original technical detail sits underneath
+  untouched. **No claim was softened and nothing was duplicated** — a second
+  plain-language copy of every claim is the "two files carry the same claim
+  and only one got fixed" failure waiting to happen.
+- **Graphs.** The palette has ink, ink-2, blue and signal, so a categorical
+  series palette cannot exist here without inventing a second accent. The
+  answer was **stat tiles and mechanism diagrams, not series charts** — which
+  is also what the data wanted, because the interesting thing about this work
+  is how it behaves, not how much of it there is.
+
+**The four diagrams are in `src/components/Mechanism.astro`**, one component
+with a `kind` prop. The release gate refuses a version nothing has run; the
+tenancy grid hides other masjids' rows as you switch who is signed in; two
+phones race for the same 09:00 and the second write is refused with `23P01`;
+and a week of reminders either lands across seven days or piles up on day one,
+which is the bug from Phase 25 running in front of you. **The race one is the
+best explainer on the site** — it teaches a race condition to somebody who has
+never heard the term, in one button press.
+
+**Logos are on this page now**, as the layered "what runs where" list — the
+same unmodified `simple-icons` paths `stack.js` already holds, referenced from
+one `<symbol>` sprite. **Azure is still absent**, for the reason that file
+gives.
+
+**"Counted, not claimed" is the strip under the hero**, and the rule attached
+to it is the point: every figure was measured on the day, and **the command
+that reproduces it is printed underneath**. The two test figures were measured
+by *running* the suites — the local stack started, every migration applied,
+then `db-test.sh` and `vitest` — not by summing `plan()` lines, which is the
+Phase 21 standard and worth keeping because a number nobody can reproduce is
+a boast.
+
+**Two stale numbers fell out, and one of them is the same mistake twice.**
+Bolton Vouched is **564 pgTAP assertions across eighteen suites and 329 unit
+tests**, not the 147-across-five and 81 this page still claimed — the
+119 commits of 12 October brought the tests with them. And the migration
+count was corrected to 140 in *one* of the two places it appears last phase,
+leaving `166` sitting in the data array for a day. **Phase 21 named this exact
+shape and it happened again**: grep for the number, not for the sentence.
+
+**One real bug, found by driving the page rather than looking at it.** The
+race diagram used `data-v` as both the selector hook and the state value, so
+`reset()` removing the state removed the hook, the final step threw, and the
+verdicts never printed — while the page looked fine in a screenshot and the
+build was green. Hook and state are separate attributes now. **Press every
+button in a headless browser before calling an interactive page done.**
+
+Checked: 19 pages x 375/768/1440 clean; `engineering.html`
+**99/100/100/100**, CLS 0, TBT 0ms over three runs. Under
+`prefers-reduced-motion` every diagram lands its end state immediately with
+no transition, all nine controls are keyboard-operable and named, each stage
+carries an `aria-live` status line saying in words what the animation shows,
+and no state is signalled by colour alone.
 
 ### Known, unfixed
 

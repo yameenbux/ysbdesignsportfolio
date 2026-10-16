@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Mechanism from '../components/Mechanism.astro';
+import { marks } from '../data/stack.js';
 
 /**
  * The technical read, for a platform or DevOps reader rather than a client.
@@ -46,7 +48,7 @@ const pipelines = [
     name: 'Testing the database as a database',
     where: 'boltonvouched \u2014 ci.yml',
     detail:
-      'The job starts a real Supabase, applies every migration, and runs <strong>147 pgTAP assertions</strong> against an empty register before any application code is involved \u2014 then reloads fixtures and drives the same build in a browser with Playwright. The scoring suite asserts the no-score floor and the shrinkage arithmetic directly in SQL.',
+      'The job starts a real Supabase, applies every migration, and runs <strong>564 pgTAP assertions across eighteen suites</strong> against an empty register before any application code is involved \u2014 then reloads fixtures and drives the same build in a browser with Playwright. The scoring suite asserts the no-score floor and the shrinkage arithmetic directly in SQL.',
     why: 'The rules worth testing are the ones in the schema. Reaching them through a web page tests the web page.',
   },
   {
@@ -80,7 +82,7 @@ const data = [
   },
   {
     h: 'Schema drift caught by the schema',
-    p: 'A <code>health_check()</code> function asserts invariants the code cannot be trusted to hold — including that every table carries its tenant column. It caught a table built exactly as its design drawing showed, where the drawing had no <code>masjid_id</code> at all. 166 migrations are applied and tracked by hand, and a migration that rebuilds a function prints the function rather than pointing at history.',
+    p: 'A <code>health_check()</code> function asserts invariants the code cannot be trusted to hold — including that every table carries its tenant column. It caught a table built exactly as its design drawing showed, where the drawing had no <code>masjid_id</code> at all. 140 migrations are applied and tracked by hand, and a migration that rebuilds a function prints the function rather than pointing at history.',
   },
   {
     h: 'Consent as a constraint, not a checkbox',
@@ -97,6 +99,43 @@ const data = [
   {
     h: 'A certificate that expires takes the listing down on its own',
     p: 'Gas work and driving instruction are gated on both sides. A trigger refuses to file the category without an in-date Gas Safe or DVSA check, and the public view independently drops it the day that check lapses. Neither depends on a person running a report, which is the only version of a compliance check that survives being forgotten about.',
+  },
+];
+
+/**
+ * Counted, not claimed. Every one of these was measured from the source on
+ * 16 October — the two test figures by running the suites, not by reading a
+ * badge or summing the plan() lines. `how` is what a reader would run to get
+ * the same number, because a figure nobody can reproduce is a boast.
+ */
+const counts = [
+  { n: '564', label: 'database tests', sub: 'Bolton Vouched, across 18 SQL suites', how: 'npm run test:db' },
+  { n: '329', label: 'unit tests beside them', sub: 'all passing, 39 files', how: 'npx vitest run' },
+  { n: '140', label: 'tracked migrations', sub: 'on the largest database', how: 'ls db/[0-9]*.sql' },
+  { n: '11',  label: 'automated workflows', sub: 'on one app repository', how: 'ls .github/workflows' },
+];
+
+/**
+ * Where each piece of software actually sits. The marks are the unmodified
+ * simple-icons paths already used on the home list — the genuine artefact,
+ * never a redrawn one — and Azure is absent here for the same reason it is
+ * absent from `stack.js`: the certificate is Azure, the systems are not.
+ */
+const layers = [
+  {
+    h: 'On the phone or in the browser',
+    p: 'What a person actually touches. Built as static files wherever it can be, because a page that is just a file cannot fall over.',
+    marks: ['react', 'nextdotjs', 'typescript', 'tailwindcss', 'expo', 'javascript'],
+  },
+  {
+    h: 'In between — the part that builds and ships',
+    p: 'Nobody uploads anything by hand. Pushing the code runs the checks, and the checks decide whether it reaches anyone.',
+    marks: ['github', 'githubactions', 'cloudflareworkers', 'railway', 'render'],
+  },
+  {
+    h: 'The database, where the rules live',
+    p: 'The important rules are kept here rather than in the app, because this is the one place every route has to go through.',
+    marks: ['postgresql', 'supabase', 'stripe'],
   },
 ];
 
@@ -148,12 +187,44 @@ const failures = [
     </p>
   </section>
 
+  <svg class="sprite" aria-hidden="true" focusable="false"><defs>
+    {Object.entries(marks).map(([k, m]) => (
+      <symbol id={`m-${k}`} viewBox="0 0 24 24"><title>{m.title}</title><path d={m.d} /></symbol>
+    ))}
+  </defs></svg>
+
+  <section class="sec counts-sec">
+    <p class="eyebrow m-0 rv">Counted, not claimed</p>
+    <ul class="counts rv">
+      {counts.map((c) => (
+        <li>
+          <span class="count-n">{c.n}</span>
+          <span class="count-l">{c.label}</span>
+          <span class="count-s">{c.sub}</span>
+          <span class="count-h">{c.how}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="counts-note rv">
+      Measured on 16 October, here, not read off a badge \u2014 the two test
+      figures by actually running the suites, the other two by counting the
+      files. None is an estimate, and the command that gets you the same
+      number is printed under each one.
+    </p>
+  </section>
+
   <section class="sec">
     <h2>Delivery</h2>
     <p class="sec-p rv">
       Eleven workflows across one app repository, plus a deploy pipeline per
       site. The interesting ones are not the builds \u2014 they are the gates.
     </p>
+    <p class="plain rv">
+      <strong>In plain terms:</strong> a gate is a check that is allowed to say
+      no. Plenty of projects run tests; the useful part is wiring the tests to
+      something that refuses to ship when they have not run.
+    </p>
+    <div class="rv"><Mechanism kind="gate" /></div>
     <ol class="rows rv gates">
       {pipelines.map((x, i) => (
         <li class="row">
@@ -174,6 +245,14 @@ const failures = [
       Multi-tenant Postgres on Supabase, with the rules in the database rather
       than in the interface.
     </p>
+    <p class="plain rv">
+      <strong>In plain terms:</strong> a rule written into the app can be got
+      round \u2014 by a bug, by a different screen, by somebody editing the page in
+      their own browser. A rule written into the database cannot, because every
+      route in has to pass through it. Both diagrams below are that idea.
+    </p>
+    <div class="rv"><Mechanism kind="tenancy" /></div>
+    <div class="rv"><Mechanism kind="race" /></div>
     <div class="pair rv">
       {data.map((x) => (
         <div class="panel pane">
@@ -190,6 +269,32 @@ const failures = [
       Static-first by default, with compute only where something has to happen
       server-side. Nothing here is on a box I have to patch.
     </p>
+    <p class="plain rv">
+      <strong>In plain terms:</strong> three layers. What you touch, the part
+      that builds and ships it, and the database underneath where the rules
+      live. These are the actual tools, at the layer each one works on.
+    </p>
+    <ol class="layers rv">
+      {layers.map((L, i) => (
+        <li class="layer">
+          <div class="layer-t">
+            <span class="eyebrow m-0">Layer {i + 1}</span>
+            <h3>{L.h}</h3>
+            <p>{L.p}</p>
+          </div>
+          <ul class="layer-m">
+            {L.marks.map((k) => (
+              <li>
+                <svg viewBox="0 0 24 24" width="22" height="22" role="img" aria-label={marks[k].title}>
+                  <use href={`#m-${k}`} />
+                </svg>
+                <span>{marks[k].title}</span>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ol>
     <dl class="rows rv">
       {[
         ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com — Astro and Next.js to static output wherever the page allows it. Where it does not, Railway runs the Next.js server: Bolton Vouched needs a request-time route so a phone number can be looked up without ever being sent to the browser. Render serves the ones in between — a static front end beside a small API, which is what Booked In and Hair by Chrissy both are.'],
@@ -218,6 +323,13 @@ const failures = [
     <p class="sec-p rv">
       The ones worth reading are where the check itself was the problem.
     </p>
+    <p class="plain rv">
+      <strong>In plain terms:</strong> the expensive failures are rarely the
+      loud ones. They are the checks that passed while looking at nothing, and
+      the screens that reported success over an empty queue. Here is one of
+      them, running.
+    </p>
+    <div class="rv"><Mechanism kind="burst" /></div>
     <div class="faqs rv">
       {failures.map((x) => (
         <article class="faq">
@@ -299,4 +411,60 @@ const failures = [
   .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
   .ask-p { margin: 20px 0 0; max-width: 56ch; color: var(--color-ink-2); }
   .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
+
+  /* ---- the sprite is defs only; it must take no space ---------------- */
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  /* ---- counted, not claimed ------------------------------------------ */
+  .counts-sec { padding-top: 0; }
+  .counts {
+    margin: 18px 0 0; padding: 0; list-style: none;
+    display: grid; gap: 2px; grid-template-columns: 1fr;
+    background: var(--color-line); border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm); overflow: hidden;
+  }
+  @media (min-width: 560px) { .counts { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 900px) { .counts { grid-template-columns: repeat(4, 1fr); } }
+  .counts li { display: flex; flex-direction: column; gap: 4px; padding: 20px 18px; background: var(--color-plane); }
+  .count-n {
+    font-family: var(--font-disp); font-size: clamp(2.2rem, 5vw, 3rem);
+    font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--color-ink);
+  }
+  .count-l { font-size: 15px; font-weight: 600; color: var(--color-ink); }
+  .count-s { font-size: 13px; color: var(--color-ink-2); }
+  .count-h {
+    margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--color-ink-2);
+    padding: 3px 6px; background: var(--color-line-2); border-radius: 3px; align-self: flex-start;
+  }
+  .counts-note { margin: 14px 0 0; font-size: 14px; color: var(--color-ink-2); max-width: 62ch; }
+
+  /* ---- the plain-English line before each technical block ------------- */
+  .plain {
+    margin: 16px 0 0; padding: 14px 16px; max-width: 64ch;
+    font-size: 15.5px; line-height: 1.6; color: var(--color-ink-2);
+    background: var(--color-line-2);
+    border-left: 2px solid var(--color-ink); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .plain strong { color: var(--color-ink); }
+
+  /* ---- the three layers ---------------------------------------------- */
+  .layers { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 2px;
+            background: var(--color-line); border: 1px solid var(--color-line);
+            border-radius: var(--radius-sm); overflow: hidden; }
+  .layer { display: grid; gap: 16px; padding: 22px 20px; background: var(--color-plane); }
+  /* The marks column took `auto` and grew, squeezing the prose to four
+     words a line. Give the text a real share and let the marks wrap. */
+  @media (min-width: 820px) {
+    .layer { grid-template-columns: minmax(300px, 40%) 1fr; align-items: center; gap: 34px; }
+    .layer-m { justify-content: flex-end; }
+  }
+  .layer-t h3 { margin: 6px 0 0; font-size: 1.12rem; letter-spacing: -0.015em; }
+  .layer-t p { margin: 7px 0 0; font-size: 14.5px; line-height: 1.6; color: var(--color-ink-2); max-width: 54ch; }
+  .layer-m { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .layer-m li {
+    display: flex; align-items: center; gap: 7px; padding: 7px 10px;
+    background: var(--color-paper); border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; color: var(--color-ink-2);
+  }
+  .layer-m svg { flex: none; fill: var(--color-ink-2); }
 </style>
