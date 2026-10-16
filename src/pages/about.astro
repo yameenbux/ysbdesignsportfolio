@@ -1,128 +1,244 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { certs } from '../data/certs.js';
+import { marks } from '../data/stack.js';
 
 /**
- * The candidate page. Carried the freelance process, prices and FAQs until
- * 7 October; those moved to services.astro with the pivot to a hiring
- * audience.
+ * The candidate page, rebuilt in Phase 28 to match engineering.html: four
+ * numbered colour bands, a short line each, and the long-form detail folded
+ * into a <details> rather than deleted.
  *
- * No portrait — settled 5 October and the decision holds.
+ * No portrait — settled 5 October and the decision holds. This page carries
+ * no image at all and is built not to want one.
  *
  * AZ-900 is held. AZ-104 is booked and not sat, and is kept under its own
  * term, in italics, called a plan rather than a qualification. If it is
- * passed, move it up; if it is postponed, take it off.
+ * passed, move it up; if it is postponed, take it off. A `held: false` entry
+ * never renders a badge, because there is not one to show.
+ *
+ * THE HONESTY CALLOUT IN SECTION 04 IS LOAD BEARING and must not be folded
+ * away or softened: without it an Azure certificate beside a list of cloud
+ * work implies Azure cloud work. CLAUDE.md says so in Phase 17 and it is the
+ * one paragraph on this page that is there to cost something.
  */
 
-const build = [
-  ['Interfaces', 'Static sites in Astro and Next.js, PWAs with service workers and offline behaviour, and a React Native app. Accessibility checked in CI, not at the end.'],
-  ['Software', 'Multi-tenant Postgres on Supabase with row level security, SECURITY DEFINER functions, scheduled jobs and edge functions. Stripe for payments, webhooks included.'],
-  ['Delivery', 'GitHub Actions across seven workflows — build, smoke, release gating, worker deploys. Static output to GitHub Pages on custom domains; Cloudflare Workers where compute is unavoidable.'],
+const layers = [
+  {
+    t: 'The interface',
+    line: 'The part a person actually touches.',
+    marks: ['react', 'nextdotjs', 'typescript', 'tailwindcss', 'expo'],
+    more: 'Static sites in Astro and Next.js, PWAs with service workers and real offline behaviour, and a React Native app on Google Play. Accessibility is checked in CI rather than at the end, which is the only way it survives a deadline.',
+  },
+  {
+    t: 'The data behind it',
+    line: 'Where the rules live, because that is the one place every route goes through.',
+    marks: ['postgresql', 'supabase', 'stripe'],
+    more: 'Multi-tenant Postgres on Supabase with row level security, <code>SECURITY DEFINER</code> functions, scheduled jobs and edge functions. Stripe for payments, webhooks included — and the webhook handlers read both of the shapes Stripe has used for invoice fields.',
+  },
+  {
+    t: 'The pipeline that ships it',
+    line: 'Nobody uploads anything by hand. The checks decide what reaches people.',
+    marks: ['github', 'githubactions', 'cloudflareworkers', 'railway', 'render'],
+    more: 'GitHub Actions across eleven workflows on one app repository — build, smoke, release gating, worker deploys, a timetable watchdog. Static output to GitHub Pages on custom domains; Cloudflare Workers, Railway or Render where compute is unavoidable.',
+  },
 ];
 
 const how = [
-  ['The check has to be able to fail', 'A CI job that cannot catch the thing it exists for is worse than no job, because it buys confidence. I have shipped that mistake, and it is why my release workflow now refuses to build a bundle no device has opened.'],
-  ['Write down why, not what', 'The diff shows what changed. The commit message is for whoever finds this in a year and needs to know which constraint made it the right call — and whether that constraint still holds.'],
-  ['Say what is not built', 'Every project here states what is finished, what is staged and what is blocked. Overstating readiness costs more than admitting a gap, and it is the error I have had to correct most often.'],
-  ['Put the rule where it cannot be bypassed', 'Hiding a row in the interface is not access control. If it matters it belongs in the database, behind a grant and a policy, so editing the JavaScript in a browser gets you nothing.'],
+  {
+    t: 'The check has to be able to fail',
+    line: 'A job that cannot catch the thing it exists for is worse than no job, because it buys confidence.',
+    more: 'I shipped exactly that: five green iOS builds that had executed none of the project’s code. It is why the release workflow now refuses to build a bundle no device has ever opened.',
+  },
+  {
+    t: 'Write down why, not what',
+    line: 'The diff already shows what changed.',
+    more: 'The commit message is for whoever finds this in a year and needs to know which constraint made it the right call — and whether that constraint still holds.',
+  },
+  {
+    t: 'Say what is not built',
+    line: 'Every project here states what is finished, what is staged and what is blocked.',
+    more: 'Overstating readiness costs more than admitting a gap, and it is the error I have had to correct most often — usually in the direction of withholding something that had quietly shipped.',
+  },
+  {
+    t: 'Put the rule where it cannot be bypassed',
+    line: 'Hiding a row in the interface is not access control.',
+    more: 'If it matters it belongs in the database, behind a grant and a policy, so editing the JavaScript in a browser gets you nothing.',
+  },
 ];
 
 const looking = [
-  ['Roles', 'Platform, DevOps or infrastructure engineering. I am most useful where delivery is the problem — pipelines that do not catch what they should, environments that drift, deploys nobody trusts.'],
-  ['Where', 'Greater Manchester, or remote. The work above has gone to London, Birmingham, Coventry and Nuneaton without me being in the room.'],
-  ['Honestly', 'The certificate above is Azure; the systems are not. What I have run in production is Cloudflare, Supabase, GitHub Actions and Render. The concepts carry — tenancy, least privilege, build gating, webhook idempotency, deploy verification — but I would rather be straight about which consoles I have actually operated in than let a fundamentals exam imply more than it is.'],
+  {
+    t: 'The role',
+    line: 'Platform, DevOps or infrastructure engineering.',
+    more: 'I am most useful where delivery is the problem — pipelines that do not catch what they should, environments that drift, deploys nobody trusts.',
+  },
+  {
+    t: 'Where',
+    line: 'Greater Manchester, or remote.',
+    more: 'The work on this site has gone to London, Birmingham, Coventry and Nuneaton without me being in the room.',
+  },
 ];
 
 const description =
   'Yameen — platform and DevOps engineer in Greater Manchester. AZ-900 certified. What I build, how I work, and what I am looking for.';
+
+const used = [...new Set(layers.flatMap((l) => l.marks))];
 ---
 
-<BaseLayout title="About — platform and DevOps engineer" description={description}>
-  <section class="head">
-    <p class="eyebrow m-0">About</p>
-    <h1>One person, start to finish.</h1>
-    <p class="head-p">
+<BaseLayout title="About — platform and DevOps engineer" description={description} wide>
+  <svg class="sprite" aria-hidden="true" focusable="false"><defs>
+    {used.map((k) => (
+      <symbol id={`m-${k}`} viewBox="0 0 24 24"><title>{marks[k].title}</title><path d={marks[k].d} /></symbol>
+    ))}
+  </defs></svg>
+
+  <section class="hero shell">
+    <p class="eyebrow m-0 rv">About</p>
+    <h1 class="rv">One person, <span class="h-a">start to finish.</span></h1>
+    <p class="hero-p rv">
       I'm Yameen, in Greater Manchester. I design the interface, model the data
-      behind it, write the pipeline that ships it and operate the thing once it
-      is live — for a masjid with an app on Google Play, a product of my own,
-      and a handful of businesses. Working alone means there is nowhere to hand
-      a problem on to, which is the part I have learned most from.
+      behind it, write the pipeline that ships it, and operate the thing once
+      it is live. Working alone means there is nowhere to hand a problem on to,
+      which is the part I have learned most from.
     </p>
-  </section>
-
-  <section class="sec">
-    <h2>What I build</h2>
-    <dl class="rows rv">
-      {build.map(([term, detail]) => (
-        <div class="row">
-          <dt class="eyebrow m-0">{term}</dt>
-          <dd>{detail}</dd>
-        </div>
-      ))}
-    </dl>
-    <p class="sec-p rv">
-      The detail, with the workflow files and migrations behind each claim, is
-      on <a class="ul-draw ul-draw-on" href="/engineering.html">the engineering page</a>.
-    </p>
-  </section>
-
-  <section class="sec">
-    <h2>Certifications</h2>
-    <ul class="certs rv">
-      {certs.map((c) => (
-        <li class="cert panel">
-          {c.badge && (
-            <img src={c.badge} alt={`${c.name} badge`} width="96" height="96"
-                 loading="lazy" decoding="async" class="cert-badge" />
-          )}
-          <div>
-            <p class="eyebrow m-0">{c.held ? 'Held' : 'Booked'}</p>
-            <p class="cert-code">{c.code}</p>
-            <p class="cert-name">{c.name}</p>
-            {c.note && <p class="cert-note"><em>{c.note}</em></p>}
-            {c.verify && (
-              <p class="cert-verify">
-                <a class="eyebrow ul-draw ul-draw-on" href={c.verify} target="_blank" rel="noopener">Verify ↗</a>
-              </p>
-            )}
-          </div>
-        </li>
-      ))}
+    <ul class="facts rv">
+      <li><span class="fact-l">Based</span><span class="fact-v">Greater Manchester</span></li>
+      <li><span class="fact-l">Looking for</span><span class="fact-v">Platform / DevOps</span></li>
+      <li><span class="fact-l">Certified</span><span class="fact-v">AZ-900</span></li>
     </ul>
-    <p class="sec-p rv">
-      A fundamentals certificate is not production experience and this page
-      does not pretend otherwise — what I have actually run is below.
-    </p>
   </section>
 
-  <section class="sec">
-    <h2>How I work</h2>
-    <dl class="faqs">
-      {how.map(([q, a]) => (
-        <div class="faq rv">
-          <dt>{q}</dt>
-          <dd>{a}</dd>
+  <section class="pr pr-blue">
+    <div class="pr-in shell">
+      <header class="pr-head">
+        <span class="pr-n" aria-hidden="true">01</span>
+        <div>
+          <h2>What I build</h2>
+          <p class="pr-line">Three layers, and I work on all three. That is the whole claim this site exists to back up.</p>
         </div>
-      ))}
-    </dl>
+      </header>
+
+      <ol class="stack rv">
+        {layers.map((L, i) => (
+          <li class="sl">
+            <span class="sl-n" aria-hidden="true">{i + 1}</span>
+            <div class="sl-b">
+              <h3>{L.t}</h3>
+              <p class="sl-line">{L.line}</p>
+              <ul class="sl-m">
+                {L.marks.map((k) => (
+                  <li>
+                    <svg viewBox="0 0 24 24" width="20" height="20" role="img" aria-label={marks[k].title}><use href={`#m-${k}`} /></svg>
+                    <span>{marks[k].title}</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="sl-more" set:html={L.more} />
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <p class="pr-foot rv">
+        The workflow files and migrations behind every one of these are on <a class="ul-draw ul-draw-on" href="/engineering.html">the engineering page</a>.
+      </p>
+    </div>
   </section>
 
-  <section class="sec">
-    <h2>What I'm looking for</h2>
-    <dl class="rows rv">
-      {looking.map(([term, detail]) => (
-        <div class="row">
-          <dt class="eyebrow m-0">{term}</dt>
-          <dd>{detail}</dd>
+  <section class="pr pr-rust">
+    <div class="pr-in shell">
+      <header class="pr-head">
+        <span class="pr-n" aria-hidden="true">02</span>
+        <div>
+          <h2>How I work</h2>
+          <p class="pr-line">Four positions I hold, each one arrived at by getting it wrong first.</p>
         </div>
-      ))}
-    </dl>
+      </header>
+
+      <ul class="cards">
+        {how.map((h) => (
+          <li class="card rv">
+            <h3>{h.t}</h3>
+            <p class="card-line">{h.line}</p>
+            <p class="card-more">{h.more}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
-  <section class="ask">
+  <section class="pr pr-green">
+    <div class="pr-in shell">
+      <header class="pr-head">
+        <span class="pr-n" aria-hidden="true">03</span>
+        <div>
+          <h2>On paper</h2>
+          <p class="pr-line">One certificate held, one exam booked. They are listed separately on purpose.</p>
+        </div>
+      </header>
+
+      <ul class="certs rv">
+        {certs.map((c) => (
+          <li class={`cert ${c.held ? 'is-held' : 'is-booked'}`}>
+            {c.badge && (
+              <img src={c.badge} alt={`${c.name} badge`} width="96" height="96"
+                   loading="lazy" decoding="async" class="cert-badge" />
+            )}
+            <div>
+              <p class="cert-state">{c.held ? 'Held' : 'Booked — not sat'}</p>
+              <p class="cert-code">{c.code}</p>
+              <p class="cert-name">{c.name}</p>
+              {c.note && <p class="cert-note"><em>{c.note}</em></p>}
+              {c.verify && (
+                <p class="cert-verify">
+                  <a class="eyebrow ul-draw ul-draw-on" href={c.verify} target="_blank" rel="noopener">Verify ↗</a>
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="pr pr-mag">
+    <div class="pr-in shell">
+      <header class="pr-head">
+        <span class="pr-n" aria-hidden="true">04</span>
+        <div>
+          <h2>What I'm looking for</h2>
+          <p class="pr-line">And the one thing I would rather you heard from me than worked out later.</p>
+        </div>
+      </header>
+
+      <ul class="cards cards-2">
+        {looking.map((l) => (
+          <li class="card rv">
+            <h3>{l.t}</h3>
+            <p class="card-line">{l.line}</p>
+            <p class="card-more">{l.more}</p>
+          </li>
+        ))}
+      </ul>
+
+      <aside class="honest rv">
+        <p class="honest-l">Straight about this</p>
+        <p>
+          <strong>The certificate above is Azure. The systems are not.</strong> What I have actually run in production is Cloudflare, Supabase,
+          GitHub Actions, Railway and Render. The concepts carry — tenancy,
+          least privilege, build gating, webhook idempotency, deploy
+          verification — but a fundamentals exam is not production experience,
+          and I would rather say which consoles I have operated in than let a
+          certificate imply more than it is.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="ask shell">
     <h2 class="rv">Get in touch</h2>
     <p class="rv ask-p">
-      Hiring, or want to talk through any of the work above? Either route below
+      Hiring, or want to talk through any of the work? Either route below
       reaches me. Still taking freelance builds alongside this —
       <a class="ul-draw ul-draw-on" href="/services.html">process and prices here</a>.
     </p>
@@ -134,69 +250,142 @@ const description =
 </BaseLayout>
 
 <style>
-  .head { padding-block: clamp(40px, 7vh, 74px) 0; }
-  .head h1 { font-size: clamp(2.6rem, 8.4vw, 5.4rem); margin: 14px 0 0; max-width: 15ch; }
-  .head-p { margin: 26px 0 0; max-width: 56ch; color: var(--color-ink-2); font-size: 1.05rem; }
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-  .sec { padding-block: clamp(54px, 9vh, 92px) 0; }
-  .sec h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin: 0; }
-  .sec-p { margin: 20px 0 0; max-width: 54ch; color: var(--color-ink-2); }
+  /* ── hero ─────────────────────────────────────────────────────────── */
+  .hero { padding-block: 64px 52px; }
+  .hero h1 {
+    margin: 14px 0 0; max-width: 15ch;
+    font-size: clamp(2.6rem, 7.4vw, 5.2rem); line-height: 0.98; letter-spacing: -0.035em;
+  }
+  .h-a { color: var(--color-blue); }
+  .hero-p { margin: 24px 0 0; max-width: 50ch; font-size: 19px; color: var(--color-ink-2); }
 
-  .rows { margin: 30px 0 0; display: grid; gap: 2px; }
-  .row {
-    display: grid; grid-template-columns: 1fr; gap: 8px;
-    padding: 20px 22px;
-    background: var(--color-line-2);
+  .facts {
+    margin: 38px 0 0; padding: 0; list-style: none;
+    display: grid; gap: 1px; grid-template-columns: 1fr;
+    background: var(--color-line); border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm); overflow: hidden;
+  }
+  @media (min-width: 620px) { .facts { grid-template-columns: repeat(3, 1fr); } }
+  .facts li { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; background: var(--color-plane); }
+  .fact-l {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .fact-v { font-family: var(--font-disp); font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+
+  /* ── a numbered band, same language as engineering.html ───────────── */
+  .pr { border-top: 6px solid var(--tone); background: var(--color-paper); }
+  .pr-rust, .pr-mag { background: var(--color-paper-2); }
+  .pr-in { padding-block: 54px 58px; }
+  .pr-blue { --tone: var(--color-blue); }
+  .pr-rust { --tone: var(--color-signal); }
+  .pr-green { --tone: var(--color-accent-green); }
+  .pr-mag { --tone: var(--color-accent-mag); }
+
+  .pr-head { display: grid; gap: 14px; }
+  @media (min-width: 760px) { .pr-head { grid-template-columns: auto 1fr; gap: 28px; } }
+  .pr-n {
+    font-family: var(--font-disp); font-weight: 700; line-height: 0.8;
+    font-size: clamp(3.2rem, 9vw, 5.4rem); letter-spacing: -0.04em; color: var(--tone);
+  }
+  .pr h2 { margin: 0; font-size: clamp(1.7rem, 4.1vw, 2.5rem); letter-spacing: -0.025em; max-width: 20ch; }
+  .pr-line { margin: 14px 0 0; max-width: 58ch; font-size: 17.5px; color: var(--color-ink-2); }
+  .pr-foot { margin: 26px 0 0; font-size: 15px; color: var(--color-ink-2); }
+
+  /* ── 01 · the three layers, with a spine drawn through them ──────────
+     The line is the claim: one person spanning all three. It draws on
+     reveal, which is motion describing structure rather than decoration. */
+  .stack { position: relative; margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  /* A pseudo-element, because an <ol> may only contain <li> — a bare span
+     in there is invalid markup the build will not complain about. */
+  .stack::before {
+    content: ''; position: absolute; left: 17px; top: 8px; bottom: 8px; width: 2px;
+    background: var(--tone); transform: scaleY(0); transform-origin: top;
+    transition: transform 1100ms var(--ease-turn) 120ms;
+  }
+  .stack.in::before { transform: scaleY(1); }
+  @media (max-width: 559px) { .stack::before { display: none; } }
+
+  .sl { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+  .sl-n {
+    display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+    font-family: var(--font-disp); font-size: 14px; font-weight: 700;
+    color: var(--color-plane); background: var(--tone); position: relative; z-index: 1;
+  }
+  .sl-b {
+    padding: 18px 20px; background: var(--color-plane);
+    border: 1px solid var(--color-line); border-radius: var(--radius-sm);
+  }
+  .sl-b h3 { margin: 0; font-size: 1.14rem; letter-spacing: -0.015em; }
+  .sl-line { margin: 7px 0 0; font-size: 15.5px; color: var(--color-ink-2); max-width: 54ch; }
+  .sl-m { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 7px; }
+  .sl-m li {
+    display: flex; align-items: center; gap: 6px; padding: 6px 9px;
+    background: var(--color-paper); border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; color: var(--color-ink-2);
+  }
+  .sl-m svg { flex: none; fill: var(--color-ink-2); }
+  .sl-more {
+    margin: 14px 0 0; padding: 13px 0 0; font-size: 14.5px; line-height: 1.62;
+    color: var(--color-ink-2); border-top: 1px solid var(--color-line-2); max-width: 62ch;
+  }
+
+  /* ── 02 / 04 · cards ─────────────────────────────────────────────── */
+  .cards { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  @media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card {
+    padding: 22px 22px 24px; background: var(--color-plane);
+    border: 1px solid var(--color-line); border-left: 3px solid var(--tone);
     border-radius: var(--radius-sm);
   }
-  @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
-  .row dd, .row p { margin: 0; color: var(--color-ink-2); }
-  .row div p + p { margin-top: 14px; }
-  .terms-rows { margin-top: 34px; }
+  .card h3 { margin: 0; font-size: 1.1rem; letter-spacing: -0.015em; }
+  .card-line { margin: 9px 0 0; font-size: 16px; color: var(--color-ink); font-weight: 500; }
+  .card-more { margin: 11px 0 0; font-size: 14.5px; line-height: 1.62; color: var(--color-ink-2); }
 
-  .plans { margin: 32px 0 0; display: grid; gap: 18px; }
-  @media (min-width: 900px) { .plans { grid-template-columns: repeat(3, 1fr); } }
-  .plan { padding: 26px; display: flex; flex-direction: column; }
-  .plan h3 { margin: 0; font-size: 1.35rem; }
-  .plan-fig {
-    margin: 14px 0 0; font-family: var(--font-disp); font-weight: 700;
-    font-size: 2.3rem; line-height: 1; letter-spacing: -0.04em;
+  /* ── 03 · certifications ──────────────────────────────────────────── */
+  .certs { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+  @media (min-width: 720px) { .certs { grid-template-columns: 1fr 1fr; } }
+  .cert {
+    display: flex; gap: 18px; align-items: flex-start; padding: 22px;
+    background: var(--color-plane); border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
   }
-  .plan-care { margin: 8px 0 0; }
-  .plan-blurb { margin: 16px 0 0; font-size: 15px; line-height: 1.5; }
-  .plan ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; }
-  .plan li {
-    font-size: 14.5px; padding-left: 18px; position: relative;
-    color: color-mix(in srgb, var(--color-ink) 74%, transparent);
+  /* Held and booked must never look like the same kind of thing. Held gets
+     the solid accent edge; booked gets a dashed one and says so in words. */
+  .cert.is-held { border-left: 3px solid var(--color-accent-green); }
+  .cert.is-booked { border: 1px dashed var(--color-line); background: transparent; }
+  .cert-badge { flex: none; width: 96px; height: 96px; object-fit: contain; }
+  .cert-state {
+    margin: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-ink-2);
   }
-  .plan li::before {
-    content: ''; position: absolute; left: 0; top: 9px;
-    width: 7px; height: 7px; background: var(--color-blue); border-radius: 50%;
-  }
-
-  .certs { margin: 30px 0 0; padding: 0; list-style: none; display: grid; gap: 18px; }
-  @media (min-width: 760px) { .certs { grid-template-columns: repeat(2, 1fr); } }
-  .cert { padding: 26px; display: flex; align-items: flex-start; gap: 20px; }
-  .cert-badge { width: 96px; height: 96px; flex: none; }
+  .cert.is-held .cert-state { color: var(--color-accent-green); }
   .cert-code {
-    margin: 10px 0 0; font-family: var(--font-disp); font-weight: 700;
-    font-size: 2rem; line-height: 1; letter-spacing: -0.035em;
+    margin: 7px 0 0; font-family: var(--font-disp); font-size: 1.5rem; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1;
   }
-  .cert-name { margin: 10px 0 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.5; }
-  .cert-note { margin: 12px 0 0; color: var(--color-ink-2); font-size: 14.5px; line-height: 1.5; }
+  .cert-name { margin: 5px 0 0; font-size: 15px; color: var(--color-ink-2); }
+  .cert-note { margin: 10px 0 0; font-size: 14px; color: var(--color-ink-2); max-width: 36ch; }
   .cert-verify { margin: 12px 0 0; }
 
-  .faqs { margin: 30px 0 0; display: grid; gap: 2px; }
-  .faq {
-    display: grid; grid-template-columns: 1fr; gap: 8px;
-    padding: 22px; background: var(--color-line-2); border-radius: var(--radius-sm);
+  /* ── 04 · the caveat that is there to cost something ──────────────── */
+  .honest {
+    margin: 22px 0 0; padding: 22px 24px; max-width: 68ch;
+    background: var(--color-plane); border: 1px solid var(--color-line);
+    border-left: 3px solid var(--tone); border-radius: var(--radius-sm);
   }
-  @media (min-width: 820px) { .faq { grid-template-columns: 1fr 1.25fr; gap: 34px; } }
-  .faq dt { font-family: var(--font-disp); font-weight: 700; font-size: 17px; letter-spacing: -0.015em; line-height: 1.3; }
-  .faq dd { margin: 0; color: var(--color-ink-2); font-size: 15.5px; line-height: 1.55; }
+  .honest-l {
+    margin: 0 0 9px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--color-ink-2);
+  }
+  .honest p + p, .honest p:last-child { margin: 0; font-size: 15.5px; line-height: 1.65; color: var(--color-ink-2); }
+  .honest strong { color: var(--color-ink); }
 
-  .ask { padding-block: clamp(64px, 11vh, 118px); }
-  .ask h2 { font-size: clamp(2rem, 5.4vw, 3.4rem); margin: 0; }
-  .ask-p { margin: 20px 0 0; color: var(--color-ink-2); }
+  /* ── ask ──────────────────────────────────────────────────────────── */
+  .ask { padding-block: 64px 90px; }
+  .ask h2 { margin: 0; font-size: clamp(2rem, 5.4vw, 3.4rem); letter-spacing: -0.03em; }
+  .ask-p { margin: 20px 0 0; max-width: 56ch; color: var(--color-ink-2); }
   .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }
 </style>

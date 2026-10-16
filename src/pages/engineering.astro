@@ -224,7 +224,7 @@ const layers = [
   .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
   /* ── hero ─────────────────────────────────────────────────────────── */
-  .hero { padding: 64px 0 52px; }
+  .hero { padding-block: 64px 52px; }
   .hero h1 {
     margin: 14px 0 0; max-width: 17ch;
     font-size: clamp(2.6rem, 7.4vw, 5.2rem); line-height: 0.98; letter-spacing: -0.035em;
@@ -253,7 +253,7 @@ const layers = [
      long column. The rule is 6px of the section's own accent.             */
   .pr { padding: 0; border-top: 6px solid var(--tone); background: var(--color-paper); }
   .pr:nth-child(even) { background: var(--color-paper-2); }
-  .pr-in { padding: 54px 0 58px; }
+  .pr-in { padding-block: 54px 58px; }
   .pr-blue { --tone: var(--color-blue); }
   .pr-rust { --tone: var(--color-signal); }
   .pr-green { --tone: var(--color-accent-green); }
@@ -305,7 +305,7 @@ const layers = [
   .proof-l strong, .proof-l em { color: var(--color-ink); }
 
   /* ── what it runs on ──────────────────────────────────────────────────── */
-  .runs { padding: 64px 0 20px; }
+  .runs { padding-block: 64px 20px; }
   .runs h2 { margin: 0 0 26px; font-size: clamp(1.7rem, 4.1vw, 2.5rem); letter-spacing: -0.025em; }
   .layers { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
   @media (min-width: 880px) { .layers { grid-template-columns: repeat(3, 1fr); } }
@@ -329,7 +329,7 @@ const layers = [
   .runs-note strong { color: var(--color-ink); }
 
   /* ── ask ──────────────────────────────────────────────────────────────── */
-  .ask { padding: 64px 0 90px; }
+  .ask { padding-block: 64px 90px; }
   .ask h2 { margin: 0; font-size: clamp(2rem, 5.4vw, 3.4rem); letter-spacing: -0.03em; }
   .ask-p { margin: 20px 0 0; max-width: 56ch; color: var(--color-ink-2); }
   .ask-do { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px; }

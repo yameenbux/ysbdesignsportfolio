@@ -512,7 +512,7 @@ burst gets this wrong by default — its selected option can be *the bug*, so a
 blue "pressed" button would sit above a `signal` failure bar. Selected is
 neutral ink there, and the bar colour carries the verdict.
 
-### Two more accents, on engineering.html only — Phase 27
+### Two more accents, on the engineering and about pages — Phase 27
 
 ```
 accent-green  #196B42   5.21:1 on paper — it got through
@@ -520,8 +520,11 @@ accent-mag    #A3157A   5.71:1 on paper — structural, section 04
 ```
 
 **This is a scoped reversal of "a second accent colour", asked for directly.**
-It applies to `engineering.html` and nowhere else; every other page is the
-seven-value palette above, unchanged.
+It applied to `engineering.html` alone until Phase 28 put `about.html` on the
+same treatment, also asked for directly. **It is the two candidate pages and
+nowhere else** — home, work and every case study are the seven-value palette
+above, unchanged, and a third page joining them is a decision rather than a
+default.
 
 **They were chosen by measurement, not by eye.** The data-viz validator was
 run over the four-hue set against the paper surface, and the things tried
@@ -651,7 +654,8 @@ Rules that hold:
 - Emoji as section iconography
 - Parallax on text
 - A second accent colour, **except the two measured accents scoped to
-  `engineering.html`** — see "Colour" above. Blue as a body colour is still out.
+  `engineering.html` and `about.html`** — see "Colour" above. Blue as a body
+  colour is still out.
 - A saturated or dark ground — tried as "Ultramarine" and rejected
 - Monospace anywhere (Space Grotesk is a grotesque, not mono — see "Type")
 - Motion that does not describe structure
@@ -1615,6 +1619,75 @@ Checked: 19 pages x 375/768/1440 clean, no overflow at 375;
 lands every diagram's end state with no transition, all thirteen controls are
 keyboard-operable and named, six `aria-live` status lines say in words what
 each animation shows.
+
+**Phase 28 — about.html on the same treatment, 16 October.** Asked for the
+engineering page's manner applied here. Four numbered colour bands rather than
+six, because About has four things to say and padding it to six would be
+format for its own sake.
+
+**01 What I build** carries the claim the whole site rests on — three layers,
+all three mine — and draws a **spine down through the three numbered nodes**
+as the section reveals. That is motion describing structure: the line *is* the
+"one person, start to finish" argument. Stack marks sit on each layer, the
+same unmodified `simple-icons` paths. **02 How I work** is four positions,
+each arrived at by getting it wrong first. **03 On paper** is the two
+certifications. **04 What I'm looking for** ends on the honesty callout.
+
+**Held and booked must never look like the same kind of thing**, and the
+markup now enforces what Phase 17 only asked for in prose: AZ-900 takes a
+solid green edge and the word *Held*; AZ-104 takes a **dashed** border, no
+accent, and reads *Booked — not sat* above an italic note calling it a plan
+rather than a qualification. A `held: false` entry still never renders a
+badge. **The honesty callout in 04 is load bearing and is deliberately not
+folded away** — it is the one paragraph on the page that exists to cost
+something, and an Azure certificate beside a list of cloud work implies Azure
+cloud work without it.
+
+**The accents now cover two pages, not one.** See "Colour" above; the scope
+moved because this was asked for, not because it drifted.
+
+**"Seven workflows" was still here.** Phase 25 corrected that count to eleven
+on the engineering page and this page kept the old one for a day. **That is
+the third time this exact shape has bitten** — Phase 21 (MasjidOne's product
+count), Phase 26 (the migration count), now this. The lesson has been written
+down twice and did not work either time, so state it as a procedure instead:
+**when a number changes, grep the whole `src/` tree for the digits, not for
+the sentence.**
+
+**It is honestly longer, not shorter: 540 visible words to 706**, and 3,155px
+to 4,039px. The brief here was the treatment rather than the knife — the
+length complaint was about engineering.html — but the number is worth
+recording rather than implying every redesign cuts. The extra is framing: a
+facts strip, a one-line hook on each item, and the numbered structure. A
+second hero paragraph was written and then cut as redundant.
+
+**A gutter bug that was already live, and a 320px overflow that always
+was.** `.shell` supplies `padding-inline`, and a `padding: 64px 0 52px`
+shorthand on the same element resets it to zero — so the banded pages had
+**no side gutter at all** and their type ran to the edge of a phone. Phase 27
+shipped that to `engineering.html` and the sweep never saw it, because zero
+gutter causes no overflow at 375. **Use `padding-block` on anything carrying
+`.shell`.** Seven declarations across the two pages are fixed.
+
+Chasing it turned up something older: **every page on the site overflowed
+39px at 320px**, from four nav items that do not fit, on pages nobody had
+touched in weeks. The working rules say check 375 and 1440, so 320 had never
+been looked at. `.mast nav ul` wraps now — the Phase 16 fix carried down a
+size — and all 19 pages are clean at 320, 360 and 375. **The standard widths
+should probably include 320.**
+
+**One markup bug and one whitespace bug.** A bare `<span>` was sitting
+directly inside an `<ol>`, which is invalid and which the build does not
+complain about — the spine is a `::before` now. And **Astro trims the newline
+between text and an inline element**, so a link that began on the next source
+line rendered as "are onthe engineering page". Two of those shipped into the
+first build; both are fixed by keeping the text and the inline tag on one
+line. **Check rendered text, not source, for run-together words.**
+
+Checked: 19 pages x 375/768/1440 clean, no overflow at 375; `about.html`
+**100/100/100/100**, CLS 0, over three runs. Under `prefers-reduced-motion`
+the spine renders drawn rather than stuck at zero, and no reveal is left
+hidden.
 
 ### Known, unfixed
 
