@@ -186,7 +186,10 @@ const EMAIL = 'yameen_bee@hotmail.co.uk';
     letter-spacing: -0.03em; text-decoration: none; color: var(--color-ink);
   }
   .wordmark span { color: var(--color-ink-2); font-weight: 500; margin-left: 6px; }
-  .mast nav ul { display: flex; gap: 26px; margin: 0; padding: 0; list-style: none; }
+  /* `wrap` because four items do not fit a 320px phone: every page
+     overflowed 39px there. Phase 16 fixed the same shape at 375 by
+     wrapping the header row; this is that fix carried down a size. */
+  .mast nav ul { display: flex; flex-wrap: wrap; gap: 26px; margin: 0; padding: 0; list-style: none; }
   .navlink { text-decoration: none; transition: color 0.2s; }
   .navlink:hover { color: var(--color-blue); }
   .navlink.is-current { color: var(--color-ink); }
