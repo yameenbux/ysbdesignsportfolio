@@ -1,6 +1,13 @@
 ---
-import CaseLayout from '../layouts/CaseLayout.astro';
-import { cases } from '../data/cases.js';
+/**
+ * Peony became Booked In on 12 October, on its own domain at booked-in.co.uk.
+ * This URL was live from 12 October, so it forwards rather than 404ing.
+ */
+import RedirectPage from '../layouts/RedirectPage.astro';
 ---
 
-<CaseLayout data={cases.peony} />
+<RedirectPage
+  to="/bookedin.html"
+  title="Peony is now Booked In"
+  linkText="the Booked In case study"
+/>

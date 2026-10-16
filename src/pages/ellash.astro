@@ -1,42 +1,15 @@
 ---
 /**
- * èllash became Peony on 12 October. This URL has been live and indexed since
- * Phase 1, and CLAUDE.md promises every live URL keeps working — so the old
- * address stays and forwards rather than 404ing.
- *
- * Written as a page rather than an `astro.config` redirect because that config
- * emitted nothing for a literal `.html` route under `build.format: 'file'`,
- * which would have quietly dropped an indexed URL. A page is checkable: it
- * either lands in dist/ or the build shows it did not.
- *
- * noindex,follow so the old address drops out of the index while the link
- * equity still reaches the new one.
+ * èllash became Peony on 12 October and Peony became Booked In the same week.
+ * This URL has been live and indexed since Phase 1, so it forwards — straight
+ * to the current page rather than hopping through /peony.html, because a
+ * redirect chain costs a round trip and loses a little equity at each hop.
  */
-const TO = '/peony.html';
-const CANONICAL = 'https://www.ysbdesigns.uk/peony.html';
+import RedirectPage from '../layouts/RedirectPage.astro';
 ---
 
-<!doctype html>
-<html lang="en-GB">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>èllash is now Peony — YSB Designs</title>
-    <link rel="canonical" href={CANONICAL} />
-    <meta name="robots" content="noindex,follow" />
-    <meta http-equiv="refresh" content={`0; url=${TO}`} />
-    <style>
-      body { margin: 0; min-height: 100vh; display: grid; place-items: center;
-             background: #E8E6DE; color: #16191C; padding: 24px;
-             font: 17px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
-      h1 { font-size: 1.3rem; font-weight: 600; margin: 0 0 8px; }
-      a { color: #1F45CC; }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>èllash is now Peony</h1>
-      <p>Taking you to <a href={TO}>the Peony case study</a>.</p>
-    </main>
-  </body>
-</html>
+<RedirectPage
+  to="/bookedin.html"
+  title="èllash is now Booked In"
+  linkText="the Booked In case study"
+/>

@@ -121,7 +121,7 @@ material to carry a screenshot-led layout.
 | MasjidOne | **Own product**, running at one masjid — not client work | 4 |
 | Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
 | Bolton Vouched | **Own product**, a Bolton directory — built and deploying, **not launched** | 4 |
-| Peony | **Own product**, a booking platform for solo beauty pros — **live** | 3 |
+| Booked In | **Own product**, a booking platform for solo beauty pros — **live** | 3 |
 
 **Retired at the user's request: The Venetian Company, Diamond Heating &
 Plumbing and LuxeScent UK on 10 October, and **Bux Travel on 13 October**
@@ -143,7 +143,7 @@ a signed build, and it is on neither the App Store nor Google Play.
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (Hair by Chrissy, plus Taiyabah as community work) and
-**"Built for myself"** (MasjidOne, Tidemark, Bolton Vouched and Peony).
+**"Built for myself"** (MasjidOne, Tidemark, Bolton Vouched and Booked In).
 **èllash moved across on 12 October** and then **became Peony the same day** —
 it had been listed as a client, and calling your own business a client is the
 invented-client-count failure this file bars. **That first group is now
@@ -184,7 +184,7 @@ number that appears as text on this site is YSB's own.
 ### Kept but unlisted
 
 **This section is now empty of listed pages, and that is the point.**
-`ellash.html` became a redirect to `/peony.html` on 12 October and
+`ellash.html` and `peony.html` are both redirects to `/bookedin.html` and
 `buxtravel.html` was retired on 13 October — but **both still resolve**, and
 must keep doing so. Every URL this site has ever published stays reachable;
 retiring a project removes it from the listings and the sitemap and sets
@@ -225,9 +225,9 @@ up as full cases — there is not enough captured material — which is what
   - **Every mark is the genuine artefact, never a redrawn one.** The client
     wordmarks come from each project's own repository — Taiyabah's and
     Tidemark's SVGs, Bux Travel's and MasjidOne's lockups keyed off their
-    plates — and the three that exist only as CSS are set in the face their
-    own site uses (Hair by Chrissy in Cormorant Garamond, Peony's petal mark
-    beside its name in Bodoni Moda). Nothing is traced by eye.
+    plates — and the ones that exist only as CSS are set in the face their
+    own site uses (Hair by Chrissy in Cormorant Garamond). Nothing is traced
+    by eye.
     **Where a brand ships a running app, capture its own rendering rather than
     rebuilding the lockup from its CSS.** Bolton Vouched was rebuilt by hand
     twice and was wrong twice — the second time because the brand had changed
@@ -237,6 +237,13 @@ up as full cases — there is not enough captured material — which is what
     border** so the near-white mark inside the brick tile is never reached. Only
     the wordmark colour is substituted, to that product's own dark ink, because
     its header is cream-on-dark and this ground is paper.
+    **Booked In is captured the same way**, and it is the reason the rule is
+    worth keeping: that brand was èllash, then Peony, then Booked In inside a
+    week, and each time the mark changed with it. Its `.brand` element — the
+    didone B beside the name in Bodoni Moda — is shot from a local build of its
+    own site and flood-filled from the border. A rebuild from `brand.md` would
+    have been a faithful drawing of whichever name was current when the file
+    was last read.
   - **Stack marks are `simple-icons` paths, unmodified**, in `src/data/stack.js`.
     A mark that package does not carry stays unillustrated — OneSignal and
     Playwright do, and they are simply absent rather than approximated.
@@ -348,8 +355,8 @@ a redirect, and `/tidemark.html` was added on 8 October.
 | `/boltonvouched.html` | Case study — own product, a Bolton directory, pre-launch | via work |
 | `/about.html` | About — the candidate page: what I build, how I work, what I want | yes |
 | `/contact.html` | Contact | yes |
-| `/peony.html` | Case study — own product, a booking platform, pre-launch | via work |
-| `/ellash.html` | **Redirect to `/peony.html`** — the old brand's indexed URL, kept alive | no |
+| `/bookedin.html` | Case study — own product, a booking platform, live | via work |
+| `/peony.html` `/ellash.html` | **Redirects to `/bookedin.html`** — two superseded brands' indexed URLs, kept alive | no |
 | `/buxtravel.html` | **Retired** 13 October — resolves, `noindex`, linked from nowhere | no |
 | `/venetian.html` `/diamond.html` `/luxescent.html` | **Retired** — resolve, `noindex`, linked from nowhere | no |
 | `/services.html` | **Freelance work** — process, prices, estimator. Not in nav | footer |
@@ -1304,12 +1311,129 @@ same length and `rest` is empty. "Also built" will stay invisible until
 something is listed without a `problem` field.
 
 **The two groups are 2 against 4** — Hair by Chrissy and Taiyabah for other
-people; MasjidOne, Tidemark, Bolton Vouched and Peony for himself. Worse than
+people; MasjidOne, Tidemark, Bolton Vouched and Booked In for himself. Worse than
 the 2-against-3 flagged in Phase 21, and the same answer: the fix is another
 written-up paying client, not a thinner own-product section. Three of the four
 retirements so far have been client or in-house work, which is the whole of
 the drift.
 
+
+**Phase 25 — every project re-checked, 16 October.** Push dates against the
+12–13 October checks. **Unchanged and still correct: Hair by Chrissy,
+MasjidOne, and Taiyabah's two screen repositories.** Five had moved, and the
+three biggest corrections were all in the **underclaiming** direction — the
+site withholding something that had since shipped. That is now the fourth
+consecutive sweep where the expensive error ran that way, and it is worth
+naming as a pattern rather than as four separate mistakes: copy written at the
+moment something was blocked does not notice when it unblocks.
+
+**Peony is now Booked In**, at `booked-in.co.uk`, deployed on **Render**. The
+third name for this project in a week — èllash, then Peony on 12 October, then
+Booked In hours later — so `/bookedin.html` is the case study and **both
+`/peony.html` and `/ellash.html` resolve as redirects to it**. `ellash.html`
+points straight at the current page rather than hopping through `peony.html`,
+because a chain costs a round trip and leaks a little equity at each hop. The
+two stubs now share `src/layouts/RedirectPage.astro` rather than being copied,
+which is a direct response to this having happened twice: a brand that renames
+this often will rename again. **Verify `dist/peony.html` and `dist/ellash.html`
+both exist after any build that touches this**, and keep both out of the
+sweep — a meta refresh navigates away mid-check and the harness reads that as
+an error.
+
+What the rename actually carried, which is why it is not just a find-and-replace:
+the platform grew a **patch-test gate in the database**. Tinting and lash
+extensions need a test 24 to 48 hours beforehand, the window is the insurer's,
+and if a client reacts and the studio cannot produce a dated record the cover
+may not hold. Every other platform in that trade sells the appointment and
+leaves the compliance beside it in a notebook. Here a lapsed test refuses the
+booking, and **booking the patch test is itself the record**. It is the best
+thing on that case study and it is on the engineering page too. Also new:
+twenty tracked migrations rather than eight, a third tier, deposits, rebooking
+built as a soft opt-in rather than marketing, and a `build.sh` that refuses to
+emit a `dist/` holding a service-role key — **decoding every JWT it finds
+rather than grepping for the phrase**, because the two keys look alike and a
+comment mentioning one is not a leak.
+
+**Taiyabah — iOS moved from blocked to in testing.** The site said the
+charity's D-U-N-S record still needed correcting and that there was no iPhone
+build to talk about. The record cleared on 2 October, enrolment followed, and
+there is now a signed build on TestFlight carrying the push entitlement. The
+build before it shipped without that entitlement, so push is dead in it — the
+page says which one to test, because testing notifications on the wrong build
+reports the whole push setup broken when it is not. **The charity's D-U-N-S
+number, registered address, charity number, D&B case reference, office line
+and the two named staff who would take a verification call are all in that
+repository and none of them are on this site** — same rule as Phases 15 and 21,
+and the reason it keeps needing restating is that each sweep surfaces more of
+it. Also added: a home-screen widget, and eleven workflows rather than eight.
+
+**Tidemark — the Apple enrolment is through.** The page said it was in review
+and that there had been no signed iPhone build. Signing is managed by EAS for
+the YSB Ventures team, builds upload to App Store Connect, and the app has its
+own App Store ID there; the first upload was rejected for answering the
+export-compliance question without a code. What has *not* happened is the
+device pass — CI compiles for the simulator, which proves it builds rather
+than that it works, and the twenty-four numbered checks its own README sets
+out have not been run on a phone. Its repository was renamed from `Tracker` to
+`Tidemark-Fitness`; the source link follows it rather than relying on GitHub's
+redirect.
+
+**Bolton Vouched — reviews are in.** 119 commits landed on 12 October after
+that day's check. The site still said no resident could leave a review; phone
+sign-in, reviews, provider replies and moderation are built and switched on,
+and the ranking reads real reviews rather than fixtures. It is **still
+pre-launch** and the status is unchanged: the policy pages carry a draft
+banner, the domain has not been pointed at it, and ICO registration and the
+twelve-month purge job are still on its own unticked list. Four hardening
+details came with sign-in and are on the case study, because they are the kind
+that cannot be retrofitted: sign-in codes limited per number *and* per
+connection, a single-use nonce binding new phone accounts, review writes made
+server-side under the session's user id, and the client IP read from the
+**trusted** end of `X-Forwarded-For` rather than its first entry.
+
+**Two failures added to the engineering page, both from Taiyabah.** The first:
+`expo-notifications` matches a trigger on its `type` field and drops anything
+unrecognised through to a `null` default — and **a null trigger means deliver
+it now, not never**. The app passed the pre-SDK-50 shape, so up to thirty-six
+reminders fired at once every time a switch was flicked, and because each was
+spent on the spot *not one real reminder was ever scheduled* while the screen
+reported "36 reminders are scheduled on this phone". The second is a platform
+lesson rather than a library one: a **per-IP rate limit counted an entire
+congregation as a single caller**, because everyone on the masjid wifi leaves
+through one address. At 600 writes an hour the 601st person would have been
+refused and left silently unreachable by every announcement afterwards — on
+the one day it was announced at Jumuʿah, with nothing pointing at the cause.
+
+**Flagged, not acted on.** Two of these repositories now write to
+`support@ysbdesigns.uk` and `hello@ysbdesigns.uk`, which are described as real
+aliases. This site still publishes a `hotmail.co.uk` address, which Phase 17
+already recorded as a credibility cost for a hiring audience. Changing a
+published contact address is not something to do unasked — see "## Contact" —
+so it stays until the user says otherwise, but the domain mailbox evidently
+now exists.
+
+**Two real accessibility bugs fell out of measuring, and both were already
+live.** `engineering.html` had been scoring **95** on accessibility while
+every other page scored 100 — it had simply never been measured, because the
+Lighthouse runs recorded in Phases 7 and 22 covered the homepage, work, about
+and the case template and not this one.
+
+- `.gates .aside` set `color: var(--color-ink-2)` and then `opacity: 0.85`,
+  which renders `#6e7378` — **3.48:1 on the recessed band**, an AA failure.
+  The opacity is gone; full ink-2 is 4.61:1 there. **Fading a palette token
+  with `opacity` silently throws away the measurement the palette section
+  promises**, and that is the general lesson: the colours in this file are
+  measured pairs, so a token plus an opacity is a colour nobody checked.
+- `code` inherited its colour, so an identifier inside ink-2 copy sat at
+  **3.78:1** once the Phase 23 tint was behind it. `code` now sets
+  `color: var(--color-ink)` — 12.83:1 on the tint.
+
+Both are fixed and `engineering.html` is **100/100/100/100**. Worth keeping in
+mind that a page can sit below AA for weeks because the measurement habit
+covered a fixed list of routes rather than all of them.
+
+**The groups are still 2 against 4** and the answer has not changed: the fix
+is another written-up paying client.
 
 ### Known, unfixed
 

@@ -100,11 +100,19 @@
      no monospace and is not allowed one; 22 of these were quietly rendering
      in the browser's mono on engineering.html and the case studies before
      this rule existed. The job the mono did is done by weight and a tint,
-     the same reasoning as `.eyebrow`. */
+     the same reasoning as `.eyebrow`.
+
+     `color` is set rather than inherited, and that is a fix not a flourish.
+     Inheriting meant a <code> inside ink-2 copy — the engineering page's
+     asides and detail lines — sat at 3.78:1 once the tint was behind it,
+     an AA failure that cost that page 5 accessibility points. Ink on the
+     tint is 12.83:1, and an identifier reading slightly darker than the
+     sentence around it is correct anyway. Measured, not eyeballed. */
   code {
     font-family: inherit;
     font-weight: 600;
     font-size: 0.94em;
+    color: var(--color-ink);
     background: var(--color-line-2);
     padding: 0.08em 0.32em;
     border-radius: 3px;

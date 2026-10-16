@@ -50,6 +50,13 @@ const pipelines = [
     why: 'The rules worth testing are the ones in the schema. Reaching them through a web page tests the web page.',
   },
   {
+    name: 'A build that refuses to ship a secret',
+    where: 'Booked In — build.sh',
+    detail:
+      'The publish step will not produce a <code>dist/</code> containing a service-role key — the key that bypasses every row level security policy in the database. It does not grep for a phrase: it <strong>decodes every JWT it finds and checks the role claim</strong>, because the anon key and the service key look alike and a comment that merely mentions one is not a leak.',
+    why: 'The repository is public. A check that matches on text either misses the real thing or blocks a comment; a check that reads the token knows which it is holding.',
+  },
+  {
     name: 'A build that fails rather than silently breaking the domain',
     where: 'ysbdesignsportfolio — deploy.yml',
     detail:
@@ -84,6 +91,10 @@ const data = [
     p: 'The anonymous role is stripped of every grant, and <strong>default privileges are revoked too</strong>, so a table added next year starts closed instead of waiting for someone to remember. One view is the only door. Making that view readable anonymously turned on a detail worth knowing: Postgres checks function permissions against the <em>calling</em> role even inside a view, so its helpers live in a schema the public cannot reach \u2014 which works because EXECUTE is checked at run time while schema access is only checked when a name is looked up.',
   },
   {
+    h: 'Compliance the booking cannot route around',
+    p: 'Tinting and lash extensions need a patch test 24 to 48 hours beforehand, and if a client reacts and the studio cannot produce a dated record, the insurance that was meant to cover it may not. Every other platform in that trade sells the appointment and leaves the compliance beside it in a notebook — so the one thing a stranger can do unaided is also the thing that can quietly void the cover. Here <strong>the database refuses</strong>: a treatment needing a test cannot be booked by somebody whose test has lapsed, and <strong>booking the patch test is itself the record</strong>, so nothing has to be remembered afterwards. The window and the lifetime are the studio’s own, because guessing at the wording of someone else’s insurance policy is not a thing to do on their behalf.',
+  },
+  {
     h: 'A certificate that expires takes the listing down on its own',
     p: 'Gas work and driving instruction are gated on both sides. A trigger refuses to file the category without an in-date Gas Safe or DVSA check, and the public view independently drops it the day that check lapses. Neither depends on a person running a report, which is the only version of a compliance check that survives being forgotten about.',
   },
@@ -103,6 +114,18 @@ const failures = [
       'An idle scheduled job is not a passing one. Its check now runs the function against all three answers the upstream can give.',
   },
   {
+    h: 'A null trigger does not mean never',
+    p: 'Prayer reminders were arriving the instant they were scheduled instead of at their time. <code>expo-notifications</code> matches a trigger on its <code>type</code> field and drops anything it does not recognise through to a default of <code>null</code> — and a null trigger means <em>deliver it now</em>, not never. The app passed <code>{ date: when }</code>, the pre-SDK-50 shape every old example still shows, so it was not rejected, not warned about and not ignored. Arming a week is up to thirty-six notifications, all delivered at once, every time a switch was flicked — and because each was spent on the spot, <strong>not one real reminder was ever scheduled</strong>. The screen cheerfully reported "36 reminders are scheduled on this phone" over an empty queue.',
+    lesson:
+      'A silent fallback is worse than a throw. The triggers are now built in a file with no imports so a plain Node test can read what comes out, and one test asserts that the library still falls through to deliver-now — so if that behaviour ever changes, the comment explaining it fails instead of rotting.',
+  },
+  {
+    h: 'A rate limit that counted a congregation as one person',
+    p: 'Everyone on the masjid’s wifi leaves through one public IP, so a per-IP cap counts the whole building as a single caller. The tag-write cap was 600 an hour, set when the note beside it said "high enough that a room full of people never reaches it". The masjid has thousands, and the hour after the app is announced at Jumuʿah is the one hour when every phone writes its tags at once over that one address. The six-hundred-and-first person would be refused and left untagged — silently unreachable by every announcement from then on, holding an app that otherwise works perfectly.',
+    lesson:
+      'An address cap cannot tell a congregation from an attacker; a per-device cap can. The shared-address limits were raised to fit the real population and the per-device cap is the one left with teeth. Worth noticing that this would have failed on the single day it mattered most, and nothing would have pointed at the cause.',
+  },
+  {
     h: 'Zero rows read as "not built"',
     p: 'Features were tagged <em>in development</em> across a product site because their tables were empty. They were complete and enforcing; nobody had used them yet. Months of telling customers a shipped feature was coming.',
     lesson:
@@ -113,7 +136,7 @@ const failures = [
 
 <BaseLayout
   title="Engineering \u2014 pipelines, data and failure modes"
-  description="How I build and run things: CI/CD across eight workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
+  description="How I build and run things: CI/CD across eleven workflows, multi-tenant Postgres with row level security, edge compute, and the failures that changed how I work."
 >
   <section class="head">
     <p class="eyebrow m-0">Engineering</p>
@@ -128,7 +151,7 @@ const failures = [
   <section class="sec">
     <h2>Delivery</h2>
     <p class="sec-p rv">
-      Eight workflows across one app repository, plus a deploy pipeline per
+      Eleven workflows across one app repository, plus a deploy pipeline per
       site. The interesting ones are not the builds \u2014 they are the gates.
     </p>
     <ol class="rows rv gates">
@@ -169,12 +192,12 @@ const failures = [
     </p>
     <dl class="rows rv">
       {[
-        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com — Astro and Next.js to static output wherever the page allows it. Where it does not, Railway runs the Next.js server: Bolton Vouched needs a request-time route so a phone number can be looked up without ever being sent to the browser.'],
+        ['Hosting', 'GitHub Pages from Actions, custom domains, DNS at one.com — Astro and Next.js to static output wherever the page allows it. Where it does not, Railway runs the Next.js server: Bolton Vouched needs a request-time route so a phone number can be looked up without ever being sent to the browser. Render serves the ones in between — a static front end beside a small API, which is what Booked In and Hair by Chrissy both are.'],
         ['Edge', 'Cloudflare Workers behind Wrangler for the jobs a static site cannot do \u2014 notification fan-out, form intake. Secrets as Wrangler secrets, never in the repository.'],
-        ['Data', 'Supabase Postgres with RLS, SECURITY DEFINER functions, scheduled jobs and edge functions. 166 tracked migrations on the largest of them.'],
+        ['Data', 'Supabase Postgres with RLS, SECURITY DEFINER functions, scheduled jobs and edge functions. 140 tracked migrations on the largest of them.'],
         ['Payments', 'Stripe \u2014 Checkout, deposits with a held slot, webhooks, and Bacs Direct Debit for recurring billing. Webhook handlers read both of the shapes Stripe has used for invoice fields.'],
         ['Messaging', 'OneSignal web push, fired automatically off a published timetable. Resend for transactional mail, behind a Worker rather than a form company.'],
-        ['Clients', 'PWAs with service workers and offline behaviour, and a React Native app on Google Play — which replaced the Trusted Web Activity it started as, because a webview cannot keep audio playing with the phone locked.'],
+        ['Clients', 'PWAs with service workers and offline behaviour, and a React Native app on Google Play — which replaced the Trusted Web Activity it started as, because a webview cannot keep audio playing with the phone locked. The same codebase now has a signed iPhone build on TestFlight, with a home-screen widget beside it; it is not on the App Store yet, and the case study says so rather than letting a TestFlight build imply a release.'],
       ].map(([k, v]) => (
         <div class="row">
           <dt class="eyebrow m-0">{k}</dt>
@@ -239,7 +262,12 @@ const failures = [
   @media (min-width: 820px) { .row { grid-template-columns: 210px 1fr; gap: 30px; } }
   .row dd, .row p { margin: 0; color: var(--color-ink-2); }
   .gates h3 { margin: 0 0 8px; font-size: 1.1rem; letter-spacing: -0.015em; }
-  .gates .aside { margin-top: 10px; font-size: 14.5px; color: var(--color-ink-2); opacity: 0.85; }
+  /* No opacity here. `opacity: 0.85` on ink-2 rendered #6e7378, which is
+     3.48:1 on the recessed band — an AA failure, and the reason this page
+     scored 95 on accessibility while every other page scored 100. The
+     palette is measured; fading a token with opacity silently throws the
+     measurement away. Full ink-2 is 4.61:1 on the band. */
+  .gates .aside { margin-top: 10px; font-size: 14.5px; color: var(--color-ink-2); }
 
   .pair { margin: 30px 0 0; display: grid; gap: 18px; }
   @media (min-width: 900px) { .pair { grid-template-columns: repeat(2, 1fr); } }
