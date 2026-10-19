@@ -1,0 +1,311 @@
+---
+/**
+ * The opening hero — hero-10 from 21st.dev, hand-ported to Astro.
+ *
+ * Same porting decision as ScrollDeck (Aceternity's container-scroll) and
+ * ShowcaseList (21st.dev's project-showcase): the design is taken, the
+ * framework is not. The original is React + motion/react + react-wrap-balancer
+ * + @radix-ui/react-slot + class-variance-authority, which this file's Stack
+ * section rules out in as many words — "No React, no GSAP, no shadcn" — and
+ * which would cost around 115KB gzipped on the one page that already loses
+ * seven Lighthouse points to its hero.
+ *
+ * What each dependency was actually doing, and what replaces it:
+ *   motion/react          → CSS transitions on a class the existing
+ *                           IntersectionObserver already toggles
+ *   react-wrap-balancer   → `text-wrap: balance`, native, 0KB
+ *   @radix-ui/react-slot  → nothing; the CTAs are anchors
+ *   cva + shadcn/button   → `.btn` / `.btn-ghost`, already in global.css
+ *   cn()                  → class:list, built into Astro
+ *
+ * Token mapping, because shadcn's palette does not exist here:
+ *   bg-background → paper        text-primary          → blue
+ *   text-foreground → ink        text-muted-foreground → ink-2
+ *
+ * TYPE AND BUTTONS ARE THE ORIGINAL'S, asked for directly after a first pass
+ * had adapted them to the site's own primitives. So the title is `font-serif`
+ * at `font-normal`, the sizes are the component's 3xl/4xl/5xl ramp rather than
+ * this site's larger clamp, and the CTAs are shadcn/button's geometry — h-10,
+ * px-4, rounded-md, text-sm, font-medium, colour-only transition — instead of
+ * the site's `.btn`.
+ *
+ * `font-serif` is Tailwind's own stack (ui-serif, Georgia, Cambria, Times),
+ * so it is a SYSTEM stack and costs no font file and no request. It is still
+ * a third family on a site whose Type section says two, and it will render as
+ * a different face on each platform — that is the trade, and it was made
+ * knowingly rather than drifted into.
+ *
+ * ONE value from the original is not copied. shadcn's primary hover is
+ * `bg-primary/90`, and an opacity on a token is the exact trap this file
+ * names twice: measured, blue at 90% over paper composites to #3355CE, which
+ * drops paper-on-button from 6.04:1 to 5.04:1 — a hover that makes the label
+ * HARDER to read. The hover here darkens instead, to #1E3EB0 (7.10:1), which
+ * is what the shadcn rule was reaching for on a dark ground.
+ *
+ * `shadow-xl` + `outline-black/10` on the cards is also still a `plane` mat
+ * with a hairline border. That one is not a preference — a light-UI capture
+ * needs a sheet under it or it sits flush against the paper and disappears,
+ * which this file calls the single most important rule in the direction.
+ */
+export interface Props {
+  title: string;
+  line2Prefix?: string;
+  highlight?: string;
+  description: string;
+  note?: string;
+  shots: { src: string; alt: string; w: number; h: number }[];
+  primary: { text: string; href: string };
+  secondary?: { text: string; href: string };
+  /**
+   * `ink` is shadcn's dark theme, which is what the component's own demo is
+   * rendered on — `bg-background` / `text-foreground` are theme tokens, not
+   * colours. It is the same ground as the WhatsApp and LinkedIn banners
+   * (#16191C with paper type), so the site and the banners agree.
+   *
+   * It is a BAND, not a dark ground: the rest of the page stays on paper,
+   * and the layout rules already use colour bands to separate sections. A
+   * dark ground for the whole site is the thing that was tried and rejected.
+   */
+  theme?: 'paper' | 'ink';
+}
+
+const { title, line2Prefix, highlight, description, note, shots, primary, secondary,
+        theme = 'paper' } = Astro.props;
+
+/**
+ * The fan geometry, carried over from the original's `fanSlots`: the middle
+ * card is widest and sits on top, the outer two are rotated out and tucked
+ * under it. `x` is where each card starts before it slides into place.
+ */
+const SLOTS = [
+  { w: '38%', z: 10, r: -6, ty: 24, x: 48, ml: '0', mr: '-2rem' },
+  { w: '42%', z: 20, r: 0, ty: -8, x: 0, ml: '0', mr: '0' },
+  { w: '38%', z: 10, r: 6, ty: 24, x: -48, ml: '-2rem', mr: '0' },
+];
+---
+
+<div class="band" class:list={[theme === 'ink' && 'is-ink']}>
+<section class="hero shell">
+  <div class="hero-head rv">
+    <h1>
+      {title}{(line2Prefix || highlight) && <br />}
+      {line2Prefix && <span>{line2Prefix} </span>}{highlight && <em>{highlight}</em>}
+    </h1>
+    <p class="hero-sub">{description}</p>
+  </div>
+
+  <div class="hero-act rv">
+    <div class="hero-btns">
+      <a class="cta cta-primary" href={primary.href}>{primary.text}</a>
+      {secondary && <a class="cta cta-outline" href={secondary.href}>{secondary.text}</a>}
+    </div>
+    {note && <p class="hero-note">{note}</p>}
+  </div>
+
+  <div class="fan rv">
+    {shots.slice(0, 3).map((s, i) => {
+      const slot = SLOTS[i] ?? SLOTS[1];
+      return (
+        <figure
+          class="card"
+          style={`--w:${slot.w};--z:${slot.z};--r:${slot.r}deg;--ty:${slot.ty}px;--x:${slot.x}px;--ml:${slot.ml};--mr:${slot.mr};--i:${i}`}
+        >
+          <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="eager" decoding="async" />
+        </figure>
+      );
+    })}
+  </div>
+</section>
+</div>
+
+<style>
+  /* `padding-block`, never a `padding` shorthand — .shell supplies
+     padding-inline and a shorthand resets it to zero, which is how the banded
+     pages once shipped with no side gutter at all on a phone. */
+  /* py-20 sm:py-28, gap-8 sm:gap-10 */
+  .hero {
+    padding-block: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+  }
+  @media (min-width: 640px) { .hero { padding-block: 7rem; gap: 2.5rem; } }
+
+  /* gap-5 */
+  .hero-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: 42rem;            /* max-w-2xl */
+  }
+
+  /* font-serif font-normal tracking-tight text-balance,
+     text-3xl sm:text-4xl md:text-5xl */
+  h1 {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    font-weight: 400;
+    font-size: 1.875rem;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    margin: 0;
+    text-wrap: balance;          /* react-wrap-balancer, natively */
+  }
+  @media (min-width: 640px) { h1 { font-size: 2.25rem; } }
+  @media (min-width: 768px) { h1 { font-size: 3rem; } }
+  h1 em { font-style: normal; color: var(--color-blue); }
+
+  /* text-muted-foreground max-w-lg text-sm sm:text-base */
+  .hero-sub {
+    margin: 0;
+    color: var(--color-ink-2);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 32rem;
+    text-wrap: balance;
+  }
+  @media (min-width: 640px) { .hero-sub { font-size: 1rem; } }
+
+  .hero-act { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  /* gap-x-4 gap-y-3 */
+  .hero-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1rem; }
+  /* text-xs font-medium */
+  .hero-note { margin: 0; font-size: 0.75rem; font-weight: 500; color: var(--color-ink-2); }
+
+  /* ── CTAs: shadcn/button geometry ─────────────────────────────────────
+     h-10 px-4 py-2, rounded-md, text-sm font-medium, transition-colors.
+     Scoped to this component rather than altering the global `.btn`, which
+     every other page uses. */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  /* bg-primary text-primary-foreground — 6.04:1 */
+  .cta-primary { background: var(--color-blue); color: var(--color-paper); }
+  .cta-primary:hover { background: #1E3EB0; }   /* 7.10:1, measured */
+
+  /* border border-input bg-background */
+  .cta-outline {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-line);
+  }
+  .cta-outline:hover { background: var(--color-paper-2); }
+
+  /* ── the fan ──────────────────────────────────────────────────────── */
+  .fan {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 48rem;
+  }
+
+  .card {
+    position: relative;
+    flex-shrink: 0;
+    width: var(--w);
+    z-index: var(--z);
+    margin-left: var(--ml);
+    margin-right: var(--mr);
+    /* A plane sheet with a hairline border, not a drop shadow — same mat
+       every screenshot on this site sits on. */
+    background: var(--color-plane);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 6px;
+    margin-block: 0;
+    overflow: hidden;
+    transform: rotate(var(--r)) translateY(var(--ty));
+    transition: transform 500ms var(--ease-turn), opacity 500ms var(--ease-turn),
+                filter 500ms var(--ease-turn);
+  }
+
+  .card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1px;
+    /* The captures are 340x736 phones. The original card is 4:5, so they are
+       cropped to 3:4 and pinned to the top — the top of a phone UI is the part
+       that identifies it, and the bottom is usually a tab bar. */
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  /* The assembled fan is the DEFAULT state and the offset is what JS opts
+     into. Written the other way round, a script error leaves three cards
+     stacked off to one side with the hero looking broken — and under
+     prefers-reduced-motion they would never arrive at all. */
+  :global(html.js) .fan:not(.in) .card {
+    opacity: 0;
+    filter: blur(6px);
+    transform: rotate(var(--r)) translateY(var(--ty)) translateX(var(--x));
+  }
+  .fan.in .card { transition-delay: calc(var(--i) * 100ms); }
+
+  @media (max-width: 640px) {
+    /* At phone width three overlapping cards leave nothing legible, so the
+       fan closes up and the outer two tuck further under. */
+    .fan { max-width: 100%; }
+    .card { --ml: -1.4rem; --mr: -1.4rem; padding: 4px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+  }
+
+  /* ── ink theme ────────────────────────────────────────────────────────
+     Every value here was measured against the ground rather than carried
+     over, because three of them change meaning on a dark surface:
+
+       paper text        14.12:1   unchanged
+       muted #868D95      5.26:1   the banners' muted, not ink-2 (which is
+                                   a text colour chosen FOR paper)
+       brand blue         2.34:1   FAILS — so the highlight word and the
+                                   button fill cannot stay #1F45CC
+       lifted blue        5.02:1   the highlight, same value the banners use
+
+     The primary button inverts rather than staying blue. A blue fill is only
+     2.34:1 against this ground, so the button would read as a smudge even
+     though its own label is legible — the shape has to be visible too. Paper
+     fill with an ink label is 14.12:1 both ways, and is what shadcn's own
+     dark theme does. */
+  .band.is-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .band.is-ink h1 { color: var(--color-paper); }
+  .band.is-ink h1 em { color: #6F85D3; }
+  .band.is-ink .hero-sub,
+  .band.is-ink .hero-note { color: #868D95; }
+
+  .band.is-ink .cta-primary { background: var(--color-paper); color: var(--color-ink); }
+  .band.is-ink .cta-primary:hover { background: #FFFFFF; }
+  .band.is-ink .cta-outline {
+    color: var(--color-paper);
+    border-color: rgba(232, 230, 222, 0.28);
+  }
+  .band.is-ink .cta-outline:hover { background: rgba(232, 230, 222, 0.10); }
+
+  /* The mat stays a light sheet — that is the whole point of it. On this
+     ground it also stops being a subtlety: a light-UI capture needs the
+     sheet far more against near-black than it does against paper. */
+  .band.is-ink .card { border-color: rgba(232, 230, 222, 0.14); }
+</style>

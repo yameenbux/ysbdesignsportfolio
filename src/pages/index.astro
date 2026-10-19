@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ShowcaseList from '../components/ShowcaseList.astro';
 import ScrollDeck from '../components/ScrollDeck.astro';
+import Hero10 from '../components/ui/hero-10.tsx';
 import { all } from '../data/projects.js';
 
 /**
@@ -22,26 +23,39 @@ const description =
   {/* v4 trial: Aceternity's container-scroll, hand-ported. The hero content
       is unchanged; the three layers move below the deck because a dl under a
       centred title fights the card rising into it. */}
-  <ScrollDeck
-    src="/assets/img/taiyabah-web.jpg"
-    alt="The Taiyabah Masjid website: prayer times, notices and hall booking"
-    width="760"
-    height="475"
-    class="hero-deck"
-    pull="0rem"
-  >
-    <p class="eyebrow rv">Greater Manchester · platform and DevOps</p>
-    <h1 class="rv">I build <em>and run</em> the whole thing.</h1>
-    <p class="hero-sub rv">
-      The interface, the data model behind it, and the pipeline that ships it.
-      Multi-tenant Postgres, edge compute, and CI that refuses to ship what it
-      has not seen run.
-    </p>
-    <div class="hero-do rv">
-      <a class="btn" href="/engineering.html">How it is built and run</a>
-      <a class="btn btn-ghost" href="/work.html">See the work</a>
-    </div>
-  </ScrollDeck>
+  {/* shadcn hero-10, used as supplied. `client:load` because the component's
+      animation is motion/react running in the browser — without a client
+      directive Astro would render it to static HTML and the fan would never
+      animate. The `dark` wrapper selects shadcn's own dark theme, which is
+      what its demo is rendered on. */}
+  {/* `text-foreground` is here because the shadcn base layer that normally
+      sets it on <body> is deliberately not installed — it would repaint all
+      19 pages. Without it, shadcn's `outline` button sets no colour of its
+      own and inherits this site's ink, which on the dark ground rendered the
+      secondary CTA as near-invisible dark-on-dark. Scoped to the hero. */}
+  <div class="dark text-foreground">
+    <Hero10
+      client:load
+      title="I build and run"
+      titleLine2Prefix="the"
+      titleHighlight="whole thing."
+      description="The interface, the data model behind it, and the pipeline that ships it. Multi-tenant Postgres, edge compute, and CI that refuses to ship what it has not seen run."
+      socialProof="Every claim on this site points at a public file."
+      animation="subtle"
+      images={[
+        '/assets/img/taiyabah-app.jpg',
+        '/assets/img/bookedin-phone.jpg',
+        '/assets/img/bv-plumbers.jpg',
+      ]}
+      imageAlts={[
+        "The Taiyabah Masjid app on a phone, showing the day's prayer times",
+        'The Booked In booking platform on a phone',
+        'The Bolton Vouched plumber category on a phone, with ranked providers',
+      ]}
+      primaryCTA={{ ctaEnabled: true, text: 'How it is built and run', link: '/engineering.html', variant: 'default', size: 'default' }}
+      secondaryCTA={{ ctaEnabled: true, text: 'See the work', link: '/work.html', variant: 'outline', size: 'default' }}
+    />
+  </div>
 
   <section class="shell hero-legend">
     <dl class="hero-layers rv">

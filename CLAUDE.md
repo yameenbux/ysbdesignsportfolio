@@ -58,8 +58,12 @@ in the nav.
 
 Migrating from hand-written static HTML to a build step.
 
-- **Astro**, static output. No React, no framework integrations. If a component
-  seems to need React, it doesn't.
+- **Astro**, static output. **React is now installed** — see Phase 32. It was
+  barred outright until 19 October, and the bar held for four hand-ports
+  (the wheel, the corridor, ScrollDeck, ShowcaseList) before it was lifted
+  for the hero. The rule for everything else is unchanged: if a component
+  seems to need React, it doesn't, and the homepage is the only route that
+  hydrates.
 - **Tailwind 4** via `@tailwindcss/vite`. Not `@astrojs/tailwind` — that
   integration supports Astro 3–5 only and is deprecated, and this runs Astro 7.
   Tokens live in `@theme` in `src/styles/global.css`, not a `tailwind.config.js`.
@@ -74,9 +78,15 @@ Migrating from hand-written static HTML to a build step.
   third party off the site, and makes local typography checks real. Two
   families (Space Grotesk, Inter), not three, and still no monospace — see
   "Type".
-- **No React, no GSAP, no shadcn.** v3's wheel was ported from a React +
-  GSAP ScrollTrigger component by hand — see "The wheel" below for what that
-  bought. If a component seems to need a framework, it doesn't.
+- **No GSAP. React and shadcn are in, as of Phase 32, and only on the
+  homepage hero.** v3's wheel was ported from a React + GSAP ScrollTrigger
+  component by hand — see "The wheel" below for what that bought — and that
+  remains the default answer. What changed is that the hero-10 component was
+  asked for verbatim, twice, after the conflict was put up; the cost was
+  then measured rather than estimated. **388KB of JavaScript on a page that
+  shipped zero**, and 98/100/100/100 against the 100 it held before.
+  `src/components/ui/` and `src/lib/utils.ts` now exist, with shadcn's token
+  layer appended to `global.css`.
 - **GitHub Pages**, custom domain `www.ysbdesigns.uk`. DNS at one.com, unchanged.
 
 ### Deploy — read before touching the build
@@ -1894,6 +1904,77 @@ Checked: 19 pages x 375/768/1440 clean, and clean at 320 and 360 too;
 JavaScript disabled and under `prefers-reduced-motion` the layer bars render
 drawn at their real widths and no reveal is left hidden; every link on the
 page has an accessible name.
+
+**Phase 32 — the shadcn hero, 19 October.** The homepage opening section
+rebuilt from 21st.dev's `hero-10`, supplied as a React + shadcn integration
+prompt and asked for **as is, no changes, follow everything to the T** — which
+was the second asking, after the conflict had been put up and a hand-port
+offered instead.
+
+**The hand-port was built first and is still in the repository.**
+`src/components/HeroFan.astro` is the same design in vanilla Astro — 0KB,
+`text-wrap: balance` for Balancer, CSS transitions for motion, the site's own
+`.btn`. It is referenced by nothing, left rather than deleted for the same
+reason `Wheel.astro` was. **If the 388KB is ever judged not worth it, the
+alternative is already written.**
+
+**What the integration needed, beyond the files supplied.** The prompt's own
+setup questions were real: this repo had Tailwind but no TypeScript, no React,
+no `@/` alias, no `components/ui`, no `lib/utils`. All of that is now in, plus
+`@astrojs/react` and the four npm dependencies.
+
+**Two files the prompt did not give and this repo had to supply:**
+
+- **`hero-10-utils/cta.tsx`.** `hero-10.tsx` imports `{ Cta, CtaProps }` from
+  it and it was not among the files to copy. Reconstructed from how `hero-10`
+  and `demo.tsx` use it — `ctaEnabled`, `text`, `link`, `variant`, `size`, and
+  `asChild` + an anchor when a link is present.
+- **The shadcn token layer** in `global.css`. `bg-background`,
+  `text-primary`, `text-muted-foreground`, `border-input` and the rest did not
+  exist here, and resolve to nothing without it. shadcn's own default values,
+  unaltered.
+
+**One shadcn install default is deliberately NOT installed, and leaving it out
+caused a real bug.** A normal install adds `body { @apply bg-background
+text-foreground }`, which would repaint all 19 pages white-on-near-black — an
+install default, not part of the component. Without it, shadcn's `outline`
+button sets no colour of its own and inherited this site's ink, so **the
+secondary CTA rendered near-invisible dark-on-dark**. `text-foreground` is
+scoped to the hero wrapper instead. *A token layer without its base layer
+leaves every component that relies on inheritance half-dressed.*
+
+**One build failure worth writing down.** `react-wrap-balancer@1.1.1` ships no
+`exports` field, so Vite resolved its CJS `main` for the SSR pass and
+`import Balancer from ...` arrived as `{ Balancer, Provider, default }` rather
+than the component — React threw *"Element type is invalid … got: object"* at
+build. **`ssr.noExternal` was not enough**; it needed a `resolve.alias` to the
+ESM build. `hero-10.tsx` is untouched.
+
+**The bisect that found it wasted three rounds, and the reason is worth
+keeping: `src/pages/` ignores any file whose name starts with `_`.** The probe
+page was `_probe.astro`, so it was never rendered and every isolation test
+"passed". **A test that cannot fail is worse than no test** — which is the
+second principle on the engineering page, demonstrated on myself.
+
+**Three faithful-but-costly consequences, all accepted rather than fixed:**
+
+- **The images carry no `width`/`height`.** `hero-10.tsx` renders
+  `<img src alt decoding className>` and nothing more. That breaks this file's
+  own working rule and **the sweep fails index.html at all three widths
+  because of it**. Practical harm is small — the `aspect-4/5` wrapper reserves
+  the box, and CLS measured 0.005 on one run of three — but it is a real
+  failure left in on purpose, not an oversight. One line in the component
+  fixes it.
+- **`text-primary` on shadcn's dark theme is near-white**, so the highlighted
+  words carry no accent at all. The blue that the rest of the site turns on
+  is simply absent from the hero.
+- **`font-serif` is a third family.** It is Tailwind's system stack, so no
+  font file and no request — but it renders as a different face on every
+  platform, against a Type section that specifies two faces precisely.
+
+**Measured, three runs each:** 98/100/100/100, LCP 1.1s, TBT 0ms, against
+100/100/100/100 and LCP 0.5s for the hero it replaced. 19 pages x
+375/768/1440 clean **except** the image-dimensions failure above.
 
 ### Known, unfixed
 
