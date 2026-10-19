@@ -132,6 +132,7 @@ material to carry a screenshot-led layout.
 | Tidemark | **Own product**, an iPhone app — built, **not on either store**; own site at tidemark.ysbdesigns.uk | 3 |
 | Bolton Vouched | **Own product**, a Bolton directory — built and deploying, **not launched** | 4 |
 | Booked In | **Own product**, a booking platform for solo beauty pros — **live** | 3 |
+| Domi | **Own product**, a home-visit healthcare diary — **working demo, no practice on it** | 3 |
 
 **Retired at the user's request: The Venetian Company, Diamond Heating &
 Plumbing and LuxeScent UK on 10 October, and **Bux Travel on 13 October**
@@ -153,7 +154,7 @@ a signed build, and it is on neither the App Store nor Google Play.
 
 **The work index** splits its written-up projects in two — **"Built for
 other people"** (Hair by Chrissy, plus Taiyabah as community work) and
-**"YSB Designs products"** (MasjidOne, Tidemark, Bolton Vouched and Booked In).
+**"YSB Designs products"** (MasjidOne, Tidemark, Bolton Vouched, Booked In and Domi).
 **That second heading was "Built for myself" until 16 October**, renamed at
 the user's request. The rename moves the claim from the person to the brand,
 which reads better beside a row of wordmarks — but it also costs the heading
@@ -1975,6 +1976,66 @@ second principle on the engineering page, demonstrated on myself.
 **Measured, three runs each:** 98/100/100/100, LCP 1.1s, TBT 0ms, against
 100/100/100/100 and LCP 0.5s for the hero it replaced. 19 pages x
 375/768/1440 clean **except** the image-dimensions failure above.
+
+**Phase 33 — Domi, 19 October.** Found rather than asked for: `audiologydomi`
+turned up while copying the cv-watch skill into the other project repos, had
+been pushed the day before, and **was nowhere on this site at all.**
+
+**A home-visit healthcare diary that acts on a cancellation.** A home-visit
+round loses more to one than a clinic does — the clinician is already on the
+road and the gap is too short to fill by ringing round. Domi ranks the waiting
+list against the gap, texts the people who actually fit it, and books the first
+yes with nobody in the office involved.
+
+**It is an own product and it is pre-launch**, and the repository is unusually
+honest about that, so the case study simply uses its words. The demo holds
+invented patients, keeps them in memory and resets itself; **no practice is
+using it**; and six things are listed as needed before a real patient goes near
+it — a UK database with a restore that has actually been tested, real accounts,
+encrypted offline copies on phones, secrets in a host's store, contracted
+routing, and the paperwork (DPIA, ICO, processing agreements, the NHS DSP
+Toolkit, Cyber Essentials). Its own README carries the rule this file keeps:
+*"Never claim a feature that isn't built"*, and *"Domi has none yet, so no
+testimonials, logos or trusted-by lines."*
+
+**The README's loudest claim was already stale, and checking caught it.** The
+badge reads `npm dependencies: none`, but `package.json` carries `pg`. The
+truth is better than the badge: the **demo** loads nothing — `node:http`,
+`node:sqlite`, `node:crypto` and plain browser JavaScript with no build step —
+and the Postgres client is `require`d lazily, only when a live database is
+configured. **A README is a claim, not evidence**, for the fourth recorded time.
+
+**The architecture is the most unusual thing on this site.** A live practice
+runs on *the same in-memory SQLite database the demo runs on*, so every booking
+rule, transaction and test stays identical between the two. Postgres (Supabase,
+London) is the durable record: triggers note every changed row, a committed
+transaction writes those rows across in order, and **the server only answers
+once they have landed — texts go out after that, never before.**
+
+**The best detail for this audience is a rule that cannot be argued with.** In
+England an NHS home sight test needs PCSE notifying 48 hours ahead, so the
+refill engine will not offer one into a gap sooner than that; a gap today goes
+to a glasses delivery or a repair instead, and every NHS test booked or
+cancelled lands on a notifications list with its deadline so the notice and the
+GOS 6 claim cannot drift apart. That is the same shape as Booked In's
+patch-test gate and Bolton Vouched's certificate expiry.
+
+**The test figure was measured by running the suite**, per the Phase 21
+standard: **128 tests across 17 files — 125 pass, 0 fail, 3 skipped.**
+
+**Screenshots come from a local demo on invented data**, which is safe by
+construction here: every visitor gets a private in-memory copy through
+`AsyncLocalStorage`, and the sample practice *Aire Valley Eyecare* is invented
+— that repository records checking it against a web search before use. The
+wordmark is the app's own `.wm` element, keyed **globally** rather than by
+edge flood-fill, because the lockup has enclosed counters that must read as
+paper. 0 opaque near-white pixels after keying.
+
+**The groups are now 2 against 5**, which is worse than the 2-against-4 this
+file has flagged three times, and the answer is unchanged: the fix is another
+written-up **paying client**, not a sixth own product. Domi makes the portfolio
+stronger and the imbalance worse at the same time, and both halves of that are
+worth saying.
 
 ### Known, unfixed
 

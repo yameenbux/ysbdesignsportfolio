@@ -52,6 +52,49 @@ export const cases = {
       }
     ]
   },
+  "domi": {
+    "slug": "domi",
+    "title": "Domi",
+    "seoTitle": "Domi — home-visit diaries that refill themselves",
+    "description": "A diary for home-visit healthcare that acts on a cancellation: it ranks the waiting list against the gap, texts the people who fit it, and books the first yes.",
+    "kind": "Own product",
+    "role": "Node 22 built-ins · node:sqlite in memory · Postgres (Supabase, London) as the durable record · service worker · Server-Sent Events · Twilio · postcodes.io and OSRM · Render and Fly.io",
+    "problem": "A home-visit practice loses more to a cancellation than a clinic does. The clinician is already out on the road, the gap is too short to fill by ringing round between other calls, and the people on the waiting list who would happily have taken it never hear that it existed.<br><br>Plenty of software keeps a diary. The part nobody does is <em>act on the gap</em> — work out who actually fits it, ask them, and book the answer, without a person in the office holding the whole thing in their head while the clock runs down.",
+    "approach": "<strong>The refill engine decides in two stages, and the first one is not negotiable.</strong> Hard rules come first: only an optometrist for an eye examination, never a dispensing optician; an NHS sight test only when PCSE can still be notified 48 hours ahead; texts only to patients who take texts, with the rest listed for the office to ring. What survives that is then ranked — clinical priority, how local they are, days waited, preferred clinician — and every candidate shows the reasons it ranked where it did.<br><br><strong>How close the gap is changes the shape of the offer.</strong> Days or hours away, it goes to one person at a time with room for several rounds. Under an hour of slack, the top three are asked at once, the first YES wins and the others are told it has gone. Too close to confirm anyone, the slot is deliberately left open rather than spent on someone who cannot be ready.<br><br><strong>The booking, the texts and the live update are one transaction.</strong> Texts and events are only released once the database has committed, so a patient is never told about a visit that did not save, and two YES replies cannot both win the same slot.<br><br><strong>An NHS rule sits in the code rather than in somebody's memory.</strong> In England a home sight test needs a pre-visit notification to PCSE at least 48 hours ahead, so Domi will not offer an NHS test for a gap sooner than that — a gap today goes to a glasses delivery, a repair or a follow-up instead, none of which need notifying. Every NHS test booked or cancelled lands on a notifications list with its deadline, so the notification and the GOS 6 claim cannot drift apart.<br><br><strong>Routes are planned properly where it is cheap to and approximately where it is not.</strong> Up to seven visits in a half-day, every order is tried; beyond that it is nearest neighbour then 2-opt. Mornings stay mornings, nothing moves inside half an hour today, and a plan has to save at least ten minutes before it is offered at all.<br><br><strong>The demo runs on Node's built-ins alone.</strong> <code>node:http</code>, <code>node:sqlite</code>, <code>node:crypto</code>, and plain HTML, CSS and JavaScript in the browser with no build step. The single npm package, the Postgres client, is required lazily and only when a live database is configured — so the demo genuinely loads nothing. A live practice then runs on <em>the same in-memory SQLite database</em> as the demo, which is the point: every booking rule, transaction and test stays identical. Postgres is the record that survives a restart — triggers note every changed row, a committed transaction writes those rows to Postgres in order, and the server only answers once they are in.",
+    "outcome": "<strong>It is a working demo and no practice is using it.</strong> That is the repository's own position and it is worth repeating rather than softening: the demo keeps everything in memory, holds invented patients only, resets itself, and lists six things needed before a real patient goes near it — a permanent UK database with a restore that has actually been tested, real accounts rather than demo ones, encrypted offline copies on clinicians' phones, secrets in a host's store, self-hosted or contracted routing, and the paperwork (a DPIA, ICO registration, processing agreements, the NHS Data Security and Protection Toolkit, Cyber Essentials).<br><br><strong>The tests were measured by running them, not counted.</strong> 128 tests across 17 files: 125 pass, 0 fail, 3 skipped. They cover the refill ranking, the planner, the importer, the PCSE notice window, authentication and the live event stream.<br><br>Two decisions are worth naming because they cost something. <strong>Patients never see Domi</strong> — every text, the booking page and the invoices carry the practice's own name, which means the product gives up its own branding at exactly the moment a patient is paying attention. And the demo gives <strong>every visitor a private in-memory copy</strong> of the sample practice through <code>AsyncLocalStorage</code>, cleared after three hours idle, so two people on the same link cannot see or break each other's data — which costs a real database but makes the demo safe to hand to anyone.<br><br>The sample practice, <em>Aire Valley Eyecare</em>, is invented, and the repository records that it was checked against a web search before use. Every patient in these screenshots is invented too.",
+    "links": [
+      {
+        "href": "https://github.com/yameenbux/audiologydomi",
+        "text": "Read the source"
+      }
+    ],
+    "shots": [
+      {
+        "src": "/assets/img/domi-office.jpg",
+        "alt": "The Domi office view: three clinicians' diaries for the day, a waiting list, and the panel that refills a cancelled visit",
+        "w": 760,
+        "h": 475,
+        "caption": "The office view · invented demonstration data · cancel any visit and the best-matched patient is offered the slot",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/domi-routes.jpg",
+        "alt": "Route planning in Domi, showing twenty minutes less driving across one clinician and an Apply button per clinician",
+        "w": 760,
+        "h": 475,
+        "caption": "Route planning · nothing changes until it is applied, and patients whose time moves are texted",
+        "portrait": false
+      },
+      {
+        "src": "/assets/img/domi-clinician.jpg",
+        "alt": "The Domi clinician view on a phone: the visit in progress, the rest of the day, and drive times between visits",
+        "w": 340,
+        "h": 736,
+        "caption": "The clinician's phone · works offline, syncs in order when signal returns",
+        "portrait": true
+      }
+    ]
+  },
   "taiyabah": {
     "slug": "taiyabah",
     "title": "Taiyabah Masjid",
