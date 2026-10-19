@@ -41,6 +41,45 @@ the honesty gates.
 
 ## Log
 
+### 2026-10-19 — the facts strip, and what it paid for
+
+A design pass, not a claims pass. **Nothing new is claimed and nothing was
+softened** — the figures below were already on the CV, inside sentences.
+
+**The defect was hierarchy.** Six sections were weighted identically, so the
+document's strongest assets — 600+ sites, a nine-month migration, apps on both
+stores — were only findable by reading prose, on a page that gets scanned
+before it gets read. A three-cell numeral strip now sits under the masthead.
+
+**It cost 48px on a page that had 17px spare, and the space came from the
+redundancy it created**, which is the part worth recording:
+
+- The Experience bullet opened *"Led the Windows 11 migration across 600+
+  dental practices — a nine-month programme"*. The strip says both of those
+  one inch above it. The bullet keeps what the strip does not say: that the
+  programme was owned from build through rollout, and the **120 sites a week**
+  peak rate.
+- The profile lede opened on *"five of them running a 600+ site estate"*.
+  Same duplication, same fix.
+
+**Two typographic defects found by looking rather than measuring**, both
+already in the shipped CV:
+
+- **"Postgres row-level security" was breaking at the hyphen** into "row-" /
+  "level security", and "Cisco Meraki" split across lines. A skill is one
+  term; each is atomic now and the row wraps only at its separators.
+- The name was 22pt against a four-line contact block. 25pt costs nothing,
+  because the header's height is set by the contact block, not the name.
+
+**Checked:** one page, 13px spare. The PDF text layer still reads in document
+order and every bullet, skill term and strip figure extracts — the strip is a
+grid, so nothing is interleaved and an ATS parse is unaffected.
+
+**Third strip cell:** carries the apps rather than *"1 paying customer"*. The
+customer is a stronger fact but a weak hero numeral beside "600+", and it
+already leads the Engineering practice subline — putting it in both would be
+the duplication this pass exists to remove.
+
 ### 2026-10-19 — Domi, and a paying customer
 
 **Passed scrutiny question 2** (proves a capability the CV could not evidence)

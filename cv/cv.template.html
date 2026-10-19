@@ -26,16 +26,38 @@
   /* ── masthead ─────────────────────────────────────────────── */
   .top{display:flex;justify-content:space-between;align-items:flex-end;gap:14mm;
        padding-bottom:2.6mm;border-bottom:1.6pt solid var(--ink)}
-  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22pt;
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:25pt;
      letter-spacing:-.035em;line-height:.92}
   .role{font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:11pt;
         letter-spacing:-.01em;color:var(--blue);margin-top:1.6mm}
-  .contact{text-align:right;font-size:8.6pt;line-height:1.72;color:var(--ink-2);white-space:nowrap}
+  .contact{text-align:right;font-size:8.3pt;line-height:1.68;color:var(--ink-2);white-space:nowrap}
   .contact b{font-weight:600;color:var(--ink)}
   .contact a{border-bottom:.5pt solid var(--line)}
 
+  /* ── facts strip ──────────────────────────────────────────────
+     The numbers were all here already, inside sentences. A CV gets scanned
+     before it gets read, so the evidence needs a place the eye lands on
+     first. The accent earns its keep here: before this it carried the role
+     line and the section numerals and nothing else. */
+  .facts {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    margin-top: 3.1mm;
+  }
+  .facts div { padding: 0 5mm; border-left: .5pt solid var(--line); }
+  .facts div:first-child { padding-left: 0; border-left: 0; }
+  .facts b {
+    display: block;
+    font-family: "Space Grotesk", sans-serif; font-weight: 700;
+    font-size: 14.5pt; line-height: 1; letter-spacing: -.03em;
+    color: var(--blue);
+  }
+  .facts span {
+    display: block; margin-top: .9mm;
+    font-size: 7.5pt; line-height: 1.28; color: var(--ink-2);
+  }
+
   /* ── sections ─────────────────────────────────────────────── */
-  section{margin-top:2.7mm;break-inside:avoid}
+  section{margin-top:2.5mm;break-inside:avoid}
   h2{font-family:Inter,sans-serif;font-size:7.6pt;font-weight:700;
      letter-spacing:.17em;text-transform:uppercase;color:var(--ink-3);
      padding-bottom:1.1mm;margin-bottom:2.1mm;border-bottom:.5pt solid var(--line-2);
@@ -50,6 +72,7 @@
   .skills{display:grid;grid-template-columns:35mm 1fr;gap:1.5mm 5mm;font-size:8.9pt}
   .skills dt{font-weight:650;color:var(--ink)}
   .skills dd{color:var(--ink-2)}
+  .skills .t{white-space:nowrap}
 
   /* ── experience ───────────────────────────────────────────── */
   .job{margin-bottom:3.0mm;break-inside:avoid}
@@ -71,7 +94,7 @@
   .prior b{color:var(--ink);font-weight:600}
 
   /* ── certs + education, side by side ──────────────────────── */
-  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:7mm;margin-top:2.7mm}
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:7mm;margin-top:2.2mm}
   .two section{margin-top:0}
   .cert{display:flex;justify-content:space-between;gap:3mm;padding:1.05mm 0;
         border-bottom:.5pt solid var(--line-2)}
@@ -107,11 +130,17 @@
   </div>
 </header>
 
+<div class="facts">
+  <div><b>600+</b><span>sites in the estate I run</span></div>
+  <div><b>9 months</b><span>to migrate every one to Windows&nbsp;11</span></div>
+  <div><b>iOS + Android</b><span>apps I built, shipped and operate</span></div>
+</div>
+
 <section>
   <h2 data-n="01">Profile</h2>
-  <p class="lede">Infrastructure engineer — <b>eight years in IT, five of them running a 600+ site estate</b> — who builds
-  production systems as well as running them: <b>multi-tenant Postgres with access enforced in the
-  database</b>, edge compute, payments, and CI that refuses to ship a build it has not seen run.
+  <p class="lede"><b>Eight years in IT, five of them in infrastructure</b> — and I build production systems as well as
+  running them: <b>multi-tenant Postgres with access enforced in the database</b>, edge compute,
+  payments, and CI that refuses to ship a build it has not seen run.
   <b>Looking for cloud, platform or infrastructure engineering roles.</b></p>
 </section>
 
@@ -119,11 +148,11 @@
   <h2 data-n="02">Core skills</h2>
   <dl class="skills">
     <dt>Cloud, identity &amp; infra</dt>
-    <dd>Microsoft 365 · Azure · Entra ID · Exchange Online · Active Directory · Group Policy · Cisco Meraki · DHCP/DNS · VMware · Hyper-V · Apple Business Manager</dd>
+    <dd><span class="t">Microsoft 365</span> · <span class="t">Azure</span> · <span class="t">Entra ID</span> · <span class="t">Exchange Online</span> · <span class="t">Active Directory</span> · <span class="t">Group Policy</span> · <span class="t">Cisco Meraki</span> · <span class="t">DHCP/DNS</span> · <span class="t">VMware</span> · <span class="t">Hyper-V</span> · <span class="t">Apple Business Manager</span></dd>
     <dt>Automation, CI &amp; data</dt>
-    <dd>PowerShell · GitHub Actions · release gating · PostgreSQL · Supabase · Cloudflare Workers · Railway · Render · Stripe</dd>
+    <dd><span class="t">PowerShell</span> · <span class="t">GitHub Actions</span> · <span class="t">release gating</span> · <span class="t">PostgreSQL</span> · <span class="t">Supabase</span> · <span class="t">Cloudflare Workers</span> · <span class="t">Railway</span> · <span class="t">Render</span> · <span class="t">Stripe</span></dd>
     <dt>Security</dt>
-    <dd>Proofpoint mail filtering · phishing simulation · application and USB whitelisting · Postgres row-level security</dd>
+    <dd><span class="t">Proofpoint mail filtering</span> · <span class="t">phishing simulation</span> · <span class="t">application and USB whitelisting</span> · <span class="t">Postgres row-level security</span></dd>
   </dl>
 </section>
 
@@ -139,7 +168,7 @@
       <div class="jd">May 2020 – present</div>
     </div>
     <ul>
-      <li><strong>Led the Windows 11 migration across 600+ dental practices — a nine-month programme from build and testing to full rollout</strong>, deploying at up to 120 sites a week and scheduled out of hours, so <strong>no practice lost time during opening hours</strong>.</li>
+      <li><strong>Led the Windows 11 migration across the estate</strong> — owned it from build and testing through to full rollout, deploying at <strong>up to 120 sites a week</strong>, scheduled out of hours.</li>
       <li><strong>Delivered the Cisco switch and router refresh across the same 600+ sites</strong>, configuring and shipping hardware to remote practices.</li>
       <li>Run Microsoft 365 and Entra ID day to day — licensing, Exchange, SharePoint, Teams, Active Directory and Group Policy — and <strong>automate the routine administration in PowerShell</strong>: provisioning, permissions and licensing that were previously manual.</li>
       <li>Own endpoint and mail security across the estate: application and USB whitelisting, Proofpoint filtering, and <strong>phishing simulation campaigns run business-wide</strong>.</li>
