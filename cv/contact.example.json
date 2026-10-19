@@ -1,0 +1,6 @@
+{
+  "_comment": "Copy to cv/contact.json and fill in. contact.json is gitignored — this repo is public and the CV carries a personal mobile, not the site's business number.",
+  "PHONE": "07xxx xxxxxx",
+  "EMAIL": "you@example.com",
+  "LOCATION": "Greater Manchester, UK"
+}

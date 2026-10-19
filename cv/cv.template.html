@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Yameen Bux — CV</title>
+<style>
+  @font-face{font-family:"Space Grotesk";font-weight:300 700;font-display:block;
+    src:url("file:///home/user/ysbdesignsportfolio/public/fonts/space-grotesk-latin.woff2") format("woff2-variations");}
+  @font-face{font-family:"Inter";font-weight:100 900;font-display:block;
+    src:url("file:///home/user/ysbdesignsportfolio/public/fonts/inter-latin.woff2") format("woff2-variations");}
+
+  :root{
+    --ink:#16191C; --ink-2:#4B5159; --ink-3:#6B7178;
+    --blue:#1F45CC; --line:rgba(22,25,28,.16); --line-2:rgba(22,25,28,.07);
+    --paper:#FFFFFF; --tint:#F4F3EF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  @page{size:A4;margin:10.5mm 13mm}
+  html,body{background:var(--paper);color:var(--ink);
+    font-family:Inter,system-ui,sans-serif;font-size:9.15pt;line-height:1.375;
+    -webkit-font-smoothing:antialiased;}
+
+  a{color:inherit;text-decoration:none}
+  strong{font-weight:650;color:var(--ink)}
+
+  /* ── masthead ─────────────────────────────────────────────── */
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:14mm;
+       padding-bottom:2.6mm;border-bottom:1.6pt solid var(--ink)}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22pt;
+     letter-spacing:-.035em;line-height:.92}
+  .role{font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:11pt;
+        letter-spacing:-.01em;color:var(--blue);margin-top:1.6mm}
+  .contact{text-align:right;font-size:8.6pt;line-height:1.72;color:var(--ink-2);white-space:nowrap}
+  .contact b{font-weight:600;color:var(--ink)}
+  .contact a{border-bottom:.5pt solid var(--line)}
+
+  /* ── sections ─────────────────────────────────────────────── */
+  section{margin-top:2.7mm;break-inside:avoid}
+  h2{font-family:Inter,sans-serif;font-size:7.6pt;font-weight:700;
+     letter-spacing:.17em;text-transform:uppercase;color:var(--ink-3);
+     padding-bottom:1.1mm;margin-bottom:2.1mm;border-bottom:.5pt solid var(--line-2);
+     display:flex;align-items:baseline;gap:3mm}
+  h2::before{content:attr(data-n);color:var(--blue);font-variant-numeric:tabular-nums;
+             letter-spacing:.06em}
+
+  .lede{font-size:9.4pt;line-height:1.42;color:var(--ink-2);max-width:168mm}
+  .lede b{color:var(--ink);font-weight:600}
+
+  /* ── skills grid ──────────────────────────────────────────── */
+  .skills{display:grid;grid-template-columns:35mm 1fr;gap:1.5mm 5mm;font-size:8.9pt}
+  .skills dt{font-weight:650;color:var(--ink)}
+  .skills dd{color:var(--ink-2)}
+
+  /* ── experience ───────────────────────────────────────────── */
+  .job{margin-bottom:3.0mm;break-inside:avoid}
+  .job:last-child{margin-bottom:0}
+  .jh{display:flex;justify-content:space-between;align-items:baseline;gap:6mm}
+  .jt{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:10.4pt;letter-spacing:-.015em}
+  .jc{font-size:8.9pt;color:var(--ink-2);margin-top:.4mm}
+  .jd{font-size:8.4pt;font-weight:600;color:var(--ink-3);white-space:nowrap;
+      font-variant-numeric:tabular-nums}
+  ul{list-style:none;margin-top:1.8mm}
+  li{position:relative;padding-left:4.2mm;margin-bottom:.85mm;color:var(--ink-2)}
+  li::before{content:"";position:absolute;left:0;top:1.62mm;width:1.5mm;height:1.5mm;
+             border:.6pt solid var(--blue);border-radius:50%}
+  li:last-child{margin-bottom:0}
+
+  .prior{display:flex;gap:4mm;flex-wrap:wrap;font-size:8.9pt;color:var(--ink-2);
+         background:var(--tint);padding:1.9mm 3mm;border-radius:1mm;margin-top:1mm}
+  .prior span{white-space:nowrap}
+  .prior b{color:var(--ink);font-weight:600}
+
+  /* ── certs + education, side by side ──────────────────────── */
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:7mm;margin-top:2.7mm}
+  .two section{margin-top:0}
+  .cert{display:flex;justify-content:space-between;gap:3mm;padding:1.05mm 0;
+        border-bottom:.5pt solid var(--line-2)}
+  .cert:last-child{border-bottom:0}
+  .cert .n{font-weight:600;color:var(--ink);font-size:8.7pt}
+  .cert .d{font-size:8pt;color:var(--ink-3);white-space:nowrap;
+           font-variant-numeric:tabular-nums}
+  .cert.booked .n{font-weight:500;color:var(--ink-2)}
+  .cert.booked .d{font-style:italic}
+
+  .edu{padding:1.05mm 0;border-bottom:.5pt solid var(--line-2)}
+  .edu:last-child{border-bottom:0}
+  .edu .n{font-weight:600;font-size:8.7pt}
+  .edu .m{font-size:8.3pt;color:var(--ink-3)}
+
+  .foot{margin-top:5mm;padding-top:2.2mm;border-top:.5pt solid var(--line-2);
+        font-size:8pt;color:var(--ink-3);display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>Yameen Bux</h1>
+    <div class="role">Infrastructure &amp; Platform Engineer</div>
+  </div>
+  <div class="contact">
+    {{LOCATION}}<br>
+    <b>{{PHONE}}</b><br>
+    {{EMAIL}}<br>
+    <a href="https://www.ysbdesigns.uk">ysbdesigns.uk</a> ·
+    <a href="https://github.com/yameenbux">github.com/yameenbux</a>
+  </div>
+</header>
+
+<section>
+  <h2 data-n="01">Profile</h2>
+  <p class="lede">Infrastructure engineer — <b>eight years in IT, five of them running a 600+ site estate</b> — who builds
+  production systems as well as running them: <b>multi-tenant Postgres with access enforced in the
+  database</b>, edge compute, payments, and CI that refuses to ship a build it has not seen run.
+  <b>Looking for cloud, platform or infrastructure engineering roles.</b></p>
+</section>
+
+<section>
+  <h2 data-n="02">Core skills</h2>
+  <dl class="skills">
+    <dt>Cloud, identity &amp; infra</dt>
+    <dd>Microsoft 365 · Azure · Entra ID · Exchange Online · Active Directory · Group Policy · Cisco Meraki · DHCP/DNS · VMware · Hyper-V · Apple Business Manager</dd>
+    <dt>Automation, CI &amp; data</dt>
+    <dd>PowerShell · GitHub Actions · release gating · PostgreSQL · Supabase · Cloudflare Workers · Railway · Render · Stripe</dd>
+    <dt>Security</dt>
+    <dd>Proofpoint mail filtering · phishing simulation · application and USB whitelisting · Postgres row-level security</dd>
+  </dl>
+</section>
+
+<section>
+  <h2 data-n="03">Experience</h2>
+
+  <div class="job">
+    <div class="jh">
+      <div>
+        <div class="jt">IT Infrastructure Engineer</div>
+        <div class="jc">MyDentist (IDH Group) — national dental group, 600+ practices · Greater Manchester</div>
+      </div>
+      <div class="jd">May 2020 – present</div>
+    </div>
+    <ul>
+      <li><strong>Led the Windows 11 migration across 600+ dental practices — a nine-month programme from build and testing to full rollout</strong>, deploying at up to 120 sites a week and scheduled out of hours, so <strong>no practice lost time during opening hours</strong>.</li>
+      <li><strong>Delivered the Cisco switch and router refresh across the same 600+ sites</strong>, configuring and shipping hardware to remote practices.</li>
+      <li>Run Microsoft 365 and Entra ID day to day — licensing, Exchange, SharePoint, Teams, Active Directory and Group Policy — and <strong>automate the routine administration in PowerShell</strong>: provisioning, permissions and licensing that were previously manual.</li>
+      <li>Own endpoint and mail security across the estate: application and USB whitelisting, Proofpoint filtering, and <strong>phishing simulation campaigns run business-wide</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="jh">
+      <div>
+        <div class="jt">IT Helpdesk Technician — 1st then 2nd line</div>
+        <div class="jc">MyDentist (IDH Group) — Greater Manchester</div>
+      </div>
+      <div class="jd">May 2017 – May 2020</div>
+    </div>
+    <div class="prior">
+      <span><b>2nd line</b> Dec 2018 – May 2020</span>
+      <span><b>1st line</b> May 2017 – Dec 2018</span>
+      <span>Promoted twice in three years, into infrastructure.</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 data-n="04">Engineering practice</h2>
+  <div class="job">
+    <div class="jh">
+      <div>
+        <div class="jt">YSB Designs — self-employed, alongside full-time work</div>
+        <div class="jc">Production systems built, deployed and operated end to end ·
+          <a href="https://www.ysbdesigns.uk"><strong>ysbdesigns.uk</strong></a></div>
+      </div>
+      <div class="jd">Aug 2026 – present</div>
+    </div>
+    <ul>
+      <li><strong>Multi-tenant Postgres with tenancy and access enforced in the database, not application code</strong> — row-level security, role-checked functions and revoked default privileges.</li>
+      <li><strong>CI/CD on GitHub Actions with release gates that refuse to build unless a smoke run passed on that exact commit</strong>, and that verify live service state rather than trusting checked-in config.</li>
+      <li><strong>Shipped mobile apps for iOS and Android</strong> — a React Native app on Google Play and a signed iOS build on TestFlight, backed by edge compute, managed Postgres and Stripe billing.</li>
+      <li><strong>564 database assertions and 329 unit tests</strong>, run against a real database in CI rather than against mocks.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="two">
+  <section>
+    <h2 data-n="05">Certifications</h2>
+    <div class="cert"><span class="n">CompTIA Security+</span><span class="d">Nov 2023</span></div>
+    <div class="cert"><span class="n">Microsoft Certified: Azure Fundamentals (AZ-900)</span><span class="d">Oct 2023</span></div>
+    <div class="cert booked"><span class="n">Azure Administrator Associate (AZ-104)</span><span class="d">booked, not yet sat</span></div>
+  </section>
+
+  <section>
+    <h2 data-n="06">Education</h2>
+    <div class="edu">
+      <div class="n">BSc (Hons) Computer Network Technology</div>
+      <div class="m">Manchester Metropolitan University · 2012–2016</div>
+    </div>
+    <div class="edu">
+      <div class="n">BTEC Level 3 National Diploma in ICT</div>
+      <div class="m">Bolton Sixth Form College · 2010–2012</div>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

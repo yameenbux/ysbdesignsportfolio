@@ -17,3 +17,9 @@ secrets.json
 
 # local Claude Code state, specific to one machine
 .claude/settings.local.json
+
+# The CV carries a personal mobile; this repo is public.
+cv/contact.json
+cv/*.pdf
+cv/*.png
+cv/cv.html

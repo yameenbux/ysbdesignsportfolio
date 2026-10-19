@@ -2001,6 +2001,31 @@ second principle on the engineering page, demonstrated on myself.
   already published on About or follows from it. Anything added there is a
   commitment, so it is not a page to pad.
 
+## The CV
+
+**`.claude/skills/cv-watch/` is a standing instruction, not documentation.**
+It fires whenever work lands on any YSB project and asks whether that work
+changes what the CV can claim — including whether it *invalidates* something
+already on it, which is the failure this file has recorded four times in other
+places and which the CV is now a fifth place to suffer.
+
+- **`cv/cv.template.html`** is the CV. `node cv/render.mjs` renders it and
+  **exits non-zero if it spills past one page** — the page limit is enforced
+  by the tool rather than by remembering.
+- **Personal contact details are placeholders**, filled from `cv/contact.json`,
+  which is gitignored along with the rendered HTML and PDF. **This repo is
+  public and the CV carries a personal mobile, not the site's business
+  number.** Never put it in a commit message, a comment or this file.
+- **`.claude/skills/cv-watch/EVIDENCE.md`** is the append-only log of claims,
+  their measurements and where a stranger can verify them. It also tracks
+  divergences between the CV, this site and LinkedIn, because those three now
+  make overlapping claims and a mismatch is what makes a reader look harder at
+  everything else.
+- A **monthly readiness review** runs on the 1st. Its standing position is
+  that he is already employable and should apply now; it exists to say when an
+  application got materially *stronger*, never to say wait. The Standing note
+  at the foot of this file is the same point.
+
 ## Working rules
 
 - **Port first, rebrand second. Never both in one commit.**
