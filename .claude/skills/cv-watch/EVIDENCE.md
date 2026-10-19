@@ -41,6 +41,55 @@ the honesty gates.
 
 ## Log
 
+### 2026-10-19 — Domi, and a paying customer
+
+**Passed scrutiny question 2** (proves a capability the CV could not evidence)
+**and question 3** (changes a claim already on the CV).
+
+`audiologydomi` — a home-visit healthcare diary that acts on a cancellation:
+ranks the waiting list against the specific gap, texts whoever actually fits
+it, books the first yes. Added to the portfolio as an own product,
+pre-launch.
+
+**The CV change is one line and it is the biggest single upgrade since the
+rebuild.** The engineering practice subline now reads *"Production systems
+built, deployed and operated end to end — **one with a paying customer**"*.
+Before this, that whole section could be read as side projects. A product a
+business pays for is a different claim, and it is a stronger one than
+commissioned work: it says somebody chose to buy the thing rather than hiring
+the person. It displaced nothing — it replaced existing text.
+
+**Verifiable at:** `server/pilot.js` refers to *"the targets agreed at
+signing"* and a thirteen-week pilot. The customer itself is the client's
+business and is not named on the site or the CV.
+
+**Two source claims found stale by checking, both in the same README:**
+
+- The badge reads `npm dependencies: none`; `package.json` carries `pg`. The
+  honest version is better — the **demo** loads nothing, and the Postgres
+  client is required lazily only when a live database is configured.
+- *"Domi has none yet, so no testimonials, logos or trusted-by lines"* — there
+  is now one paying customer. **A README is a claim, not evidence**, for the
+  fourth and fifth recorded time, both in one file.
+
+**Not yet carried across, pending an answer:** whether the pilot is running
+with real patients. The repository lists six things needed *before real
+patients* (UK database with a tested restore, real accounts, encrypted offline
+copies, secrets, contracted routing, DPIA/ICO/DSP Toolkit/Cyber Essentials).
+If those are done the site's `Pre-launch` status is wrong; if the client has
+signed but is not live yet, it is right. **Do not change the status without
+that answer** — a Live chip over a case study saying no practice is using it
+is the contradiction this spec exists to prevent, and Phase 23 records it
+happening in the opposite direction.
+
+**Candidate for the CV, not yet taken:** Domi's write-through architecture — a
+live practice runs on the same in-memory SQLite the demo does, with Postgres
+as the durable record, and the server answers only once the rows have landed.
+It is the most distinctive engineering claim available, but the CV is full,
+and it would have to displace the "564 assertions and 329 unit tests" bullet,
+which is the weakest of the four (a number without a mechanism behind it).
+
+
 ### 2026-10-19 — baseline set
 
 CV rebuilt from the 2023-era version. The old one carried none of the
