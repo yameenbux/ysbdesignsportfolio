@@ -1,9 +1,13 @@
 /**
  * Renders the CV to a one-page A4 PDF.
  *
- *   node cv/render.mjs
+ *   node cv/render.mjs               # cv/cv.template.html → Yameen_Bux_CV.pdf
+ *   node cv/render.mjs integration   # cv/cv.integration.template.html → Yameen_Bux_CV_Integration.pdf
  *
- * Reads cv/cv.template.html, substitutes the placeholders from
+ * A variant is a separate template for a different kind of role — the same
+ * facts, re-weighted. Each is one page and each is checked the same way.
+ *
+ * Reads the template, substitutes the placeholders from
  * cv/contact.json, and writes cv/Yameen_Bux_CV.pdf. Both the filled HTML and
  * the PDF are gitignored — THIS REPO IS PUBLIC and the CV carries a personal
  * mobile rather than the site's business number. The template in git has
@@ -30,13 +34,18 @@ if (!existsSync(`${ROOT}cv/contact.json`)) {
 }
 const contact = JSON.parse(readFileSync(`${ROOT}cv/contact.json`, 'utf8'));
 
-let html = readFileSync(`${ROOT}cv/cv.template.html`, 'utf8');
+const variant = process.argv[2] ?? '';
+const TEMPLATE = variant ? `cv/cv.${variant}.template.html` : 'cv/cv.template.html';
+const OUT = variant ? `Yameen_Bux_CV_${variant[0].toUpperCase()}${variant.slice(1)}` : 'Yameen_Bux_CV';
+if (!existsSync(`${ROOT}${TEMPLATE}`)) { console.error(`${TEMPLATE} does not exist`); process.exit(1); }
+
+let html = readFileSync(`${ROOT}${TEMPLATE}`, 'utf8');
 for (const key of ['PHONE', 'EMAIL', 'LOCATION']) {
   if (!contact[key]) { console.error(`contact.json is missing ${key}`); process.exit(1); }
   html = html.replaceAll(`{{${key}}}`, contact[key]);
 }
 if (html.includes('{{')) { console.error('unsubstituted placeholder left in the CV'); process.exit(1); }
-writeFileSync(`${ROOT}cv/cv.html`, html);
+writeFileSync(`${ROOT}cv/${OUT}.html`, html);
 
 const browser = await chromium.launch({
   executablePath: process.env.CHROME_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
@@ -44,7 +53,7 @@ const browser = await chromium.launch({
 });
 const page = await browser.newPage({ viewport: { width: PRINT_W, height: PRINT_H } });
 await page.emulateMedia({ media: 'print' });
-await page.goto(`file://${ROOT}cv/cv.html`, { waitUntil: 'load' });
+await page.goto(`file://${ROOT}cv/${OUT}.html`, { waitUntil: 'load' });
 await page.evaluate(() => document.fonts.ready);
 await new Promise((r) => setTimeout(r, 300));
 
@@ -55,10 +64,10 @@ console.log(`content ${h}px / ${PRINT_H}px  →  ${over <= 0
   : `OVER by ${over}px (${(over / MM).toFixed(1)}mm)`}`);
 
 await page.pdf({
-  path: `${ROOT}cv/Yameen_Bux_CV.pdf`, format: 'A4', printBackground: true,
+  path: `${ROOT}cv/${OUT}.pdf`, format: 'A4', printBackground: true,
   margin: { top: '0', bottom: '0', left: '0', right: '0' },   // @page owns the margins
 });
-await page.screenshot({ path: `${ROOT}cv/preview.png`, fullPage: true });
+await page.screenshot({ path: `${ROOT}cv/${OUT}.preview.png`, fullPage: true });
 await browser.close();
 
 if (over > 0) {

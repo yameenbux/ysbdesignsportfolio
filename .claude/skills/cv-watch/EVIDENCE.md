@@ -18,6 +18,7 @@ small inconsistency that makes a reader look harder at everything else.
 | 1 | **CompTIA Security+ is on the CV but not on LinkedIn.** It is also a stronger pinned skill than at least two of the five currently there | open |
 | 2 | **LinkedIn's YSB Designs entry** may still read `Aug 2026 – Nov 2026` with "I currently work here" unticked, which both ends in the future and contradicts the CV's `Aug 2026 – present` | open — needs confirming |
 | 3 | **The case studies close with a freelance CTA** — "If this looks like your problem… tell me what it takes" over a WhatsApp button — written for a prospect, not a hiring manager. Last pre-pivot copy on the main reading path | open |
+| 5 | **Two CV variants now carry overlapping claims.** Platform and integration templates share facts; a correction landing in one and not the other is the five-times-recorded failure in a new place | open — standing |
 | 4 | **`og.png` is the pre-pivot services card.** Every link shared to LinkedIn renders with "the website you see, the software behind it, and the hosting it runs on" | open — replacement built, not deployed |
 
 ---
@@ -40,6 +41,57 @@ the honesty gates.
 ---
 
 ## Log
+
+### 2026-10-23 — the integration variant, for an internal role
+
+An internal Integration Engineer posting at the current employer: Boomi and
+Azure Integration Services (including API Management), REST and SOAP, FTP/MFT,
+and "AI assisted coding tools (e.g. Claude Code)". R4, Dentally and IFS named.
+
+**The CV now has two variants from one renderer.** `cv/cv.template.html` is
+the platform cut; `cv/cv.integration.template.html` is the same facts
+re-weighted, rendered with `node cv/render.mjs integration`. Same head, same
+CSS (diffed identical), same one-page check. **When a fact changes, both
+templates change** — this is the two-places shape the portfolio spec records
+five times, now with a CV on each side of it.
+
+**What the integration cut says that the platform cut does not:**
+
+- **"600+ dental practices on R4 and Dentally"** on the MyDentist line.
+  Inferred from the posting being internal and naming those systems; the
+  estate he runs is the estate they run on. **He must confirm the wording
+  before it is sent** — if part of the estate is on one system and part on
+  the other, "on R4 and Dentally" still holds; if a practice-management
+  system he has not touched is in the mix, it does not.
+- **Three integration mechanisms promoted to the engineering bullets**, each
+  checkable in a public repo: the Stripe webhook as the only writer of plan
+  state through a `SECURITY DEFINER` function (Booked In); ordered
+  write-through from in-memory SQLite to Postgres with the API answering
+  only once rows have landed (Domi); the Android build asking Google's
+  Digital Asset Links API rather than reading the checked-in JSON (Taiyabah).
+  They displaced "shipped apps" (still in the facts strip) and the test
+  counts, which this log already rated the weakest bullet.
+- **An "AI-assisted delivery" skills row** naming Claude Code. Asked about on
+  19 October and held back then as unevidenced for a platform audience; this
+  posting asks for it by name, and the evidence is the skill system in five
+  public repos.
+
+**Deliberately not claimed, because nothing evidences it:** Boomi, Azure
+Integration Services, API Management, SOAP, FTP/MFT. He may well have FTP or
+MFT from the estate side — it was never relevant to a platform pitch so it was
+never recorded — but an unrecorded claim is not a claim this log can carry.
+**If he confirms it, it goes on; until then it stays off.** Boomi's associate
+training is free and would turn "none" into a held certification before
+interview; it is not on the CV until it is held.
+
+**One near-miss worth recording.** The first draft wrapped `SECURITY DEFINER`
+in `<code>`, and the CV template has no `code` rule — so it would have
+rendered in the browser's default monospace, the Phase 23 failure on a
+document whose whole design bars it. Caught by grepping for the rule before
+rendering. The tag is gone; the words stand.
+
+**Checked:** one page, 8px spare; the PDF text layer reads in order and every
+new claim extracts. Rated ready to send on confirmation of the R4/Dentally line.
 
 ### 2026-10-19 — the facts strip, and what it paid for
 
