@@ -42,6 +42,21 @@ the honesty gates.
 
 ## Log
 
+### 2026-10-23 — first CV sent to a hiring manager
+
+The integration cut went to the hiring manager for the internal Integration
+Engineer role, off the record, with the CV's one Boomi gap stated in the
+message rather than left for him to find. Role line under the name is
+**"Infrastructure Engineer"** — the current job, not the destination; the
+case for the move is made by the content underneath, not the title.
+
+This is the first time any version of the CV has been read by someone who
+could hire. **The standing position held**: he applied now rather than
+waiting for the readiness review, which is what that review exists to say.
+
+Still inferred rather than confirmed: the *"600+ dental practices on R4 and
+Dentally"* line. The reader is the one person who will know if it is wrong.
+
 ### 2026-10-23 — the integration variant, for an internal role
 
 An internal Integration Engineer posting at the current employer: Boomi and
