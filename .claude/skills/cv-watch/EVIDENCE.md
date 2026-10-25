@@ -18,6 +18,7 @@ small inconsistency that makes a reader look harder at everything else.
 | 1 | **CompTIA Security+ is on the CV but not on LinkedIn.** It is also a stronger pinned skill than at least two of the five currently there | open |
 | 2 | **LinkedIn's YSB Designs entry** may still read `Aug 2026 – Nov 2026` with "I currently work here" unticked, which both ends in the future and contradicts the CV's `Aug 2026 – present` | open — needs confirming |
 | 3 | **The case studies close with a freelance CTA** — "If this looks like your problem… tell me what it takes" over a WhatsApp button — written for a prospect, not a hiring manager. Last pre-pivot copy on the main reading path | open |
+| 6 | **The CV sent on 23 Oct says "one with a paying customer"** and the records do not support it. Confirm with a signed agreement, or correct it with the hiring manager | **open — urgent** |
 | 5 | **Two CV variants now carry overlapping claims.** Platform and integration templates share facts; a correction landing in one and not the other is the five-times-recorded failure in a new place | open — standing |
 | 4 | **`og.png` is the pre-pivot services card.** Every link shared to LinkedIn renders with "the website you see, the software behind it, and the hosting it runs on" | open — replacement built, not deployed |
 
@@ -41,6 +42,31 @@ the honesty gates.
 ---
 
 ## Log
+
+### 2026-10-25 — INVALIDATION: "one with a paying customer" is not evidenced
+
+**Scrutiny question 4** — the expensive one — and it was missed on 19 October.
+
+The claim went on the CV on the founder's word and was logged here as "the
+biggest single upgrade since the rebuild". The records say otherwise. Gmail:
+Home Visiting Optics was visited on 15 Oct, sent a questionnaire on 16 Oct,
+configured on `domi-live` on 18 Oct, and on 21 Oct was offered a meeting "to
+go through the costs together". **No price had been shown. Nothing was
+signed.** Domi's Supabase project has no tables; the practice's brand entry
+carries a placeholder email domain. The README's own line — "Domi has none
+yet" — was right, and this log called it stale.
+
+**Both CV templates now read "one in a founding pilot with a Bolton
+practice."** Defensible: a practice hosted a visit, answered a detailed
+questionnaire and had Domi configured in its branding. "Paying" is not.
+**If the practice signed on 23 October, the agreement restores the line.**
+
+**The CV sent on 23 Oct to the hiring manager carries the unverified claim.**
+The honest move is a one-line correction to him.
+
+**Lesson:** a founder's statement is a claim, not evidence — the same rule as
+README-is-a-claim, applied to the person. This log exists to check, and did
+not.
 
 ### 2026-10-23 — first CV sent to a hiring manager
 
