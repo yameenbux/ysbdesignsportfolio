@@ -24,9 +24,10 @@ export const company = {
   // 'England and Wales', 'Scotland' or 'Northern Ireland'.
   jurisdiction: 'England and Wales',
   // Eight characters, e.g. '12345678'.
-  number: '',
+  // From the Companies House register, read 25 October 2026.
+  number: '16022339',
   // One line, comma-separated, including the postcode.
-  office: '',
+  office: '711 Crompton Way, Bolton, BL1 8TL',
   // Optional, e.g. 'GB123456789'. Omit unless registered.
   vat: '',
 };
