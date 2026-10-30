@@ -248,3 +248,15 @@ removed per month. It is the difference between 9.5 and 10, and the page has
 ~33px held in reserve for it.
 
 Rated 9.5/10, green to send.
+
+## 2026-10-30 — Conditional Access and MFA added to every cut
+
+**Claim added:** "Set up Conditional Access and MFA across the estate in Entra ID" (experience bullet, MyDentist), and `Conditional Access · MFA` at the head of the Security skills row.
+
+**Source:** the user, directly, 30 October: "yes i set up conditional access and mfa across the estate". Not in any repository — it is employer work. No policy count, user count or method list was given, so none is claimed. If the user supplies detail (legacy auth blocked, methods, scope), it can be added; until then the bullet stays at this level.
+
+**Why it matters:** two contract adverts read on 30 October (MFA Engineer, £570/day inside, Sheffield; Cloud Security Engineer, to £75k, hybrid) both list Conditional Access as a core requirement, and the CV said nothing about it. This was an underclaim of the Phase 25 kind: a fact known to the candidate and absent from the record.
+
+**Cost:** five of seven templates went over one page by 3–14px. Recovered by shortening the Microsoft 365 bullet (dropping the Exchange/SharePoint/Teams list, which the skills row already carries). All seven render to one page: platform 13px spare, contract 3px, Dubai/Singapore/KL 13px, New York 38px, integration 8px.
+
+**Divergence note:** the site's about and engineering pages do not mention Conditional Access either. That is consistent — the site is about the public systems, the CV is about the whole career — but it is a fact the CV now claims that nothing public can verify. A hiring manager has to take it on the reference.
