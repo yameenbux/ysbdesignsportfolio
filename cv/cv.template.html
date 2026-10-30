@@ -133,7 +133,7 @@
 <div class="facts">
   <div><b>600+</b><span>sites in the estate I run</span></div>
   <div><b>9 months</b><span>to migrate every one to Windows&nbsp;11</span></div>
-  <div><b>11 workflows</b><span>GitHub Actions pipelines on one product, every release gated</span></div>
+  <div><b>11 workflows</b><span>gated pipelines on one product</span></div>
 </div>
 
 <section>
@@ -205,9 +205,9 @@
     </div>
     <ul>
       <li><strong>Multi-tenant Postgres with tenancy and access enforced in the database, not application code</strong> — row-level security, role-checked functions and revoked default privileges.</li>
-      <li><strong>CI/CD pipelines on GitHub Actions with release gates that refuse to build unless a smoke run passed on that exact commit</strong>, verify live service state rather than trusting checked-in config, and re-request every deploy before calling it done.</li>
+      <li><strong>CI/CD pipelines on GitHub Actions with release gates that refuse to build unless a smoke run passed on that exact commit</strong>, and that verify live service state rather than trusting checked-in config.</li>
       <li><strong>Shipped mobile apps for iOS and Android</strong> — a React Native app on Google Play and a signed iOS build on TestFlight, backed by edge compute, managed Postgres and Stripe billing.</li>
-      <li><strong>Least-privilege CI</strong> — the job that installs dependencies holds read-only permissions and only a separate deploy job can publish, so a compromised install script cannot ship; a scheduled watchdog loads the live app every six hours.</li>
+      <li><strong>Least-privilege CI</strong> — the job that installs dependencies is read-only and only a separate deploy job can publish, so a compromised install script cannot ship.</li>
     </ul>
   </div>
 </section>
