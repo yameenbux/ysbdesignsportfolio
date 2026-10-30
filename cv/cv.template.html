@@ -119,7 +119,7 @@
 <header class="top">
   <div>
     <h1>Yameen Bux</h1>
-    <div class="role">Infrastructure &amp; Platform Engineer</div>
+    <div class="role">Infrastructure Engineer</div>
   </div>
   <div class="contact">
     {{LOCATION}}<br>
@@ -133,7 +133,7 @@
 <div class="facts">
   <div><b>600+</b><span>sites in the estate I run</span></div>
   <div><b>9 months</b><span>to migrate every one to Windows&nbsp;11</span></div>
-  <div><b>iOS + Android</b><span>apps I built, shipped and operate</span></div>
+  <div><b>11 workflows</b><span>GitHub Actions pipelines on one product, every release gated</span></div>
 </div>
 
 <section>
@@ -141,7 +141,7 @@
   <p class="lede"><b>Eight years in IT, five of them in infrastructure</b> — and I build production systems as well as
   running them: <b>multi-tenant Postgres with access enforced in the database</b>, edge compute,
   payments, and CI that refuses to ship a build it has not seen run.
-  <b>Looking for cloud, platform or infrastructure engineering roles.</b></p>
+  <b>Looking for Azure DevOps, platform or cloud engineering roles.</b></p>
 </section>
 
 <section>
@@ -149,8 +149,8 @@
   <dl class="skills">
     <dt>Cloud, identity &amp; infra</dt>
     <dd><span class="t">Microsoft 365</span> · <span class="t">Azure</span> · <span class="t">Entra ID</span> · <span class="t">Exchange Online</span> · <span class="t">Active Directory</span> · <span class="t">Group Policy</span> · <span class="t">Cisco Meraki</span> · <span class="t">DHCP/DNS</span> · <span class="t">VMware</span> · <span class="t">Hyper-V</span> · <span class="t">Apple Business Manager</span></dd>
-    <dt>Automation, CI &amp; data</dt>
-    <dd><span class="t">PowerShell</span> · <span class="t">GitHub Actions</span> · <span class="t">release gating</span> · <span class="t">PostgreSQL</span> · <span class="t">Supabase</span> · <span class="t">Cloudflare Workers</span> · <span class="t">Railway</span> · <span class="t">Render</span> · <span class="t">Stripe</span></dd>
+    <dt>Automation, CI/CD &amp; data</dt>
+    <dd><span class="t">PowerShell</span> · <span class="t">shell scripting</span> · <span class="t">GitHub Actions</span> · <span class="t">CI/CD release gating</span> · <span class="t">health checks and watchdogs</span> · <span class="t">PostgreSQL</span> · <span class="t">Supabase</span> · <span class="t">Cloudflare Workers</span> · <span class="t">Render</span></dd>
     <dt>Security</dt>
     <dd><span class="t">Proofpoint mail filtering</span> · <span class="t">phishing simulation</span> · <span class="t">application and USB whitelisting</span> · <span class="t">Postgres row-level security</span></dd>
   </dl>
@@ -205,9 +205,9 @@
     </div>
     <ul>
       <li><strong>Multi-tenant Postgres with tenancy and access enforced in the database, not application code</strong> — row-level security, role-checked functions and revoked default privileges.</li>
-      <li><strong>CI/CD on GitHub Actions with release gates that refuse to build unless a smoke run passed on that exact commit</strong>, and that verify live service state rather than trusting checked-in config.</li>
+      <li><strong>CI/CD pipelines on GitHub Actions with release gates that refuse to build unless a smoke run passed on that exact commit</strong>, verify live service state rather than trusting checked-in config, and re-request every deploy before calling it done.</li>
       <li><strong>Shipped mobile apps for iOS and Android</strong> — a React Native app on Google Play and a signed iOS build on TestFlight, backed by edge compute, managed Postgres and Stripe billing.</li>
-      <li><strong>564 database assertions and 329 unit tests</strong>, run against a real database in CI rather than against mocks.</li>
+      <li><strong>Least-privilege CI</strong> — the job that installs dependencies holds read-only permissions and only a separate deploy job can publish, so a compromised install script cannot ship; a scheduled watchdog loads the live app every six hours.</li>
     </ul>
   </div>
 </section>
